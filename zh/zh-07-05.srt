@@ -1,0 +1,405 @@
+0
+00:00:03,860 --> 00:00:07,259
+This is the first of what will be a considerable sequence of videos on bottom
+这是底部相当多的视频序列中的第一个
+
+1
+00:00:07,259 --> 00:00:14,259
+up parsing. The first thing to know is that bottom up parsing is more general
+向上解析。首先要知道的是，自下而上解析更通用。
+
+2
+00:00:16,079 --> 00:00:20,990
+than deterministic top down parsing. So recall we talked about recursive descent,
+而不是确定性的自上而下解析。回想一下，我们谈过递归下降，
+
+3
+00:00:20,990 --> 00:00:26,180
+which is a completely general parsing algorithm, but requires backtracking. And
+这是一个完全通用的解析算法，但需要回溯。和
+
+4
+00:00:26,180 --> 00:00:29,890
+now we're focused on deterministic techniques and we talked about L-L one or
+现在我们把重点放在确定性技术上，我们谈到了L-L One或
+
+5
+00:00:29,890 --> 00:00:34,070
+predictive parsing last time. And now we're gonna switch, shift gears and talk
+上次的预测分析。现在我们要交换意见，换换话题，谈谈
+
+6
+00:00:34,070 --> 00:00:37,750
+about bottom up parsing. And it turns out though even the bottom up parsing is more
+关于自下而上的解析。事实证明，即使是自下而上的解析也要
+
+7
+00:00:37,750 --> 00:00:41,640
+general, it's just as efficient, and it uses all of the ideas that we learned in
+总而言之，它是同样高效的，它使用了我们在中学到的所有想法
+
+8
+00:00:41,640 --> 00:00:46,960
+top down parsing. And in fact, bottom up. Parsing is the preferred method that's
+自上而下解析。事实上，是自下而上的。解析是首选的方法，因为
+
+9
+00:00:46,960 --> 00:00:53,190
+using most of the parser generator tools. So, one good thing about bottom up
+使用大多数解析器生成器工具。所以，自下而上有一个好处
+
+10
+00:00:53,190 --> 00:00:57,100
+parcers, is they don't need left factored grammars, so we can revert to the natural
+Parcers，是他们不需要左因式语法，所以我们可以恢复到自然
+
+11
+00:00:57,100 --> 00:01:01,640
+grammar for our example and natural here is in quotes, because we still have to
+我们示例的语法和这里的自然语法用引号括起来，因为我们仍然需要
+
+12
+00:01:01,640 --> 00:01:06,079
+encode the precedence of plus and times, so bottom up parcers aren't going to deal
+对加号和倍数的优先级进行编码，这样自下而上的地块就不会处理
+
+13
+00:01:06,079 --> 00:01:11,040
+with ambiguous grammars. And let's just as an example, consider how a bottom up
+语法模棱两可。让我们举个例子，考虑一下自下而上的
+
+14
+00:01:11,040 --> 00:01:18,040
+parcer would work on the following, typical input string. So the first thing
+PARCER将处理以下典型的输入字符串。所以第一件事就是
+
+15
+00:01:19,330 --> 00:01:23,610
+to know about bottom up parsing is that it reduces, what we call reduces a string
+要知道自下而上的解析是减少的，我们称之为减少字符串
+
+16
+00:01:23,610 --> 00:01:27,900
+into the start symbol by inverting productions, by running productions
+通过反转乘积，通过运行乘积添加到开始符号中
+
+17
+00:01:27,900 --> 00:01:34,900
+backwards. So here's an example. On the left hand side is the sequence of states
+往后倒。这里有一个例子。左侧是状态序列
+
+18
+00:01:35,119 --> 00:01:39,619
+of the string. On the right hand side are the productions that were used And the
+这根线的一部分。右手边是使用过的产品和
+
+19
+00:01:39,619 --> 00:01:44,840
+thing to observe, let's just look at the very first step. Is that we began with the
+要观察的东西，让我们只看第一步。我们是从
+
+20
+00:01:44,840 --> 00:01:49,979
+entire string. We began with the, the, the string of terminals. And we picked some of
+整个字符串。我们从终端的这个，那个，那串开始。我们挑选了一些
+
+21
+00:01:49,979 --> 00:01:54,130
+those terminals. In this case, just one, this particular Int right here. And we ran
+那些终端。在这种情况下，只有一个，这个特定的Int就在这里。然后我们就跑了
+
+22
+00:01:54,130 --> 00:01:59,270
+a production backwards. We replaced the Int here by the left side of the
+一部倒排的作品。我们将这里的Int替换为
+
+23
+00:01:59,270 --> 00:02:03,060
+production. We began with, we matched the right side of the production Int and we
+制作。我们首先，我们匹配了生产Int的右侧，我们
+
+24
+00:02:03,060 --> 00:02:08,189
+replaced it by the left side. So Int went backwards here to T. And then in the next
+已将其更换为左侧。所以Int在这里倒退到T，然后在下一个
+
+25
+00:02:08,189 --> 00:02:15,189
+step, we took Int times T, this substr ing of The, string that we're working on And
+一步，我们取Int乘以T，这是我们正在处理的字符串的减字符串，
+
+26
+00:02:15,560 --> 00:02:19,569
+we replace it by the left-hand side of this production. N times T was replaced by
+我们把它换成这部作品的左手边。N乘以T替换为
+
+27
+00:02:19,569 --> 00:02:26,569
+T, and so on. At each step here, we're matching some portion of the string. And
+T，以此类推。在这里的每一步，我们都在匹配字符串的某一部分。和
+
+28
+00:02:26,980 --> 00:02:31,950
+I'm underlining the portion that's being replaced at each step. And we're running,
+我在每一步都要替换的部分下划线。我们在奔跑，
+
+29
+00:02:31,950 --> 00:02:35,349
+and that matches the right hand side of sum production. And then we're replacing
+这与SUM乘积的右边相匹配。然后我们要替换掉
+
+30
+00:02:35,349 --> 00:02:40,590
+that substring by the left hand side. And finally, this entire, string here is
+左手边的那个子串。最后，这里的整个字符串是
+
+31
+00:02:40,590 --> 00:02:45,540
+replaced by E. And we wind up at the start symbol. So we began with an input string.
+替换为E，我们在开始符号处结束。所以我们从一个输入字符串开始。
+
+32
+00:02:45,540 --> 00:02:51,730
+This is our input string up here. Alright put string of tokens and we end with the
+这是我们的输入字符串。好的，放上一串代币，我们以
+
+33
+00:02:51,730 --> 00:02:58,730
+start symbol down here And if you read the moves in this direction If you start at
+从这里开始符号，如果你读到了这个方向的动作，如果你从
+
+34
+00:03:00,520 --> 00:03:07,239
+the bottom and read towards the top. Well, these are just productions. And in fact
+从底部往下看，往上看。嗯，这些只是作品。事实上，
+
+35
+00:03:07,239 --> 00:03:10,959
+this whole thing is a derivation. This is just a normal derivation going from bottom
+这整件事都是衍生出来的。这只是一个从下往下的正常推导
+
+36
+00:03:10,959 --> 00:03:14,849
+to top. But in this direction when we run it backwards beginning with the string
+到顶端。但是在这个方向上，当我们从字符串开始向后运行时
+
+37
+00:03:14,849 --> 00:03:21,849
+towards the start symbol, we call these reductions. And I haven't told you exactly
+对于开始符号，我们称这些减量为。我还没有确切地告诉你
+
+38
+00:03:22,950 --> 00:03:28,090
+how we decided what reductions to do, and you might wonder, well, how I knew to do
+我们是如何决定要做什么减税的，你可能会想，嗯，我是怎么知道要这么做的？
+
+39
+00:03:28,090 --> 00:03:32,760
+this particular sequence of reductions. Well, here's another interesting property
+这种特殊的减少顺序。嗯，这是另一个有趣的地方
+
+40
+00:03:32,760 --> 00:03:38,290
+of bottom-up parsing. So, if you read the productions backwards, they trace a
+自下而上的解析。所以，如果你倒着读这些结果，它们会追溯到一个
+
+41
+00:03:38,290 --> 00:03:43,200
+rightmost derivation, so if we begin here with e, so we're gonna--so remember the
+最右边的派生，所以如果我们从e开始，那么我们要--所以记住
+
+42
+00:03:43,200 --> 00:03:46,920
+parser is actually going in this direction, so this is the direction of
+解析器实际上正朝着这个方向前进，所以这就是
+
+43
+00:03:46,920 --> 00:03:52,510
+parsing here. But now we're gonna look at the steps the parser took in reverse, and
+在这里解析。但现在我们要看看解析器反向执行的步骤，
+
+44
+00:03:52,510 --> 00:03:57,140
+we're going to see that it was, in fact, a rightmost derivation. So here, E went to
+我们将看到，事实上，这是一个最右边的派生。所以在这里，E去了
+
+45
+00:03:57,140 --> 00:04:01,819
+T+E. Well, E was the only non terminal. But then E here is the one that's
+T+E。嗯，E是唯一的非末端。但这里的E才是
+
+46
+00:04:01,819 --> 00:04:06,060
+expanded, it's the rightmost non terminal. And then this T is expanded, it's also the
+扩展后，它是最右边的非终结点。然后这个T被扩展，它也是
+
+47
+00:04:06,060 --> 00:04:09,790
+rightmost non terminal to get int. And now this T is the rightmost tom-, non
+要获取int的最右边的非终结符。现在这个T是最右边的汤姆-，不
+
+48
+00:04:09,790 --> 00:04:14,120
+terminal. It's expanded to get Int times T. And then this is the only end right
+终点站。它被扩展为Int乘以T，然后这是唯一正确的结束
+
+49
+00:04:14,120 --> 00:04:18,930
+most non terminal, and so we wind up with the whole input string, Int times Int plus
+大多数都不是终结符，所以我们最终得到了整个输入字符串，Int乘以Int+
+
+50
+00:04:18,930 --> 00:04:25,800
+int. And this leads us to The first important f act about bottom up parsing,
+内部这就把我们带到了关于自下而上解析的第一个重要环节，
+
+51
+00:04:25,800 --> 00:04:31,259
+which is that a bottom up parser traces a rightmost derivation in reverse, all
+即自下而上的解析器以相反的方式跟踪最右边的派生，所有
+
+52
+00:04:31,259 --> 00:04:36,279
+right? So if you're ever having trouble with bottom up parsing, it's always
+对吗？因此，如果您在自下而上解析时遇到问题，它总是
+
+53
+00:04:36,279 --> 00:04:41,479
+helpful to go back to this basic fact. Bottom up parser traces a rightmost
+回到这个基本事实是有帮助的。自下而上的解析器跟踪最右边的
+
+54
+00:04:41,479 --> 00:04:48,479
+derivation, but it does so in reverse by using reductions instead of productions.
+派生，但它通过使用减法而不是乘积进行相反的操作。
+
+55
+00:04:49,819 --> 00:04:53,930
+So here's the series of reductions again. Shown on the left And here is the parse
+所以这又是一系列的减少。如左边所示，这里是解析
+
+56
+00:04:53,930 --> 00:04:58,809
+tree, that is constructed, from those reductions. And this is actually I think,
+这棵树，就是从这些减量中构造出来的。这实际上是我认为的，
+
+57
+00:04:58,809 --> 00:05:03,860
+a very helpful picture, if we animate it, to see the sequence of steps, and to see
+这是一幅非常有帮助的图片，如果我们将其动画化，以查看步骤的顺序，并查看
+
+58
+00:05:03,860 --> 00:05:07,839
+what a bottom up parser is really doing. So here we begin with the input string.
+自下而上的解析器到底在做什么。所以这里我们从输入字符串开始。
+
+59
+00:05:07,839 --> 00:05:12,649
+Over here And we show the same input string here. And now we're just going to
+在这里，我们在这里显示相同的输入字符串。现在我们要做的就是
+
+60
+00:05:12,649 --> 00:05:16,830
+walk through the sequence of steps that the, bottom up parser takes A series of
+演练自下而上解析器执行的一系列步骤
+
+61
+00:05:16,830 --> 00:05:22,580
+reductions. And show how it builds an entire parse tree. And the basic idea is
+减价。并展示它是如何构建整个解析树的。它的基本思想是
+
+62
+00:05:22,580 --> 00:05:26,099
+that in each step we're performing a reduction. And remember when we do a
+在每一步中我们都在进行减量。记住当我们做一个
+
+63
+00:05:26,099 --> 00:05:31,800
+reduction we replace the children of the right hand side of sum production by its
+减法将和乘积右侧的子代替换为
+
+64
+00:05:31,800 --> 00:05:38,800
+left hand side. And just like when we were doing top down parson well, we will do the
+左手边。就像我们做自上而下的牧师一样，我们会做
+
+65
+00:05:39,229 --> 00:05:45,319
+same thing here. In the input, and then we make T its parent. And now you can see
+这里也是一样。在输入中，然后我们将T设为它的父级。现在你可以看到
+
+66
+00:05:45,319 --> 00:05:51,279
+what's going to happen. A top down parser begins with the start symbol, and produces
+接下来会发生什么。自上而下的解析器以开始符号开始，并生成
+
+67
+00:05:51,279 --> 00:05:56,319
+the tree incrementally by expanding some non terminal, at the frontier. At the
+这棵树在边界通过扩展一些非末端递增。在
+
+68
+00:05:56,319 --> 00:06:01,210
+current, at a current leaf of the partially constructed parse tree. The
+当前，在部分构造的解析树的当前叶。这个
+
+69
+00:06:01,210 --> 00:06:05,599
+bottom up parsers is going to begin with all the leaves of the eventual pars tree
+自下而上的解析器将从最终解析树的所有叶子开始
+
+70
+00:06:05,599 --> 00:06:10,639
+The entire input. And it's going to build little trees on top of those. And it's
+整个输入。它将在这些树的上面建造一些小树。而且它是
+
+71
+00:06:10,639 --> 00:06:15,339
+going to be pasting together all the sub-trees that it's put together so far to
+把到目前为止放在一起的所有子树粘贴在一起
+
+72
+00:06:15,339 --> 00:06:20,449
+build the complete tree. Let's walk a few more steps and see how that happens. So in
+构建完整的树。让我们再走几步，看看会发生什么。所以在
+
+73
+00:06:20,449 --> 00:06:27,339
+the next step, we go from Int times T to T, so Int times and the sub tree rooted at
+下一步，我们从Int乘T到T，所以Int乘以子树为根
+
+74
+00:06:27,339 --> 00:06:32,309
+the other T, become children of this non terminal T and you can see we've taken
+另一个T，成为这个非终端T的子节点，你可以看到我们已经
+
+75
+00:06:32,309 --> 00:06:36,509
+these three sub trees here, and pasted them together into a larger tree. So as we
+这三棵子树放在这里，然后把它们贴在一起，做成一棵更大的树。所以当我们
+
+76
+00:06:36,509 --> 00:06:41,210
+go throug h the parcer, bigger and bigger portions of the original input are gonna
+通过寄存处，原始输入的越来越大的部分将
+
+77
+00:06:41,210 --> 00:06:48,059
+be pasted together into larger and larger trees. And the next reduction takes the
+被贴在一起，变成越来越大的树。而下一次降价则需要
+
+78
+00:06:48,059 --> 00:06:54,309
+Int to the far into the input, and reduces it to T. And that gets reduced to E, and
+INT到远端的输入，并将其缩减为T，它将被缩减为E，并且
+
+79
+00:06:54,309 --> 00:07:00,849
+then. At the very end the three remaining sub trees are all pasted together into one
+然后。最后，剩下的三棵子树全部粘贴在一起
+
+80
+00:07:00,849 --> 00:07:04,080
+parse tree for the whole thing with a start symbol as the root.
+以开始符号为根，解析整个对象的解析树。
+

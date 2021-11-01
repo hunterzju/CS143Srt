@@ -1,0 +1,950 @@
+0
+00:00:03,419 --> 00:00:08,940
+In this video, we are going to look at the second garbage collection technique, stop
+在本视频中，我们将了解第二种垃圾收集技术，停止
+
+1
+00:00:08,940 --> 00:00:14,540
+and copy. In stop-and-copy garbage collection memory is organized into two
+然后复制。在停止复制垃圾收集中，内存被组织为两个
+
+2
+00:00:14,540 --> 00:00:19,359
+areas. We have an old space that's used for allocation and so all of the data that
+区域。我们有一个旧空间用于分配，因此所有数据
+
+3
+00:00:19,359 --> 00:00:23,270
+the program is currently using lives in this area called the old space. And then
+该计划目前正在使用这个被称为旧空间的区域的生命。然后
+
+4
+00:00:23,270 --> 00:00:27,520
+there's a new space which is reserved for the garbage collector. And so, this is not
+有一个新的空间是为垃圾收集器预留的。所以，这不是
+
+5
+00:00:27,520 --> 00:00:33,940
+used by the program, it's just for the GC. And so the first decision in stop-and-copy
+由程序使用，它仅供GC使用。所以停止复制的第一个决定
+
+6
+00:00:33,940 --> 00:00:39,589
+garbage collection is that the program can only use half the space. And there are
+垃圾回收是指程序只能使用一半的空间。而且还有
+
+7
+00:00:39,589 --> 00:00:43,190
+some techniques more advance techniques, for stop-and-copy garbage collection that
+某些技术更高级，用于停止和复制垃圾收集，这些垃圾收集
+
+8
+00:00:43,190 --> 00:00:47,729
+allow the program to use more than half the space. So, this isn't as bad as it
+允许程序使用一半以上的空间。所以，这并不是那么糟糕
+
+9
+00:00:47,729 --> 00:00:51,600
+sounds but fundamentally, a fairly significant fraction of the space has to
+听起来不错，但从根本上讲，相当大一部分空间必须
+
+10
+00:00:51,600 --> 00:00:56,789
+be reserved for the garbage collector. Now the way allocation works is that there's a
+保留给垃圾收集器。现在分配的方式是有一个
+
+11
+00:00:56,789 --> 00:01:03,170
+heat pointer here in the old space and everything to the left of the heat pointer
+热指针位于旧空间中，以及热指针左侧的所有内容
+
+12
+00:01:03,170 --> 00:01:06,470
+is currently in use. This is where all the objects have already been allocated in
+当前正在使用中。这是已经在其中分配了所有对象的位置
+
+13
+00:01:06,470 --> 00:01:12,280
+this area that I just shaded here in red. And then when it comes time to allocate a
+我刚才在这里用红色阴影的这个区域。然后，当需要分配一个
+
+14
+00:01:12,280 --> 00:01:16,030
+new object, we simply allocate it at the heap pointers. So, the heap pointer will
+新对象，我们只需在堆指针处分配它。因此，堆指针将
+
+15
+00:01:16,030 --> 00:01:22,820
+simply bump up and some block of space will be allocated to a, the next object
+简单地撞上去，一些挡路的空间就会分配给一个，下一个物体
+
+16
+00:01:22,820 --> 00:01:27,250
+that we want to do. And it will just keep marching through the old space allocating
+这是我们想要做的。它将继续在旧的空间分配中行进
+
+17
+00:01:27,250 --> 00:01:32,020
+as you allocate more objects. Okay, so allocation just advances the heap pointer
+随着您分配更多的对象。好的，所以分配只是推进堆指针
+
+18
+00:01:32,020 --> 00:01:36,280
+so one of the advantages, actually, of stop-and-copy is a very simple and fast
+因此，实际上，停止和复制的优势之一是非常简单和快速
+
+19
+00:01:36,280 --> 00:01:42,549
+allocation strategy. Now eventually, of course, if we allocate over and over
+分配策略。最终，当然，如果我们一遍又一遍地分配
+
+20
+00:01:42,549 --> 00:01:46,060
+again, we're going to fill up the old space and so garbage collection will start
+同样，我们要填满旧空间，因此垃圾收集将开始
+
+21
+00:01:46,060 --> 00:01:52,189
+GC, will start when the old space is full. And what it's going to do is going to copy
+GC，将在旧空间已满时启动。它要做的就是复制
+
+22
+00:01:52,189 --> 00:01:56,289
+all the reachable objects, all the reachable objects from the old space into
+所有可达对象，将旧空间中的所有可达对象放入
+
+23
+00:01:56,289 --> 00:02:00,189
+the new space. And the beauty of this idea is that when you copy the reachable
+新的空间。这个想法的美妙之处在于，当你复制可达的
+
+24
+00:02:00,189 --> 00:02:04,829
+objects, the garbage is left behind. So, you simply pickup all the data that you're
+对象时，垃圾就会留在后面。因此，您只需获取您正在处理的所有数据
+
+25
+00:02:04,829 --> 00:02:09,140
+using and move it over to the new space and all the junk that you didn't need
+使用并将其移动到新的空间和所有不需要的垃圾
+
+26
+00:02:09,139 --> 00:02:14,769
+anymore is left behind in the old space. And then, after you copy stuff to the new
+更多的东西被留在了老地方。然后，在您将内容复制到新的
+
+27
+00:02:14,769 --> 00:02:20,290
+space first of all since you left the garbage behind, you're using less space
+空间首先，自从你把垃圾留在身后，你使用的空间就更少了
+
+28
+00:02:20,290 --> 00:02:23,569
+than you did before the collection. So, there's some space available now in the
+比你在收藏之前做的更多。所以，现在有一些空余的空间
+
+29
+00:02:23,569 --> 00:02:28,450
+new space for allocating new objects. And then, you simply swap the roles of the old
+用于分配新对象的新空间。然后，你简单地交换一下旧的角色
+
+30
+00:02:28,450 --> 00:02:32,950
+and new space. So, the old and new spaces are reversed what was old becomes the new,
+和新的空间。所以，旧的和新的空间颠倒了，旧的变成了新的，
+
+31
+00:02:32,950 --> 00:02:39,920
+and what was new becomes the old, and then the program resumes. So, let's take a look
+新的就变成了旧的，然后程序又恢复了。那么我们来看一看，
+
+32
+00:02:39,920 --> 00:02:44,390
+at a quick example here just to get a idea of how this works. Let's say we have our
+这里有一个简单的例子，只是想了解一下它是如何工作的。让我们假设我们有我们的
+
+33
+00:02:44,390 --> 00:02:50,019
+old space over here, this is the old space, and we have one root which is this
+这里是老空间，这是老空间，我们有一个根，那就是这个
+
+34
+00:02:50,019 --> 00:02:54,500
+object A. And so what we're going to do, well we're going to make a copy of all the
+对象A，所以我们要做的是，我们要复制所有
+
+35
+00:02:54,500 --> 00:02:58,409
+objects reachable from A. We're gonna move them over to the new space. And what
+可以从A到达的物体我们要把它们搬到新的地方。还有什么
+
+36
+00:02:58,409 --> 00:03:02,180
+that's going to look like, well, here it is, afterward. But let's trace it out. So,
+这看起来就像，嗯，这就是，之后的样子。不过，让我们把它查出来。所以,
+
+37
+00:03:02,180 --> 00:03:06,670
+we started A, we follow pointers from A, we can see there's a pointer to C, okay,
+我们从A开始，沿着从A开始的指针，我们可以看到有一个指向C的指针，好的，
+
+38
+00:03:06,670 --> 00:03:11,610
+so C is going to be reachable and there's a pointer to F , okay. And then F points
+所以C是可达的，有一个指向F的指针。然后是F点
+
+39
+00:03:11,610 --> 00:03:18,019
+back to A, and that's all the reachable objects so we copy them. And notice when
+返回到A，这是所有可到达的对象，所以我们复制它们。并注意什么时候
+
+40
+00:03:18,019 --> 00:03:21,349
+we copy them, we also copy their pointers, and now the pointers have all been
+我们复制它们，我们也复制它们的指针，现在指针都
+
+41
+00:03:21,349 --> 00:03:27,989
+changed. So, in the copy of A, it now points to the copy of C, okay. And of
+变化。所以，在A的副本中，它现在指向C的副本，好的。以及
+
+42
+00:03:27,989 --> 00:03:33,040
+course, C will point to the copy of F and there's a little issue here, this line is
+当然，C会指向F的副本，这里有一个小问题，这一行是
+
+43
+00:03:33,040 --> 00:03:39,610
+not in the right place so it should look like that. And then F points back to the
+位置不对，所以应该是这样的。然后F指向后面的
+
+44
+00:03:39,610 --> 00:03:42,819
+copy of A. So, what we know, when the object and move their pointers and we
+那么，我们所知道的，当对象和指针移动时，我们
+
+45
+00:03:42,819 --> 00:03:46,920
+adjust them so that we've really copied the whole graph of objects over to the
+调整它们，以便我们真正将整个对象图复制到
+
+46
+00:03:46,920 --> 00:03:51,590
+news space. Now, we're using less space so there's some free space here, okay. And
+新闻空间。现在，我们使用的空间更少了，所以这里有一些空闲的空间，好吧。和
+
+47
+00:03:51,590 --> 00:03:58,590
+now, this will become the old space. This now our old space and this is now the new
+现在，这里将成为旧的空间。这是我们的旧空间，现在是新的
+
+48
+00:03:58,609 --> 00:04:04,219
+space which we will use for the next garbage collection. To summarize the
+我们将用于下一次垃圾收集的空间。总结一下
+
+49
+00:04:04,219 --> 00:04:08,890
+discussi on so far, one of the essential problems in stop-and-copy is to make sure
+到目前为止，讨论停止复制的一个基本问题是确保
+
+50
+00:04:08,890 --> 00:04:12,769
+that we find all the reachable objects and we saw this same problem with
+我们找到了所有可到达的对象，我们看到了同样的问题
+
+51
+00:04:12,769 --> 00:04:16,260
+mark-and-sweep garbage collection. Now, the thing that really distinguishes
+标记和清除垃圾收集。现在，真正与众不同的是
+
+52
+00:04:16,260 --> 00:04:20,010
+stop-and-copy is that we're going to copy these objects. So, when we find a
+停止复制就是我们要复制这些对象。所以，当我们找到一个
+
+53
+00:04:20,010 --> 00:04:24,850
+reachable object we copy it into the new space. And that means that we have to find
+可到达的对象，我们将其复制到新空间中。这意味着我们必须找到
+
+54
+00:04:24,850 --> 00:04:30,100
+and fix all the pointers that point to that object and this is actually not
+并修复指向该对象的所有指针，而这实际上不是
+
+55
+00:04:30,100 --> 00:04:35,480
+obvious how to do, alright. Cuz when you find an object, of course, you can't see
+很明显该怎么做，好吧。因为当你找到一个物体的时候，你当然看不到
+
+56
+00:04:35,480 --> 00:04:39,180
+all the pointers that point into that object. So, how are we going to do that?
+所有指向该对象的指针。那么，我们要怎么做呢？
+
+57
+00:04:39,180 --> 00:04:44,040
+Well, here is an idea. Well, we copy the object, we're going to store in the old
+好吧，我有个主意。嗯，我们复制对象，我们要存储在旧的
+
+58
+00:04:44,040 --> 00:04:49,330
+version of it, it was called, a forwarding pointer to the new copy. So, let's take a
+它的版本被称为指向新副本的转发指针。那么，让我们来看一看
+
+59
+00:04:49,330 --> 00:04:53,170
+look at what that would how that would, how that looks like. So we have our old
+看看那会是什么样子，看起来是什么样子。所以我们有我们的旧的
+
+60
+00:04:53,170 --> 00:04:59,230
+space, we have our new space. And let's say, we discover some reachable object A
+太空，我们有了新的空间。比方说，我们发现了一些可达的对象A
+
+61
+00:04:59,230 --> 00:05:02,820
+in the old space. So, what we're going to do is we're going to make a copy of it
+在老地方。所以，我们要做的就是复制一份
+
+62
+00:05:02,820 --> 00:05:07,460
+over here in the new space and that's easy enough to do. But now what we're going to
+在这里的新空间，这是很容易做到的。但现在我们要做的是
+
+63
+00:05:07,460 --> 00:05:11,660
+do is we're gonna take A and we're going to reuse its space and we're gonna store
+我们要做的是拿A，我们要重新利用它的空间，我们要存储
+
+64
+00:05:11,660 --> 00:05:16,520
+what's called a forwarding pointer in it. So, we're going to, yeah, first of all,
+这就是所谓的转发指针。所以，我们要，是的，首先，
+
+65
+00:05:16,520 --> 00:05:19,580
+we're going to mark somehow that this has been copied. So, this will have some
+我们会以某种方式标记这是被复制的。所以，这个会有一些
+
+66
+00:05:19,580 --> 00:05:24,400
+special mark on it which I'll just, you know, indicate with here with a purple bar
+上面有一个特殊的标记，你知道，我会在这里用一个紫色的线条来表示
+
+67
+00:05:24,400 --> 00:05:28,600
+something. This is we're marking someway so that we can tell this object has
+某物。这是我们以某种方式标记的，这样我们就可以告诉这个物体
+
+68
+00:05:28,600 --> 00:05:32,990
+already been copied. And then at a. At a distinguished location in the object,
+已经被复制了。然后在a.在对象中的显著位置，
+
+69
+00:05:32,990 --> 00:05:35,470
+we're going to store the forwarding pointer. And you can think of this as like
+我们将存储转发指针。你可以把这个想象成这样
+
+70
+00:05:35,470 --> 00:05:39,750
+a forwarding address. So, if you know where somebody lives you can go to their
+转发地址。所以，如果你知道某人住在哪里，你可以去他们的
+
+71
+00:05:39,750 --> 00:05:43,910
+house and if they have moved, you can ask for the forwarding address. And that's
+如果他们搬家了，你可以问他们的转寄地址。那就是
+
+72
+00:05:43,910 --> 00:05:47,960
+exactly and then you can go off to their new house wherever they've wherever
+没错，然后你就可以去他们的新房子，无论他们在哪里，无论他们在哪里
+
+73
+00:05:47,960 --> 00:05:51,460
+they've gone to and presumably find them. And so, that's what's going to happen
+他们已经去了，大概找到他们了。所以，这就是将要发生的事情
+
+74
+00:05:51,460 --> 00:05:57,580
+here. If we have a pointer that points into this object later on and maybe much
+这里。如果我们有一个稍后指向此对象的指针，可能会有更多
+
+75
+00:05:57,580 --> 00:06:01,620
+later on in the garbage collection, we may discover this pointer, we may follow this
+稍后在垃圾收集中，我们可能会发现此指针，我们可能会遵循以下内容
+
+76
+00:06:01,620 --> 00:06:05,580
+pointer, find out it points in this object, realize that this object has moved
+指针，找出它指向这个对象，意识到这个对象已经移动了
+
+77
+00:06:05,580 --> 00:06:08,600
+because we've marked it and the object was moved. And then we can use the forwarding
+因为我们已经做了标记，而且物体被移动了。然后我们就可以使用转发
+
+78
+00:06:08,600 --> 00:06:14,000
+pointer to find out where the new object is and then update this pointer wherever
+查找新对象所在位置的指针，然后在任何位置更新此指针
+
+79
+00:06:14,000 --> 00:06:21,000
+it is to point to the new object. Now, just like with mark-and-sweep, we still
+它指向新对象。现在，就像标记和清扫一样，我们仍然
+
+80
+00:06:22,410 --> 00:06:27,020
+have the issue of how to implement the traversal of the object graph without
+我有一个问题，那就是如何在没有对象图的情况下实现对象图的遍历
+
+81
+00:06:27,020 --> 00:06:32,500
+using any extra space. Again, when these garbage collection algorithms, they only
+使用任何额外的空间。同样，当这些垃圾收集算法
+
+82
+00:06:32,500 --> 00:06:37,770
+get used, they only get run in low memory situations. And you can't assume that you
+使用后，它们只在内存较低的情况下运行。你不能想当然地认为你
+
+83
+00:06:37,770 --> 00:06:42,130
+can build unbounded data structures to use with the garbage collectors. The garbage
+可以构建无界数据结构以与垃圾收集器一起使用。垃圾
+
+84
+00:06:42,130 --> 00:06:48,240
+collector really needs to work in constants base. And now here is the idea
+收集器确实需要在常量库中工作。现在的想法是这样的
+
+85
+00:06:48,240 --> 00:06:53,000
+that will, that is used in stop-and-copy algorithms to solve the problem. So, we're
+那就是，在停止和复制算法中使用它来解决问题。所以，我们要
+
+86
+00:06:53,000 --> 00:06:57,120
+going partition in new space and this is just the new space here into three
+在新的空间中进行分区，这就是这里的新空间，分为三个
+
+87
+00:06:57,120 --> 00:07:02,850
+contiguous regions. We're going to have we'll start with the one on the far right.
+连续区域。我们将会有，我们将从最右边的那个开始。
+
+88
+00:07:02,850 --> 00:07:06,550
+We're going to have the empty region where we're allocating new objects. And there's
+我们将拥有分配新对象的空白区域。而且还有
+
+89
+00:07:06,550 --> 00:07:10,900
+an allocation pointer that points to the beginning of that region. So this is the
+指向该区域开始的分配指针。所以这就是
+
+90
+00:07:10,900 --> 00:07:14,190
+region that we're filling up with objects that we're copying over and this is just
+我们正在用我们复制的对象填充的区域，这就是
+
+91
+00:07:14,190 --> 00:07:20,790
+empty unused space. Now, immediately to the left of that region are the objects
+清空未使用的空间。现在，紧靠该区域左侧的是对象
+
+92
+00:07:20,790 --> 00:07:27,530
+that have already been copied, but not scanned, okay? This is copied and not
+已经被复印了，但没有扫描，好吗？此文件已复制，并且未
+
+93
+00:07:27,530 --> 00:07:34,060
+scanned. And, what does that mean? Well, that means that the object has been copied
+扫描过了。那是什么意思呢？嗯，这意味着这个物体已经被复制了
+
+94
+00:07:34,060 --> 00:07:38,060
+over. And so, we've actually, you know, made a copy of the object into the new
+完毕。所以，我们实际上已经，你知道，把这个物体复制到新的
+
+95
+00:07:38,060 --> 00:07:41,400
+space. But we haven't yet looked at its pointers. We haven't yet looked at the
+太空。但我们还没有看过它的要点。我们还没有看过
+
+96
+00:07:41,400 --> 00:07:46,210
+pointers inside the object to see where they go. And then, to the left of that,
+对象内部的指针以查看它们的去向。然后，在它的左边，
+
+97
+00:07:46,210 --> 00:07:48,560
+are the objects that have been copied and scanned. These are objects that have been
+是已复制和扫描的对象。这些是已经被
+
+98
+00:07:48,560 --> 00:07:53,460
+copied over. And we've also processed all the pointers inside of those obje cts. And
+复制过来了。我们还处理了这些对象CTS中的所有指针。和
+
+99
+00:07:53,460 --> 00:07:57,360
+so, you can think of this area here, between the scanned pointer and the
+所以，你可以在这里想一想，在扫描的指针和
+
+100
+00:07:57,360 --> 00:08:02,800
+allegation pointer, this is the work quest. So, these are the objects that
+指控指针，这就是工作追求。所以，这些就是这些物体
+
+101
+00:08:02,800 --> 00:08:06,680
+still need to be processed. These are the objects that have been copied over but
+还需要处理。这些是已经复制的对象，但是
+
+102
+00:08:06,680 --> 00:08:10,690
+might yet still point to objects that haven't been copied. And so, these are the
+可能仍指向尚未复制的对象。所以，这些是
+
+103
+00:08:10,690 --> 00:08:13,220
+objects where we have to look at their pointers to see whether they point to
+对象，我们必须查看它们的指针以查看它们是否指向
+
+104
+00:08:13,220 --> 00:08:20,220
+something that still needs to be copied over to finish the garbage collection.
+仍需复制以完成垃圾收集的内容。
+
+105
+00:08:20,530 --> 00:08:24,560
+Returning to our little example, I'm now going to walk through how a stop-and-copy
+返回到我们的小示例，我现在将演练如何停止和复制
+
+106
+00:08:24,560 --> 00:08:29,210
+garbage collector would collect this particular heap step by step. So, notice
+垃圾收集器将逐步收集此特定堆。所以，请注意
+
+107
+00:08:29,210 --> 00:08:33,969
+that we only have one root object and it's A, okay, I just want to point out that A
+我们只有一个根对象，它是A，好的，我只想指出A
+
+108
+00:08:33,969 --> 00:08:40,000
+has one pointer which points to object C, alright. So, at the very first step, what
+有一个指针指向对象C，好的。那么，在最开始的第一步，
+
+109
+00:08:40,000 --> 00:08:46,110
+we're going to do is we're going to copy the A object over to the new space, okay.
+我们要做的是把A物体复制到新的空间，好的。
+
+110
+00:08:46,110 --> 00:08:52,060
+And this is literally a byte for byte copy. So, we just take the bytes of A and
+这实际上是一个字节接一个字节的拷贝。所以，我们只取A和A的字节
+
+111
+00:08:52,060 --> 00:08:57,100
+we do a copy without, you know, doing any inspection of the interior of the object,
+我们复制的时候，你知道，没有对物体内部做任何检查，
+
+112
+00:08:57,100 --> 00:09:02,800
+over to the new space. And how's that work? Of course, our allocation pointer
+去新的地方。这是怎么回事？当然，我们的分配指针
+
+113
+00:09:02,800 --> 00:09:08,230
+isn't in, initially right here at the beginning of the new space. And then we
+不在这里，最初就在新空间的开始处。然后我们
+
+114
+00:09:08,230 --> 00:09:11,610
+add and we copy this one object over. And then that means allocating an object and
+相加，我们就把这个物体复制过来。然后这意味着分配一个对象和
+
+115
+00:09:11,610 --> 00:09:15,879
+so now, the allocation pointer points to the first word of memory, beyond the
+所以现在，分配指针指向内存的第一个字，超出
+
+116
+00:09:15,879 --> 00:09:20,110
+object that we just allocated, okay. Now what happens when we copy it over? Well,
+我们刚刚分配的对象，好的。现在当我们把它复制过来的时候会发生什么呢？井,
+
+117
+00:09:20,110 --> 00:09:24,310
+because it is just a byte for byte copy, all the pointers in A still point to the
+因为它只是字节复制的一个字节，所以A中的所有指针仍然指向
+
+118
+00:09:24,310 --> 00:09:27,750
+objects as they pointed to before which are the objects in old space. And notice
+它们所指的对象是旧空间中的对象。并请注意
+
+119
+00:09:27,750 --> 00:09:33,529
+now that this copy of A points to the object C in the old space. The other thing
+现在A的这个副本指向旧空间中的对象C。另一件事是
+
+120
+00:09:33,529 --> 00:09:38,180
+we do is we leave a forwarding pointer in the old copy of A. So, we mark A as having
+我们所做的就是在A的旧副本中保留一个转发指针。因此，我们将A标记为
+
+121
+00:09:38,180 --> 00:09:41,300
+been copied, that's why it's grayed out. Indicates that this object has already
+被复制了，这就是它灰显的原因。指示此对象已经
+
+122
+00:09:41,300 --> 00:09:47,170
+been moved. And that this dotted line here indicates that somewhere, we stored a
+被搬走了。这里的虚线表明，我们在某个地方存储了一个
+
+123
+00:09:47,170 --> 00:09:52,170
+pointer to the new copy of A. And now, we're ready to begin the algorithms. And
+指向A的新副本的指针，现在，我们准备开始算法。和
+
+124
+00:09:52,170 --> 00:09:59,170
+not ice that we have some objects here that have been copied but not scanned so
+不是冰，我们这里有一些已经复制但没有扫描的对象
+
+125
+00:09:59,430 --> 00:10:04,249
+this is our work list. So, now it's going to repeatedly work off of those objects
+这是我们的工作清单。所以，现在它将重复地工作在这些物体上
+
+126
+00:10:04,249 --> 00:10:08,199
+and how do we know they're objects in there? Well, we just compare the scan and
+我们怎么知道它们是里面的物品呢？嗯，我们只是把扫描结果和
+
+127
+00:10:08,199 --> 00:10:12,899
+the allocation pointers. So, if they're if they are different, if there's an object
+分配指针。所以，如果它们是不同的，如果有一个物体
+
+128
+00:10:12,899 --> 00:10:16,230
+in between the scan and the allocation pointer, at least one object between the
+在扫描和分配指针之间，至少有一个对象位于
+
+129
+00:10:16,230 --> 00:10:21,540
+two, then there's work to do. There's an object that needs to be scanned that and,
+两个，然后就有工作要做了。有一个物体需要扫描，
+
+130
+00:10:21,540 --> 00:10:27,249
+and possibly resulting in more objects being moved and allocated. So, what
+并且可能导致更多的对象被移动和分配。那么，怎么了？
+
+131
+00:10:27,249 --> 00:10:33,040
+happens next? So, object, we, we process A, so we walk over A and find all the
+接下来会发生什么？所以，对象，我们，我们处理A，所以我们遍历A，找到所有
+
+132
+00:10:33,040 --> 00:10:38,649
+pointers in A. And we copy any objects that it points to that haven't already
+中的指针，并且我们复制它所指向的任何尚未
+
+133
+00:10:38,649 --> 00:10:42,689
+been moved. And so, before we said, you know, the A, this, this copy of A pointed
+被搬走了。所以，在我们说之前，你知道，A，这个，这个A的复印件指向
+
+134
+00:10:42,689 --> 00:10:48,389
+to the old copy of C. So, now what we discover the C object, it hasn't been
+到C的旧副本，所以现在我们发现的C对象，它还没有
+
+135
+00:10:48,389 --> 00:10:52,980
+moved, it's still in the old space. So, we copy it over and we update the pointer in
+搬家了，它还在老地方。因此，我们复制它并更新指针
+
+136
+00:10:52,980 --> 00:10:59,079
+A to point to the new copy of C. Now, of course and then the scan pointer moves
+A指向C的新副本。现在，当然，然后扫描指针移动
+
+137
+00:10:59,079 --> 00:11:03,199
+over A. We've scanned all the pointers in A, alright. And the allocation pointer
+在A上，我们已经扫描了A中的所有指针，好的。和分配指针
+
+138
+00:11:03,199 --> 00:11:08,519
+also moves because we had to allocate space for C. And of course, C is just a
+也会移动，因为我们必须为C分配空间。当然，C只是一个
+
+139
+00:11:08,519 --> 00:11:13,420
+byte for byte copy of what was in the old space. And so it, any pointers that it has
+旧空间中内容的逐字节副本。所以它，它所拥有的任何指针
+
+140
+00:11:13,420 --> 00:11:17,430
+that point to objects that haven't been moved yet, moved yet just point back into
+该指针指向尚未移动、已移动但仅指向返回的对象
+
+141
+00:11:17,430 --> 00:11:22,670
+the old space. So, in this case the object C points to the object F in the old space.
+旧空间。因此，在这种情况下，对象C指向旧空间中的对象F。
+
+142
+00:11:22,670 --> 00:11:26,399
+And I probably should indicate here, here's the original dividing line, you
+也许我应该在这里指出，这是原来的分界线，你
+
+143
+00:11:26,399 --> 00:11:31,639
+know, this is the old space over here and this is the new space over there, alright.
+知道吗，这是这里的旧空间，这是那里的新空间，好吧。
+
+144
+00:11:31,639 --> 00:11:36,569
+And finally we mark C as having been copied, having been moved to the new space
+最后，我们将C标记为已复制，已移动到新空间
+
+145
+00:11:36,569 --> 00:11:40,749
+and we left a forwarding pointer to it in case so we can fix any pointers that point
+我们留了一个指向它的转发指针以防万一，这样我们就可以修复指向它的任何指针
+
+146
+00:11:40,749 --> 00:11:47,660
+to C that we come across in the future. And now we have to continue scanning
+到我们将来遇到的C。现在我们必须继续扫描
+
+147
+00:11:47,660 --> 00:11:51,370
+objects that have been copied but not scanned. And we can see that there is an
+已复制但未扫描的对象。我们可以看到有一个
+
+148
+00:11:51,370 --> 00:11:55,509
+object between the scan and the allocatio n pointer namely C and so we'll now
+对象位于扫描和分配指针(即C)之间，所以我们现在
+
+149
+00:11:55,509 --> 00:12:02,509
+process all the pointers in C. Next, we scan C. And, we discover that it points to
+处理C中的所有指针。接下来，我们扫描C，我们发现它指向
+
+150
+00:12:02,759 --> 00:12:08,199
+F. Which hasn't been moved yet and so we copy F over into the new space and we
+它还没有被移动，所以我们把F复制到新的空间，我们
+
+151
+00:12:08,199 --> 00:12:14,059
+update the pointer in C. And now C has been copied and scanned, okay. So, the
+更新C中的指针，现在C已经被复制和扫描，好的。所以呢，这个
+
+152
+00:12:14,059 --> 00:12:20,180
+scan pointer moves past C and of course, F again is a byte for byte copy and so all
+扫描指针移过C，当然，F也是字节复制的字节，因此全部
+
+153
+00:12:20,180 --> 00:12:24,670
+it's pointers into old space are still pointing to old space, in particular F
+指向旧空间的指针仍然指向旧空间，特别是F
+
+154
+00:12:24,670 --> 00:12:29,480
+points to A and the allocation pointer is moved again because we moved F, alright.
+指向A，分配指针再次移动，因为我们移动了F。
+
+155
+00:12:29,480 --> 00:12:35,990
+And now, we have to process F. And this will be the last object that we move. And
+现在，我们必须处理F，这将是我们移动的最后一个物体。和
+
+156
+00:12:35,990 --> 00:12:42,129
+what happens, well, we discover that F points to A, okay. And A is already marked
+发生了什么，我们发现F指向A，好的。而且A已经被标记了
+
+157
+00:12:42,129 --> 00:12:46,990
+as having been moved and it has a forwarding pointer. So, instead of copying
+因为它已经被移动，并且它具有转发指针。所以，与其复制
+
+158
+00:12:46,990 --> 00:12:53,019
+A again, we simply update the pointer in F that pointed to the old version of A to
+同样，我们只需将F中指向A的旧版本的指针更新为
+
+159
+00:12:53,019 --> 00:12:59,100
+point to the copy of A, okay. And so, now F is completely scanned. All the pointers
+指向A的副本，好的。所以，现在F完全被扫描了。所有的指针
+
+160
+00:12:59,100 --> 00:13:03,189
+in F have been processed. We didn't allocate any new objects so the allocation
+F中的所有数据都已处理过。我们没有分配任何新对象，因此分配
+
+161
+00:13:03,189 --> 00:13:06,759
+pointer didn't move and now the scan pointer and the allocation pointer are
+指针没有移动，现在扫描指针和分配指针
+
+162
+00:13:06,759 --> 00:13:11,319
+equal. There are no objects in between them and so our work list is empty and
+平等。它们之间没有对象，所以我们的工作列表是空的
+
+163
+00:13:11,319 --> 00:13:17,040
+this is the garbage collected heap. This is a complete graph, a complete copy of
+这是垃圾收集堆。这是一个完整的图表，一个完整的副本
+
+164
+00:13:17,040 --> 00:13:23,449
+its A, of the graph of reachable objects from the old space. So, now we're done and
+它是来自旧空间的可达对象图的A。所以，现在我们做完了
+
+165
+00:13:23,449 --> 00:13:29,399
+we simply swap the role of the new and old space and we resume the program so that
+我们只需交换新旧空间的角色，然后恢复该计划，以便
+
+166
+00:13:29,399 --> 00:13:34,360
+when the program starts running again, it will allocate out of this area and it'll
+当程序再次开始运行时，它将分配出此区域，并且它将
+
+167
+00:13:34,360 --> 00:13:38,939
+be on the allocation pointer until it fills up what is now the old space, you
+一直在分配指针上，直到它填满了现在的旧空间，您
+
+168
+00:13:38,939 --> 00:13:43,490
+know, and then this will be the new space that will be used for the next garbage
+知道，然后这将是新的空间，将用于下一个垃圾
+
+169
+00:13:43,490 --> 00:13:50,490
+collection. Here's a pseudo code algorithm outlining how stop-and-copy garbage
+收藏。这里有一个伪代码算法，概述了如何停止和复制垃圾
+
+170
+00:13:51,249 --> 00:13:54,420
+collection should work. So, while the scan and allocation pointers are different,
+收集应该可以工作。因此，虽然扫描指针和分配指针不同，
+
+171
+00:13:54,420 --> 00:13:58,079
+remember, we keep running until the scan pointer catches up with the allocation
+请记住，我们会一直运行，直到扫描指针赶上分配
+
+172
+00:13:58,079 --> 00:14:01,920
+pointer and they're equal. What we're going to do is we're going to look at the
+指针，它们是相等的。我们要做的是我们要看看
+
+173
+00:14:01,920 --> 00:14:05,389
+object that is at the scan pointer. That we'll call that objec t , and then for
+对象，该对象位于扫描指针处。我们称之为Objec T，然后
+
+174
+00:14:05,389 --> 00:14:08,660
+every pointer in O, we're going to do the following. We're going to find the object
+O中的每个指针，我们将执行以下操作。我们要找到那个物体
+
+175
+00:14:08,660 --> 00:14:14,279
+O' that, that pointer points to. And then there are two cases. One is that there is
+哦，那个，那个指针指向。然后是两个案例。其一是有
+
+176
+00:14:14,279 --> 00:14:18,240
+no forwarding pointer, alright. And if there's no forwarding pointer, then we
+没有转发指针，好吧。如果没有转发指针，那么我们
+
+177
+00:14:18,240 --> 00:14:22,910
+have to copy that object to new space and that will involve allocating a new object
+我必须将该对象复制到新空间，这将涉及到分配一个新对象
+
+178
+00:14:22,910 --> 00:14:26,850
+and updating the allocation pointer. Then we're going to set and here it says the
+以及更新分配指针。然后我们要设置，这里写着
+
+179
+00:14:26,850 --> 00:14:30,360
+first word, they really shouldn't emphasize the first word. Set a word. So,
+第一个词，他们真的不应该强调第一个词。定个词。所以,
+
+180
+00:14:30,360 --> 00:14:33,459
+it's a distinguished word, that's what's important. We have to know which word
+这是一个杰出的词，这才是最重要的。我们必须知道哪个词
+
+181
+00:14:33,459 --> 00:14:37,379
+we're going to use and will always be the same word. But anyways, we set a word of
+我们将使用并将永远使用同一个词。但不管怎样，我们定了一句话
+
+182
+00:14:37,379 --> 00:14:44,100
+the old object to point to the new copy. We mark the old object as copied. Mark old
+指向新副本的旧对象。我们将旧对象标记为复制。标记为旧
+
+183
+00:14:44,100 --> 00:14:51,100
+object as copied, okay. So, that's so that we can tell if we ever come to a pointer
+复制的物体，好的。这就是说，如果我们到达一个指针，我们就可以知道
+
+184
+00:14:52,249 --> 00:14:57,639
+to it again, we know it's already been moved and then we change p, the pointer,
+再说一次，我们知道它已经被移动了，然后我们改变指针p，
+
+185
+00:14:57,639 --> 00:15:01,329
+to point to the new copy of O', alright. So, if there was, that's what we do if
+指向O‘的新版，好吧。所以，如果有的话，这就是我们要做的
+
+186
+00:15:01,329 --> 00:15:04,540
+there is no forwarding pointer. And if there is a forwarding pointer, then we
+没有转发指针。如果有转发指针，那么我们
+
+187
+00:15:04,540 --> 00:15:10,540
+simply update the pointer to point to the same place as the forwarding pointer. And
+只需更新指针，使其指向与转发指针相同的位置。和
+
+188
+00:15:10,540 --> 00:15:17,540
+we just repeat this loop over and over again until we've scanned all the copied
+我们只是一遍又一遍地重复这个循环，直到我们扫描完所有拷贝的
+
+189
+00:15:17,589 --> 00:15:17,839
+options.
+选项。
+

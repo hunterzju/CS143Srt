@@ -1,0 +1,20 @@
+0
+00:00:00,989 --> 00:00:03,389
+So, to summarize, a bottom up parser traces out a
+因此，总而言之，自下而上的解析器会跟踪出
+
+1
+00:00:03,389 --> 00:00:08,420
+rightmost derivation in reverse. And it builds a parse tree by combining small parse
+最右边的反向派生。并结合较小的句法分析，构建一棵句法分析树
+
+2
+00:00:08,420 --> 00:00:12,990
+trees into larger ones. It precedes bottom up. Instead of expanding out from the
+把树变成更大的树。它先于自下而上。而不是从
+
+3
+00:00:12,990 --> 00:00:17,300
+start symbol top down, it builds from the leaves of the tree up towards the root.
+开始符号自上而下，它从树叶向上向根构建。
+

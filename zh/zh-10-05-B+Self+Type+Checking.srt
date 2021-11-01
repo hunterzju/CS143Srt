@@ -1,0 +1,145 @@
+0
+00:00:01,660 --> 00:00:04,230
+To wrap up this video, here are a few comments on
+为了结束这段视频，这里有一些关于以下内容的评论
+
+1
+00:00:04,230 --> 00:00:09,440
+implementing type checking in the presence of self-type. First of all, the extended
+在存在自类型的情况下实现类型检查。首先，扩展的
+
+2
+00:00:09,440 --> 00:00:15,030
+subtyping and least upper bound operations can do a lot of the work. If you extend
+子类型和最小上限操作可以完成大量工作。如果你延长
+
+3
+00:00:15,030 --> 00:00:18,470
+subtyping and least upper bound the way that we did then a lot of the rules don't
+子类型和最小上界，就像我们做的那样，那么很多规则就不会
+
+4
+00:00:18,470 --> 00:00:22,000
+have to change and for the most part, you don't have to do anything special for self
+必须改变，而且在很大程度上，你不需要为自己做任何特别的事情
+
+5
+00:00:22,000 --> 00:00:27,830
+type. Self-type can only be used in a very few places in the language and it's up to
+键入。Self-Type只能在语言中的极少数地方使用，而且
+
+6
+00:00:27,830 --> 00:00:30,699
+you to check that it isn't used anywhere else. Those restrictions have to be
+请您检查一下它是否没有在其他地方使用。这些限制必须是
+
+7
+00:00:30,699 --> 00:00:36,940
+followed carefully. And finally, for the most part, a use of self-type always
+小心翼翼地跟在后面。最后，在很大程度上，自我类型的使用总是
+
+8
+00:00:36,940 --> 00:00:41,410
+refers to any sub-type of the current class. There is one exception to this in
+指当前类的任意子类型。这方面有一个例外，在
+
+9
+00:00:41,410 --> 00:00:46,649
+the type checking of dispatch. In dispatch there's a method look up where we look up
+派单的类型检查。在调度中有一个方法查找，我们在哪里查找
+
+10
+00:00:46,649 --> 00:00:53,649
+in some class C, a method F. And it's possible that, that method will have a
+在某些类C中，是一个方法F。该方法可能会有一个
+
+11
+00:00:53,690 --> 00:01:00,340
+return type self-type. And this class here c, may have nothing to do with the current
+返回类型自身类型。这里的这个类c，可能与当前的
+
+12
+00:01:00,340 --> 00:01:04,059
+class. We are dispatching here to a different class and whatever our current
+班级。我们要派到一个不同的班级，不管我们目前的情况是什么
+
+13
+00:01:04,059 --> 00:01:09,110
+class is, this particular self type refers self type in That class, the class in
+类是，这个特定的Self类型引用该类中的Self类型，而
+
+14
+00:01:09,110 --> 00:01:12,090
+which we're doing the look up, not whatever class in which we're doing type
+我们做的是查找，而不是我们在哪门课上输入
+
+15
+00:01:12,090 --> 00:01:16,320
+checking. And fortunately we never need to compare that self-type to any self -type
+正在检查。幸运的是，我们从来不需要将这种自我类型与任何自我类型进行比较
+
+16
+00:01:16,320 --> 00:01:21,120
+in the current class so there's no cross talk between different kinds of self-type.
+所以不同类型的自我之间没有串音。
+
+17
+00:01:21,120 --> 00:01:26,600
+And again this is the only place in the type checking rules where you look at a
+同样，这也是类型检查规则中唯一可以查看
+
+18
+00:01:26,600 --> 00:01:33,600
+self-type that is not one in the current class. To summarize our discussion of
+不在当前类中的Self类型。总结一下我们对……的讨论
+
+19
+00:01:35,290 --> 00:01:39,080
+self-type, self-type is still a research idea. It adds more expressiveness to the
+自我类型，自我类型仍然是一种研究思路。它增加了更多的表现力
+
+20
+00:01:39,080 --> 00:01:42,520
+type system, and I think that's, yeah, easy to see, but you won't find self type
+类型系统，我认为，是的，很容易看出来，但是你不会发现自我类型
+
+21
+00:01:42,520 --> 00:01:47,890
+in mainstream languages. Self-type by itself I think is not so important, except
+用主流语言。自我类型本身我认为并不那么重要，除了
+
+22
+00:01:47,890 --> 00:01:51,560
+for the project that you're going to implement. Rather, the reason for
+你要实施的项目。更确切地说，是因为
+
+23
+00:01:51,560 --> 00:01:55,440
+including self-type is to illustrate that type checking can be quite subtle. It's
+包括自类型是为了说明类型检查可能相当微妙。它是
+
+24
+00:01:55,440 --> 00:02:00,180
+not all INT plus INT equals INT. There are actually are fairly sophisticated things
+并不是所有的int加int都等于int。实际上有相当复杂的东西
+
+25
+00:02:00,180 --> 00:02:05,880
+and fairly sophisticated reasoning that goes on inside type checking In practice,
+以及在实践中在类型检查内部进行的相当复杂的推理，
+
+26
+00:02:05,880 --> 00:02:09,780
+of course, there needs to be a balance between the complexity of the type-system
+当然，需要在类型系统的复杂性之间取得平衡
+
+27
+00:02:09,780 --> 00:02:14,310
+and its expressiveness. So more complex type-systems are harder to learn and
+以及它的表现力。因此，更复杂的类型系统更难学习和
+
+28
+00:02:14,310 --> 00:02:18,770
+they're harder to use effectively, but they also allow you to write more programs.
+它们更难有效使用，但也允许您编写更多程序。
+

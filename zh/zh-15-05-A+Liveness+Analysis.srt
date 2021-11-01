@@ -1,0 +1,650 @@
+0
+00:00:03,580 --> 00:00:08,260
+In this video, we're going to look at another global analysis called liveness
+在这段视频中，我们将查看另一个名为活跃度的全球分析
+
+1
+00:00:08,260 --> 00:00:14,780
+analysis. So, in the past several videos we've looked at a procedure for globally
+分析。因此，在过去的几个视频中，我们查看了全球范围内
+
+2
+00:00:14,780 --> 00:00:19,259
+propagating constants through a control flow graph And let's, here's, here's one
+在控制流图中传播常量，下面是一个
+
+3
+00:00:19,259 --> 00:00:23,250
+of the control flow graphs we've been looking at and recall that this algorithm
+我们一直在看的控制流图，回想一下这个算法
+
+4
+00:00:23,250 --> 00:00:27,039
+that we discussed would be sufficient to show that we could replace this use of x
+我们所讨论的将足以表明我们可以替换x的这种用法。
+
+5
+00:00:27,039 --> 00:00:34,039
+here by the constant three. And once we do that. This assignment x might no longer be
+在这里按固定的三。一旦我们做到了这一点。此赋值x可能不再是
+
+6
+00:00:35,500 --> 00:00:39,549
+useful. It might not be used anywhere And so we could potentially delete this
+很有用。它可能不会在任何地方使用，因此我们可能会将其删除
+
+7
+00:00:39,549 --> 00:00:43,269
+statement from the program And that would be a real optimization, an important
+语句，这将是一个真正的优化，一个重要的
+
+8
+00:00:43,269 --> 00:00:48,549
+optimization to do. However, we can only do that if x is not used elsewhere in the
+要做的优化工作。但是，我们只能在x没有在其他地方使用的情况下才能做到这一点。
+
+9
+00:00:48,549 --> 00:00:55,010
+program. So let's be a little more careful about what we mean by saying that x is not
+程序。所以让我们更小心一点，我们说x不是
+
+10
+00:00:55,010 --> 00:01:00,350
+used. So down here is a use of x, a reference to x, in a statement. And,
+使用。下面是x的用法，引用x，在语句中。和,
+
+11
+00:01:00,350 --> 00:01:07,350
+clearly this particular reference to x, is, use, picking up the value that's
+显然，这个对x的特殊引用是，使用，提取的值是
+
+12
+00:01:07,369 --> 00:01:13,260
+defined by this right x here. So, we say that the right of x here, is live. This
+这里由这个右边的x定义。所以，我们说x在这里的权利，是活的。这
+
+13
+00:01:13,260 --> 00:01:19,240
+one is live. Okay, And what that means is that the value may be used in the future.
+一个是现场直播。好的，这意味着这个值可能会在未来使用。
+
+14
+00:01:19,240 --> 00:01:26,240
+So, live, equals, may be used. In the future, Okay? So the value written to x at
+所以，LIVE，EQUACES，可以使用。在未来，好吗？因此，写入x的值在
+
+15
+00:01:32,070 --> 00:01:37,190
+this line of code maybe used by some subsequent instruction And here it's not
+这行代码可能会被一些后续指令使用，但这里没有
+
+16
+00:01:37,190 --> 00:01:40,080
+just that it may be used. It's actually guaranteed to be used because there's only
+只是说它可能会被使用。它实际上被保证会被使用，因为只有
+
+17
+00:01:40,080 --> 00:01:44,680
+one path. And that one path has a reference to x on it before there's
+一条路。这一条路径上有一个对x的引用
+
+18
+00:01:44,680 --> 00:01:49,460
+another assignment to x. Okay? So this particular value of x as written here is
+另一个任务给x。好吗？所以这里写的x的这个特定值是
+
+19
+00:01:49,460 --> 00:01:52,979
+guaranteed to be used. But in general we don't require that. We just mean there has
+保证会被使用。但一般说来，我们并不要求这样做。我们的意思是有
+
+20
+00:01:52,979 --> 00:01:57,840
+to be a possibility that it will be used. Now in contrast let's take a look at this.
+它有可能会被使用。现在对比一下，我们来看看这个。
+
+21
+00:01:57,840 --> 00:02:02,990
+Other statement in this example, Here, we assign x a value three but this assignment
+在本例中的其他语句中，在这里，我们为x赋值为3，但此赋值
+
+22
+00:02:02,990 --> 00:02:09,619
+x, this value of x is never used. This one, is dead. Alright? Because the value
+x，则永远不会使用此值x。这一个，已经死了。好吗？因为它的价值
+
+23
+00:02:09,619 --> 00:02:15,340
+three here is overwritten by the value four before there's any use of, the
+此处的3在使用之前被值4覆盖，
+
+24
+00:02:15,340 --> 00:02:19,730
+variable x, Okay? So this particular right to x will never see the light of day.
+变量x，好吗？因此，这种对x的特殊权利将永远不会出现在光天化日之下。
+
+25
+00:02:19,730 --> 00:02:24,980
+It'll never get used by any part of the program. And we say that it is dead. So,
+它永远不会被程序的任何部分使用。我们说它死了。所以,
+
+26
+00:02:24,980 --> 00:02:30,940
+to summarize a variable x is live as a statement S if, there exist some statement
+总而言之，变量x是作为语句Sif活动的，存在一些语句
+
+27
+00:02:30,940 --> 00:02:35,310
+that uses x. Okay. So, some other statement S prime that uses x, and there
+它使用x。好的。所以，其他一些使用x的语句S素数，在那里
+
+28
+00:02:35,310 --> 00:02:41,900
+is some path from S to S prime and there is no intervening assignments on that path
+是从S到S素数的某条路径，且在该路径上没有中间赋值
+
+29
+00:02:41,900 --> 00:02:47,280
+to x. Alright? So, there needs to be an assignment to x, at some statement S there
+敬x，好吗？所以，需要对x进行赋值，在某个语句S处
+
+30
+00:02:47,280 --> 00:02:54,280
+is some path through the program that reaches a read of x. Add sum statement to
+是通过程序到达读取x的某个路径。将SUM语句添加到
+
+31
+00:02:55,200 --> 00:03:02,200
+S prime, and along that path, there is no right to x, Okay? And if this situation
+素数，沿着这条路径，没有x的权利，好吗？如果这种情况
+
+32
+00:03:04,110 --> 00:03:10,080
+arises, then we say that this value written in this first statement s is live.
+出现，那么我们就说第一个语句s中写的这个值是活的。
+
+33
+00:03:10,080 --> 00:03:15,849
+Now if a value is not live, then it is dead. And a statement that assigns to x is
+现在，如果一个值不是活的，那么它就是死的。赋值给x的语句是
+
+34
+00:03:15,849 --> 00:03:20,599
+going to be dead code if x is dead after the assignment. So, if we know that
+如果x在赋值后是死的，那么它就是死代码。所以，如果我们知道
+
+35
+00:03:20,599 --> 00:03:24,900
+immediately after the assignment, immediately after this assignment to x,
+紧接着赋值之后，紧接着这个赋值给x，
+
+36
+00:03:24,900 --> 00:03:28,330
+there is no possibility that a value of x will be used in the future. Well then the
+未来不可能使用x值。那好吧，那么
+
+37
+00:03:28,330 --> 00:03:33,360
+assignment was useless, and the entire statement can be removed. Alright, So dead
+赋值是无用的，可以删除整个语句。好吧，那就死定了
+
+38
+00:03:33,360 --> 00:03:37,379
+assignments can be deleted from the program, But notice that in order to do
+可以从程序中删除工作分配，但请注意，为了做到这一点
+
+39
+00:03:37,379 --> 00:03:40,890
+that we have to have the liveness information. We need to know whether x is
+我们必须要有活体信息。我们需要知道x是否
+
+40
+00:03:40,890 --> 00:03:46,780
+dead at this point. So, once again, what we want to do is to have global
+在这一点上已经死了。所以，再一次，我们要做的是让全球
+
+41
+00:03:46,780 --> 00:03:50,940
+information about the control flow graph. In this case, the property is whether x
+有关控制流图的信息。在本例中，属性是x是否为x
+
+42
+00:03:50,940 --> 00:03:54,580
+will be used in the future. We want to make that information local to a specific
+将在未来使用。我们希望将该信息设置为特定的本地信息
+
+43
+00:03:54,580 --> 00:03:59,870
+point in the program, so we can make a local optimization decision. Alright, And
+在程序中定位，这样我们就可以做出局部优化决策。好的，还有
+
+44
+00:03:59,870 --> 00:04:04,709
+just like for constant propagation, we're going to define in a, an algorithm for
+就像常量传播一样，我们要在一个中定义一个算法，
+
+45
+00:04:04,709 --> 00:04:08,890
+performing liveness analysis And it's going to follow the same framework. If
+进行活跃度分析，它将遵循相同的框架。如果
+
+46
+00:04:08,890 --> 00:04:12,560
+we're going to express liveness in terms of information transferred between
+我们要用信息传递的方式来表达我们的生命力
+
+47
+00:04:12,560 --> 00:04:16,379
+adjacent statements, just as we did for copy of constant propagation And it's
+相邻语句，就像我们对常量传播的副本所做的那样，它的
+
+48
+00:04:16,379 --> 00:04:19,549
+gonna turn out that liveness is actually quite, If it's simpler, or somewhat
+我会发现，如果更简单的话，活跃度实际上是相当高的，或者有点
+
+49
+00:04:19,548 --> 00:04:23,490
+simpler, than constant propagation, since it's just a Boolean property. Eh, you
+比常量传播简单，因为它只是一个布尔属性。嗯，你
+
+50
+00:04:23,490 --> 00:04:29,300
+know, it's either true of false. Alright So let's take a look at some of the rules
+要知道，要么是真的，要么是假的。好的，那么让我们来看看其中的一些规则
+
+51
+00:04:29,300 --> 00:04:36,300
+for liveness. So here, we're defining what it means for x to be live at this point
+为了活泼。所以在这里，我们定义了x在这一点上活着意味着什么
+
+52
+00:04:36,620 --> 00:04:41,229
+here. So we're immediately after p is x live And it's going to be live. Remember
+这里。所以我们紧接着p是x实况转播，它将是实况转播。记住
+
+53
+00:04:41,229 --> 00:04:46,330
+what the intuition is. The intuition is that a, the variable x is live right after
+直觉是什么。直觉是a，变量x紧随其后
+
+54
+00:04:46,330 --> 00:04:53,330
+p if the value of x is used on some path. On one of the paths that begin at p.
+如果x的值在某条路径上使用，则为p。在其中一条从p开始的路径上。
+
+55
+00:04:53,770 --> 00:04:57,490
+Alright, And so, in order to know whether it's live, we're going to take the
+好的，为了知道是不是实况转播，我们要
+
+56
+00:04:57,490 --> 00:05:02,860
+liveness information at each of the input points. So that would be here, here, here,
+每个输入点的活跃度信息。所以它应该在这里，
+
+57
+00:05:02,860 --> 00:05:07,289
+and here. So each of the successor statements after p And we're gonna ask, is
+还有这里。所以p后面的每个后续声明，我们要问的是
+
+58
+00:05:07,289 --> 00:05:11,990
+x live at any of those points? So it's just a big or over the liveness of x and
+X住在这些地方吗？所以这只是一个很大的或超过x的活性
+
+59
+00:05:11,990 --> 00:05:18,990
+all of the successors of p And that's the liveness of x at the out of p. Next, let's
+所有p的后继者，这就是x在出界p的活跃度，接下来，让我们
+
+60
+00:05:19,180 --> 00:05:23,639
+consider the effect of individual statements on the liveness of x. So, the
+考虑单个语句对x的活性的影响。因此，
+
+61
+00:05:23,639 --> 00:05:27,629
+first rule is, that if we have a statement, and it reads the value of x,
+第一条规则是，如果我们有一个语句，它读取x的值，
+
+62
+00:05:27,629 --> 00:05:30,469
+Okay? So here, we have an assignment statement, and on the right hand side, it
+好吧?在这里，我们有一个赋值语句，在右边，它
+
+63
+00:05:30,469 --> 00:05:36,550
+refers to x, so its reading x Then, x is live Before that statement. Clearly, x is
+是指x，所以它的读数是x，那么x在该语句之前是有效的。显然，x是
+
+64
+00:05:36,550 --> 00:05:40,729
+just about to be used on the end of this statement, and so x is live at that point.
+即将在这条语句的末尾使用，所以x在这一点是有效的。
+
+65
+00:05:40,729 --> 00:05:44,860
+Alright? So if a statement, or if, if a statement reads the
+好吗？因此，如果一条语句，或者如果一条语句读取
+
+66
+00:05:44,860 --> 00:05:51,349
+value of x, then the in of that statement, x, is true. Sorry, the liveness of x is
+值，则该语句的in为真。抱歉，x的活性是
+
+67
+00:05:51,349 --> 00:05:57,499
+true. A second case is when a statement writes the value of x So here we have an
+没错。第二种情况是语句写入x的值，因此在这里我们有一个
+
+68
+00:05:57,499 --> 00:06:02,129
+assignment to x And the rest of the statement does not refer x Does not read
+赋值给x并且睡觉的语句没有引用x没有读到
+
+69
+00:06:02,129 --> 00:06:09,129
+the value of x. So there's no x in E. Okay So in this situation x is not live before
+x的值，所以在E中没有x。好的，在这种情况下，x在
+
+70
+00:06:13,029 --> 00:06:19,080
+the statement. X is not live or we can say that x is dead Before the statement And
+这份声明。x不是活的，或者我们可以说x在语句之前是死的，
+
+71
+00:06:19,080 --> 00:06:24,360
+why is that? Well, we're overriding the value of x, so whatever value, x had
+为什么会这样呢？我们覆盖了x的值，所以不管x有什么值
+
+72
+00:06:24,360 --> 00:06:28,219
+before this statement is never gonna be read. Okay, Because the ee here, the
+在这份声明永远不会被宣读之前。好的，因为在座的人，
+
+73
+00:06:28,219 --> 00:06:32,569
+right-hand side of the assignment, doesn't refer to x And, so, immediately before the
+赋值的右侧没有引用x，因此紧接在
+
+74
+00:06:32,569 --> 00:06:36,599
+statement, the current value of x is never gonna be used in the future. And so x is
+语句，则x的当前值将永远不会在将来使用。所以x是
+
+75
+00:06:36,599 --> 00:06:43,599
+dead at that point. And finally, the last case is what if we have a statement that
+在这一点上已经死了。最后，最后一个例子是，如果我们有一个声明，
+
+76
+00:06:43,899 --> 00:06:50,149
+does not refer to x? Okay, So it neither reads no r writes x. Well, then whatever
+不是指x吗？好的，所以它既不是不是r写的是x。好的，那不管怎么说
+
+77
+00:06:50,149 --> 00:06:55,770
+the line this is of x after the statement, it has the same liveness, before this
+这是语句后面的x行，它具有相同的活性，在此之前
+
+78
+00:06:55,770 --> 00:07:02,770
+statement. So if x is live here. Then x will be live here. Okay, and similarly, if
+声明。所以如果x住在这里。那么x就会住在这里。好的，同样的，如果
+
+79
+00:07:04,529 --> 00:07:10,669
+x is dead After the statement. Then x must be dead before the statement. And that's
+X在声明之后就死了。那么x在语句之前一定是死的。那就是
+
+80
+00:07:10,669 --> 00:07:16,210
+because x if x is not use in the future after the statement S then it still want
+因为x如果x在语句S之后不在将来使用，那么它仍然希望
+
+81
+00:07:16,210 --> 00:07:20,119
+be use in the future before the statement S. Since the statement S neither reads nor
+用于将来，放在语句S之前。因为语句S既不读也不读
+
+82
+00:07:20,119 --> 00:07:26,309
+write x. So those are the only four rules and now I can give the algorithm. So
+写x，这是仅有的四条规则，现在我可以给出算法了。所以
+
+83
+00:07:26,309 --> 00:07:31,860
+initially we left the liveness information for x be false at all program points And
+最初，我们在所有程序点将x的活性信息保留为false
+
+84
+00:07:31,860 --> 00:07:36,009
+then we repeat the following until all the statements satisfy the rules one through
+然后，我们重复下面的操作，直到所有语句都满足规则1到
+
+85
+00:07:36,009 --> 00:07:40,419
+four, and just has it's the same algorithm that we used for constant propagation. We
+四个，它和我们用来进行常量传播的算法是一样的。我们
+
+86
+00:07:40,419 --> 00:07:45,369
+pick some statement where the information is inconsistent and then up, update the
+选择一些信息不一致的语句，然后向上更新
+
+87
+00:07:45,369 --> 00:07:50,399
+information at that statement with the appropriate rule. So let's do a simple
+该语句中信息和适当的规则。所以让我们做一个简单的
+
+88
+00:07:50,399 --> 00:07:57,399
+example, something with a loop. So let's begin, say by initializing x to zero, and
+例如，有循环的东西。那么让我们开始吧，比方说把x初始化为0，
+
+89
+00:07:58,330 --> 00:08:05,330
+then what should our loop body do? Well, we can check whether x is equal to ten,
+那么我们的循环体应该做什么呢？嗯，我们可以检查x是否等于10，
+
+90
+00:08:05,969 --> 00:08:12,969
+and if it is, we'll, we'll exit, the loop And let's assume that x is dead on exit.
+如果是，我们就退出循环，假设x在退出时是死的。
+
+91
+00:08:13,619 --> 00:08:20,619
+So x is not refer to outside of the loop. In other wise if x is not ten Then we will
+所以x不是指循环之外的。换句话说，如果x不是10，那么我们就会
+
+92
+00:08:20,830 --> 00:08:25,439
+increment x and we'll branch back to the top of the loop. So this is a very, very
+递增x，我们将分支回到循环的顶部。所以这是一个非常非常
+
+93
+00:08:25,439 --> 00:08:30,189
+silly little program. It just counts to ten and then exits. Well let's do the
+愚蠢的小程序。它只需数到十就退出了。好的，让我们来做
+
+94
+00:08:30,189 --> 00:08:37,189
+lightness now to see where x is life. So since x is dead here on exit it's clearly
+现在来看看x在哪里是生命。所以由于x在出口是死的，所以很明显
+
+95
+00:08:38,520 --> 00:08:45,520
+gonna be dead on the out Of, of this, conditional on this branch, Okay? So I
+在这根树枝的条件下，就会死掉，好吗？所以我
+
+96
+00:08:45,890 --> 00:08:49,820
+should say that x is not live. So we're using booleans here, so that's x's,
+应该说x不是活的。所以我们这里用的是布尔值，所以这是x的，
+
+97
+00:08:49,820 --> 00:08:56,820
+liveness would be false And we're assuming And x is also, not live everyplace else,
+活性是假的，我们假设x也是，并不是生活在其他地方，
+
+98
+00:08:58,030 --> 00:09:03,250
+initially. Okay And so, there's a program point in there, also Where the liveness of
+最初是这样的。好的，这里有一个程序点，还有一个活跃度
+
+99
+00:09:03,250 --> 00:09:08,540
+x is false. Okay, So now, let's propagate the information. Well, so here we have
+X为假。好的，那么现在，让我们把信息传播出去。好的，所以我们这里有
+
+100
+00:09:08,540 --> 00:09:13,360
+read of x. And let me switch colors here. So here we have a read of x. So in fact
+读一下x，让我在这里切换颜色。所以这里我们有一个x的读数。所以实际上
+
+101
+00:09:13,360 --> 00:09:17,610
+the information's inconsistent here because ri ght before this statement since
+这里的信息不一致，因为在此语句之前
+
+102
+00:09:17,610 --> 00:09:23,910
+we have a read of x, x must be live. So in fact, x is live at this point. Now notice
+我们看到x的读数了，x肯定是带电的。所以实际上，x在这一点上是活的。现在请注意
+
+103
+00:09:23,910 --> 00:09:30,380
+that this statement both reads and writes x. Okay? But the rule that says x is live
+这个声明既读又写x，好吗？但是说x是实况的规则
+
+104
+00:09:30,380 --> 00:09:36,370
+before, when we do a read, takes priority here Because, the read happens before the
+之前，当我们执行读取时，在这里优先，因为读取发生在
+
+105
+00:09:36,370 --> 00:09:40,640
+write. So we'll read the old value of x, before we write the new value of x, Okay.
+写。所以在我们写x的新值之前，我们先读出x的旧值，好的。
+
+106
+00:09:40,640 --> 00:09:44,330
+So the old value of x does get used, and that's why x is live immediately before
+所以x的旧值确实会被使用，这就是为什么x在紧接之前是有效的
+
+107
+00:09:44,330 --> 00:09:51,330
+this statement. Okay, so then here's another, read of x. Okay, so on the, so
+这份声明。好的，这是另一个，读一下x。好的，所以
+
+108
+00:09:53,060 --> 00:09:57,720
+the point immediately before this when I left out one program point here, x is also
+紧接在此之前的点，我在这里省略了一个程序点，x也是
+
+109
+00:09:57,720 --> 00:10:02,820
+Y. Okay, And then following edges backwards, well, that means x is gonna be
+好的，然后沿着边缘向后，这意味着x将是
+
+110
+00:10:02,820 --> 00:10:08,910
+live on the back edge of the loop And it's also gonna be live by going into the
+在环路的后缘现场直播，它也将通过进入
+
+111
+00:10:08,910 --> 00:10:15,910
+initialization block. Alright? Now we come back around here and we see that we're
+初始化挡路。好吗？现在我们回到这里，我们看到我们是
+
+112
+00:10:16,000 --> 00:10:21,890
+done 'cause x is already known to be, live within the loop body. And now, live, x is
+这样做是因为已经知道x在循环体内，而现在，live，x是
+
+113
+00:10:21,890 --> 00:10:25,460
+also live here And then the question is, you know, what about this point on, the
+也住在这里，然后问题是，你知道，关于这一点，
+
+114
+00:10:25,460 --> 00:10:30,150
+entrance, at the entrance to the control flow graph? Well, there's a right of x And
+入口，在控制流图的入口处？嗯，这里有一个x的右边，
+
+115
+00:10:30,150 --> 00:10:35,250
+with no read of x on the right-hand side. So, in fact, x, is not live on entry to
+右手边没有x的读数。所以，事实上，x并不是在进入
+
+116
+00:10:35,250 --> 00:10:39,470
+this control flow graph. So in fact, x is dead at this point. So whatever value x
+此控制流程图。所以实际上，x在这一点上是死的。所以不管x值是多少
+
+117
+00:10:39,470 --> 00:10:43,240
+has when we enter the control flow graph, it will never be used in the future.
+当我们进入控制流图时，它将永远不会在未来使用。
+
+118
+00:10:43,240 --> 00:10:47,160
+Alright, and so that is the correct liveness information for every
+好的，这就是正确的活体信息
+
+119
+00:10:47,160 --> 00:10:54,160
+program point in this example. Now another thing you can see from our little example
+本例中的程序点。现在，您可以从我们的小示例中看到另一件事
+
+120
+00:10:56,310 --> 00:11:01,320
+is that values change from false to true, but not the other way around. So every
+就是值从假变成真，但不是反过来。所以每个人
+
+121
+00:11:01,320 --> 00:11:06,950
+value starts at false, and it can change at most once. To say that the value is
+值从false开始，最多只能更改一次。要说它的价值是
+
+122
+00:11:06,950 --> 00:11:11,910
+actually live, the property becomes true, and then it won't ever change back to
+实实在在的生活，财产变成真实的，然后它就再也不会变回
+
+123
+00:11:11,910 --> 00:11:18,790
+false again. So, going back to orderings, We only have two values in this analysis,
+又是假的。所以，回到排序，我们在这个分析中只有两个值，
+
+124
+00:11:18,790 --> 00:11:22,820
+false and true And the ordering is that false is less than true. Okay, And we
+FALSE和TRUE，顺序是FALSE小于TRUE。好的，我们
+
+125
+00:11:22,820 --> 00:11:26,590
+know, so everything starts at the lowest possible element of the ordering and they
+知道吗，所以所有事情都从排序中尽可能低的元素开始
+
+126
+00:11:26,590 --> 00:11:30,980
+only move up, and so they can be promoted to true, but no t vice versa And so since
+只有向上移动，它们才能提升为真，反之亦然，因为
+
+127
+00:11:30,980 --> 00:11:34,990
+each value can only change once, termination is guaranteed. That eventually
+每个值只能更改一次，保证终止。那最终会是
+
+128
+00:11:34,990 --> 00:11:37,970
+we're guaranteed to have consistent information throughout the control flow
+我们保证在整个控制流中具有一致的信息
+
+129
+00:11:37,970 --> 00:11:39,760
+graph, and the analysis will terminate.
+图形，则分析将终止。
+

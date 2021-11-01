@@ -1,0 +1,440 @@
+0
+00:00:03,570 --> 00:00:06,490
+In this video, we're gonna talk about the main difficulty with Recursive Descent
+在这段视频中，我们将讨论递归下降的主要困难
+
+1
+00:00:06,490 --> 00:00:13,490
+Parsing, a problem known as Left Recursion. Let's consider a very simple
+解析，这是一个称为左递归的问题。让我们考虑一个非常简单的
+
+2
+00:00:15,879 --> 00:00:22,480
+grammar that consist of only one production, s goes to s followed by a. So
+只包含一个结果的语法，s转到s，后面跟着a。所以
+
+3
+00:00:22,480 --> 00:00:28,580
+the Recursive Descent Algorithm for this production is the following. So, we just
+此产品的递归下降算法如下所示。所以，我们只是
+
+4
+00:00:28,580 --> 00:00:34,120
+have a function called s1 for the first production of s. And it's going to succeed
+我有一个名为s1的函数，用于s的第一次生成。它将会成功
+
+5
+00:00:34,120 --> 00:00:39,649
+if the function s succeeds and then after that succeeds we see a terminal a in the
+如果函数s成功，则在成功之后，我们将在
+
+6
+00:00:39,649 --> 00:00:46,649
+input stream. And then we have to write a function for the symbol s itself and since
+输入流。然后，我们必须为符号s本身编写一个函数，因为
+
+7
+00:00:48,300 --> 00:00:52,500
+there's only one alternative, there's only one production for s we don't need to
+只有一种选择，只有一种我们不需要的产品
+
+8
+00:00:52,500 --> 00:00:57,500
+worry about backtracking or anything. So as we'll succeed exactly when as one
+担心走回头路之类的。所以当我们合二为一的时候我们就会成功
+
+9
+00:00:57,500 --> 00:01:01,719
+succeed. There's only one possibility in this case and now I think you can see the
+成功。在这种情况下只有一种可能性，现在我想你可以看到
+
+10
+00:01:01,719 --> 00:01:07,810
+problem what's going to happen. Well, when we go to parse an input string, we're
+问题是会发生什么事。嗯，当我们要解析输入字符串时，我们
+
+11
+00:01:07,810 --> 00:01:12,950
+going to call the function s which is going to call the function s1. And then
+将调用函数s，该函数将调用函数s1。然后
+
+12
+00:01:12,950 --> 00:01:15,590
+what the function as one gonna do well, the very first thing it's going to do is
+作为一个人的功能要做好的，它要做的第一件事就是
+
+13
+00:01:15,590 --> 00:01:20,670
+to call the function s again. And as a result, the function s is going to go into
+若要再次调用函数%s，请执行以下操作。因此，函数s将进入
+
+14
+00:01:20,670 --> 00:01:24,700
+an infinite loop and we're never going to succeed in parsing any input. This will
+无限循环，我们永远不会成功解析任何输入。这将是
+
+15
+00:01:24,700 --> 00:01:31,700
+always go into an infinite loop. So, The reason that this, this grammar doesn't
+总是进入无限循环。所以，这个，这个语法不是这样的原因
+
+16
+00:01:32,880 --> 00:01:37,840
+behave very well is because it is left recursive. And a left recursive grammar is
+表现非常好是因为它是左递归的。左递归语法是
+
+17
+00:01:37,840 --> 00:01:41,750
+any grammar that has a non-terminal where if you start with that non-terminal and
+任何具有非终止符的语法，如果您从该非终止符开始，并且
+
+18
+00:01:41,750 --> 00:01:44,939
+you do some non-empty sequence of re-writes. Notice the plus there. You have
+您执行一些非空的重写序列。注意那里的加号。你有
+
+19
+00:01:44,939 --> 00:01:49,399
+to do more than one re-write. So, if you're actually doing a sequence of
+进行不止一次重写。所以，如果你真的在做一系列
+
+20
+00:01:49,399 --> 00:01:55,560
+replacements, you get back to a situation where you have the same symbol still in
+替换，您会回到一个情况，在此情况下，您仍然有相同的符号
+
+21
+00:01:55,560 --> 00:02:01,530
+the left most position. And you can see, this is not going to be good for parsing.
+最左边的位置。您可以看到，这不利于解析。
+
+22
+00:02:01,530 --> 00:02:08,530
+So, in the case of this grammar up here, what happens while we get s goes to sa it
+那么，在上面这个语法的例子中，当我们得到s的时候，会发生什么呢？
+
+23
+00:02:09,500 --> 00:02:16,500
+goes to saa goes to saaa. And so on and we can always get to a situation where we
+去SAA去SAAA。以此类推，我们总能达到这样的境地
+
+24
+00:02:18,100 --> 00:02:24,190
+have a long string of a's and an s on the left end of the string. And if we always
+在字符串的左端有一长串a和s。如果我们总是
+
+25
+00:02:24,190 --> 00:02:28,350
+have an s on the left end of the string, we can never manage any input because the
+在字符串的左端有s，我们永远不能管理任何输入，因为
+
+26
+00:02:28,350 --> 00:02:32,250
+only way we manage input is if the first thing we generate is a terminal symbol.
+我们管理输入的唯一方法是，如果我们生成的第一个东西是终端符号。
+
+27
+00:02:32,250 --> 00:02:35,390
+But if the first thing is always a non-terminal, we will never make any
+但如果第一件事总是非终结符，我们将永远不会做任何
+
+28
+00:02:35,390 --> 00:02:41,890
+progress. And, it just doesn't work. I mean, Recursive Descent does not work with
+进步了。而且，它就是不起作用。我是说，递归下降不适用于
+
+29
+00:02:41,890 --> 00:02:47,460
+Left-Recursive Grammars. Well, this seems like a major problem with recursive to
+左递归文法。嗯，这似乎是递归到的一个主要问题
+
+30
+00:02:47,460 --> 00:02:52,750
+same parsing. It is a problem but as we'll see shortly it's really not so major. So
+同样的解析。这是个问题，但正如我们很快会看到的，它真的不是那么严重。所以
+
+31
+00:02:52,750 --> 00:02:57,700
+let's consider a left-recursive grammar that slightly more general form. So here
+让我们考虑一种稍微更一般形式的左递归语法。所以在这里
+
+32
+00:02:57,700 --> 00:03:02,030
+we have two productions now for s, s goes to s followed by something alpha or it
+我们现在有两个关于s的乘积，s转到s，后面跟着某个alpha或它
+
+33
+00:03:02,030 --> 00:03:07,730
+goes to something else that doesn't mention s and let's call that Beta. And if
+转到其他没有提到s的地方，我们称它为Beta。如果
+
+34
+00:03:07,730 --> 00:03:11,370
+you think about the language that this generates, it's gonna join all strings
+你想一想这会产生的语言，它会把所有的字符串连接起来
+
+35
+00:03:11,370 --> 00:03:17,040
+that start with a beta and then follow, and followed by any number of alphas. And,
+从测试版开始，然后是任意数量的阿尔法。和,
+
+36
+00:03:17,040 --> 00:03:24,040
+but it does it in a very particular way. So if I write out some, a derivation here
+但它是以一种非常特殊的方式做到这一点的。所以如果我在这里写出一些，一个派生
+
+37
+00:03:24,400 --> 00:03:28,980
+where I used a few, where I used the first production a few times. You can see what's
+在那里我使用了一些，在那里我使用了第一部作品几次。你可以看到是什么
+
+38
+00:03:28,980 --> 00:03:34,540
+going on. So again, s goes to s followed by alpha. And then s goes to s followed by
+还在继续。所以再一次，s转到s，然后是alpha。然后s转到s，后跟s。
+
+39
+00:03:34,540 --> 00:03:40,080
+alpha, alpha and then s goes to s followed by alpha, alpha, alpha and if I repeat
+阿尔法，阿尔法，然后是s，后跟阿尔法，如果我重复
+
+40
+00:03:40,080 --> 00:03:47,080
+this, I get. S followed by any number of alphas and then in one more step, I can.
+这个，我明白了。s后面跟着任意数量的字母，然后再多走一步，我就可以了。
+
+41
+00:03:49,200 --> 00:03:54,090
+Put in beta and I get beta followed by any number of alpha. So, that's the proof that
+输入Beta，我得到的是Beta，后面跟着任意数量的α。所以，这就是证明
+
+42
+00:03:54,090 --> 00:03:58,310
+it generates that language. That language that begins with a beta and has some
+它产生了这种语言。该语言以测试版开始，并且有一些
+
+43
+00:03:58,310 --> 00:04:02,440
+sequence of alphas but you can see that it does it right to left, it produces the
+序列，但是您可以看到它是从右到左操作的，它产生
+
+44
+00:04:02,440 --> 00:04:07,200
+right under the string first and in fact the very last thing it produces if the
+首先在字符串下面，实际上也是它产生的最后一件事，如果
+
+45
+00:04:07,200 --> 00:04:12,380
+first thing that appears in the input and that's why. It doesn't work with Recursive
+在输入中出现的第一件事，这就是原因。它不适用于递归
+
+46
+00:04:12,380 --> 00:04:17,090
+Descent Parsing because Recursive Descent Parsing wants to see the first part of the
+下降解析，因为递归下降解析希望看到
+
+47
+00:04:17,089 --> 00:04:22,370
+input first and then work left to right. And this grammar is built to produce the
+先输入，然后从左到右操作。而这个语法是用来生成
+
+48
+00:04:22,370 --> 00:04:29,370
+string right to left. And therein lies the idea that allow us to fix the problem so
+字符串从右到左。其中蕴含着这样一种想法，那就是让我们能够这样解决这个问题
+
+49
+00:04:30,230 --> 00:04:34,730
+we can generate exactly the same language producing the strings from left to right
+我们可以生成完全相同的语言，从左到右生成字符串
+
+50
+00:04:34,730 --> 00:04:39,710
+instead of right to left and th e way we do that is to replace left-recursion by
+而不是从右到左，我们这样做是将左递归替换为
+
+51
+00:04:39,710 --> 00:04:44,780
+right-recursion. And this requires us to add one more symbol in this case to the
+右递归。这需要我们在本例中再添加一个符号到
+
+52
+00:04:44,780 --> 00:04:50,210
+grammar so instead of having s go to something involving s on the left, we'll
+语法，所以不用转到左边涉及s的部分，我们将
+
+53
+00:04:50,210 --> 00:04:57,210
+have s go to beta so the first thing notice in the very first position and then
+必须转到测试版，所以首先要注意的是第一个位置，然后
+
+54
+00:04:57,310 --> 00:05:01,340
+it goes to s prime and what does s prime do, well s prime produce what you would
+它转到s素数，而s素数的作用是什么，好吧，s素数产生你想要的结果。
+
+55
+00:05:01,340 --> 00:05:07,970
+expect, a sequence of alphas and it could be the empty sequence. And if you write
+期望是一个字母序列，它可能是空序列。如果你写下
+
+56
+00:05:07,970 --> 00:05:14,970
+out some you know? Example derivation here we'll have s goes to beta s prime. Which
+你知道吗？示例推导，这里我们有s到βs素数。哪一个
+
+57
+00:05:16,980 --> 00:05:23,630
+goes to now using the rules for s prime goes to beta alpha s prime, Goes to beta
+到现在为止，使用s素数的规则，得到βαs素数，再到βαs素数。
+
+58
+00:05:23,630 --> 00:05:30,120
+alpha. Alpha s prime goes to and after any number of sequent, any number of rewrites
+阿尔法。Alpha的质数在任意数量的顺序、任意数量的重写之后进行。
+
+59
+00:05:30,120 --> 00:05:37,120
+we get beta followed by sub sequence of alphas followed by s prime. And then in
+我们得到β，然后是α子序列，然后是s素数。然后在
+
+60
+00:05:37,250 --> 00:05:42,450
+one more step we use the Epsilon Rule here and we wind up with beta followed by some
+再往下一步，我们在这里使用Epsilon规则，最终得到测试版，然后是
+
+61
+00:05:42,450 --> 00:05:46,210
+number of alphas. And so you can see it generates exactly the same string as the
+阿尔法的数量。所以您可以看到它生成的字符串与
+
+62
+00:05:46,210 --> 00:05:50,380
+first grammar but it does so in a right-recursive way instead of a
+第一个语法，但它是以右递归方式实现的，而不是
+
+63
+00:05:50,380 --> 00:05:57,380
+left-recursive way. So in general, we may have many productions some of which are
+左递归法。所以一般说来，我们可能有很多作品，其中一些是
+
+64
+00:05:59,980 --> 00:06:05,850
+left-recursive and some of which are not. And the language produced by this
+左递归的，有些不是左递归的。以及由此产生的语言
+
+65
+00:06:05,850 --> 00:06:10,900
+particular form of grammar here is gonna be all the strings. They are derived from
+这里的特殊语法形式是所有的字符串。它们派生自
+
+66
+00:06:10,900 --> 00:06:17,300
+asst start with one of the betas. So one of the things here that doesn't involve s
+先从其中一个测试版开始。所以这里有一件事没有涉及到
+
+67
+00:06:17,300 --> 00:06:23,920
+and it continues with zero or more instances of the alphas. And we can do
+并且它以零个或多个阿尔法实例继续。我们能做的就是
+
+68
+00:06:23,920 --> 00:06:27,800
+exactly the same trick. This is just generalizing the idea that we had before
+完全一样的把戏。这只是我们以前的想法的推广
+
+69
+00:06:27,800 --> 00:06:32,520
+where we only have one beta and one alpha to many betas and many alphas and so the
+我们只有一个贝塔和一个阿尔法到很多贝塔和阿尔法，所以
+
+70
+00:06:32,520 --> 00:06:37,830
+general form of rewriting this left-recursive grammar in using
+改写这种左递归语法的一般形式
+
+71
+00:06:37,830 --> 00:06:43,090
+right-recursion is given here. So here each of the betas appears as an
+这里给出了右递归。因此，这里的每个测试版都显示为
+
+72
+00:06:43,090 --> 00:06:47,389
+alternative in the first position. We only need one additional symbol s prime and
+第一个位置的备选方案。我们只需要一个额外的符号s素数和
+
+73
+00:06:47,389 --> 00:06:54,389
+then the s prime rules is take care of generating any sequence of the alpha i.
+则s个质数规则负责生成αi的任何序列。
+
+74
+00:06:56,000 --> 00:06:59,830
+Now it turns out that, that isn't the most general form of left recursion. There are
+现在事实证明，这不是最一般的左递归形式。确实有
+
+75
+00:06:59,830 --> 00:07:05,660
+even other ways to encode left recursion in a grammar and here's another way that's
+甚至是在语法中编码左递归的其他方法，这里还有另一种方法，即
+
+76
+00:07:05,660 --> 00:07:11,770
+important. So, we may have a grammar that where nothing is obviously left-recursive.
+很重要。所以，我们可能有一个语法，其中没有任何东西明显是左递归的。
+
+77
+00:07:11,770 --> 00:07:16,250
+So if you look here, you see that the s doesn't even appear on the right hand side
+所以如果你看这里，你会发现s甚至没有出现在右手边
+
+78
+00:07:16,250 --> 00:07:20,520
+here. And if you look at this production here, a doesn't appear anywhere on the
+这里。如果你看这部作品，a没有出现在
+
+79
+00:07:20,520 --> 00:07:24,330
+right hand side so there's no what's called Immediate Left-Recursion in this
+右手边，所以这里没有所谓的直接左递归
+
+80
+00:07:24,330 --> 00:07:29,930
+grammar. But on the other hand, there is left-recursion because s goes to a alpha
+语法。但是另一方面，有左递归，因为s是α
+
+81
+00:07:29,930 --> 00:07:36,930
+and then a can go to s beta. And so there we have in, in two steps produce another
+然后A可以转到Sβ。所以我们在这里，在两个步骤中产生另一个
+
+82
+00:07:37,020 --> 00:07:41,889
+string with s at the left end and so this is still a Left-Recursive Grammar. We just
+左端有s的字符串，所以这仍然是一个左递归语法。我们只是
+
+83
+00:07:41,889 --> 00:07:46,340
+delayed it by inserting other non-terminals at the left most position
+通过在最左侧位置插入其他非终端来延迟它
+
+84
+00:07:46,340 --> 00:07:52,919
+before we got back to s. So, this left recursion can also be eliminated. In fact,
+在我们回到s之前，所以这个左递归也可以消除。事实上,
+
+85
+00:07:52,919 --> 00:07:57,600
+this can be eliminated automatically, it doesn't even require human intervention.
+这可以自动消除，甚至不需要人工干预。
+
+86
+00:07:57,600 --> 00:08:00,990
+And if you look at any of the text pretty quickly in the Dragon Book, you'll find
+如果你快速阅读“龙书”中的任何一篇文章，你会发现
+
+87
+00:08:00,990 --> 00:08:02,090
+algorithms were doing that.
+算法就是这么做的。
+

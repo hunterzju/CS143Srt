@@ -1,0 +1,935 @@
+0
+00:00:04,180 --> 00:00:07,649
+In this video we're going to start our discussion of garbage collection or
+在本视频中，我们将开始讨论垃圾收集或
+
+1
+00:00:07,649 --> 00:00:12,289
+automatic memory management. This will take us a few videos to get through and
+自动内存管理。这需要我们看几个视频才能看完
+
+2
+00:00:12,289 --> 00:00:15,330
+this first video is just an overview of the problem. And then we'll talk about
+第一个视频只是问题的概述。然后我们再谈一谈
+
+3
+00:00:15,330 --> 00:00:22,330
+specific techniques in subsequent videos. To set the stage, let's first talk about
+具体技巧将在后续视频中介绍。作为铺垫，我们先来谈一谈
+
+4
+00:00:23,410 --> 00:00:28,320
+the problem that we're trying to solve. So, if one has to manage memory manually,
+我们试图解决的问题。因此，如果必须手动管理内存，
+
+5
+00:00:28,320 --> 00:00:33,329
+meaning you have to do all the allocation and deallocation explicitly yourself, that
+这意味着你必须自己明确地做所有的分配和取消分配，
+
+6
+00:00:33,329 --> 00:00:37,710
+is a hard way to programming leads to certain kinds of bugs that are very
+是一种很难编程的方法，会导致某些类型的错误，这些错误非常
+
+7
+00:00:37,710 --> 00:00:42,320
+difficult to eliminate from programs. So, in particular, these days you see this
+很难从节目中消除。所以，特别是这几天，你会看到这个
+
+8
+00:00:42,320 --> 00:00:46,630
+primarily in C and C++ programs. Those are the main languages that are used that have
+主要是在C和C++程序中。这些是使用的主要语言，具有
+
+9
+00:00:46,630 --> 00:00:50,809
+manual memory management. And, the kinds of storage bugs that you can get because
+手动内存管理。而且，您可以得到的存储错误种类是因为
+
+10
+00:00:50,809 --> 00:00:55,770
+it has manual memory management are things like forgetting to free unused memory so
+它有手动内存管理功能，比如忘记释放未使用的内存，因此
+
+11
+00:00:55,770 --> 00:01:00,450
+that's a, it means a memory leak. Dereferencing dangling pointers,
+那是一个，意思是内存泄露。取消引用悬挂指针，
+
+12
+00:01:00,450 --> 00:01:04,629
+overriding parts of a data structure, unintentionally. And actually there's a
+无意中重写数据结构的各部分。实际上有一个
+
+13
+00:01:04,629 --> 00:01:07,149
+few more things, although these are probably the three most common problems
+虽然这可能是最常见的三个问题
+
+14
+00:01:07,149 --> 00:01:12,200
+that people have and these bugs are really hard to find. And I want to emphasize that
+这些细菌真的很难找到。我想强调的是
+
+15
+00:01:12,200 --> 00:01:17,720
+these kinds of bugs are often some of the very, very last bugs to be found in, in
+这些类型的错误通常是一些非常、非常晚才能发现的错误。
+
+16
+00:01:17,720 --> 00:01:23,180
+complex systems. They often persist into production and sometimes for a very long
+复杂的系统。他们经常坚持生产，有时会坚持很长时间。
+
+17
+00:01:23,180 --> 00:01:28,670
+time after the code is in production use. And why is that? The reason is that these,
+代码投入生产使用后的时间。为什么会这样呢？原因是这些，
+
+18
+00:01:28,670 --> 00:01:32,680
+these kinds of bugs, storage bugs, typically have effects that are far away
+这些类型的错误，存储错误，通常会产生很远的影响
+
+19
+00:01:32,680 --> 00:01:38,020
+in time and space from the source and so how can that happen? Well let's think
+在时间和空间上，从源头开始，那么这是怎么发生的呢？好吧，让我们想一想
+
+20
+00:01:38,020 --> 00:01:45,020
+about some object in memory and now let's say only on interesting you might have
+关于内存中的某个对象，现在让我们只说有趣的，你可能会有
+
+21
+00:01:45,680 --> 00:01:49,070
+some fields, let's say you have a few fields and I am keeping some pointers to
+一些字段，假设您有几个字段，我保留了一些指向
+
+22
+00:01:49,070 --> 00:01:54,659
+it. So somewhere on program is a reference to this particular object and now I come
+它。所以程序中的某个地方引用了这个特定的对象，现在我来了
+
+23
+00:01:54,659 --> 00:01:59,380
+along and free it. So I am doing my own memory management like free this object
+一起去解救它。所以我正在进行我自己的内存管理，比如释放这个对象
+
+24
+00:01:59,380 --> 00:02:03,780
+but I forget that I had this pointer. And so now what's happen all the storage has
+但是我忘了我有这个指针。所以现在发生的事情是所有的存储都有
+
+25
+00:02:03,780 --> 00:02:08,829
+been freed it's no longer really valid memory but the pointer still exist to it.
+被释放，它不再是真正有效的内存，但是指向它的指针仍然存在。
+
+26
+00:02:08,829 --> 00:02:12,799
+And then when I come along and allocate something else it might allocate the same
+然后，当我出现并分配其他东西时，它可能会分配相同的东西
+
+27
+00:02:12,799 --> 00:02:18,480
+piece of memory. So this might now be a different kind of object, okay. So I might
+一段记忆。所以现在这可能是一种不同的物体，好的。所以我可能会
+
+28
+00:02:18,480 --> 00:02:22,739
+have a different type here even. In this memory might be used for something
+甚至在这里也有不同的类型。在这个记忆中可能被用来做某事
+
+29
+00:02:22,739 --> 00:02:27,019
+completely different and now I have a pointer that says it thinks it's a red
+完全不同，现在我有一个指针，说它认为它是红色的
+
+30
+00:02:27,019 --> 00:02:30,909
+object, it's pointing to a blue object. And when I come in and write stuff into
+对象，它指向一个蓝色对象。当我进来把东西写进
+
+31
+00:02:30,909 --> 00:02:34,409
+this object, of course I'm just writing nonsense. So I, this, whatever piece of
+这个物体，当然我只是在写无稽之谈。所以我，这个，不管是什么
+
+32
+00:02:34,409 --> 00:02:39,340
+code holds this pointer thinks it's still the old kind of object. It will write some
+持有该指针的代码认为它仍然是旧类型的对象。它会写一些
+
+33
+00:02:39,340 --> 00:02:43,930
+bits in here and when I go in some other part of the program possibly quite far
+比特在这里，当我进入程序的其他部分时，可能会很远
+
+34
+00:02:43,930 --> 00:02:49,079
+away go out and read out, this is a blue object, I'll just get some random garbage
+出去读出，这是一个蓝色的物体，我会随便拿一些垃圾
+
+35
+00:02:49,079 --> 00:02:55,459
+and that will probably cause my program to cash. So this is a very, very old problem.
+这可能会导致我的计划兑现。所以这是一个非常、非常古老的问题。
+
+36
+00:02:55,459 --> 00:02:59,819
+It's been studied since at least the 1950s. It was first thought about
+至少从20世纪50年代开始，人们就开始对它进行研究。这是我们最初想到的
+
+37
+00:02:59,819 --> 00:03:04,069
+carefully in list. And there are some well-known techniques for completely
+仔细地列在单子上。有一些众所周知的技术可以完全
+
+38
+00:03:04,069 --> 00:03:09,430
+automatic memory management so you don't have to manage memory yourself. And this
+自动内存管理，因此您不必自己管理内存。还有这个
+
+39
+00:03:09,430 --> 00:03:14,579
+only became mainstream actually in the 1990s so with the popularity of Java.
+实际上直到20世纪90年代才成为主流，所以随着Java的流行。
+
+40
+00:03:14,579 --> 00:03:19,099
+Prior to that time there was really no mainstream language that used automatic
+在此之前，确实没有使用自动语言的主流语言
+
+41
+00:03:19,099 --> 00:03:24,769
+memory managements so that's really just in the last now almost twenty years that
+内存管理，所以这实际上只是在过去的近20年里，
+
+42
+00:03:24,769 --> 00:03:29,129
+garbage collection and automatic memory management in general became a popular
+垃圾收集和自动内存管理通常变得流行起来
+
+43
+00:03:29,129 --> 00:03:34,319
+mainstream programming technique. So the basic strategy in automatic memory
+主流编程技术。所以自动记忆的基本策略
+
+44
+00:03:34,319 --> 00:03:37,909
+management is, is pretty simple. So, when an object is created, when we allocate a
+管理是，是很简单的。因此，当创建对象时，当我们分配
+
+45
+00:03:37,909 --> 00:03:41,809
+new object the system, the run time system will find some unused space for that
+新对象在系统中，运行时系统将为该对象找到一些未使用的空间
+
+46
+00:03:41,809 --> 00:03:48,809
+object and it will just allocate it. So whenever you say new of some class name in
+对象，它将只分配它。所以，每当您说到某个类名的新名称时
+
+47
+00:03:48,919 --> 00:03:53,229
+Cool. Some memory is automatically allocated by the system, some previously
+凉爽的。有些内存是由系统自动分配的，有些是以前分配的
+
+48
+00:03:53,229 --> 00:03:57,049
+unused memory is automatically allocated by the system for that object. And if you
+系统会自动为该对象分配未使用的内存。如果你
+
+49
+00:03:57,049 --> 00:04:01,150
+keep doing this over and over and over again and after awhile you're going to run
+一遍又一遍地这样做，过一段时间你就会跑了
+
+50
+00:04:01,150 --> 00:04:07,489
+out of space. So eventually there is no more unused space left for additional obj
+空间不够。因此，最终没有更多未使用的空间可供其他对象使用
+
+51
+00:04:07,489 --> 00:04:11,609
+ects. And at that point you have to do something. You have to reclaim some of the
+等。在这一点上，你必须做点什么。你必须回收一些
+
+52
+00:04:11,609 --> 00:04:17,269
+space in order to allocate more objects and the observation that garbage
+空间为了分配更多的对象而观察到垃圾
+
+53
+00:04:17,269 --> 00:04:22,139
+collection systems rely upon is that some of the spaces being used is probably
+收集系统所依赖的是一些正在使用的空间可能
+
+54
+00:04:22,139 --> 00:04:27,490
+occupied by objects that will never be used again. So they, some of these objects
+被永远不会再使用的物品占据。所以他们，这些物体中的一些
+
+55
+00:04:27,490 --> 00:04:31,639
+are not going to be referred to again by the program and if we can figure out which
+不会被程序再次引用，如果我们能找出
+
+56
+00:04:31,639 --> 00:04:37,080
+objects those are, which objects are not longer going to be used. Then we could
+那些对象，哪些对象将不再被使用。那我们就可以
+
+57
+00:04:37,080 --> 00:04:42,889
+deallocate them and reuse the space for new objects. So the big question is, how
+取消分配它们，并将空间重新用于新对象。所以最大的问题是，如何
+
+58
+00:04:42,889 --> 00:04:48,080
+can we know that an object will never be used again? And, most of the garbage
+我们能知道一件物品永远不会再被使用吗？而且，大多数垃圾
+
+59
+00:04:48,080 --> 00:04:52,479
+collection techniques that are out there today rely on the following observation,
+今天存在的收集技术依赖于下面的观察，
+
+60
+00:04:52,479 --> 00:04:56,500
+then that's that a program can only use the objects that it can find and what do
+这就是说，程序只能使用它能找到的对象以及它能做什么
+
+61
+00:04:56,500 --> 00:05:01,900
+we mean by that? So I'm going to switch colors so let's take a look at this piece
+我们的意思是这样吗？所以我要换颜色，让我们来看看这件作品
+
+62
+00:05:01,900 --> 00:05:05,219
+of code so what's going to happen? Well when we execute this the first thing that
+那么会发生什么呢？嗯，当我们执行这项工作时，首先要做的就是
+
+63
+00:05:05,219 --> 00:05:10,629
+happens is we allocate an A object, alright. And it's assigned x, so x will
+就是我们分配一个A对象，好吧。它被赋值为x，所以x将
+
+64
+00:05:10,629 --> 00:05:17,370
+have a pointer to that object. And then, in the body of this let, what's going to
+具有指向该对象的指针。然后，在这封信的正文中，
+
+65
+00:05:17,370 --> 00:05:24,310
+happen well, we're going to assign x, the value that y points to so y is another
+发生的很好，我们将赋值x，y指向的值，所以y是另一个
+
+66
+00:05:24,310 --> 00:05:30,469
+variable. It points to some other objects in memory, okay. And what's going to
+变量。它指向内存中的其他对象，好的。那么接下来会发生什么呢？
+
+67
+00:05:30,469 --> 00:05:35,949
+happen, when we execute this assignment is that we're going to remove the old value
+当我们执行此赋值时发生的情况是，我们将删除旧值
+
+68
+00:05:35,949 --> 00:05:42,949
+of x and x now is going to point to this object. Now observe that this object a is
+会指向这个物体。现在观察到这个对象a是
+
+69
+00:05:43,379 --> 00:05:50,379
+unreachable. Meaning it has no references to it. There are no longer any pointers to
+遥不可及。意思是它没有提到它。不再有任何指向
+
+70
+00:05:50,960 --> 00:05:55,229
+it. And how do I know that? Well, a brand new here when it was created. I only
+它。我怎么知道的？嗯，这里刚造出来的时候是全新的。只有我
+
+71
+00:05:55,229 --> 00:05:59,509
+created one pointer to it, x and then I immediately assigned x to something else.
+创建了一个指向它的指针，x，然后我立即将x赋给了其他东西。
+
+72
+00:05:59,509 --> 00:06:04,909
+So I dropped the only pointer to A. There is no reference to A anywhere in the
+所以我删除了指向A的唯一指针。
+
+73
+00:06:04,909 --> 00:06:09,060
+program. And so the program will never be able to find it again. The program, if no
+程序。所以程序再也找不到它了。程序，如果没有
+
+74
+00:06:09,060 --> 00:06:15,169
+variable or data structure in the program has a pointer to A, then A can never be
+程序中的变量或数据结构有指向A的指针，则A永远不能
+
+75
+00:06:15,169 --> 00:06:20,090
+referred to by the program in the future. So any kind of subsequent execution of the
+在未来的程序中引用。因此任何类型的后续执行
+
+76
+00:06:20,090 --> 00:06:23,729
+program has no p ointers to A and therefore it will never use A again and so
+程序没有指向A的指针，因此它再也不会使用A了
+
+77
+00:06:23,729 --> 00:06:30,020
+the space ray can be reclaimed and used for another object. Now it turns out that
+空间射线可以回收并用于另一个对象。现在事实证明，
+
+78
+00:06:30,020 --> 00:06:33,340
+we need a more general definition of object reachability than this example
+我们需要比本例更一般的对象可达性定义
+
+79
+00:06:33,340 --> 00:06:38,080
+illustrates so let's take a look at that. We're going to say that an object x is
+图解，让我们来看看这个。我们要说物体x是
+
+80
+00:06:38,080 --> 00:06:42,180
+reachable if and only if one of the following two things is true. So either A
+仅当且仅当以下两件事之一为真时才可达。所以要么是A
+
+81
+00:06:42,180 --> 00:06:47,749
+register contains a pointer to x. So either the x is reachable immediately from
+寄存器包含指向x的指针。因此可以立即从
+
+82
+00:06:47,749 --> 00:06:51,669
+some register. Remember that the registers contain things like the local variables in
+有些人注册了。请记住，寄存器包含类似于
+
+83
+00:06:51,669 --> 00:06:56,419
+there and the intermediate expressions and they're just you know, the values that the
+还有中间表达式，它们就是你知道的，
+
+84
+00:06:56,419 --> 00:07:03,039
+program has immediate access to or another reachable object y contains a pointer to
+程序可以立即访问或另一个可访问对象y包含指向
+
+85
+00:07:03,039 --> 00:07:07,469
+x. And so what does this say? Well, this says you're going start at the register so
+那么这上面写的是什么呢？嗯，这上面说你要从收银台开始
+
+86
+00:07:07,469 --> 00:07:11,759
+you know the program might be implemented using a few registers. And then you're
+您知道，该程序可能使用几个寄存器来实现。然后你就会
+
+87
+00:07:11,759 --> 00:07:17,090
+going to look at all the things that those registers point to, all the objects that
+我们来看看这些寄存器所指向的所有东西，所有
+
+88
+00:07:17,090 --> 00:07:21,409
+they point to. And you will look at the pointers in those objects and everything
+他们指着。您将查看这些对象中的指针和所有内容
+
+89
+00:07:21,409 --> 00:07:27,789
+they can point to, okay. And some of these things might overlap. I mean, some of
+他们可以指出来，好的。其中一些东西可能会重叠。我是说，有些人
+
+90
+00:07:27,789 --> 00:07:32,189
+these there might be multiple things which are reachable by more than one path
+这些可能存在多个可通过多条路径到达的事物
+
+91
+00:07:32,189 --> 00:07:35,370
+starting at the registers. But the complete side of things that you can
+从收银台开始。但是你所能做的事情的完整的一面
+
+92
+00:07:35,370 --> 00:07:39,319
+reach, beginning at the registers and following all the possible pointers, those
+从寄存器开始，跟随所有可能的指针，到达那些
+
+93
+00:07:39,319 --> 00:07:44,199
+are all the reachable objects. And then the complement of that set, an unreachable
+是所有可到达的对象。然后是那个集合的补码，一个无法到达的
+
+94
+00:07:44,199 --> 00:07:48,819
+object is one that isn't reachable. So all the other objects, the ones that you were
+对象是无法到达的对象。所以所有其他的物体，那些你曾经是的物体
+
+95
+00:07:48,819 --> 00:07:53,439
+not able to reach by recursively starting at registers and following pointers as far
+不能通过递归地从寄存器开始并跟随指针到达
+
+96
+00:07:53,439 --> 00:07:58,349
+as you could, those objects can never be used. Because clearly the implementation
+正如您所能做到的，这些对象永远不能使用。因为很明显，实现
+
+97
+00:07:58,349 --> 00:08:04,059
+can only access things through registers and, and then only find additional things
+只能通过寄存器和访问内容，然后只能查找其他内容
+
+98
+00:08:04,059 --> 00:08:07,189
+by, you know loading pointers out of objects that it could reach from the
+通过，您可以知道从对象中加载指针可以从
+
+99
+00:08:07,189 --> 00:08:12,559
+registers. So anything that it can reach by some sequence of sub-steps will never
+寄存器。因此，它可以通过某些子步骤序列到达的任何东西都永远不会
+
+100
+00:08:12,559 --> 00:08:18,809
+be used again, and is garbage. So let's take a look at another example that
+再用一次，就是垃圾。那么我们来看另一个例子，
+
+101
+00:08:18,809 --> 00:08:23,849
+illustrates some interesting aspects of re achability and its use in automatic memory
+说明了可达性的一些有趣方面及其在自动记忆中的用法
+
+102
+00:08:23,849 --> 00:08:27,629
+management. So what does this example do? The first thing it does, it allocates an A
+管理层。那么这个示例做了什么呢？它做的第一件事就是分配一个A
+
+103
+00:08:27,629 --> 00:08:34,390
+object, on the heap and assigns that to the variable x. So, x is a pointer to that
+对象，并将其赋给变量x。因此，x是指向该对象的指针
+
+104
+00:08:34,390 --> 00:08:41,390
+object. And then it allocates a B object and y will point to that object. And then,
+对象。然后它分配一个B对象，y将指向该对象。然后,
+
+105
+00:08:42,789 --> 00:08:49,789
+it assigns the value of y to x, alright. So, we'll have this configuration and, and
+它将y的值赋给x，好的。因此，我们将使用此配置，并且
+
+106
+00:08:50,690 --> 00:08:57,690
+now let's draw a line here, okay and we'll come back and let's remember this point in
+现在让我们在这里画一条线，好的，我们会回来的，让我们记住这一点
+
+107
+00:08:57,870 --> 00:09:02,170
+time, what things look like at this point in time. And then we're going to go off
+时间，这个时间点上的情况。然后我们要出发了
+
+108
+00:09:02,170 --> 00:09:04,630
+and we're going to execute this conditional. And notice that this
+我们要执行这个有条件的。请注意这一点
+
+109
+00:09:04,630 --> 00:09:09,860
+conditional is going to do. It's going to always be true, alright? So the predicate
+有条件的就行了。这将永远是事实，好吗？所以谓词
+
+110
+00:09:09,860 --> 00:09:12,490
+will always be true so it'll never take the false branch. All it's going to ever
+将永远是真的，所以它永远不会走上错误的枝条。它所要做的就是
+
+111
+00:09:12,490 --> 00:09:15,649
+do is take the true branch and what's it going to do there, is immediately going to
+取真正的分支，它将在那里做什么，立即
+
+112
+00:09:15,649 --> 00:09:19,910
+overwrite x. And so x is going to wind up pointing at some other new object. It
+重写x，所以x最终会指向其他一些新的物体。它
+
+113
+00:09:19,910 --> 00:09:24,740
+doesn't matter what it is. And now, let's say that at this point right here, is
+不管是什么都无关紧要。现在，让我们假设在这一点上，
+
+114
+00:09:24,740 --> 00:09:28,820
+where we try to do a garbage collection. So you know, for some reason this is the
+在那里我们尝试进行垃圾收集。所以你知道，出于某种原因，这是
+
+115
+00:09:28,820 --> 00:09:34,360
+point where the program stops and tries to collect unused memory. And what can it
+程序停止并尝试收集未使用内存的位置。它能做什么呢？
+
+116
+00:09:34,360 --> 00:09:37,810
+collect? Well, just like before cuz the example up to this point is essentially
+对方付费吗？嗯，就像以前一样，因为到现在为止的例子基本上是
+
+117
+00:09:37,810 --> 00:09:44,790
+the same. We can see that this object is unreachable, okay. So the first A object
+一样的。我们可以看到这个物体是无法到达的，好的。所以第一个A对象
+
+118
+00:09:44,790 --> 00:09:49,940
+becomes unreachable at that point and it can be collected. Now what about the
+在这一点上变得无法到达，并且它可以被收集。现在我们来看一下
+
+119
+00:09:49,940 --> 00:09:54,230
+second object? Well it is reachable, it's clearly reachable. It's reachable through
+第二件物品呢？嗯，它是可以到达的，它显然是可以到达的。它可以通过以下途径到达
+
+120
+00:09:54,230 --> 00:09:58,779
+x, okay at that point and it's also reachable as it happens through y. And so
+好的，在这一点上，它也是可以到达的，因为它发生在y上，所以
+
+121
+00:09:58,779 --> 00:10:03,800
+it's not garbage and it's not going to be collected but notice that the x value is
+它不是垃圾，也不会被收集，但请注意，x值是
+
+122
+00:10:03,800 --> 00:10:09,180
+always going to be overwritten, okay? So the program, the compiler doesn't know
+总是会被覆盖的，好吗？所以程序，编译器不知道
+
+123
+00:10:09,180 --> 00:10:13,709
+that this branch is always going to be true. So, it doesn't realize that the
+这个分支将永远是正确的。所以，它没有意识到
+
+124
+00:10:13,709 --> 00:10:17,350
+value that x has at this point won't ever be used again but that value is
+此时x拥有的值将不会再被使用，但该值
+
+125
+00:10:17,350 --> 00:10:20,779
+immediately going to be overwritten, every time we take this conditional. And
+马上就会被覆盖，每次我们接受这个条件。和
+
+126
+00:10:20,779 --> 00:10:24,839
+furthermore, if y is not used any place else in the program, if y i s dead at this
+此外，如果y没有在程序中的任何其他位置使用，如果y已经死在这一点上。
+
+127
+00:10:24,839 --> 00:10:30,610
+point. Let's say that y is dead here. Then, neither one of these references to B
+重点。假设y在这里是死的。那么，这些对B的引用都不是
+
+128
+00:10:30,610 --> 00:10:35,970
+is ever gonna be touched again. So in fact the B value will never be used again even
+再也不会被碰了。所以事实上，B值甚至不会再被使用
+
+129
+00:10:35,970 --> 00:10:40,660
+though it is reachable. And so what this tells you is that reachability is an
+虽然它是可以触手可及的。所以这告诉你可达性是一种
+
+130
+00:10:40,660 --> 00:10:47,660
+approximation. And by that I mean it's an approximation for the objects that will
+近似值。我的意思是这是物体的近似值
+
+131
+00:10:48,170 --> 00:10:51,850
+never be used again. What we're really interested in when we do garbage
+再也不能用了。我们做垃圾时真正感兴趣的是什么
+
+132
+00:10:51,850 --> 00:10:55,300
+collection is collecting objects that will never be used in the future execution of
+集合是收集在将来的执行中永远不会使用的对象
+
+133
+00:10:55,300 --> 00:10:59,440
+the program. Because obviously that space is wasted and could be put to some other
+这个项目。因为很明显，这个空间是浪费的，可以放到其他地方去
+
+134
+00:10:59,440 --> 00:11:03,360
+use that might be better and reachability approximates that. So if an object is
+使用可能更好的，可达性接近于此。因此，如果一个对象是
+
+135
+00:11:03,360 --> 00:11:07,730
+unreachable it definitely won't be used again however, just because an object is
+但是，它肯定不会再被使用，只是因为一个对象
+
+136
+00:11:07,730 --> 00:11:12,610
+reachable it's not a guarantee that it will be used again. So now let's talk
+但不能保证它会被再次使用。所以现在让我们谈谈
+
+137
+00:11:12,610 --> 00:11:18,170
+about how we do garbage collection in Coolc. So Coolc has a fairly simple
+关于我们如何在Coolc进行垃圾收集。所以Coolc有一个相当简单的
+
+138
+00:11:18,170 --> 00:11:21,570
+structure. It uses an accumulator in which of course points to an object and that
+结构。它使用累加器，在累加器中当然指向对象，并且
+
+139
+00:11:21,570 --> 00:11:25,410
+object may point to other objects and so on. So we have to trace all the objects
+对象可以指向其他对象，依此类推。所以我们必须追踪所有的物体
+
+140
+00:11:25,410 --> 00:11:29,190
+reachable from the accumulator but we also have to worry about the stack pointer so
+可从累加器访问，但我们还必须担心堆栈指针，因此
+
+141
+00:11:29,190 --> 00:11:34,600
+there's also stuff reachable from the stack. And each stack frame of course may
+还有一些东西可以从堆栈中拿到。当然，每个堆栈帧可以
+
+142
+00:11:34,600 --> 00:11:38,910
+contain pointers like, and you know for example the method parameters that are
+包含指针，例如，您知道的方法参数是
+
+143
+00:11:38,910 --> 00:11:43,570
+stored on the stack. Each stack frame may also contain some non-pointers, alright?
+存储在堆栈上。每个堆栈帧也可能包含一些非指针，对吗？
+
+144
+00:11:43,570 --> 00:11:47,660
+So if I think about the layout of each activation record there would be some mix
+因此，如果我考虑一下每个激活记录的布局，会有一些混合
+
+145
+00:11:47,660 --> 00:11:52,310
+of pointers and non-pointers. Things like the return address so we have to know the
+指针和非指针。像寄信人地址这样的东西，所以我们必须知道
+
+146
+00:11:52,310 --> 00:11:56,269
+layout of the frame. But if we do know the layout and of course the compiler is
+框架的布局。但是如果我们知道布局，当然编译器是
+
+147
+00:11:56,269 --> 00:12:00,339
+deciding on the layout so it naturally does know the layout, it can find all the
+决定布局因此它自然知道布局，它可以找到所有
+
+148
+00:12:00,339 --> 00:12:05,060
+pointers in the frame. Essentially, the compiler has to keep a record for each
+框架中的指针。从本质上讲，编译器必须为每个
+
+149
+00:12:05,060 --> 00:12:09,110
+kind of activation record it builds for each methods. If activation record for a
+它为每个方法构建的激活记录的种类。如果激活记录用于
+
+150
+00:12:09,110 --> 00:12:14,329
+method foo and let's say that activation record has four slots then the compiler
+方法foo，假设激活记录有四个槽，那么编译器
+
+151
+00:12:14,329 --> 00:12:17,069
+would need to keep track of which one of these were pointers to objects. And
+需要跟踪其中哪一个是指向对象的指针。和
+
+152
+00:12:17,069 --> 00:12:21,139
+perhaps the second , and the fourth element of the frame are always pointers
+也许框架的第二个和第四个元素始终是指针
+
+153
+00:12:21,139 --> 00:12:25,250
+to objects and the other two are always non-pointers. So the somewhere, the
+指向对象，另外两个始终是非指针。所以在某个地方，那个
+
+154
+00:12:25,250 --> 00:12:30,120
+compiler has to keep track of this information so that the garbage collector
+编译器必须跟踪此信息，以便垃圾回收器
+
+155
+00:12:30,120 --> 00:12:35,110
+will know at Run time when it's looking at an activation record for foo where the
+在运行时，当它查看foo的激活记录时，将知道
+
+156
+00:12:35,110 --> 00:12:41,399
+pointers that it needs to follow are. So in Coolc, we start tracing from the
+它需要遵循的指针是。因此，在Coolc中，我们从
+
+157
+00:12:41,399 --> 00:12:45,509
+accumulator and the stack and these are called the roots, okay. So, in garbage
+累加器和堆栈，这些叫做根，好的。所以，在垃圾里
+
+158
+00:12:45,509 --> 00:12:51,230
+collection terminology the roots are the registers from which you begin tracing out
+集合术语根是您开始跟踪的寄存器
+
+159
+00:12:51,230 --> 00:12:54,910
+all the reachable objects. And if we do that here, what we can do, so you see we
+所有可访问的对象。如果我们在这里做到这一点，我们能做的就是，所以你可以看到我们
+
+160
+00:12:54,910 --> 00:12:57,690
+have our object, here we have our accumulator, excuse me and our stack
+有我们的对象，这里有我们的累加器，对不起，还有我们的堆栈
+
+161
+00:12:57,690 --> 00:13:03,209
+pointer and so we can just walk through. This little diagram of memory and find all
+指针，这样我们就可以走过去了。这张记忆的小图表，找到所有
+
+162
+00:13:03,209 --> 00:13:07,389
+the reachable objects so the acummulator points to object A so we'll mark that as
+可达对象，因此累加器指向对象A，因此我们将其标记为
+
+163
+00:13:07,389 --> 00:13:11,290
+reachable. And A points to C so we'll mark it as reachable. C points to E so we'll
+可以到达。A指向C，因此我们将其标记为可达。C指向E，所以我们将
+
+164
+00:13:11,290 --> 00:13:15,750
+mark E as reachable. The stack pointer has a couple of frames on it. The first frame
+将E标记为可达。堆栈指针上有几个帧。第一帧
+
+165
+00:13:15,750 --> 00:13:20,449
+has no pointers. The second frame points to E. We've already touched that one. It's
+没有指针。第二帧指向E，我们已经摸过那一帧了。它是
+
+166
+00:13:20,449 --> 00:13:23,060
+already marked so we can mark it again but it doesn't matter as long as it gets
+已经标记好了，所以我们可以再标记一次，但只要它
+
+167
+00:13:23,060 --> 00:13:27,459
+marked by somebody and now everything that is not marked is unreachable. So what
+被某人标记了，现在所有没有标记的东西都是无法到达的。那又怎样
+
+168
+00:13:27,459 --> 00:13:32,589
+objects didn't we touch and are traversal of the reachable objects? Well those are
+我们没有接触的对象，并且正在遍历可到达的对象吗？嗯，这些都是
+
+169
+00:13:32,589 --> 00:13:36,529
+objects B and D. And so those are, unreachable objects and they can be
+对象B和D，这些是无法到达的对象，它们可以
+
+170
+00:13:36,529 --> 00:13:41,339
+reclaimed and we can reuse their storage. Now, one interesting thing to note here is
+回收，我们就可以重复利用它们的储藏。现在，这里需要注意的一件有趣的事情是
+
+171
+00:13:41,339 --> 00:13:47,420
+that, just because an object has pointers to it, it does not mean it is reachable,
+那就是，仅仅因为一个对象有指向它的指针，并不意味着它是可到达的，
+
+172
+00:13:47,420 --> 00:13:53,660
+so notice here object D. Object D actually has a pointer to it, okay and yet object D
+所以请注意这里的对象D。对象D实际上有一个指向它的指针，好的，但是对象D
+
+173
+00:13:53,660 --> 00:13:57,290
+is unreachable and why is that? Well because the only pointers to it are from
+是遥不可及的吗？为什么呢？嗯，因为指向它的唯一指针来自于
+
+174
+00:13:57,290 --> 00:14:01,560
+other unreachable objects. So it's important here to, you know just
+其他无法触及的对象。所以在这里很重要的是，你知道
+
+175
+00:14:01,560 --> 00:14:05,720
+understand that it's not the case that every unreachable object has no pointers
+请理解，并不是每个无法到达的对象都没有指针
+
+176
+00:14:05,720 --> 00:14:08,610
+to it. There will be some unreachable objects or there may be some unreachable
+为它干杯。将存在一些无法访问的对象，或者可能存在一些无法访问的对象
+
+177
+00:14:08,610 --> 00:14:12,470
+objects that actually do have pointers to it, to them but they will on ly come from
+实际上确实有指向它的指针的对象，但它们只能来自
+
+178
+00:14:12,470 --> 00:14:18,480
+other unreachable objects. So every garbage collection scheme has the
+其他无法触及的对象。因此，每个垃圾收集方案都有
+
+179
+00:14:18,480 --> 00:14:21,920
+following steps. We're going to allocate space as needed for new objects, so we
+以下步骤。我们将根据需要为新对象分配空间，因此我们
+
+180
+00:14:21,920 --> 00:14:26,670
+just go ahead and allocate new space as long as we have space, so whenever we need
+只要我们有空间，就继续分配新的空间，所以无论何时我们需要
+
+181
+00:14:26,670 --> 00:14:31,629
+it. And when space runs out we need to compute what objects might be used again.
+它。当空间耗尽时，我们需要计算哪些对象可能会再次被使用。
+
+182
+00:14:31,629 --> 00:14:35,060
+And generally that's done by tracing objects reachable from a set of root
+通常，这是通过跟踪可从一组根目录访问的对象来实现的
+
+183
+00:14:35,060 --> 00:14:38,579
+registers and then we're going to free the complement of that set. We're going to
+寄存器，然后我们将释放该集合的补码。我们要去
+
+184
+00:14:38,579 --> 00:14:44,879
+free the space used by the objects not found in part A. And I want to say that
+释放A部分中未找到的对象使用的空间，我想说的是
+
+185
+00:14:44,879 --> 00:14:48,560
+some strategies do perform garbage collection before the space actually runs
+有些策略确实会在空间实际运行之前执行垃圾收集
+
+186
+00:14:48,560 --> 00:14:51,720
+out and we'll actually look at one of those in a future video.
+我们将在未来的视频中看到其中的一个。
+

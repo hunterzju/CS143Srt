@@ -1,0 +1,770 @@
+0
+00:00:03,169 --> 00:00:06,670
+Welcome back, in this second half of the lecture we'll continue with our overview
+欢迎回来，在这节课的后半部分，我们将继续概述
+
+1
+00:00:06,670 --> 00:00:13,670
+of the structure of a compiler. Recall that a compiler has five major phases,
+编译器的结构。回想一下编译器有五个主要阶段，
+
+2
+00:00:16,199 --> 00:00:21,390
+lexical analysis, parsing, semantic analysis, optimization, and code
+词法分析、解析、语义分析、优化和编码
+
+3
+00:00:21,390 --> 00:00:25,510
+generation. And now we're going to briefly talk about each one, and we're going to
+一代人。现在我们将简要地讨论每一个问题，我们将
+
+4
+00:00:25,510 --> 00:00:30,850
+explain how a compiler understands these with an analogy to how humans understand
+用人类理解的类比来解释编译器如何理解这些
+
+5
+00:00:30,850 --> 00:00:37,850
+English. The first step at understanding a program, both for a compiler and for a
+英语。理解程序的第一步，对于编译器和
+
+6
+00:00:38,379 --> 00:00:45,069
+human, is to understand the words. Now, humans can look at this example sentence
+人，就是要懂字。现在，人类可以看到这个例句
+
+7
+00:00:45,069 --> 00:00:52,069
+and immediately recognize that there are four words 'this is a' and 'sentence. And
+并立即认识到有四个词‘这是一个’和‘句子。
+
+8
+00:00:52,789 --> 00:00:57,449
+this is so automatic that you don't even think about it but there is [inaudible]
+这是如此自动，以至于你甚至不去想它，但有[听不见]
+
+9
+00:00:57,449 --> 00:01:01,209
+real computation going on here. You have to recognize the separators, namely the
+真正的计算在这里进行。您必须识别分隔符，即
+
+10
+00:01:01,209 --> 00:01:07,759
+blanks. And the punctuation, things like the periods, and also clues like capital
+一片空白。还有标点符号，像句点这样的东西，还有像大写这样的线索
+
+11
+00:01:07,759 --> 00:01:13,289
+letters. And these help you to divide up this group of letters into, a bunch of
+信件。这些帮助你把这组字母分成，一堆
+
+12
+00:01:13,289 --> 00:01:18,030
+words that you can understand. And just to emphasize that this is not completely
+你能听懂的话。我要强调的是，这并不是完全
+
+13
+00:01:18,030 --> 00:01:24,100
+trivial, let's take a look at this sentence. And you can read this, but it
+琐事，我们来看看这句话。你可以读到这个，但是它
+
+14
+00:01:24,100 --> 00:01:28,250
+takes a little bit of time Because I've put the separators in, in odd places. So
+需要一点时间，因为我在奇怪的地方放了分隔符。所以
+
+15
+00:01:28,250 --> 00:01:34,799
+you can see the word is, the word this, the word a, and the word sentence. But
+你可以看到单词is，单词this，单词a和单词句子。但
+
+16
+00:01:34,799 --> 00:01:38,820
+again this isn't something that comes to you immediately. You actually have to do
+再说一次，这不是你马上就会想到的事情。你实际上要做的就是
+
+17
+00:01:38,820 --> 00:01:44,060
+some work to see where the divisions lie Because they're not given to you in the
+有些工作是为了查看划分在哪里，因为它们不是在
+
+18
+00:01:44,060 --> 00:01:49,920
+way that you're used to. The goal of lexical analysis, then, is to divide the
+你习惯的方式。因此，词法分析的目标是将
+
+19
+00:01:49,920 --> 00:01:56,259
+program text into its words, or what we call in compiler speak, the tokens. So,
+将程序文本转化为它的单词，或者我们在编译器中所说的标记。所以,
+
+20
+00:01:56,259 --> 00:02:00,009
+here's an, an example piece of program text now, instead of a piece of English
+这不是一篇英语，而是一段，现在是一段例句的程序课文，而不是一段英语。
+
+21
+00:02:00,009 --> 00:02:05,579
+text, and let's walk through this and identify the tokens. So, there's some
+文本，让我们浏览一下并识别令牌。所以，有一些
+
+22
+00:02:05,579 --> 00:02:11,489
+obvious ones that are keywords, like if, and then. >> And else that we want to
+明显的关键字，比如if，然后。>>否则我们想要
+
+23
+00:02:11,489 --> 00:02:18,489
+identify. And then there are variable names, things like X, and Y, and Z.
+确认身份。然后是变量名，比如X、Y和Z。
+
+24
+00:02:19,120 --> 00:02:25,519
+There's also constants, things like number one, and the number two. And then there
+还有常量，比如数字一和数字二。然后在那里
+
+25
+00:02:25,519 --> 00:02:32,019
+are some operators, double equals is one, and the assignment operator is another.
+是一些运算符，Double Equals是一个运算符，赋值运算符是另一个运算符。
+
+26
+00:02:32,019 --> 00:02:36,260
+And here's already an interesting question. How do we know that double
+这已经是一个有趣的问题了。我们怎么知道这双倍
+
+27
+00:02:36,260 --> 00:02:41,170
+equals is not two individual equals signs? How do we know that we want this? To be a
+等号不是两个人的等号吗？我们怎么知道我们想要这个呢？成为一名
+
+28
+00:02:41,170 --> 00:02:45,909
+double equal so we want, and not two single equals. Well, we don't know right
+所以我们想要双倍相等，而不是两个单一相等。嗯，我们不知道对不对
+
+29
+00:02:45,909 --> 00:02:50,610
+now but we'll talk about that. >> In the lecture on how we implement Lexico
+现在，但我们会讨论这个。>>在我们如何实现Licio的讲座中
+
+30
+00:02:50,610 --> 00:02:53,959
+analysis. But we're not done with all the tokens in this example either, there's a
+分析。但是我们也没有用完本例中的所有令牌，有一个
+
+31
+00:02:53,959 --> 00:03:00,040
+few more. The semi colons, the punctuation are also tokens, and then the separators
+再来几个。分号、标点符号也是标记，然后是分隔符
+
+32
+00:03:00,040 --> 00:03:04,560
+are also tokens, so here's a blank, that's a token, here's another blank, that's
+也是代币，所以这里有一个空格，这是一个代币，这里还有一个空格，那是
+
+33
+00:03:04,560 --> 00:03:08,230
+another token, and then there are lots of blanks here that serve to separate things
+另一个记号，然后这里有很多空格，用来分隔东西
+
+34
+00:03:08,230 --> 00:03:12,150
+like the keywords and the variable names and other symbols from each other. And
+就像关键字、变量名和其他符号彼此不同。和
+
+35
+00:03:12,150 --> 00:03:19,150
+those are the tokens of this example. So for humans, once the words are understood,
+这些是本例中的标记。所以对人类来说，一旦理解了这些话，
+
+36
+00:03:19,569 --> 00:03:22,659
+the next step is to understand the structure of the sentence, and this is
+下一步是理解句子的结构，这是
+
+37
+00:03:22,659 --> 00:03:26,879
+called parsing. And as we all learned in elementary school, this means diagramming
+称为解析。正如我们在小学时学到的，这意味着要画图表
+
+38
+00:03:26,879 --> 00:03:32,110
+sentences, and these diagrams are trees, and it's a very simple procedure. Let's
+句子，这些图表是树，这是一个非常简单的过程。我们走吧
+
+39
+00:03:32,110 --> 00:03:36,969
+look at this example. This line is a longer sentence. The first step in parsing
+看看这个例子。这一行是一个较长的句子。解析的第一步
+
+40
+00:03:36,969 --> 00:03:42,790
+is to identify the role of each word in the sentence. So we have things like nouns
+就是找出每个词在句子中的角色。所以我们有名词之类的东西
+
+41
+00:03:42,790 --> 00:03:49,730
+and verbs and adjectives. But then, the actual work of parsing is to group these
+还有动词和形容词。但是，解析的实际工作是对这些内容进行分组
+
+42
+00:03:49,730 --> 00:03:53,860
+words together into higher level constructs. So for example, this
+将单词组合成更高层次的结构。举个例子，这个
+
+43
+00:03:53,860 --> 00:04:00,860
+particular sentence consists of a subject, a verb, and an object, okay? And that
+特定的句子由主语、动词和宾语组成，好吗？那就是
+
+44
+00:04:01,469 --> 00:04:04,719
+actually forms an entire sentence. So, right here we have the root of the tree
+实际上构成了一个完整的句子。所以，就在这里，我们看到了树根
+
+45
+00:04:04,719 --> 00:04:07,989
+called a sentence, and that's broken down into constituent parts. The high level
+叫做句子，它被分解成几个组成部分。高层
+
+46
+00:04:07,989 --> 00:04:11,890
+structure, as we said, is subject verb to object. And then the subject is more
+结构，正如我们所说的，是主语动词对宾语。然后主题就是更多
+
+47
+00:04:11,890 --> 00:04:18,890
+complicated, as is the object. And this is an example of parsing an English sentence.
+复杂，就像对象一样。这是一个解析英语句子的例子。
+
+48
+00:04:19,940 --> 00:04:24,420
+The analogy between parsing English text and parsing program text is very strong.
+解析英语文本和解析程序文本之间的相似性非常强。
+
+49
+00:04:24,420 --> 00:04:28,510
+In fact, they're exactly the same thing. So here's our little example piece of code
+事实上，它们完全是一回事。下面是我们的一小段示例代码
+
+50
+00:04:28,510 --> 00:04:32,880
+again, so let's work through parsing it. So, clearly, this is an if then else
+再说一次，让我们来解析一下。所以，很明显，这是一种假设，否则
+
+51
+00:04:32,880 --> 00:04:38,160
+statement, and so, the root of our diagram, of our parse tree, is gonna be if
+语句，因此，我们的图和解析树的根将是if
+
+52
+00:04:38,160 --> 00:04:42,350
+then else. [inaudible] Nothing else consists of three parts. There's a
+然后是其他的。[听不见]其他的东西都由三部分组成。有一个
+
+53
+00:04:42,350 --> 00:04:46,290
+predicate, a then statement, and an L statement. And now let?s look at the
+谓词、THEN语句和L语句。现在让我们来看一下
+
+54
+00:04:46,290 --> 00:04:51,920
+predicate which consists of three pieces. There's a variable, a comparison operator
+谓词，由三部分组成。有一个变量，一个比较运算符
+
+55
+00:04:51,920 --> 00:04:57,850
+and another variable and together those form a relation. So the comparison between
+还有另一个变量，这些变量加在一起就形成了一种关系。所以比较一下
+
+56
+00:04:57,850 --> 00:05:02,610
+two things is one of the things you can have as a valid predicate. Similarly, the
+两件事是你可以作为有效谓词的一件事。类似地，
+
+57
+00:05:02,610 --> 00:05:08,560
+then statement consists of an assignment where Z gets one, and the else statement also
+THEN语句由一个赋值组成，其中Z得到一个赋值，而ELSE语句也包含一个赋值
+
+58
+00:05:08,560 --> 00:05:15,560
+has the form of an assignment, Z gets two. And to, all together this is a parse tree,
+有赋值的形式，Z得到两个。加在一起，这是一棵解析树，
+
+59
+00:05:15,920 --> 00:05:19,320
+of the if-then-else, showing its structure, breaking it up into its
+If-Then-Else，显示其结构，将其分解为
+
+60
+00:05:19,320 --> 00:05:26,320
+constituent pieces. Now, once we've understood the sentence structure, the
+成分片。现在，一旦我们理解了句子结构，
+
+61
+00:05:26,600 --> 00:05:30,930
+next step is to try to understand the meaning, of what has been written. And,
+下一步是试着理解所写内容的含义。和,
+
+62
+00:05:30,930 --> 00:05:36,180
+this is hard. So, actually we don't know how this works for humans still. We don't
+这太难了。所以，实际上我们还不知道这对人类是如何起作用的。我们没有
+
+63
+00:05:36,180 --> 00:05:40,850
+understand, what happens after lexical analysis and parsing. We do know that
+理解词法分析和解析之后会发生什么。我们确实知道
+
+64
+00:05:40,850 --> 00:05:46,280
+people do lexical analysis and parsing in much the same way, that compilers
+人们进行词法分析和解析的方式与编译器大致相同
+
+65
+00:05:46,280 --> 00:05:50,910
+lexically analyze and parse programs. But frankly, understanding meaning is
+对程序进行词法分析和解析。但坦率地说，理解意思是
+
+66
+00:05:50,910 --> 00:05:55,830
+something that is simply too hard for compilers. So, the first important thing
+这对编译器来说简直太难了。所以，第一件重要的事
+
+67
+00:05:55,830 --> 00:06:01,710
+to understand about, semantic analysis is that compilers can only do very limited
+要了解，语义分析是编译器只能做非常有限的事情
+
+68
+00:06:01,710 --> 00:06:06,490
+kinds of semantic analysis. And in particular the kinds of things that
+各种语义分析。尤其是那些
+
+69
+00:06:06,490 --> 00:06:10,870
+compilers generally do are try to catch inconsistencies. So, if the program is
+编译器通常会尝试捕捉不一致的地方。所以，如果程序是
+
+70
+00:06:10,870 --> 00:06:15,930
+somehow self inconsistent, [inaudible] compilers can often notice that and report
+不知何故，自不一致的[听不见的]编译器经常会注意到这一点并报告
+
+71
+00:06:15,930 --> 00:06:22,130
+errors. But they don't really know what the program is supposed to do. As an
+错误。但是他们并不真正知道这个项目应该做什么。作为一个
+
+72
+00:06:22,130 --> 00:06:27,590
+example of the kind of thing that we do in semantic analysis, again, using an analogy
+我们在语义分析中所做的这类事情的例子，再一次使用类比
+
+73
+00:06:27,590 --> 00:06:32,180
+in English, let's consider the following sentence. So, Jack said Jerry left his
+在英语中，让我们考虑下面的句子。杰克说杰瑞把他的
+
+74
+00:06:32,180 --> 00:06:37,930
+assignment at home. And the question is, what, who does his, refer to here? It
+家里的作业。问题是，他的在这里指的是谁？它
+
+75
+00:06:37,930 --> 00:06:42,580
+could be that his refers to Jerry, in which case we would read, Jack said Jerry
+可能他指的是杰瑞，在这种情况下，我们会读到，杰克说，杰瑞
+
+76
+00:06:42,580 --> 00:06:48,540
+left Jerry's assignment at home. Or it could refer to Jack. In which case, we
+把杰瑞的任务留在家里了。也可能是指杰克。在这种情况下，我们
+
+77
+00:06:48,540 --> 00:06:52,630
+could read the sentence as, Jack said Jerry left Jack's assignment at home. And
+杰克说杰瑞把杰克的作业忘在家里了。和
+
+78
+00:06:52,630 --> 00:06:58,450
+without more information, we actually don't know which one. His is referring to,
+在没有更多信息的情况下，我们实际上不知道是哪一个。他指的是，
+
+79
+00:06:58,450 --> 00:07:02,980
+whether it's Jack, or it's Jerry. And even worse, let's take a look at this sentence
+不管是杰克，还是杰瑞。更糟糕的是，让我们看看这句话
+
+80
+00:07:02,980 --> 00:07:07,700
+down here. Jack said, Jack left his assignment at home. And the question is
+在这下面。杰克说，杰克把作业忘在家里了。问题是
+
+81
+00:07:07,700 --> 00:07:14,700
+how many people are actually involved in this sentence? It could be as many as
+这句话实际上涉及多少人？可能会有多达
+
+82
+00:07:14,860 --> 00:07:19,280
+three, there could be two separate Jacks and his, could even refer to somebody
+三，可能有两个不同的杰克和他的，甚至可以指某人
+
+83
+00:07:19,280 --> 00:07:23,450
+completely different. We don't know without seeing the rest of the story. That
+完全不同。如果不看这个故事的睡觉，我们就不知道。那
+
+84
+00:07:23,450 --> 00:07:27,910
+surrounds this sentence, all the possibilities for his. But it could also
+围绕着这句话，他的一切可能性。但它也可能
+
+85
+00:07:27,910 --> 00:07:32,740
+be as few as, only a single person. It could be that Jack and Jack and his are
+少到只有一个人。可能是杰克和杰克和他的
+
+86
+00:07:32,740 --> 00:07:37,700
+all the same person in this sentence. And so this kind of ambiguity is a real
+这句话里的所有人都是同一个人。所以这种模棱两可是真正的
+
+87
+00:07:37,700 --> 00:07:44,700
+problem, in semantic analysis. And the analogy in programming languages is
+语义分析中的问题。编程语言中的类比是
+
+88
+00:07:46,250 --> 00:07:50,720
+variable bindings. So we would have variables, in this case, a variable called
+变量绑定。所以我们会有变量，在本例中，变量名为
+
+89
+00:07:50,720 --> 00:07:54,340
+Jack or maybe more than one variable called Jack. And a programming language is
+或者可能不止一个名为jack的变量。一种编程语言是
+
+90
+00:07:54,340 --> 00:08:01,210
+going to have very strict rules to prevent the kind of ambiguities we had in the
+将有非常严格的规则来防止我们在
+
+91
+00:08:01,210 --> 00:08:06,900
+English sentences on the previous slide. So you know, in this example. Question is
+上一张幻灯片上的英语句子。所以你知道，在这个例子里。问题是
+
+92
+00:08:06,900 --> 00:08:12,180
+what value is printed by this output statement, and the answer is it's going to
+此OUTPUT语句打印的值是什么，答案是它将
+
+93
+00:08:12,180 --> 00:08:18,110
+print four because this use of the variable Jack binds to this definition
+打印四，因为变量JACK的使用绑定到此定义
+
+94
+00:08:18,110 --> 00:08:23,970
+here. And the outer definition is hidden. So the outer definition is not active in
+这里。并且外部定义被隐藏。因此，外部定义在中处于非活动状态
+
+95
+00:08:23,970 --> 00:08:27,390
+this scope because it is hidden by the inner definition and that is just a
+这个作用域，因为它被内部定义隐藏，这只是一个
+
+96
+00:08:27,390 --> 00:08:34,390
+standard rule of a lot of lexically scoped programming languages. Now the pilots
+许多词法作用域编程语言的标准规则。现在飞行员们
+
+97
+00:08:34,990 --> 00:08:39,300
+perform many semantic texts besides analyzing the variable bindings. And so
+除了分析变量绑定之外，执行许多语义文本。因此，
+
+98
+00:08:39,299 --> 00:08:45,829
+here's another example in English. So Jack looked her homework at home. And, under
+这里有另一个英语例子。所以杰克在家里看了她的作业。并且，在
+
+99
+00:08:45,829 --> 00:08:49,949
+the usual naming conventions, assuming that Jack is male, we know there's a type
+按照通常的命名惯例，假设杰克是男性，我们知道有一种类型
+
+100
+00:08:49,949 --> 00:08:56,050
+mismatch between Jack and her. So we know that, whatever her is, it is not Jack.
+杰克和她不匹配。所以我们知道，不管她是什么人，都不是杰克。
+
+101
+00:08:56,050 --> 00:08:59,610
+And, and therefore we known that this sentence is talking about two different
+因此我们知道这句话说的是两个不同的
+
+102
+00:08:59,610 --> 00:09:06,569
+people. And so this is, analogous to type checking. The fourth compiler phase,
+人民。这就类似于类型检查。第四编译阶段，
+
+103
+00:09:06,569 --> 00:09:10,959
+optimization, doesn't have a very strong counterpart in everyday English usage but
+优化，在日常英语用法中没有很强的对应性，但是
+
+104
+00:09:10,959 --> 00:09:14,480
+it's a little bit like editing. And, in fact, it's a lot like what professional
+这有点像编辑。事实上，这很像是什么专业人士
+
+105
+00:09:14,480 --> 00:09:18,779
+editors do when they have to reduce the length of an article to get it down to
+当编辑不得不缩短文章的长度以使之降到最低时，他们就会这么做。
+
+106
+00:09:18,779 --> 00:09:23,889
+some word budget. So, for example, I have this phrase right here, but a little bit
+一些文字预算。举个例子，我这里有这样一句话，但有一点
+
+107
+00:09:23,889 --> 00:09:29,060
+like ending; and if I didn't like it, if I thought it was too long, I could replace
+喜欢结尾；如果我不喜欢，如果我觉得太长了，我可以换掉
+
+108
+00:09:29,060 --> 00:09:36,060
+the middle four words, with two words. Akin to. So now it says, but akin to
+中间的四个字，有两个字。类似于。所以现在它说，但类似于
+
+109
+00:09:36,290 --> 00:09:40,250
+editing, and that means exactly the same thing as the original phrase, but uses
+编辑，这与原始短语的意思完全相同，但使用
+
+110
+00:09:40,250 --> 00:09:47,250
+fewer words. And the goal in program optimization Is to modify the program so
+少说几句话。而程序优化的目标是对程序进行修改，从而
+
+111
+00:09:47,279 --> 00:09:51,180
+that it uses less of some resource. Maybe we want to use less time, we want the
+它使用的资源更少。也许我们想用更少的时间，我们想要
+
+112
+00:09:51,180 --> 00:09:57,730
+program to run faster maybe we want it to use less space so that we can fit more
+程序运行得更快，也许我们希望它使用更少的空间，这样我们就可以容纳更多的人
+
+113
+00:09:57,730 --> 00:10:02,329
+data in memory. For a handheld device we might be interested in reducing the amount
+内存中的数据。对于手持设备，我们可能有兴趣降低
+
+114
+00:10:02,329 --> 00:10:06,910
+of power that it uses. If we have external communication we might be interested in
+它所使用的能量。如果我们有外部通信，我们可能会感兴趣
+
+115
+00:10:06,910 --> 00:10:12,220
+reducing the number of network messages or the number of database accesses. And
+减少网络消息数量或数据库访问次数。和
+
+116
+00:10:12,220 --> 00:10:17,800
+there's any number of resources that we might want to improve other program's use
+我们可能想要提高其他程序的使用率
+
+117
+00:10:17,800 --> 00:10:24,800
+of. So here's a simple example of the kinds of optimizations a program might do.
+的。这里有一个简单的例子，说明了程序可能进行的各种优化。
+
+118
+00:10:28,019 --> 00:10:32,600
+We can have a rule in our compiler that says X equals Y times zero, is the same as
+我们的编译器中可以有一条规则，X等于Y乘以零，等于
+
+119
+00:10:32,600 --> 00:10:36,769
+X equals zero. And this seems like a real improvement, because instead of doing the
+X等于零。这似乎是一个真正的进步，因为与其做
+
+120
+00:10:36,769 --> 00:10:42,449
+multiply, we can just do an assignment. So we save some computation by doing that.
+乘法，我们可以只做一个任务。所以我们这样做可以节省一些计算量。
+
+121
+00:10:42,449 --> 00:10:47,670
+Now unfortunately this is not a correct rule. And this is one of the important
+不幸的是，这不是一条正确的规则。这是其中一个重要的
+
+122
+00:10:47,670 --> 00:10:51,449
+things to know about compiling optimization, is that it's not always
+关于编译优化需要知道的事情是，它并不总是
+
+123
+00:10:51,449 --> 00:10:57,249
+obvious when it's legal to do certain optimizations or not. Now it turns out
+很明显，何时进行某些优化是合法的或不合法的。现在事实证明
+
+124
+00:10:57,249 --> 00:11:04,249
+That this particular rule is valid for integers. Okay, so if X and Y are
+此特定规则对整数有效。好的，如果X和Y是
+
+125
+00:11:04,819 --> 00:11:10,379
+integers, then multiplying by zero is always the same thing as just signing
+整数，则乘以零始终等同于仅签名
+
+126
+00:11:10,379 --> 00:11:17,379
+zero. But, it's invalid for floating point. And why is that, well because you
+零。但是，它对浮点数是无效的。为什么呢？因为你
+
+127
+00:11:20,350 --> 00:11:24,540
+have to know some details of the IEEE floating point standard, but there is a
+我必须了解IEEE浮点标准的一些细节，但是有一个
+
+128
+00:11:24,540 --> 00:11:29,550
+special number in the IEEE standard called not a number and it turns out that
+IEEE标准中的特殊数字不是数字，结果是
+
+129
+00:11:29,550 --> 00:11:36,550
+not a number called a NaN times zero is equal to not a number. Any particular
+一个叫做NaN的数字乘以零不等于一个数字。任何特定的
+
+130
+00:11:37,610 --> 00:11:43,540
+non-number times zero is not equal to zero If X and Y are plotting point numbers, you
+如果X和Y正在绘制点编号，则非数字乘以零不等于零
+
+131
+00:11:43,540 --> 00:11:47,790
+can't do this optimization. In fact, if you did this optimization, it would break
+无法进行此优化。事实上，如果您进行此优化，它将中断
+
+132
+00:11:47,790 --> 00:11:52,470
+certain very important algorithms that rely on the proper propagation of
+某些非常重要的算法依赖于
+
+133
+00:11:52,470 --> 00:11:59,470
+not a number. Finally, the last compiler phase is code generation, often
+不是一个数字。最后，最后一个编译器阶段是代码生成，通常是
+
+134
+00:12:00,689 --> 00:12:07,040
+referred to as Code Gen, and Code Gen, can produce assembly code. That's the most
+称为代码生成和代码生成，可以生成汇编代码。那是最多的
+
+135
+00:12:07,040 --> 00:12:10,579
+common thing that a compiler would produce. But in general, it's a
+编译器会生成的常见内容。但总的来说，这是一种
+
+136
+00:12:10,579 --> 00:12:15,040
+translation into some other language. And this is, entirely analogous to human
+翻译成其他语言。这是，完全类似于人类
+
+137
+00:12:15,040 --> 00:12:21,499
+translation. So just as a human translator might translate, English into French, a
+翻译。因此，就像人工翻译可能会将英语翻译成法语一样，一个
+
+138
+00:12:21,499 --> 00:12:28,499
+compiler will translate a high level program into assembly code. To wrap up,
+编译器将高级程序翻译成汇编代码。总而言之，
+
+139
+00:12:28,680 --> 00:12:34,360
+almost every compiler has the five phases that we outlined. However, the proportions
+几乎每个编译器都有我们概述的五个阶段。然而，这一比例
+
+140
+00:12:34,360 --> 00:12:38,899
+have changed a lot over the years, and if we were to go back to FORTRAN I and
+这些年来发生了很大的变化，如果我们回到FORTRANI和FORTRANI
+
+141
+00:12:38,899 --> 00:12:43,809
+look inside of that compiler, we would probably see a size and complexity that
+仔细观察编译器内部，我们可能会看到它的大小和复杂性
+
+142
+00:12:43,809 --> 00:12:49,550
+looks something like this. We have a fairly complex lexical analysis phase, an
+看起来像这样。我们有一个相当复杂的词法分析阶段，
+
+143
+00:12:49,550 --> 00:12:56,550
+equally complicated parsing phase, a very small semantic analysis phase, a. A fairly
+同样复杂的解析阶段，非常小的语义分析阶段，a.相当
+
+144
+00:12:57,199 --> 00:13:03,980
+involved optimization phase and another fairly involved code generation phase. And
+包括优化阶段和另一个相当复杂的代码生成阶段。和
+
+145
+00:13:03,980 --> 00:13:10,259
+so we see a compiler where the complexity was sp, spread fairly evenly throughout
+所以我们看到一个编译器，它的复杂度是sp，相当均匀地分布在各处。
+
+146
+00:13:10,259 --> 00:13:15,199
+except for its semantic analysis which is very weak in the early days. And today
+除了它早期的语义分析非常薄弱之外。而今天
+
+147
+00:13:15,199 --> 00:13:19,749
+if we look at a modern compiler you'll see almost nothing in lengthening, very little
+如果我们看一看现代编译器，你几乎看不到任何加长方面的东西，很少
+
+148
+00:13:19,749 --> 00:13:25,269
+in parsing, because we have extremely good tools to help us write those two phases.
+因为我们有非常好的工具来帮助我们编写这两个阶段。
+
+149
+00:13:25,269 --> 00:13:31,569
+We would see a fairly involved thematic analysis phase. We would see a very large
+我们将看到一个相当复杂的主题分析阶段。我们会看到一个非常大的
+
+150
+00:13:31,569 --> 00:13:36,930
+optimization phase, and this is in fact the dominant component off all modern
+优化阶段，这实际上是所有现代产品的主要组成部分
+
+151
+00:13:36,930 --> 00:13:43,290
+compilers, and the a small code-generation phase because again we understand that
+编译器，以及一个很小的代码生成阶段，因为我们再次理解
+
+152
+00:13:43,290 --> 00:13:48,949
+phase very, very well. That's it for this lecture. Future lectures, we'll look at
+阶段非常非常好。这堂课就讲到这里。在以后的讲座中，我们将关注
+
+153
+00:13:48,949 --> 00:13:50,580
+each of these phases in detail.
+这些阶段中的每一个都有详细的描述。
+

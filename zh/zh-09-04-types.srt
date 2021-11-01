@@ -1,0 +1,715 @@
+0
+00:00:04,580 --> 00:00:11,580
+Welcome back, in this video we're going to have an introductions to types. So a very
+欢迎回来，在这段视频中，我们将对类型进行介绍。所以一个非常
+
+1
+00:00:13,080 --> 00:00:18,430
+basic question to ask is what is a type anyway. And this question is worth asking
+要问的基本问题是，到底什么是类型。这个问题值得一问。
+
+2
+00:00:18,430 --> 00:00:22,619
+because the notion of type, what a type is, does vary from programming language to
+因为类型的概念，即类型是什么，确实随编程语言的不同而不同
+
+3
+00:00:22,619 --> 00:00:27,869
+programming language. Now roughly speaking the consensus is that a type is a set of
+编程语言。粗略地说，现在的共识是类型是一组
+
+4
+00:00:27,869 --> 00:00:32,640
+values, and also, perhaps more importantly, a set of operations that are
+值，或许更重要的是，还有一组操作，这些操作
+
+5
+00:00:32,640 --> 00:00:35,720
+unique to those values, a set of operations that are defined on those
+对于这些值是唯一的，即在这些值上定义的一组操作
+
+6
+00:00:35,720 --> 00:00:42,019
+values. So, for example, if I looked at the type of integers, there are some
+价值。举个例子，如果我看一下整数的类型，有一些
+
+7
+00:00:42,019 --> 00:00:45,000
+operations that you can do on integers. You can do things like, you can add. And
+可以对整数执行的操作。你可以做这样的事情，你可以加法。和
+
+8
+00:00:45,000 --> 00:00:48,750
+you can subtract integers and you can compare integers whether they are greater
+您可以减去整数，并且可以比较整数是否大于
+
+9
+00:00:48,750 --> 00:00:54,229
+than or equal or less than these operations are you know about numbers and
+大于或等于或小于这些运算，你知道数字和
+
+10
+00:00:54,229 --> 00:01:00,640
+then there are operations on strings And strings are a different type. They have.
+然后是对字符串的操作，字符串是不同类型的。他们已经做到了。
+
+11
+00:01:00,640 --> 00:01:05,610
+Operations like incantation and testing whether a string is, is an empty string or
+诸如咒语和测试字符串是否为空字符串或
+
+12
+00:01:05,610 --> 00:01:11,870
+not And the other various variety of functions that are defined on strings. And
+NOT和其他各种在字符串上定义的函数。和
+
+13
+00:01:11,870 --> 00:01:15,080
+the important thing that these operations are different from the operations defined
+重要的是，这些操作与定义的操作不同
+
+14
+00:01:15,080 --> 00:01:19,710
+on integers and we don't want to mix them up. It would be bad if we started doing
+我们不想把它们混为一谈。如果我们开始做这件事就不好了
+
+15
+00:01:19,710 --> 00:01:24,500
+string operations on integers for example. We would just get nonsense. So, in modern
+例如，整数上的字符串操作。我们只会得到无稽之谈。所以，在现代
+
+16
+00:01:24,500 --> 00:01:29,360
+programming languages types are expressed in a number of different ways. In object
+编程语言类型有多种不同的表示方式。在对象中
+
+17
+00:01:29,360 --> 00:01:35,400
+orient languages. Often we see classes being the notion of type. So, [inaudible]
+东方语言。我们经常看到类是类型的概念。所以，[听不见]
+
+18
+00:01:35,400 --> 00:01:41,130
+in cool, the class names are the types, they're all, the, with one exception,
+在Cool中，类名是类型，它们都是，除了一个例外，
+
+19
+00:01:41,130 --> 00:01:45,590
+called self type. The class names are exactly the types. And I just wanted to
+叫做自我型。类名就是这些类型。我只是想要
+
+20
+00:01:45,590 --> 00:01:49,680
+point out that this need not be the case. It happens that it's often convenient in
+指出事实并非如此。巧合的是，这通常是很方便的
+
+21
+00:01:49,680 --> 00:01:53,420
+[inaudible] Victorian languages to equate classes and types. But there are other
+[听不见]维多利亚时期的语言，等同于等级和类型。但是还有其他的
+
+22
+00:01:53,420 --> 00:01:57,780
+designs that, where the classes are not the only kinds of types, or whether
+设计，在类不是唯一类型的情况下，或者是否
+
+23
+00:01:57,780 --> 00:02:00,570
+they're. And in some languages, [inaudible] where there's no notion of
+他们是。在一些语言中，[听不见]没有
+
+24
+00:02:00,570 --> 00:02:03,979
+class, the types are completely different things. So, classes and types are really
+类中，类型是完全不同的东西。所以，类和类型实际上是
+
+25
+00:02:03,979 --> 00:02:09,039
+two different things that happen, to be identif ied in a lot of object oriented
+在许多面向对象的领域中，会发生两件不同的事情
+
+26
+00:02:09,038 --> 00:02:13,080
+designs. And I just want you to be aware that that's not necessarily the only way
+设计。我只想让你意识到这不一定是唯一的办法
+
+27
+00:02:13,080 --> 00:02:20,080
+to do it. So consider the assembly language fragment add R1 R2 R3 and what
+去做这件事。那么考虑一下汇编语言片段add R1、R2、R3等等
+
+28
+00:02:22,030 --> 00:02:27,030
+does this actually do. Well it takes the contents of register R2 and the contents
+这真的能做到吗。它取寄存器r2的内容和
+
+29
+00:02:27,030 --> 00:02:32,670
+of register R3 it adds them together, and it puts the results in register R1. And
+将它们相加，并将结果放入寄存器r1。和
+
+30
+00:02:32,670 --> 00:02:38,280
+the question is, what are the types of R1 R2 and R3 And you might hope that they're
+问题是，R1、R2和R3的类型是什么，您可能希望它们是
+
+31
+00:02:38,280 --> 00:02:42,620
+integers but in fact this is a, this is a trick question Because at the assembly
+整数，但实际上这是一个，这是一个刁钻的问题，因为在汇编
+
+32
+00:02:42,620 --> 00:02:47,980
+language level I can't tell. There's nothing that prevents R1, R2, and R3 from
+语言水平我说不清。没有什么可以阻止R1、R2和R3
+
+33
+00:02:47,980 --> 00:02:52,280
+having arbitrary types. They could be, they could be representatives of any kind
+具有任意类型的。他们可以是，他们可以是任何形式的代表
+
+34
+00:02:52,280 --> 00:02:57,310
+of type and because they're just a bunch of registers with zero and 1's in them the
+类型，因为它们只是一堆带有0和1的寄存器，
+
+35
+00:02:57,310 --> 00:03:00,790
+add operation will be happy to take them and add them up even if it doesn't make
+添加操作会很乐意接受它们并将它们相加，即使它不会
+
+36
+00:03:00,790 --> 00:03:06,540
+sense And produce a bit pattern that then stores into R1. So, to make this a little
+检测并产生位模式，然后将其存储到R1中。所以，为了让这件事变得有点
+
+37
+00:03:06,540 --> 00:03:11,770
+clear perhaps it's useful to think about a, a certain operations that are legal for
+显然，考虑一种，一种特定的操作是合法的，也许是有用的
+
+38
+00:03:11,770 --> 00:03:15,860
+values of each type. So for example, it make perfect example to add two integers,
+每种类型的值。因此，例如，将两个整数相加是一个完美示例，
+
+39
+00:03:15,860 --> 00:03:19,950
+if I have two bit patterns that represent integers, then when I sum them up I would
+如果我有两个表示整数的位模式，那么当我将它们相加时，我会
+
+40
+00:03:19,950 --> 00:03:24,470
+get a bit pattern that represents the sum of those two integers. But on the other
+获取表示这两个整数之和的位模式。但另一方面
+
+41
+00:03:24,470 --> 00:03:28,410
+hand, if I take a function pointer and integer and I add them together, I really
+另一方面，如果我把函数指针和整数加在一起，我真的
+
+42
+00:03:28,410 --> 00:03:32,690
+don't get anything. Okay this is another the function pointer is a bit pattern. The
+什么都没拿到。好的，这是另一个，函数指针是位模式。这个
+
+43
+00:03:32,690 --> 00:03:36,700
+imaginer s a bit pattern I can take those two bit patterns. I could run them through
+想象一下，这是一个位模式，我可以取这两个位模式。我可以把它们穿过去
+
+44
+00:03:36,700 --> 00:03:41,349
+and I do get out a new set of bits. But there's no useful interpretation of that
+我确实拿出了一组新的比特。但对此没有什么有用的解释
+
+45
+00:03:41,349 --> 00:03:45,280
+results. The resulting things I get doesn't mean anything, but the problem is
+结果。我得到的结果没有任何意义，但问题是
+
+46
+00:03:45,280 --> 00:03:50,660
+that these both have the same assembly language implementation. Okay, nothing at
+它们都有相同的汇编语言实现。好的，没什么
+
+47
+00:03:50,660 --> 00:03:54,950
+the assembly language level, these two operations look exactly the same. So I
+在汇编语言级别，这两个操作看起来完全一样。所以我
+
+48
+00:03:54,950 --> 00:04:00,200
+can't tell at the assembly language level, which one of these I'm doing. If I want
+在汇编语言级别我不知道我在做哪一个。如果我想的话
+
+49
+00:04:00,200 --> 00:04:07,200
+there to be types, if I want to make sure that I only do operations on the correct,
+有一些类型，如果我想确保我只对正确的
+
+50
+00:04:07,360 --> 00:04:11,190
+that I only do certain operations on, on their correc t types, then I need some
+我只在他们的相应类型上做一些特定的操作，那么我需要一些
+
+51
+00:04:11,190 --> 00:04:17,900
+sort of type description, some sort of type system to enforce those distinctions.
+某种类型描述，某种类型系统来加强这些区别。
+
+52
+00:04:17,899 --> 00:04:21,769
+Perhaps I'm belaboring this point, but I think it's important, so one more time. A
+也许我在重复这一点，但我认为这很重要，所以再说一次。一个
+
+53
+00:04:21,769 --> 00:04:25,909
+languages type system specifies which operations are valid for which types. Then
+语言类型系统指定哪些操作对哪些类型有效。然后
+
+54
+00:04:25,909 --> 00:04:31,669
+the goal for type checking is to ensure that operations are used only, only with
+类型检查的目标是确保操作仅用于
+
+55
+00:04:31,669 --> 00:04:37,370
+the correct types. And by doing this, type checking enforces the intended
+正确的类型。通过这样做，类型检查强制执行预期的
+
+56
+00:04:37,370 --> 00:04:41,059
+interpretation of values because nothing else is going to check. Once we get to the
+对价值的解释，因为没有其他东西会被检查。一旦我们到了
+
+57
+00:04:41,059 --> 00:04:46,319
+machine code level, it's all just a lot of 0's and 1's, and the machine will be happy
+机器代码级别，这只是一大堆0和1，机器会很高兴的
+
+58
+00:04:46,319 --> 00:04:50,330
+to do whatever operations we tell it to on those 0's and 1's, whether or not those
+在那两个0和1上做我们告诉它的任何操作，不管是不是那些
+
+59
+00:04:50,330 --> 00:04:56,210
+operations make sense. So the purpose of type systems is to enforce the intended
+运营是有意义的。因此，类型系统的目的是强制执行预期的
+
+60
+00:04:56,210 --> 00:05:00,539
+interpretations of those bit patterns and make sure that if I have a bit pattern for
+这些位模式的解释，并确保如果我有一个位模式
+
+61
+00:05:00,539 --> 00:05:05,449
+integers that I don't do any non-integer operations on that and get something that
+整数，我不对它做任何非整数运算，然后得到一些
+
+62
+00:05:05,449 --> 00:05:11,330
+is meaningless. Today, programming languages fall into three different
+是没有意义的。今天，编程语言分为三种不同的类型
+
+63
+00:05:11,330 --> 00:05:15,650
+categories with respect to how they treat types. There are the statically types
+类别与其处理类型的方式相关。有静态类型
+
+64
+00:05:15,650 --> 00:05:19,039
+languages, where all, or almost all, of the checking of types is done as part of
+语言，其中所有或几乎所有类型检查都是作为
+
+65
+00:05:19,039 --> 00:05:24,360
+compilation, and Cool is one of these And other languages that you've probably seen,
+编译，Cool是你们可能见过的这些和其他语言中的一种，
+
+66
+00:05:24,360 --> 00:05:28,599
+like C and Java, are also statically typed. Then there are the dynamically
+与C和Java一样，也是静态类型的。然后是动态的
+
+67
+00:05:28,599 --> 00:05:32,419
+typed languages, where almost all of the checking of types is done as part of
+类型化语言，其中几乎所有的类型检查都是作为
+
+68
+00:05:32,419 --> 00:05:37,869
+program execution. And the Lisp family of languages, like Scheme and Lisp itself,
+程序执行。还有Lisp语言家族，比如Scheme和Lisp本身，
+
+69
+00:05:37,869 --> 00:05:44,710
+are in this category, as are languages like Python And pearl So you've probably
+和Python和PEPEL这样的语言一样属于这一类，所以您可能已经
+
+70
+00:05:44,710 --> 00:05:49,460
+used, or heard of, at least, some of those languages And finally there are the
+使用或听说过这些语言中的一部分，最后还有
+
+71
+00:05:49,460 --> 00:05:54,509
+un-typed languages where no type checking is done at all, either at compile time or
+完全不进行类型检查的非类型化语言，无论是在编译时还是在
+
+72
+00:05:54,509 --> 00:05:59,619
+at run time. And this is basically what machine code does. So machine code has no
+在运行时。这基本上就是机器代码所做的事情。所以机器代码没有
+
+73
+00:05:59,619 --> 00:06:06,029
+notion of types and it forces no extraction boundaries, when it executes.
+类型的概念，并且它在执行时不强制任何提取边界。
+
+74
+00:06:06,029 --> 00:06:09,449
+For decades there has been debate about the relative merits of static versus
+几十年来，关于静电和
+
+75
+00:06:09,449 --> 00:06:14,710
+dynamic typing and without taking sides let me lay out for you what the various
+动态打字，不偏袒任何一方，让我为您展示一下各种
+
+76
+00:06:14,710 --> 00:06:19,259
+proponents on each side say. So, the people who believe in static typing say,
+双方的支持者都表示。所以，相信静电打字的人说，
+
+77
+00:06:19,259 --> 00:06:23,080
+that static checking catches many programming errors in compile time and it
+静电检查在编译时捕获了许多编程错误，并且它
+
+78
+00:06:23,080 --> 00:06:26,479
+also avoids the overhead of runtime type checks. If I hooked on all the type
+还避免了运行时类型检查的开销。如果我迷上了所有类型的人
+
+79
+00:06:26,479 --> 00:06:30,039
+checking and compiled time well I don't have to check the types at runtime. I
+检查和编译时间很好，我不必在运行时检查类型。我
+
+80
+00:06:30,039 --> 00:06:34,169
+don't have to check when I go do an operation that the arguments are of the
+在我执行操作时，不必检查参数是否属于
+
+81
+00:06:34,169 --> 00:06:38,349
+correct type because I already that check once and for all in compile time. And
+正确的类型，因为我已经在编译时一劳永逸地检查了。和
+
+82
+00:06:38,349 --> 00:06:42,740
+these things are both definitely true. These are the two big advantages of static
+这两件事都是千真万确的。这是静电的两大优势
+
+83
+00:06:42,740 --> 00:06:46,669
+checking. First of all Proves that some errors can never happen those are caught
+正在检查。首先证明有些错误是永远不会发生的
+
+84
+00:06:46,669 --> 00:06:51,169
+at compile time so I never have to worry about those errors at run time, and its
+这样我就不必担心运行时的那些错误了，而且它的
+
+85
+00:06:51,169 --> 00:06:57,919
+faster Dynamic typing proponents counter that aesthetic type systems are
+更快动态打字的支持者反驳说，美观的打字系统
+
+86
+00:06:57,919 --> 00:07:02,159
+restrictive. So essentially, aesthetic type system has to prove that the program
+有限制性的。所以从本质上说，美学类型系统必须证明程序
+
+87
+00:07:02,159 --> 00:07:06,020
+is well typed, that all the types makes sense And it does this by restricting what
+是好类型的，所有类型都是有意义的，并且它通过限制
+
+88
+00:07:06,020 --> 00:07:10,009
+kinds of programs you can write. There are some programs that are more difficult to
+你可以写的各种程序。有一些程序更难
+
+89
+00:07:10,009 --> 00:07:14,869
+write in an aesthetic type language because the compiler has a hard time
+用美观的类型语言编写，因为编译器很难
+
+90
+00:07:14,869 --> 00:07:21,509
+proving them correct. And there's also a belief that I, I see commonly stated that
+证明他们是正确的。还有一种观点认为我，我看到通常都会说
+
+91
+00:07:21,509 --> 00:07:25,469
+rapid prototyping is more difficult with ecstatic type system. I think the idea
+对于欣喜若狂的类型系统，快速成型更加困难。我认为这个想法
+
+92
+00:07:25,469 --> 00:07:29,979
+here is that if you're prototyping something, if you're exploring some idea
+这就是如果你在制作某样东西的原型，如果你在探索一些想法
+
+93
+00:07:29,979 --> 00:07:34,559
+you may not actually know exactly what all the types are at that point in time And
+在那个时间点上，您可能并不确切地知道所有类型是什么，
+
+94
+00:07:34,559 --> 00:07:39,309
+having to commit to something that is going to work in all cases. You know, to
+必须致力于在所有情况下都能奏效的事情。你知道，为了
+
+95
+00:07:39,309 --> 00:07:43,020
+having a type correct program when you're just trying to fiddle around and figure
+有一个正确的程序，当你只是想要摆弄和计算的时候
+
+96
+00:07:43,020 --> 00:07:48,089
+out what it is you're trying to do. That's very constraining and makes the work go
+弄清楚你到底想做什么。这是非常有约束力的，并使工作得以进行。
+
+97
+00:07:48,089 --> 00:07:54,830
+quite a bit slower. So what's the actual situation and practice today? Well, an
+慢了点。那么今天的实际情况和实践是什么呢？那么，一个
+
+98
+00:07:54,830 --> 00:07:57,929
+awful lot of code is written in [inaudible] type languages. And the
+很多代码都是用[听不见]类型的语言编写的。以及
+
+99
+00:07:57,929 --> 00:08:01,959
+practical [inaudible] type languages that people use a lot have always have some
+人们经常使用的实用的[听不见的]类型的语言总是有一些
+
+100
+00:08:01,959 --> 00:08:07,360
+kind of escape mechanism. So, in C, in Java, in C++, you have some notion of
+一种逃生机制。因此，在C、Java、C++中，您都有一些概念
+
+101
+00:08:07,360 --> 00:08:13,529
+unsafe cast. In C an unsafe cast can just results in a runtime crash. In Java it r
+不安全的演员阵容。在C语言中，不安全的强制转换只会导致运行时崩溃。在Java中，它是
+
+102
+00:08:13,529 --> 00:08:19,509
+esults in an [inaudible] runtime, when you have an unsafe or failed downcast. But
+当您有不安全或失败的向下转换时，会在[听不见]运行时产生结果。但
+
+103
+00:08:19,509 --> 00:08:25,249
+the, the effect is that you can get run time errors for type reasons. [sound] Now
+其效果是，由于类型原因，您可能会得到运行时错误。[声音]现在
+
+104
+00:08:25,249 --> 00:08:30,469
+on the dynamic typing site, the people who programming dynamic languages, they always
+在动态打字网站上，编写动态语言的人总是
+
+105
+00:08:30,469 --> 00:08:34,950
+end up or seemed end up record fitting static typing to these dynamically typed
+最终或似乎最终记录适合静电打字到这些动态键入
+
+106
+00:08:34,950 --> 00:08:39,030
+languages. So typically if a dynamically typed language because popular enough than
+语言。所以通常情况下，如果动态类型的语言足够流行，
+
+107
+00:08:39,030 --> 00:08:42,570
+people trying to write optimizing compilers for them and the first thing
+人们试图为它们编写优化编译器，首先要做的就是
+
+108
+00:08:42,570 --> 00:08:47,510
+that people want to have on an optimizing compiler. Is some insta, type information
+这是人们希望在优化编译器上拥有的。是一些实例、类型信息
+
+109
+00:08:47,510 --> 00:08:52,030
+because it helps to generate much better code? And so people wind up going back and
+因为它有助于生成更好的代码？所以人们最终回到了过去，
+
+110
+00:08:52,030 --> 00:08:56,790
+trying to figure out how to get as many types as they can from these dynamically
+试图找出如何从这些动态地获取尽可能多的类型
+
+111
+00:08:56,790 --> 00:09:02,060
+types languages as soon as they start trying to build serious tools to improve
+在语言开始尝试构建严肃的工具以改进时，立即键入语言
+
+112
+00:09:02,060 --> 00:09:06,940
+the programs written in these languages. And in my opinion it's really debatable
+用这些语言编写的程序。在我看来，这真的是值得商榷的
+
+113
+00:09:06,940 --> 00:09:12,370
+whether either compromise because, both of these are compromises on the either strict
+是不是妥协，因为，这两个都是妥协，不是严格的
+
+114
+00:09:12,370 --> 00:09:16,580
+static or strict dynamic point of view. But if either one of these represents the
+静电还是严格的动态观点。但如果这两个选项中的任何一个代表
+
+115
+00:09:16,580 --> 00:09:21,440
+best or the worst of both worlds. But this is certainly where we are today in
+这两个世界要么是最好的，要么是最坏的。但这肯定是我们今天所处的位置
+
+116
+00:09:21,440 --> 00:09:28,400
+practice. Now Cool is a statically typed language and the types that are available
+练习一下。现在Cool是一种静态类型的语言，
+
+117
+00:09:28,400 --> 00:09:33,330
+in Cool are the class names, so every time you define a class you define a new type,
+Cool中是类名，所以每次定义类时都会定义一个新类型，
+
+118
+00:09:33,330 --> 00:09:38,050
+and the special reserve symbol SELF'lt;u>TYPE which we'll be talking about in a separate'lt;/u>
+和特殊保留符号self‘lt；u>类型，我们将在单独的’lt；/u>类型中讨论
+
+119
+00:09:38,050 --> 00:09:42,940
+video all of its own. And the way cool works is that the user declares the types
+所有的视频都是它自己的。Cool的工作方式是用户声明类型
+
+120
+00:09:42,940 --> 00:09:48,000
+for identifiers. For every identifier you have to say what its type is But then the
+用于标识符。对于每个标识符，您必须说明其类型，但是
+
+121
+00:09:48,000 --> 00:09:52,190
+compiler does the rest of the work. The compiler refers the type for expressions.
+编译器负责睡觉的工作。编译器引用表达式的类型。
+
+122
+00:09:52,190 --> 00:09:58,040
+And in particular the compiler assigns a type to every single expression in, in the
+尤其是，编译器会为、中的每个单个表达式分配一个类型。
+
+123
+00:09:58,040 --> 00:10:01,510
+program. So it will go through the entire abstract syntax string and using the
+程序。因此它将遍历整个抽象语法字符串，并使用
+
+124
+00:10:01,510 --> 00:10:06,610
+declared types for identifiers it will calculate a type for every expression and
+标识符的声明类型，它将计算每个表达式的类型，并且
+
+125
+00:10:06,610 --> 00:10:11,880
+sub-expression. To wrap up, it's worth mentioning that there's a couple of
+子表达式。最后，值得一提的是，有几个
+
+126
+00:10:11,880 --> 00:10:16,200
+different terms people use for the process of computer types, and that they mean
+人们使用不同的术语来描述计算机类型的过程，它们的意思是
+
+127
+00:10:16,200 --> 00:10:20,900
+slight ly different things. So the simpler problem is what is known as type checking.
+略有不同的东西。所以更简单的问题是所谓的类型检查。
+
+128
+00:10:20,900 --> 00:10:25,070
+Here, we have a fully typed program, meaning we have an abstract syntax, free
+在这里，我们有一个完全类型化的程序，这意味着我们有一个抽象的语法，FREE
+
+129
+00:10:25,070 --> 00:10:29,520
+with all the types filled in on every node, and our only job is to check. That
+每个节点都填写了所有类型，我们唯一的工作就是检查。那
+
+130
+00:10:29,520 --> 00:10:33,780
+the types are correct, so we can just look at each note and its neighbors and confirm
+类型是正确的，所以我们只需查看每个音符及其邻居，然后确认
+
+131
+00:10:33,780 --> 00:10:37,870
+that the types are correct in that part of the tree. And we can do this for every
+树的该部分中的类型是正确的。我们可以为每一个人做这件事
+
+132
+00:10:37,870 --> 00:10:43,820
+part of the tree and check that the Program is type correct. Type inference,
+部分诊断树，并检查程序类型是否正确。类型推理，
+
+133
+00:10:43,820 --> 00:10:47,740
+on the other hand, is the process of filling in missing type information. So
+另一方面，是填充缺失类型信息的过程。所以
+
+134
+00:10:47,740 --> 00:10:52,190
+here the view is that we have an abstract syntax tree with no types on it, or
+这里的视图是，我们有一个没有类型的抽象语法树，或者
+
+135
+00:10:52,190 --> 00:10:56,750
+perhaps just a few types in key locations, on say, on the declared variables, and
+也许只有几个关键位置的类型，比如说，声明的变量上的类型，以及
+
+136
+00:10:56,750 --> 00:10:59,900
+then we want to fill in missing types. We have some nodes in there, there with
+然后我们想要填充缺少的类型。我们在那里有一些节点，那里有
+
+137
+00:10:59,900 --> 00:11:03,750
+absolutely no type information at all, and it's not just a question of confirming or
+完全没有类型信息，这不仅仅是确认或
+
+138
+00:11:03,750 --> 00:11:07,230
+checking that the types are correct, we actually have to fill in the missing type
+检查类型是否正确，我们实际上必须填充缺少的类型
+
+139
+00:11:07,230 --> 00:11:11,740
+information. And these two things are different. Actually there are many
+信息。这两件事是不同的。实际上有很多
+
+140
+00:11:11,740 --> 00:11:15,840
+languages that are actually very, very different, but people often use the terms
+实际上非常、非常不同的语言，但人们经常使用这些术语
+
+141
+00:11:15,840 --> 00:11:19,540
+interchangeably, and will not be particularly careful in my videos about
+可以互换，在我的视频中不会特别小心
+
+142
+00:11:19,540 --> 00:11:20,920
+which term I am using either.
+这两个词我都用了。
+

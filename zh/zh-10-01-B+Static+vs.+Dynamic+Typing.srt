@@ -1,0 +1,115 @@
+0
+00:00:02,139 --> 00:00:04,269
+What this means is that the soundness theorem for the Cool type
+这意味着Cool类型的可靠性定理
+
+1
+00:00:04,269 --> 00:00:09,160
+system is a bit more complicated than the one for simple type systems. So in the
+系统比用于简单类型系统的系统稍微复杂一些。所以在这里
+
+2
+00:00:09,160 --> 00:00:14,869
+presence of sub-typing, the, the property that we want is that the static type, computed
+在场的子类型化，这个，我们要的属性是静电类型的，计算出来的
+
+3
+00:00:14,869 --> 00:00:20,999
+by the compiler for a given expression E, is going to be a correct predictor of all
+对于给定表达式E的编译器，将是所有表达式的正确预测值
+
+4
+00:00:20,999 --> 00:00:25,230
+the possible dynamic types that he could have, and we do that by using the sub typing
+他可能具有的可能的动态类型，我们通过使用子类型
+
+5
+00:00:25,230 --> 00:00:29,480
+relationship right here. So we say that with every dynamic type E could have
+关系就在这里。所以我们说，对于每一种动态的E类型，
+
+6
+00:00:29,480 --> 00:00:34,980
+whatever types E can take on at run time, they have to be a sub type of the single static
+无论E在运行时可以采用什么类型，它们都必须是单个静电的子类型
+
+7
+00:00:34,980 --> 00:00:41,730
+type that is predicted for E. What this means is that all the operations that
+为E预测的类型。这意味着所有
+
+8
+00:00:41,730 --> 00:00:46,370
+can be used on an object of type C have to also be able to be used on any object of type
+可以在C类型的对象上使用，也必须能够在任何类型的对象上使用
+
+9
+00:00:46,370 --> 00:00:52,320
+C prime that's a subtype of C. So if C defines certain attributes and methods,
+这是C的一个子类型，所以如果C定义了某些属性和方法，
+
+10
+00:00:52,320 --> 00:00:59,320
+then all of those attributes and methods have to be available in C prime. And therefore
+那么所有这些属性和方法都必须在CPrime中可用。因此，
+
+11
+00:00:59,500 --> 00:01:05,379
+sub classes can only add attributes or methods. So whatever attributes
+子类只能添加属性或方法。所以无论什么属性
+
+12
+00:01:05,379 --> 00:01:10,579
+and methods a sub class will have, what c, c prime in this case, those
+以及子类将具有的方法，在本例中为c、c++，即
+
+13
+00:01:10,579 --> 00:01:16,850
+are all in addition to what c has. So c prime, a sub class, will never remove an attribute
+都是在c的基础上增加的。因此，子类c++永远不会删除属性。
+
+14
+00:01:16,850 --> 00:01:21,600
+or remove a method. It will only extend or add methods and attributes to the
+或删除方法。它只会将方法和属性扩展或添加到
+
+15
+00:01:21,600 --> 00:01:25,880
+class it is inheriting fro M. And note that you're allowed to redefine methods in
+类继承自M，请注意，允许您在
+
+16
+00:01:25,880 --> 00:01:30,530
+cool, and in most object oriented languages, but you cannot change the type.
+很酷，在大多数面向对象语言中都是如此，但是您不能更改类型。
+
+17
+00:01:30,530 --> 00:01:34,890
+So even though you can redefine the code that goes with that method, it still has to
+因此，即使您可以重新定义该方法附带的代码，它仍然必须
+
+18
+00:01:34,890 --> 00:01:39,219
+type check according to the original type that you declared. And so whatever type
+根据您声明的原始类型键入check。所以不管是哪种类型
+
+19
+00:01:39,219 --> 00:01:43,259
+the method has in the first class in which it's defined, it's going to have that
+该方法在定义它的第一个类中，它将具有
+
+20
+00:01:43,259 --> 00:01:47,289
+same type, that same argument and result, the same types for the method arguments,
+相同类型、相同的参数和结果、相同的方法参数类型
+
+21
+00:01:47,289 --> 00:01:51,009
+and the same types for the method result in all of the sub classes. And
+并且该方法的相同类型导致所有子类。和
+
+22
+00:01:51,009 --> 00:01:56,010
+that's a pretty standard, design point for a lot of object oriented languages.
+对于许多面向对象的语言来说，这是一个相当标准的设计点。
+

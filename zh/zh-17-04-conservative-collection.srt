@@ -1,0 +1,240 @@
+0
+00:00:03,340 --> 00:00:06,850
+In this very short video, I'm going to say a few words about a technique called
+在这段很短的视频中，我将简单介绍一种名为
+
+1
+00:00:06,850 --> 00:00:13,850
+Conservative Garbage Collection that can be used for languages like C and C++. To
+保守垃圾回收，可用于C和C++等语言。至
+
+2
+00:00:14,000 --> 00:00:18,519
+review, Automatic Memory Management relies on being able to find all the reachable
+回顾一下，自动内存管理依赖于能够找到所有可访问的
+
+3
+00:00:18,519 --> 00:00:23,660
+objects. And it also needs to be able to find all the pointers in an object. Now,
+对象。它还需要能够找到对象中的所有指针。现在,
+
+4
+00:00:23,660 --> 00:00:27,310
+the difficultly with doing garbage collection for a language like C or C++ is
+对C或C++这样的语言执行垃圾回收的困难在于
+
+5
+00:00:27,310 --> 00:00:31,820
+that it's very difficult or even impossible to identify the contents of
+很难甚至不可能辨认出
+
+6
+00:00:31,820 --> 00:00:37,470
+objects in memory with 100 percent reliability. So if we see, two words in
+对象以100%的可靠性存储在内存中。所以如果我们看到，有两个词
+
+7
+00:00:37,470 --> 00:00:42,620
+memory, you know, it might be a list cell that has, a data and next field. So we see
+内存，你知道，它可能是一个列表单元格，它有一个数据和下一个字段。所以我们看到
+
+8
+00:00:42,620 --> 00:00:48,219
+just two words here. And there are some bit patterns in here, 0's and 1's. Okay
+这里只有两个词。这里有一些位模式，0和1。好的
+
+9
+00:00:48,219 --> 00:00:52,149
+how do we know whether these are both pointers? It could be that one is a
+我们怎么知道这两个都是指针呢？可能其中一个是
+
+10
+00:00:52,149 --> 00:00:55,670
+pointer and the, the other is not in the case of a list cell. So one of these
+指针和，另一个不在列表单元格的情况下。所以其中一个
+
+11
+00:00:55,670 --> 00:00:59,789
+fields is just data like an injure and another one is a pointer. Or it could be
+字段只是像伤害一样的数据，而另一个字段则是指针。或者也可能是
+
+12
+00:00:59,789 --> 00:01:04,969
+something like a binary tree node where both of these words are pointers. And
+这两个词都是指针的二叉树节点。和
+
+13
+00:01:04,968 --> 00:01:09,670
+because of this weakness really in the C and C++ type systems, we just can't
+因为在C和C++类型的系统中确实存在这个弱点，所以我们不能
+
+14
+00:01:09,670 --> 00:01:15,240
+guarantee that we know where all the pointers are. Now it turns out that it is
+保证我们知道所有的指针在哪里。现在事实证明，它是
+
+15
+00:01:15,240 --> 00:01:19,560
+possible to extend garbage collection techniques to work with languages like C
+可以将垃圾收集技术扩展到使用C++等语言
+
+16
+00:01:19,560 --> 00:01:26,259
+and C++. And the basic idea, or insight, is that it's always okay to be
+和C++。最基本的想法，或者说洞察力是，总是可以
+
+17
+00:01:26,259 --> 00:01:28,859
+conservative. And if we're not sure whether something might be used in the
+老气。如果我们不确定某些东西是否可以用在
+
+18
+00:01:28,859 --> 00:01:33,169
+future, then we will just keep it around. And remember that graph reachability is
+未来，那我们就把它留在身边。记住，图的可达性是
+
+19
+00:01:33,169 --> 00:01:38,349
+already a conservative technique. What we really want is to keep around the objects
+这已经是一种保守的技术了。我们真正想要的是把这些物体
+
+20
+00:01:38,349 --> 00:01:42,700
+that will just be used in the future, but the reachability in the object graph is an
+这只会在将来使用，但对象图中的可达性是一个
+
+21
+00:01:42,700 --> 00:01:47,579
+approximation to that, so because reachable objects might be used. And now,
+大致如此，因为可能会使用可到达的对象。而现在，
+
+22
+00:01:47,579 --> 00:01:51,149
+the problem with C and C++ is that we don't know where the pointers are. We
+C和C++的问题是我们不知道指针在哪里。我们
+
+23
+00:01:51,149 --> 00:01:54,380
+don't have a guarantee from the type system about where the pointers are. And
+类型系统不能保证指针在哪里。和
+
+24
+00:01:54,380 --> 00:01:58,639
+so the basic trick is that, if something looks like a pointer, then we will treat
+所以基本的诀窍是，如果某个东西看起来像一个指针，那么我们将
+
+25
+00:01:58,639 --> 00:02:03,179
+it as a pointer. All we have to do is be conservative, and if we are not sure wh
+它就像一个指针。我们所要做的就是保守一点，如果我们不确定
+
+26
+00:02:03,179 --> 00:02:06,959
+ether a given word of memory is a pointer. Then we can just treat it as a pointer,
+以是，给定的内存字是一个指针。那么我们就可以把它当作一个指针，
+
+27
+00:02:06,959 --> 00:02:11,769
+and keep whatever it points to around. If we, and as long as we are not going to
+把它指向的任何东西都留在身边。如果我们，只要我们不打算
+
+28
+00:02:11,769 --> 00:02:16,450
+move it or change it, that would be okay. And so, how, how do we decide whether a
+移动它或改变它，那将是好的。那么，如何，我们如何决定一个
+
+29
+00:02:16,450 --> 00:02:19,950
+particular word of memory is a pointer? Well, it should be a line, meaning, you
+内存中的特定字是指针吗？嗯，应该是一条线，意思是，你
+
+30
+00:02:19,950 --> 00:02:24,870
+know, it should end in some zeros to indicate that it was pointing, if it was a
+知道吗，它应该以一些零结束，以指示它是指向的，如果它是
+
+31
+00:02:24,870 --> 00:02:28,129
+pointer it was pointing to a word boundary. And then, whatever pattern it
+它指向单词边界的指针。然后，不管它是什么图案
+
+32
+00:02:28,129 --> 00:02:31,790
+is, if we interpret it as an address, it has to be a valid address. So, it should
+就是，如果我们把它解释成一个地址，它就必须是一个有效的地址。所以，它应该是
+
+33
+00:02:31,790 --> 00:02:35,430
+point to the data segment. And Noah said, you know, these two conditions will rule
+指向数据段。诺亚说，你知道，这两个条件将起决定作用
+
+34
+00:02:35,430 --> 00:02:42,060
+out all kinds of data and memory. So for example, any small integer is probably not
+取出各种数据和内存。因此，例如，任何小整数都可能不是
+
+35
+00:02:42,060 --> 00:02:46,849
+going to be interpretable as a valid address in the data segment. So, you know,
+将被解释为数据段中的有效地址。所以，你知道，
+
+36
+00:02:46,849 --> 00:02:50,579
+most likely, only things that are pointers, or very few things that are not
+最有可能的是，只有是指针的东西，或者极少数不是指针的东西
+
+37
+00:02:50,579 --> 00:02:54,340
+pointers will be treated as pointers. And what we're going to do then, is, if it
+指针将被视为指针。我们接下来要做的是，如果
+
+38
+00:02:54,340 --> 00:02:57,950
+looks like a pointer, we're going to consider it to be a pointer. We'll follow
+看起来像一个指针，我们会认为它是一个指针。我们会跟着去的
+
+39
+00:02:57,950 --> 00:03:01,709
+it, and then we'll end up overestimating the set of reachable objects. We may keep
+这样，我们就会高估可达对象集。我们可以继续
+
+40
+00:03:01,709 --> 00:03:07,049
+around some stuff, that isn't reachable at all. But that's alright, it's always okay
+在一些东西周围，那是完全无法触及的。不过，没关系，一切都会好起来的
+
+41
+00:03:07,049 --> 00:03:12,780
+to keep around more stuff than necessary. Now, we still can't move the object,
+留下更多不必要的东西。现在，我们仍然不能移动物体，
+
+42
+00:03:12,780 --> 00:03:15,290
+alright? Because we can't update the pointers to them. If we don't know that
+好吗？因为我们无法更新指向它们的指针。如果我们不知道这一点
+
+43
+00:03:15,290 --> 00:03:19,469
+something is a pointer, we certainly don't want to change it, okay? And, you know,
+有些东西是指针，我们当然不想改变它，好吗？而且，你知道，
+
+44
+00:03:19,469 --> 00:03:22,760
+for example, if we thought something was a pointer, and it was actually an account
+例如，如果我们认为某物是一个指针，而它实际上是一个帐户
+
+45
+00:03:22,760 --> 00:03:25,670
+number, and then we updated the pointer, when we move the object, we would just
+数字，然后我们更新指针，当我们移动对象时，我们只需
+
+46
+00:03:25,670 --> 00:03:30,010
+completely change what the program does. So, this only really works when you mark
+完全改变程序的功能。所以，这只有在你标记的时候才能真正起作用
+
+47
+00:03:30,010 --> 00:03:30,260
+this way.
+这边请。
+

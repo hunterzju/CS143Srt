@@ -1,0 +1,35 @@
+0
+00:00:00,900 --> 00:00:06,420
+To summarize, lexical analysis implementation has to do two things. The first
+总而言之，词法分析实现必须做两件事。第一个
+
+1
+00:00:06,420 --> 00:00:11,089
+job is to recognize the substrings in the input that correspond to tokens. And
+任务是识别输入中与令牌相对应的子字符串。和
+
+2
+00:00:11,089 --> 00:00:16,690
+here's a little bit of compiler lingo these substrings are called the lexemes. So
+这里有一些编译器的行话，这些子字符串被称为词位。所以
+
+3
+00:00:16,690 --> 00:00:21,920
+the words of the program are called the lexemes. And then the second job is at for
+程序中的单词被称为词位。然后第二份工作就是
+
+4
+00:00:21,920 --> 00:00:28,369
+each lexeme we have to identify its token class. And then the output of the lexical
+每个词位我们都要识别它的记号类别。然后输出词汇表
+
+5
+00:00:28,369 --> 00:00:35,369
+analyzer is a series of pairs which are the token class. And lexing, Okay, And this
+Analyzer是一系列令牌类对。还有莱克星，好的，还有这个
+
+6
+00:00:35,610 --> 00:00:39,750
+whole thing, one of these pairsis called A token.
+整件事其中一对叫做代币。
+

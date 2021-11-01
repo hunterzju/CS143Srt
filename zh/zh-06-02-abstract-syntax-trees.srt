@@ -1,0 +1,230 @@
+0
+00:00:04,799 --> 00:00:09,030
+In this video, we're gonna talk about the core data structure used in compilers, the
+在本视频中，我们将讨论编译器中使用的核心数据结构
+
+1
+00:00:09,030 --> 00:00:16,030
+abstract syntax tree. To briefly review, a parser traces the derivation of a sequence
+抽象语法树。简单回顾一下，解析器跟踪序列的派生
+
+2
+00:00:18,320 --> 00:00:23,050
+of tokens but this by itself Is not all that useful to the compiler because the
+，但这本身对编译器并不是很有用，因为
+
+3
+00:00:23,050 --> 00:00:27,409
+rest of the compiler needs some representation of the program. It needs an
+睡觉的编译器需要一些程序的表示形式。它需要一个
+
+4
+00:00:27,409 --> 00:00:31,529
+actual data structure that tells it what the operations are in the program and how
+实际的数据结构，告诉它程序中有哪些操作以及如何操作
+
+5
+00:00:31,529 --> 00:00:36,100
+they're put together. Well, we know one such data structure is called a Parse Tree
+它们是放在一起的。我们知道一种这样的数据结构叫做解析树
+
+6
+00:00:36,100 --> 00:00:41,010
+but it turns out that a Parse Tree really isn't what we wanted to work on. Instead,
+但事实证明，解析树并不是我们想要做的。相反，
+
+7
+00:00:41,010 --> 00:00:45,429
+we wanted to work on something called an Abstract Syntax Tree. And the Abstract
+我们想做一种叫做抽象语法树的东西。和“抽象”
+
+8
+00:00:45,429 --> 00:00:50,789
+Syntax Tree is really just the Parse Tree but with some details ignored. We have
+语法树实际上只是解析树，但是忽略了一些细节。我们有
+
+9
+00:00:50,789 --> 00:00:55,129
+abstracted a way From some of the details of the Parse Tree. And here's an
+从解析树的一些细节中抽象出一种方法。这是一个
+
+10
+00:00:55,129 --> 00:01:02,129
+abbreviation that you'll see, ASTs stand for Abstract Syntax Tree. So, let's look
+您将看到的缩写，ASTS代表抽象语法树。那么，我们来看看
+
+11
+00:01:02,199 --> 00:01:08,590
+at the grammar. Here's the grammar for plus expressions over the integers and we
+在语法方面。下面是整数上加号表达式的语法，我们
+
+12
+00:01:08,590 --> 00:01:14,640
+also parenthesize expressions. And here's a string and after lexical analysis, what
+也可以用括号括起表达式。这是一个字符串，在词法分析之后，
+
+13
+00:01:14,640 --> 00:01:19,360
+do we have? Well, we've got a sequence of tokens again with their associated lexemes
+我们有吗？好的，我们又得到了一系列的记号和它们的相关词位
+
+14
+00:01:19,360 --> 00:01:24,690
+telling us what the actual strings were. And that gets past into the parser and
+告诉我们实际的弦是什么。然后进入解析器，然后
+
+15
+00:01:24,690 --> 00:01:30,130
+then we build a parse tree. And here's a parse tree for that expression. Now, if
+然后我们构建一棵解析树。这是该表达式的解析树。现在，如果
+
+16
+00:01:30,130 --> 00:01:34,470
+it's expressed that this representation, the parse tree is actually perfectly
+可以说，这种表示形式，解析树实际上是完美的
+
+17
+00:01:34,470 --> 00:01:39,330
+adequate for compilation. We could do our compiler using the parse tree. This is a
+足以汇编的。我们可以使用解析树进行编译器。这是一个
+
+18
+00:01:39,330 --> 00:01:43,970
+faithful representation of the program. The problem is that it would be quite
+忠实地代表节目。问题是，这将是相当
+
+19
+00:01:43,970 --> 00:01:48,340
+inconvenient to do that and to see this, it only point out some features of the
+这样做和看到这一点都不方便，它只指出了
+
+20
+00:01:48,340 --> 00:01:52,470
+parse tree. First of all you can see if the parse tree is quite robust so for
+解析树。首先，您可以看到解析树是否相当健壮，因此对于
+
+21
+00:01:52,470 --> 00:01:58,680
+example we have here a node e and it has only one child. So when there's only one
+例如，我们这里有一个节点e，它只有一个子节点。所以当只有一个
+
+22
+00:01:58,680 --> 00:02:03,500
+successor of the, of the node, what is that really doing for us? Well, we don't
+节点的后继者，这对我们到底有什么作用？嗯，我们没有
+
+23
+00:02:03,500 --> 00:02:07,880
+really need the e at all, we could just put the, The five right here and, and make
+真的很需要e，我们可以把这个，五个放在这里，然后
+
+24
+00:02:07,880 --> 00:02:13,450
+the tree smaller and similarly for the other single successor nodes. Furthermore
+该树更小，并且对于其他单个后继节点类似。此外，
+
+25
+00:02:13,450 --> 00:02:16,840
+these parentheses h ere, well these are very important in parsing because they
+这些圆括号在这里，嗯，这些在解析中非常重要，因为它们
+
+26
+00:02:16,840 --> 00:02:22,810
+show the association of, of this, of the arguments with respect to these two plus
+显示与这两个加号有关的论点的关联性
+
+27
+00:02:22,810 --> 00:02:26,810
+operations. It shows that this plus is nested; this plus down here is nested
+运营部。它显示这个加号是嵌套的；下面的这个加号是嵌套的
+
+28
+00:02:26,810 --> 00:02:30,870
+inside. Of this plus up here But once we've done the parsing, the tree structure
+在里面。再加上这里，但是一旦我们完成了解析，树结构
+
+29
+00:02:30,870 --> 00:02:35,090
+shows us the same thing. We don't need to know that these were inside a parenthesis,
+向我们展示了同样的东西。我们不需要知道这些是在括号里，
+
+30
+00:02:35,090 --> 00:02:39,280
+that the fact that these two expressions or the argument of this plus already tells
+这两个表达式或者这个加号的论点已经告诉我们
+
+31
+00:02:39,280 --> 00:02:43,780
+us all we need to know. And so, you know? All of these nodes in here are also in a
+我们都是我们需要知道的。所以，你知道吗？这里的所有这些节点也都在
+
+32
+00:02:43,780 --> 00:02:49,510
+sense redundant. We don't really need that information anymore. And so we prefer to
+感觉是多余的。我们真的不再需要这些信息了。所以我们更愿意
+
+33
+00:02:49,510 --> 00:02:54,040
+do is to use something called an Abstract Syntax Tree that just compresses out all
+所做的就是使用一种称为抽象语法树的东西，它只是压缩了所有
+
+34
+00:02:54,040 --> 00:02:59,460
+the junk in the Parse Tree. So here is a. Abstract syntax tree or a hypothetical
+解析树里的垃圾。所以这里有一个.抽象语法树或一个假设的
+
+35
+00:02:59,460 --> 00:03:03,180
+abstract syntax tree that would represent the same thing as the parse tree on the
+抽象语法树，它与
+
+36
+00:03:03,180 --> 00:03:08,430
+previous slide and you can see here we've really just cut it down to the essential
+上一张幻灯片，您可以在这里看到，我们已经将其简化到最重要的部分
+
+37
+00:03:08,430 --> 00:03:13,690
+items. We have the two+ nodes. We have the three. Arguments and the association is
+物品。我们有两个+节点。我们有三个人。参数和关联是
+
+38
+00:03:13,690 --> 00:03:17,990
+just shown by which plus node is nested inside the other. We don't have any of the
+刚才显示了哪个加号节点嵌套在另一个加号节点中。我们没有任何
+
+39
+00:03:17,990 --> 00:03:22,600
+extraneous nonterminals. We don't have the parenthesis. Everything is much simpler
+无关紧要的非终端。我们没有括号。一切都简单多了
+
+40
+00:03:22,600 --> 00:03:27,040
+and you can imagine that it'll be easier to write algorithms that walk over a
+您可以想象，编写遍历
+
+41
+00:03:27,040 --> 00:03:31,849
+structure like this rather than the, the rather, elaborate structure we had on the
+像这样的结构，而不是我们在
+
+42
+00:03:31,849 --> 00:03:38,099
+previous slide. Of course again is called an abstract syntax tree because it
+上一张幻灯片。当然，我们也将其称为抽象语法树，因为它
+
+43
+00:03:38,099 --> 00:03:42,870
+abstracts away from the concrete syntax. We suppress details of the concrete syntax
+从具体语法中抽象出来。我们隐藏了具体语法的细节
+
+44
+00:03:42,870 --> 00:03:47,459
+and just keep enough information to be able to faithfully represent the program
+只要保留足够的信息就能忠实地代表节目
+
+45
+00:03:47,459 --> 00:03:48,260
+and compile it.
+然后编译它。
+

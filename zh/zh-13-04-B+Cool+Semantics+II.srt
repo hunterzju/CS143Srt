@@ -1,0 +1,335 @@
+0
+00:00:00,890 --> 00:00:04,509
+To summarize our discussion of dynamic dispatch, the body of the method is
+总结一下我们对动态调度的讨论，该方法的主体是
+
+1
+00:00:04,509 --> 00:00:11,050
+invoked with, within environment e. That has definitions for the formal arguments
+使用调用，在环境e.中调用，该环境具有形式参数的定义
+
+2
+00:00:11,050 --> 00:00:17,730
+and the attributes of the self object and a store that's just like color store
+以及Self对象的属性和类似于色彩商店的商店
+
+3
+00:00:17,730 --> 00:00:22,210
+except that it also has the actual arguments bound to the locations allocated
+除了它还将实际参数绑定到分配的位置之外
+
+4
+00:00:22,210 --> 00:00:27,429
+for the formal parameters. Notice in the rules that the notion of a frame or
+用于形式参数。请注意，在规则中，框架或
+
+5
+00:00:27,429 --> 00:00:33,160
+activation records is implicit. We don't actually build a data structure. That
+激活记录是隐式的。我们实际上并不构建数据结构。那
+
+6
+00:00:33,160 --> 00:00:38,140
+contains you know, all of the values all of the arguments and the, the return
+包含所有的值，所有的参数和返回
+
+7
+00:00:38,140 --> 00:00:42,809
+address and all that stuff together. That information is not gathered together in
+地址和所有这些东西在一起。这些信息不是集中在一起的
+
+8
+00:00:42,809 --> 00:00:47,120
+one place, it's a little more abstract. We don't actually have to say you know,
+有一个地方，它有点抽象。我们实际上不需要说你知道，
+
+9
+00:00:47,120 --> 00:00:50,550
+whether things are allocated on the stack or on the heat and that's a good feature.
+无论物品是堆叠分配的还是热分配的，这都是一个很好的特性。
+
+10
+00:00:50,550 --> 00:00:54,260
+That allows us to have, potentially have a range of implementations like all
+这使得我们有，潜在地有一系列的实现，就像所有的
+
+11
+00:00:54,260 --> 00:00:59,789
+implement the semantics correctly. Now, we didn't do the semantics on the semantics
+正确实现语义。现在，我们没有在语义上做语义
+
+12
+00:00:59,789 --> 00:01:06,290
+dispatch but it's extremely similar. The only difference is in how the class that
+快递，但非常相似。唯一的不同之处在于班级如何
+
+13
+00:01:06,290 --> 00:01:10,140
+we are going to be dispatching to is looked up so in the stack dispatch you
+我们将调度到IS进行查找，因此在堆栈中为您调度
+
+14
+00:01:10,140 --> 00:01:13,770
+might be able to you know, you can nam e the class that you want to dispatch to
+也许能够让您知道，您可以命名要分派到的类
+
+15
+00:01:13,770 --> 00:01:18,280
+this one extra line to the side where the class is being dispatched to in the formal
+这一行是在正式的类被分派到的一侧
+
+16
+00:01:18,280 --> 00:01:24,509
+rule and you can look in the manual to see how that works. So it's worth pointing out
+规则，您可以在手册中查看它是如何工作的。所以值得指出的是
+
+17
+00:01:24,509 --> 00:01:29,790
+that while the operation of rules are very detailed, they intentionally omit some
+虽然规则的操作非常详细，但他们故意省略了一些
+
+18
+00:01:29,790 --> 00:01:34,049
+cases that you might think they should cover so let's take a look at our dispatch
+您可能认为他们应该涵盖的情况，所以让我们看看我们的发货
+
+19
+00:01:34,049 --> 00:01:41,049
+example again. So here notice that we look up the class of v0. So v0 is an object and
+再举一个例子。请注意，我们在这里查找的是V0的类。所以V0是一个物体，
+
+20
+00:01:44,469 --> 00:01:51,469
+we checked what is class tag is and then we look up in that class, the name of the
+我们检查了什么是类标记，然后在那个类中查找
+
+21
+00:01:51,869 --> 00:01:57,619
+method that we're dispatching to and we get out a definition of the method or not
+方法，然后我们得到该方法的定义或不定义
+
+22
+00:01:57,619 --> 00:02:02,829
+the definition of the method that we can write the rest of the rule. Now what would
+方法的定义，那就是我们可以写睡觉的规则。现在有什么会
+
+23
+00:02:02,829 --> 00:02:09,729
+happen If there was no such method f in the class x, I mean this, this rule just
+如果在类x中没有这样的方法f就会发生，我是说这个，这个规则
+
+24
+00:02:09,729 --> 00:02:15,750
+assumes that method is in fact to define the class x, And the rule doesn't say
+假设该方法实际上是定义类x，并且规则没有说明
+
+25
+00:02:15,750 --> 00:02:22,010
+anything about what to do if it turns out that this class x doesn't have any method
+如果发现这个类x没有任何方法，该怎么办
+
+26
+00:02:22,010 --> 00:02:29,010
+f? Well, that actually can't happen. So, type-checking has already guaranteed That
+F？嗯，那实际上是不可能的。因此，类型检查已经保证了
+
+27
+00:02:29,019 --> 00:02:33,430
+when we go to look up method as in class x it will exist. That was one of the points
+当我们在类x中查找方法时，它将存在。这是其中一点
+
+28
+00:02:33,430 --> 00:02:39,040
+with the type checking rules was that no dynamic dispatch could ever dispatch to a
+类型检查规则的一个特点是，任何动态分派都不能分派到
+
+29
+00:02:39,040 --> 00:02:44,349
+method that wasn't defined. And so the fact that the time checking is already
+未定义的方法。所以事实上时间检查已经是
+
+30
+00:02:44,349 --> 00:02:49,500
+been done, it will allows us to meet some cases. So there's some checks that we
+已经完成了，这将使我们能够遇到一些情况。所以我们有一些支票
+
+31
+00:02:49,500 --> 00:02:54,269
+don't have to do because we know that, that system has already effectively done
+不需要这样做，因为我们知道，这个系统已经有效地做到了
+
+32
+00:02:54,269 --> 00:02:58,190
+that And the rules would only be more complicated if we didn't have type
+如果我们没有类型，那么规则只会更加复杂
+
+33
+00:02:58,190 --> 00:03:02,129
+checking and we needed to actually say what would happen you know, all of the
+正在检查，我们需要实际说出会发生什么，你知道，所有的
+
+34
+00:03:02,129 --> 00:03:09,129
+cases where type checking will work where things were not typed correct. Now there
+类型检查将起作用的情况下，输入的内容不正确。现在就在那里
+
+35
+00:03:09,590 --> 00:03:13,860
+are some run time errors that the type checker doesn't prevent however and in
+是否存在一些类型检查器无法阻止的运行时错误
+
+36
+00:03:13,860 --> 00:03:20,860
+cool there are four. One is to dispatch the void. Divisions by zero you can have a
+太好了，一共有四个。其一是派遣空位。除以零，你可以得到一个
+
+37
+00:03:21,299 --> 00:03:24,890
+sub-screen in that excess out of range or you could run out of memory. You could try
+子屏幕中超出范围，否则可能会耗尽内存。你可以试试
+
+38
+00:03:24,890 --> 00:03:29,379
+allocating new objects that do not have enough space for that. And in such cases,
+分配空间不足的新对象。在这种情况下，
+
+39
+00:03:29,379 --> 00:03:33,629
+the execution has to aboard gracefully an d that means with an error message and not
+执行必须优雅地执行，这意味着带有错误消息，而不是
+
+40
+00:03:33,629 --> 00:03:39,400
+just with a segmentation fault or some other kind of hard crash and in the manual
+只是出现了分段故障或其他类型的硬崩溃，并且在手册中
+
+41
+00:03:39,400 --> 00:03:45,239
+there some guidelines as to what a correct co-implementation should do in this four
+关于正确的联合实现应该在这四个方面做些什么，有一些指导方针
+
+42
+00:03:45,239 --> 00:03:52,239
+situations. To summarize the material in the last couple of videos the operational
+情况。总结最后几个视频中的内容
+
+43
+00:03:52,280 --> 00:03:58,049
+semantic rules are really very precised and detail. If you understand them then
+语义规则确实非常精确和详细。如果你能听懂他们的话
+
+44
+00:03:58,049 --> 00:04:03,989
+you really understand how to implement a correct cool compiler. So the rules are
+您真正了解了如何实现一个正确的酷编译器。所以规则是
+
+45
+00:04:03,989 --> 00:04:09,700
+complete enough and give you enough detail that it really can't go wrong if you just
+足够完整，给你足够的细节，如果你只是
+
+46
+00:04:09,700 --> 00:04:14,019
+implement what the rules tell you to do. So you need to read the rules very
+执行规则告诉你要做的事情。所以你需要非常仔细地阅读规则
+
+47
+00:04:14,019 --> 00:04:18,630
+carefully And I'll emphasize that because there's actually quite a lot going on in
+小心，我会强调这一点，因为实际上有相当多的事情发生在
+
+48
+00:04:18,630 --> 00:04:22,630
+the rules. They're written in a certain way and you know, to, to achieve a certain
+这是规则。它们是以某种方式写的，你知道，为了达到某种目的
+
+49
+00:04:22,630 --> 00:04:27,070
+effect and I pointed out a couple of subtle things in the rules and so you
+效果，我指出了规则中的几个微妙之处，所以你
+
+50
+00:04:27,070 --> 00:04:31,080
+know, you really have to actually study the rules in order to internalize what
+要知道，你真的必须真正研究规则，才能将什么内在化
+
+51
+00:04:31,080 --> 00:04:37,000
+they mean and be able to. Implement them correctly. It's also a great way
+他们的意思是而且能够做到。正确实施它们。这也是一种很好的方式
+
+52
+00:04:37,000 --> 00:04:40,440
+understanding these rules and details was actually a great way to learn quite a bit
+理解这些规则和细节实际上是一个很好的学习方法
+
+53
+00:04:40,440 --> 00:04:45,010
+of the, the kind of formal thinking that goes in to the design of programming
+程序设计中的一种形式思维
+
+54
+00:04:45,010 --> 00:04:49,670
+languages and what it means for a programming language to have a semantics
+语言以及编程语言具有语义的含义
+
+55
+00:04:49,670 --> 00:04:55,250
+and for implementation of something to be correct. Now having settled that, I should
+为了让某些事情的实施是正确的。现在解决了这个问题，我应该
+
+56
+00:04:55,250 --> 00:04:59,480
+say that most languages do not have a well specified operational semantics. There are
+假设大多数语言没有明确指定的操作语义。确实有
+
+57
+00:04:59,480 --> 00:05:03,970
+some there are some substantial languages and fairly realistic languages that do
+有些语言和相当现实的语言可以做到这一点
+
+58
+00:05:03,970 --> 00:05:08,780
+have a formal semantics but most of the language is that you're familiar with do
+有一个正式的语义，但是大部分的语言都是你熟悉的
+
+59
+00:05:08,780 --> 00:05:13,510
+not. Finally just a comment you know when portability is important, when you really
+不。最后只是一个评论，你知道什么时候可移植性很重要，什么时候你真的
+
+60
+00:05:13,510 --> 00:05:18,890
+want software that you write behave the exactly the same in different environments
+希望您编写的软件在不同环境中的行为完全相同
+
+61
+00:05:18,890 --> 00:05:24,740
+so you know if I take the same program and I move it to a different machine or a
+所以你知道，如果我把相同的程序移到不同的机器上，或者
+
+62
+00:05:24,740 --> 00:05:29,590
+different operating system and I still want to kind of guarantee that this offer
+不同的操作系统，我仍然想要某种程度上保证这个服务
+
+63
+00:05:29,590 --> 00:05:35,970
+will behave as it as it you know the same on both machine or the old environment and
+将按照您所知道的在两台计算机或旧环境上相同的方式运行，并且
+
+64
+00:05:35,970 --> 00:05:40,370
+the new environment then I really need some independent defin ition of what it
+新的环境，我真的需要一些独立的定义
+
+65
+00:05:40,370 --> 00:05:44,550
+means what the behavior of these programs should be. And that's where a formal
+意味着这些程序的行为应该是什么。这就是一个正式的
+
+66
+00:05:44,550 --> 00:05:47,180
+semantics becomes a really critical.
+语义学变得非常关键。
+

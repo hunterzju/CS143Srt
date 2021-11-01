@@ -1,0 +1,540 @@
+0
+00:00:03,990 --> 00:00:07,850
+Welcome back, In this video we're going to talk about converting regular expressions
+欢迎回来，在这段视频中，我们将讨论如何转换正则表达式
+
+1
+00:00:07,850 --> 00:00:14,850
+into non-deterministic finite automata. Before we get started I wanna give you an
+变成非确定的有限自动机。在我们开始之前，我想给你们一个
+
+2
+00:00:16,740 --> 00:00:21,840
+overview of the plan for the next few videos. We have a lexical specification
+接下来几个视频的计划概述。我们有一个词汇说明
+
+3
+00:00:21,840 --> 00:00:27,060
+that we want to implement and the first step is for someone to write that down as
+我们想要实现，第一步是有人把它写成
+
+4
+00:00:27,060 --> 00:00:32,820
+a set of regular expressions. Now that bites all the courses not implementation,
+一组正则表达式。既然这会影响到所有的课程而不是实施，
+
+5
+00:00:32,820 --> 00:00:37,910
+that's just specification. So we have to translate that into a program that can
+那只是说明书而已。所以我们必须把它转化成一个可以
+
+6
+00:00:37,910 --> 00:00:43,270
+actually do lexical analysis and this actually happens in several steps. The
+实际上是做词法分析，这实际上是分几步进行的。这个
+
+7
+00:00:43,270 --> 00:00:48,830
+first part is a translate Those regular expressions into non-deterministic finite
+第一部分是将这些正则表达式转换为非确定性有限表达式。
+
+8
+00:00:48,830 --> 00:00:54,260
+automata that recognize the same, exactly the same thing. And then those
+能够识别相同的、完全相同的东西的自动机。然后是那些
+
+9
+00:00:54,260 --> 00:00:59,580
+non-deterministic automata are translated into deterministic automata and finally
+将非确定自动机转化为确定自动机，最后
+
+10
+00:00:59,580 --> 00:01:05,150
+those deterministic automata are implemented as a set of Lookup tables and
+这些确定性自动机被实现为一组查找表，并且
+
+11
+00:01:05,150 --> 00:01:12,150
+a little bit of code for traversing those tables. So in previous videos, we talked
+一些用于遍历这些表的代码。所以在之前的视频中，我们谈到
+
+12
+00:01:13,649 --> 00:01:18,880
+about this piece and we've also defined this piece. And so now we're ready to put
+关于这件事，我们也给这件事下了定义。所以现在我们准备好把
+
+13
+00:01:18,880 --> 00:01:23,460
+the whole thing together and in this particular video, we're going to focus on
+在这段特别的视频中，我们将把整个事情放在一起，重点放在
+
+14
+00:01:23,460 --> 00:01:27,100
+this component right here, The translation of regular expressions to
+这个组件就在这里，将正则表达式转换为
+
+15
+00:01:27,100 --> 00:01:34,100
+non-deterministic finite automata. So the plan is that for each kind of regular
+非确定性有限自动机。所以我们的计划是，对于每一种常规的
+
+16
+00:01:35,340 --> 00:01:41,890
+expression we're going to find an equivalent Non-deterministic Automata,
+表达式，我们将找到一个等价的非确定自动机，
+
+17
+00:01:41,890 --> 00:01:46,259
+automaton that accepts exactly the same language as the language or a regular
+接受与语言或常规语言完全相同的语言的自动机
+
+18
+00:01:46,259 --> 00:01:51,319
+expression. And here's a little bit of notation we're gonna use. We'll define
+表达式。这是我们要用到的一点符号。我们会定义
+
+19
+00:01:51,319 --> 00:01:56,119
+these automaton for regular expressions and usually, what we're going to be doing
+这些正则表达式的自动机，通常情况下，我们要做的是
+
+20
+00:01:56,119 --> 00:02:00,280
+is needing to modify their start states and their final states so we'll just
+需要修改它们的开始状态和最终状态，所以我们只需
+
+21
+00:02:00,280 --> 00:02:04,819
+indicate the start state with the l and the final state. With the double circle
+用l和最终状态指示开始状态。用双圆圈
+
+22
+00:02:04,819 --> 00:02:08,280
+and we won't worry too much about the overall structure of the machine as long
+而且我们也不会太担心机器的整体结构，只要
+
+23
+00:02:08,280 --> 00:02:13,920
+as we have a handle on the start state and the final state. I should say that in the
+因为我们掌握了开始状态和最终状态的句柄。我应该说，在
+
+24
+00:02:13,920 --> 00:02:20,810
+machines we'll build here, there will only be one final state. Okay, so let's begin.
+我们在这里建造的机器，只有一个最终状态。好的，我们开始吧。
+
+25
+00:02:20,810 --> 00:02:27,220
+So for the epsilon regular expression, once the machine that accepts that, well
+所以对于epsilon正则表达式，一旦机器接受了它，那么
+
+26
+00:02:27,220 --> 00:02:31,690
+this is a very simple machine. We can just have a start state and a final state and
+这是一台非常简单的机器。我们可以只有一个开始状态和一个最终状态
+
+27
+00:02:31,690 --> 00:02:38,690
+epsilon transition between them so this machine accepts exactly the empty string.
+Epsilon在它们之间转换，所以这台机器完全接受空字符串。
+
+28
+00:02:39,500 --> 00:02:45,720
+Certainly for a single character A, we can define a one transition two state machine
+当然，对于单个字符A，我们可以定义一个一个转换两个状态机
+
+29
+00:02:45,720 --> 00:02:50,120
+that accepts that one character. So from the start state we can move to the final
+它接受这一个字符。所以我们可以从开始状态进入决赛
+
+30
+00:02:50,120 --> 00:02:54,480
+state if it only, if we read that particular character, okay. So those are
+如果我们读了那个特定的字符，请说明，好的。所以这些都是
+
+31
+00:02:54,480 --> 00:03:00,480
+out two simple regular expressions and now we have to do the compound regular
+输出了两个简单的正则表达式，现在我们必须做复合正则表达式
+
+32
+00:03:00,480 --> 00:03:05,530
+expressions. And these are little [inaudible] involved. So let's talk about
+表情。而且这些都很少[听不见]涉及到。所以我们来谈谈
+
+33
+00:03:05,530 --> 00:03:11,570
+concatenation first. And so, because we're gonna build these machines up from
+先串接。所以，因为我们要把这些机器从
+
+34
+00:03:11,570 --> 00:03:16,040
+smaller. Regular expressions to larger ones, we can assume that we've already
+小一点。正则表达式转换为更大的正则表达式，我们可以假设我们已经
+
+35
+00:03:16,040 --> 00:03:21,880
+converted A and B separately in two machines. So I have the machine for A. And
+在两台机器中分别转换A和B。我有A和A的取款机。
+
+36
+00:03:21,880 --> 00:03:26,340
+to have a machine for B and now all I have to do is say how I'm going to paste
+有一台机器给B，现在我要做的就是说我要怎么粘贴
+
+37
+00:03:26,340 --> 00:03:30,130
+together these two machines to form a machine, a compound machine that
+把这两台机器放在一起组成一台机器，一台复合机，
+
+38
+00:03:30,130 --> 00:03:34,790
+recognizes the same language as a concatenated with B. And here's the
+将相同的语言识别为与B连接的
+
+39
+00:03:34,790 --> 00:03:39,270
+construction, the start state for the compound machine will be the start state
+构造时，复合机的启动状态将为启动状态
+
+40
+00:03:39,270 --> 00:03:43,890
+for A so we'll just keep that start state for A the same and then we modify the
+对于A，我们只需保持A的起始状态不变，然后修改
+
+41
+00:03:43,890 --> 00:03:48,230
+final state of A. So we make the final state of A no longer a final state and
+所以我们使A的终态不再是终态，
+
+42
+00:03:48,230 --> 00:03:53,960
+I've done that here by removing the double circle on the final state of A andthe
+我在这里通过去掉A的最终状态上的双圆来做到这一点，并且
+
+43
+00:03:53,960 --> 00:03:59,170
+epsilon transition to the start state of B. Now if we think about it, that does
+Epsilon转变到B的开始状态。现在，如果我们想一想，那就是
+
+44
+00:03:59,170 --> 00:04:03,150
+exactly the right thing but that says, is that first you recognize some portion of
+这确实是正确的，但也就是说，首先你会认识到
+
+45
+00:04:03,150 --> 00:04:08,010
+the input that belongs to the language of A, and when we get to that, what would
+属于A语言的输入，当我们谈到这一点时，
+
+46
+00:04:08,010 --> 00:04:12,990
+been the final state of A, we can jump to the start state of B without consuming any
+作为A的最终状态，我们可以跳到B的开始状态，而不消耗任何
+
+47
+00:04:12,990 --> 00:04:17,759
+input and then try to read the rest of the string as part of the language, as, as a
+输入，然后尝试将字符串的睡觉作为语言的一部分，作为，作为
+
+48
+00:04:17,759 --> 00:04:24,740
+string in the language of B. And for union we have a similar way of phasing together
+B语言中的字符串。对于联合，我们有一个类似的分阶段的方法。
+
+49
+00:04:24,740 --> 00:04:28,789
+the machines. Although the, the structure is somewhat different so we, at a new
+机器。虽然这个结构有点不一样，所以我们在一个新的
+
+50
+00:04:28,789 --> 00:04:33,990
+start state for the compound machine and What does A + B mean? It means either the
+复合机的启动状态，A+B是什么意思？这意味着要么是
+
+51
+00:04:33,990 --> 00:04:38,759
+input is in the language of A, or it's in the language of B. And epsilon transitions
+输入使用A的语言，或者使用B的语言。
+
+52
+00:04:38,759 --> 00:04:42,819
+are really good for capturing this because we just make a decision right from the
+非常适合于捕捉到这一点，因为我们只是根据
+
+53
+00:04:42,819 --> 00:04:47,879
+start state is the string going to be in language of A or is it going to be in the
+开始状态是将使用A语言的字符串，还是将使用
+
+54
+00:04:47,879 --> 00:04:53,169
+language of B. So we make a non-deterministic choice and then we read
+所以我们做了一个非确定性的选择，然后我们读到
+
+55
+00:04:53,169 --> 00:04:57,759
+the string as using that, the automaton that we chose and if we get to the final
+使用的字符串，我们选择的自动机，如果我们进入决赛
+
+56
+00:04:57,759 --> 00:05:02,550
+state. Either those machines we can make the epsilon transition to the new final
+州政府。不管是那些机器，我们都可以把epsilon过渡到新的决赛
+
+57
+00:05:02,550 --> 00:05:06,289
+state for the compound machine. Now remember what the notion is of acceptance
+复合机的状态。现在请记住接受的概念是什么
+
+58
+00:05:06,289 --> 00:05:10,729
+for Nondeterministic Automata, you know? They make these guesses but if there's any
+不确定自动机，你知道吗？他们会做出这些猜测，但如果有
+
+59
+00:05:10,729 --> 00:05:16,270
+guess that works, then we say that it's in the language of the machine. So, if in
+我想这是可行的，那么我们就说它是用机器的语言写的。所以，如果在
+
+60
+00:05:16,270 --> 00:05:21,629
+fact the string is in the union of A or B then either choosing A or choosing B will
+事实上，字符串是A或B的并集，那么选择A或选择B都将
+
+61
+00:05:21,629 --> 00:05:28,629
+work and so the machine will accept the string. And finally the most complicated
+工作，所以机器会接受绳子。最后是最复杂的
+
+62
+00:05:30,139 --> 00:05:35,240
+case for iteration is star, we have the following construction, So here's the
+迭代的案例是STAR，我们有以下结构，所以这里是
+
+63
+00:05:35,240 --> 00:05:41,060
+machine for A, Embedded in here. We've added a new start state and a new final
+A的机器，嵌入在这里。我们增加了一个新的起跑状态和一个新的决赛
+
+64
+00:05:41,060 --> 00:05:46,219
+state, And now, let's talk about how this works. So one possibility is, remember
+现在，让我们来讨论一下这是如何工作的。所以一种可能性是，记住
+
+65
+00:05:46,219 --> 00:05:53,219
+that epsilon is always in the language of A star, and so we have this transition here,
+那个ε总是用A星的语言表示的，所以我们在这里有了这个过渡，
+
+66
+00:05:53,509 --> 00:05:57,159
+We can go straight from the start state to the final state and accept the empty
+我们可以直接从开始状态进入最终状态，并接受空的
+
+67
+00:05:57,159 --> 00:06:01,520
+string. And so, that just guarantees that the empty string is in the language.
+字符串。因此，这只能保证空字符串在语言中。
+
+68
+00:06:01,520 --> 00:06:05,830
+Otherwise, what do we do? Otherwise, we can make a transition, an epsilon
+否则，我们该怎么办？否则，我们可以做一个转变，一个ε
+
+69
+00:06:05,830 --> 00:06:10,050
+transition to the start state of A. And then we can, from the final state of A if
+转换到A的开始状态，然后我们可以从A的最终状态IF
+
+70
+00:06:10,050 --> 00:06:14,289
+we reach it, we can go back to the start state of the whole machine and we can do
+当我们到达它时，我们可以返回到整个机器的启动状态，我们可以这样做
+
+71
+00:06:14,289 --> 00:06:20,789
+this as many times as we like. Okay, So, there's the iteration of A, Surround this
+我们想要多少次都可以。好的，这是A的迭代，围绕着这个
+
+72
+00:06:20,789 --> 00:06:26,479
+loop right here, And when we reach the final state of A we can also decide to
+就在这里循环，当我们到达A的最终状态时，我们也可以决定
+
+73
+00:06:26,479 --> 00:06:30,469
+just make a transition to the final state of the machine, we conclude that the last
+只要转换到机器的最终状态，我们就可以得出结论，最后一个
+
+74
+00:06:30,469 --> 00:06:37,469
+time. And so this machine recognizes zero or more strings in the language of A. So
+时间到了。因此，这台机器可以识别零个或多个a语言的字符串。
+
+75
+00:06:40,550 --> 00:06:45,110
+now, let's do an example, So here's a regular expression and we want to build a
+现在，让我们来做一个例子，所以这里有一个正则表达式，我们想要构建一个
+
+76
+00:06:45,110 --> 00:06:49,840
+equivalent nondeterministic machine that recognizes the sa me language and we're
+等价的不确定机器，它可以识别简单的语言，而我们
+
+77
+00:06:49,840 --> 00:06:56,199
+gonna follow our construction, Which works by induction on the structure of the
+我将跟随我们的建筑，通过对结构的归纳来工作
+
+78
+00:06:56,199 --> 00:06:59,830
+regular expressions starting with the simple regular expressions and building up
+正则表达式从简单的正则表达式开始构建
+
+79
+00:06:59,830 --> 00:07:05,729
+to the compound one so what do we have here? So we have a machine for accepting
+到院子里的那个那么我们这里有什么？所以我们有一台机器来接受
+
+80
+00:07:05,729 --> 00:07:09,949
+one, okay. So we need a machine that accepts one and if we call it had two
+一件，好的。所以我们需要一台可以接受一台的机器，如果我们称之为有两台的话
+
+81
+00:07:09,949 --> 00:07:15,710
+states and it just, you know made a transition between the two on the number
+它只是，你知道的，在数字上在这两个州之间做了一个转换
+
+82
+00:07:15,710 --> 00:07:22,710
+one, Similarly a machine for accepting zero. Okay, And now, we need to put them
+第一，同样是一台接受零的机器。好的，现在，我们要把它们
+
+83
+00:07:23,059 --> 00:07:28,270
+together in a machine that accepts either one or zero. And the way we did that is we
+一起放在一台可以接受1或0的机器里。我们做到这一点的方式是我们
+
+84
+00:07:28,270 --> 00:07:35,270
+made a choice from A, from a start state for the compound machine where you can
+从A中进行选择，从复合机的启动状态中进行选择
+
+85
+00:07:35,949 --> 00:07:40,699
+either move to the machine for accepting one or the machine for accepting zero. And
+要么移动到接受1的机器，要么移动到接受0的机器。和
+
+86
+00:07:40,699 --> 00:07:46,479
+then we have, at the end, also epsilon moves back to the final state of the
+然后我们在最后，也有ε移动回最后的状态，
+
+87
+00:07:46,479 --> 00:07:52,599
+compound machine. Okay, And now we need to iterate this so we need to be able to
+复合机。好的，现在我们需要迭代这个，所以我们需要能够
+
+88
+00:07:52,599 --> 00:07:59,599
+accept zero or more of one's or zero's and so we're going to take this entire Block
+接受零个或多个1或0，所以我们将使用整个挡路
+
+89
+00:08:00,789 --> 00:08:07,789
+here and paste it into the pattern that we had for iteration so how do we do that?
+并将其粘贴到我们用于迭代的模式中，那么我们如何做到这一点呢？
+
+90
+00:08:08,509 --> 00:08:13,379
+Well, we have a new start state and a new final state, okay. And there's an epsilon
+嗯，我们有一个新的起始态和一个新的终止态，好的。还有一个ε
+
+91
+00:08:13,379 --> 00:08:18,259
+move from the start state to the new final state to guarantee that we accept the
+从开始状态移动到新的最终状态，以保证我们接受
+
+92
+00:08:18,259 --> 00:08:23,879
+empty string. And then we can just iterate this inner machine as many times as we
+空字符串。然后我们就可以把这台内部机器重复尽可能多的次数
+
+93
+00:08:23,879 --> 00:08:29,059
+like. We can make an epsilon move to the start state, We could execute the machine
+喜欢。我们可以使epsilon移动到启动状态，我们可以执行机器
+
+94
+00:08:29,059 --> 00:08:34,490
+ones and if we decide we want to do it again, well we can do that. Okay, Go back
+如果我们决定再来一次，我们可以这么做。好的，回去吧
+
+95
+00:08:34,490 --> 00:08:38,990
+around for another time, Or from the final state, we can decide that we've seen
+在另一个时间，或者从最终的状态，我们可以决定我们已经看到
+
+96
+00:08:38,990 --> 00:08:43,089
+enough and we can just move to the final state of the compound machine. So this
+够了，我们就可以转到复合机的最终状态了。所以这件事
+
+97
+00:08:43,089 --> 00:08:48,880
+machine then accepts the language one + zero'lt;i>. And now, we have a little bit more'lt;/i>
+然后，机器接受语言1+0‘lt；i>。现在，我们有更多的‘lt；/i>
+
+98
+00:08:48,880 --> 00:08:54,740
+to do. We have to accept, we have other machine that accepts just one so we build
+去做。我们必须接受，我们有另一台机器只接受一台，所以我们构建
+
+99
+00:08:54,740 --> 00:09:01,740
+another machine that accepts The digit one and now we need to compose two of these
+另一台接受数字1的机器，现在我们需要组合其中的两台
+
+100
+00:09:04,570 --> 00:09:08,660
+things, to concatenate them and that was very simple. We just have an epsilon move
+将它们连接起来，这是非常简单的。我们刚刚有了一个埃西隆动作
+
+101
+00:09:08,660 --> 00:09:13,120
+from the final state of the first machine to the start state of the second mac hine
+从第一机器的最终状态到第二Mac Hine的启动状态
+
+102
+00:09:13,120 --> 00:09:17,430
+and then these are all the states of the final machine. And we just need to now
+然后这些就是最终机器的所有状态。我们现在只需要
+
+103
+00:09:17,430 --> 00:09:21,730
+label our final, final state or the end of the state that we're actually gonna use in
+将我们实际要使用的最终状态或状态的结束标记为
+
+104
+00:09:21,730 --> 00:09:25,910
+the end of the final state of the entire machine which should be that one and the
+整个计算机的最终状态(应该是该状态)的末尾，并且
+
+105
+00:09:25,910 --> 00:09:32,910
+start state, Which is this state over here. And that's the entire construction
+开始状态，这就是这里的状态。这就是整个建筑
+
+106
+00:09:33,529 --> 00:09:38,230
+for the non-deterministic automata or a non-deterministic automata that recognizes
+对于非确定自动机或识别的非确定自动机
+
+107
+00:09:38,230 --> 00:09:38,730
+this language.
+这种语言。
+

@@ -1,0 +1,585 @@
+0
+00:00:03,720 --> 00:00:07,260
+In this video, we're going to begin a discussion of Register Allocation which is
+在本视频中，我们将开始讨论寄存器分配
+
+1
+00:00:07,260 --> 00:00:11,770
+one of the most sophisticated things that compilers do to optimize performance and
+编译器做的最复杂的事情之一是优化性能和
+
+2
+00:00:11,770 --> 00:00:15,160
+also involves many of the concepts that we've been discussing in global flow
+还涉及我们在全球流程中讨论的许多概念
+
+3
+00:00:15,160 --> 00:00:21,929
+analysis. Recall that intermediate code can use unlimited numbers of temporaries
+分析。回想一下，中间代码可以使用无限数量的临时
+
+4
+00:00:21,929 --> 00:00:26,179
+and this simplifies a number of things. Particularly it simplifies optimization so
+这简化了很多事情。特别是它简化了优化，因此
+
+5
+00:00:26,179 --> 00:00:31,029
+we don't have to worry about preserving the right number of registers in the code.
+我们不必担心在代码中保留正确数量的寄存器。
+
+6
+00:00:31,029 --> 00:00:35,260
+But, it does complicate the final translation into assembly code cuz we
+但是，它确实使最终翻译成汇编代码变得复杂，因为我们
+
+7
+00:00:35,260 --> 00:00:40,640
+might be using too many temporaries and this is actually a problem in practice.
+可能使用了太多的临时语句，这在实践中实际上是一个问题。
+
+8
+00:00:40,640 --> 00:00:44,830
+So, it's not uncommon at all for intermediate code to use more temporaries
+因此，中间代码使用更多临时代码并不少见
+
+9
+00:00:44,830 --> 00:00:51,140
+than there are registers on the target machine. The problem then is to rewrite
+比目标机器上的寄存器多。那么问题就是重写
+
+10
+00:00:51,140 --> 00:00:55,990
+the intermediate code to use no more temporaries than there are machine
+中间代码使用的临时代码不比机器多
+
+11
+00:00:55,990 --> 00:01:00,150
+registers and the way we're going to do that is we're going to assign multiple
+寄存器，我们要做的是将多个
+
+12
+00:01:00,150 --> 00:01:05,689
+temporaries to each register. So, we're going to have a many-one mapping. A many
+每个登记处都有临时工。所以，我们将会有一个多-一映射。很多人
+
+13
+00:01:05,689 --> 00:01:12,689
+to one mapping from temporaries to registers, okay? And, clearly there's a
+一个从临时到寄存器的映射，好吗？而且，很明显有一个
+
+14
+00:01:13,740 --> 00:01:18,790
+little bit of an issue here if we really are using many temporaries, we will not be
+这里有一个小问题，如果我们真的使用了很多临时函数，我们就不会
+
+15
+00:01:18,790 --> 00:01:22,490
+able to fit them all into a single register. So there needs to be some kind
+能够将它们全部放入一个寄存器中。所以一定要有某种
+
+16
+00:01:22,490 --> 00:01:26,080
+of a trick and we'll say what that trick is in a few minutes and there will be
+几分钟后我们会说出那是什么把戏
+
+17
+00:01:26,080 --> 00:01:29,030
+situations actually when this will fail, we'll have to have some kind of back up
+实际情况当这将失败时，我们将不得不有某种形式的支持
+
+18
+00:01:29,030 --> 00:01:36,030
+plan. But our default plan is to try to put as many temporaries as possible into
+计划一下。但我们的默认计划是尝试把尽可能多的临时人员
+
+19
+00:01:36,030 --> 00:01:40,780
+the same machine register. And doing all of this without changing the behavior of
+相同的机器寄存器。在不改变行为的情况下完成所有这些操作
+
+20
+00:01:40,780 --> 00:01:47,780
+the program. So, how can we do this? Magic thing. How can we actually make a single
+这个项目。那么，我们怎么才能做到这一点呢？神奇的东西。我们怎么才能真正让一首单曲
+
+21
+00:01:49,140 --> 00:01:54,010
+register hold multiple values? Well, the trick is that it's fine for registers to
+寄存器是否包含多个值？嗯，诀窍是登记员可以
+
+22
+00:01:54,010 --> 00:01:58,940
+have local values as long as it only has one value at a time. So, let's consider
+只要一次只有一个值，就具有本地值。那么，让我们考虑一下
+
+23
+00:01:58,940 --> 00:02:03,530
+this program, I'm going to switch colors here. Okay. Simple three statement program
+这个程序，我要在这里切换颜色。好吧。简单的三语句程序
+
+24
+00:02:03,530 --> 00:02:08,670
+and notice here that a is used in the first two statements. So it's written in
+注意，这里在前两个语句中使用了a。所以它是写在
+
+25
+00:02:08,669 --> 00:02:12,790
+the first statement, read in the second stateme nt e is written in the second
+在第二个状态中读取的第一个语句写入第二个状态
+
+26
+00:02:12,790 --> 00:02:16,819
+statement and read in the third statement and that is only written in the third
+语句，并在第三个语句中读取，并且只在第三个语句中写入
+
+27
+00:02:16,819 --> 00:02:21,090
+statement. And actually, these three values a, e and f, they don't ever really
+声明。实际上，这三个值a，e和f，
+
+28
+00:02:21,090 --> 00:02:26,090
+co-exist at the same time but at the time we've read a we are really done with it.
+在同一时间共存，但当我们读完一本书的时候，我们真的受够了。
+
+29
+00:02:26,090 --> 00:02:29,040
+We've all the uses that they are going to have in this little code fragment. Here,
+我们拥有它们将在这个小代码片段中使用的所有用途。这里,
+
+30
+00:02:29,040 --> 00:02:32,849
+I'm assuming that a and effort are not used anywhere else and so it turns out
+我假设a和努力没有在其他地方使用，所以结果是
+
+31
+00:02:32,849 --> 00:02:37,810
+that a, e, and f could all actually live in the same register. Alright, that's
+a，e和f实际上都可以位于同一个寄存器中。好的，那就是
+
+32
+00:02:37,810 --> 00:02:43,270
+assuming that a and e are dead after their uses. And what will that look like, well
+假设a和e在使用后死亡。那会是什么样子呢，嗯
+
+33
+00:02:43,270 --> 00:02:48,620
+let's allocate them all to a particular register r1 and let's assign c, d, and b
+让我们将它们全部分配给特定的寄存器R1，并将c、d和b
+
+34
+00:02:48,620 --> 00:02:53,930
+into their own individual registers and the code would like this, r1 would be r2 +
+放入它们自己的单独寄存器中，代码如下所示，R1将是R2+
+
+35
+00:02:53,930 --> 00:03:00,400
+r3, and then r1 would be r1 + r4 and r1 would be r1 - one. And so now notice how
+R3，那么R1将是R1+R4，R1将是R1-1。所以现在请注意如何
+
+36
+00:03:00,400 --> 00:03:05,450
+this is just a transliteration of the code over here into registers but there is a
+这只是将这里的代码音译到寄存器中，但是有一个
+
+37
+00:03:05,450 --> 00:03:12,450
+many one mapping of names on the left to register names on the right. A register
+左侧的多个名称映射到右侧的注册名称。收银机
+
+38
+00:03:14,819 --> 00:03:20,879
+allocation is an old problem. In fact, it was first recognized way back in the 1950s
+分配是一个老问题。事实上，早在20世纪50年代，人们就已经认识到这一点。
+
+39
+00:03:20,879 --> 00:03:25,660
+in the original Fortran project but originally, register allocation was done
+在最初的Fortran项目中，但最初是进行寄存器分配
+
+40
+00:03:25,660 --> 00:03:31,519
+with a fairly crude algorithms and who is rapidly or very quickly noticed that was
+使用相当粗糙的算法，谁能很快或非常迅速地注意到这一点，那就是
+
+41
+00:03:31,519 --> 00:03:36,430
+actually a bottle neck in the quality of code generation that actually limitations
+实际上是代码生成质量的瓶颈，这实际上限制了
+
+42
+00:03:36,430 --> 00:03:40,239
+on the ability of register allocation and do a good job have a really significant
+对寄存器分配能力的提高和做好寄存器分配工作有非常重要的意义
+
+43
+00:03:40,239 --> 00:03:44,410
+effect on the overall equality, overall quality of the code that compilers could
+对编译器可以实现的代码的总体等价性、总体质量的影响
+
+44
+00:03:44,410 --> 00:03:51,060
+produce. And then about 30 years later, in 1980, a breakthrough occurred where people
+生产。大约30年后，也就是1980年，出现了一个突破性进展，人们
+
+45
+00:03:51,060 --> 00:03:54,840
+discovered or a group of researchers at IBM discovered a register allocation
+发现或IBM的一组研究人员发现了寄存器分配
+
+46
+00:03:54,840 --> 00:03:59,019
+scheme based on graph coloring. And the great thing about this scheme is that it's
+基于图着色的方案。这个计划的伟大之处在于它
+
+47
+00:03:59,019 --> 00:04:04,019
+pretty simple. It's easy to explain. It's global, meaning it takes advantage of
+很简单。这很容易解释。它是全球性的，这意味着它利用
+
+48
+00:04:04,019 --> 00:04:08,150
+information from the entire control flow graph at the same time and also happens to
+信息同时从整个控制流程图中提取，并且碰巧
+
+49
+00:04:08,150 --> 00:04:15,150
+work well in practice. And here's the basic principle that underlies the modern
+在实践中做好工作。这是现代社会的基本原则
+
+50
+00:04:18,029 --> 00:04:23,370
+register allocation algorithms. So, if I have two temporaries t1 and t2, I want to
+寄存器分配算法。所以，如果我有两个临时的t1和t2，我想
+
+51
+00:04:23,370 --> 00:04:27,430
+know when they can share register. So, they're allowed to share a register and
+知道他们何时可以共享注册表。所以，他们被允许共享一个寄存器
+
+52
+00:04:27,430 --> 00:04:32,970
+they're allowed to be in the same register if they are not live at the same time,
+如果他们不在同一时间生活，他们就可以在同一个登记簿里，
+
+53
+00:04:32,970 --> 00:04:38,250
+okay? So like I said, any point in the program in most one of t1 or t2 as live.
+好吧?所以就像我说的，节目中的任何一点，在T1或T2中的大多数情况下都是实时的。
+
+54
+00:04:38,250 --> 00:04:43,889
+And we are more concise which I already said was partially is, is that if t2, t1
+我们更简洁，我已经说过，部分是，如果t2，t1
+
+55
+00:04:43,889 --> 00:04:48,710
+and t2 are live at the same time, okay? Meaning that there's, there's some program
+和T2同时直播，好吗？意思是有，有一些程序
+
+56
+00:04:48,710 --> 00:04:54,030
+point were both are live then they cannot share a register, alright? So this is the
+如果两个人都是现场直播的，那他们就不能共用一个录音机，好吗？所以这就是
+
+57
+00:04:54,030 --> 00:04:59,000
+negative form of the statement and it just tells you that if, if you need two values
+语句的否定形式，它只告诉您，如果您需要两个值
+
+58
+00:04:59,000 --> 00:05:05,280
+at the same moment in time, then they have to be in separate registers. Let's take a
+在同一时刻，那么它们必须在不同的登记簿中。让我们拿一张
+
+59
+00:05:05,280 --> 00:05:09,970
+look at a control flow graph and now, we know that in order to do the register allocation
+看看控制流图，现在，我们知道为了进行寄存器分配
+
+60
+00:05:09,970 --> 00:05:14,120
+to solve the register allocation at least in this in this way, we're going to need
+为了至少以这种方式解决寄存器分配问题，我们需要
+
+61
+00:05:14,120 --> 00:05:18,910
+liveness information. So, let's compute the live variables for each point of this
+活体信息。那么，让我们计算一下每个点的活动变量
+
+62
+00:05:18,910 --> 00:05:25,910
+program. So, here it is and I'll just walk through it very quickly. Let's assume that
+程序。所以，这就是了，我会快速浏览一下。我们假设
+
+63
+00:05:26,160 --> 00:05:31,380
+on exit from this loop that only b is live. So b is the output of this piece of
+在从该循环退出时，只有b是活动的。所以b是这段的输出
+
+64
+00:05:31,380 --> 00:05:35,650
+the code and it's used elsewhere but none of the other variables are live. So, now
+代码和它在其他地方使用，但是其他变量都不是活动的。那么现在
+
+65
+00:05:35,650 --> 00:05:41,389
+if we work backwards, remember that line is a backward analysis. We'll see here
+如果我们倒着干，记住这一行是倒着分析的。我们在这里看看
+
+66
+00:05:41,389 --> 00:05:46,040
+that b is written so it's not live before the statement but f and c are read. So,
+b被写入，所以它在语句之前不是活动的，而是f和c被读取。所以,
+
+67
+00:05:46,040 --> 00:05:52,780
+both c and f are live before this basic block. Okay, and similarly if we, if we go
+在这个基本的挡路之前，c和f都是现场直播的。好的，同样的，如果我们，如果我们去
+
+68
+00:05:52,780 --> 00:05:56,940
+up another level here, here we see that e is now alive and f is dead because f was
+再往上一层，这里我们看到e现在是活的，f是死的，因为
+
+69
+00:05:56,940 --> 00:06:02,820
+written here and e was read. And over on this path, here we have another exit where
+写在这里，e被读了。在这条路上，我们还有另一个出口
+
+70
+00:06:02,820 --> 00:06:09,660
+b is live and now at this point here right after this basic block the set of lot
+B是现场直播的，现在就在这里，在这个基本的挡路之后，一组拍品
+
+71
+00:06:09,660 --> 00:06:15,229
+variables that are live is b, c, and f because b is live on one path and c and f
+活动的变量是b、c和f，因为b在一条路径上，而c和f在一条路径上
+
+72
+00:06:15,229 --> 00:06:19,220
+are live on the other path. Remember for something to be live, it only has to be
+住在另一条路上。记住，要想让某件事活着，它只需要
+
+73
+00:06:19,220 --> 00:06:24,550
+live on some, in some future possible evolution of the execution. So, on some
+活在一些，在未来的一些可能的行刑演变中。所以，在一些
+
+74
+00:06:24,550 --> 00:06:30,910
+path out of this node is a variables live, then it's live at the exit from this.
+从这个节点出来的路径是一个活变量，那么它在这个出口处是活的。
+
+75
+00:06:30,910 --> 00:06:37,910
+Working backwards here. B, c, and f are live here because e is read. And b, c, and
+在这里倒着工作。b、c和f驻留在这里，因为e是可读的。和b、c和
+
+76
+00:06:39,039 --> 00:06:45,449
+f are not referred to in this statement and so they just propagate upwards. Here b
+在该语句中没有提到F，所以它们只是向上传播。这里b
+
+77
+00:06:45,449 --> 00:06:49,970
+is removed from the live f because it's written but d is added and set here and
+从活动f中删除，因为它是写入的，但在这里添加和设置了d，并且
+
+78
+00:06:49,970 --> 00:06:54,310
+similarly, for the other edges in this graph. If you go and check all the other
+同样，对于此图中的其他边也是如此。如果你去检查所有其他的
+
+79
+00:06:54,310 --> 00:06:58,830
+edges you will see that the live set is correct and it just follows from the
+边，您将看到活动集是正确的，并且它只是从
+
+80
+00:06:58,830 --> 00:07:05,150
+simple rules we gave in the previous video. But how are going to use the
+我们在上一个视频中给出了简单的规则。但是我们将如何使用
+
+81
+00:07:05,150 --> 00:07:08,810
+liveness information to do register allocation? Well, we're going to construct
+活体信息要做寄存器分配吗？好的，我们要建造一个
+
+82
+00:07:08,810 --> 00:07:13,520
+and undirected graph and in this graph, there will be a node for each temporaries
+和无向图，在此图中，每个时间都有一个节点
+
+83
+00:07:13,520 --> 00:07:18,319
+so each variable will have a node in the graph and there'll be an edge between two
+因此每个变量在图中都有一个节点，在两个变量之间有一条边
+
+84
+00:07:18,319 --> 00:07:22,710
+temporaries if they are live simultaneously at some point in the
+临时对象(如果它们同时在
+
+85
+00:07:22,710 --> 00:07:29,350
+program, alright? So backing up and looking at our little example here, we can
+程序，好吗？所以回过头来看看我们这里的小例子，我们可以
+
+86
+00:07:29,350 --> 00:07:33,090
+see for example at this point in the program c and e are both live. They're
+例如，在节目c和e的这一点上都是活动的。他们是
+
+87
+00:07:33,090 --> 00:07:39,520
+both in the live set after this basic block executes. So c and e cannot be in
+两者都在这个基本的挡路执行后的现场。所以c和e不能在
+
+88
+00:07:39,520 --> 00:07:46,520
+the same register. Alright, continuing on, this is called, this data structure, this
+同样的登记簿。好，继续，这叫这个数据结构，这个
+
+89
+00:07:47,090 --> 00:07:53,550
+graph is called the Register Interference Graph or RIG for short. And again, the
+图形称为注册干涉图或简称为Rig。再说一遍，
+
+90
+00:07:53,550 --> 00:07:57,060
+basic idea is that two temporaries can be allocated in the same register if there is
+基本思想是，如果存在两个临时寄存器，则可以在同一寄存器中分配两个临时寄存器
+
+91
+00:07:57,060 --> 00:08:03,419
+no edge connecting them in the register interference graph. So, here's a register
+寄存器干涉图中没有连接它们的边。所以，这是一张收银机
+
+92
+00:08:03,419 --> 00:08:10,419
+interference graph for our example. This is the graph constructed from the code and
+我们示例中的干涉图。这是从代码和
+
+93
+00:08:11,229 --> 00:08:15,630
+the line analysis that we're given a few slides ago and you know, it's easy to read
+我们在几张幻灯片前看到的线条分析，你知道，它很容易读懂
+
+94
+00:08:15,630 --> 00:08:20,280
+off from the graph what the constraints are. So, for example b and c cannot be in
+从图表中找出约束是什么。因此，例如b和c不能在
+
+95
+00:08:20,280 --> 00:08:24,639
+the same register because b and c are connected by an edge. Okay, seeing that
+相同的寄存器，因为B和C由边缘连接。好的，看到这一点
+
+96
+00:08:24,639 --> 00:08:28,520
+they're live simultaneously at some part, some point in the program and so they have
+他们在节目的某个部分、某个时间点同时直播，所以他们
+
+97
+00:08:28,520 --> 00:08:32,389
+to live in different registers. On the other hand, there is at, there is no edge
+住在不同的寄存器里。从另一方面来说，就是在，没有优势。
+
+98
+00:08:32,389 --> 00:08:37,659
+between b and d, okay. So, this edge is missing and therefore, it's possible that
+在b和d之间，好的。所以，这条边不见了，因此，有可能
+
+99
+00:08:37,659 --> 00:08:41,659
+b and d could be allocated in the same register. They are live ranges all the
+B和D可以被分配在同一寄存器中。他们一直都是实况转播场
+
+100
+00:08:41,659 --> 00:08:48,659
+times in which they are alive do not overlapped. So a great thing about the
+他们活着的时间并不重叠。所以有一件很棒的事，那就是
+
+101
+00:08:48,759 --> 00:08:52,759
+register interference graph is that it extracts exactly the information needed to
+寄存器干涉图的特点是它准确地提取了所需的信息
+
+102
+00:08:52,759 --> 00:08:57,369
+characterize a legal register assignment. So, it gives us a representation of all
+描述合法寄存器分配的特征。因此，它为我们提供了所有
+
+103
+00:08:57,369 --> 00:09:00,949
+the possible legal register assignments. Now, I haven't said I haven't actually get
+可能的合法寄存器分配。现在，我还没有说我实际上还没有
+
+104
+00:09:00,949 --> 00:09:04,889
+a register assignment out of the register interference graph, but the first step is
+寄存器干扰图之外的寄存器分配，但第一步是
+
+105
+00:09:04,889 --> 00:09:10,139
+to characterize the problem in some kind of precise way. And the graph of, cannot
+以某种精确的方式描述这个问题。而图中的，不能
+
+106
+00:09:10,139 --> 00:09:15,230
+live in the same register constraints does that for us. The other thing that is good
+居住在相同的寄存器中的约束为我们做了这件事。另一件好事是
+
+107
+00:09:15,230 --> 00:09:19,689
+about is a, is a global view of the register requirements meaning it's over
+关于a，是注册要求的全局视图，意味着它结束了
+
+108
+00:09:19,689 --> 00:09:23,639
+the entire control flow graphs. So, takes into account information from every part
+整个控制流程图。因此，考虑到了来自各个部分的信息
+
+109
+00:09:23,639 --> 00:09:27,869
+of control flow graph which will help us to make good global decisions about what
+控制流图，它将帮助我们做出关于以下内容的良好的全局决策
+
+110
+00:09:27,869 --> 00:09:33,179
+value is very important to live in registers. And finally, the other thing to
+值对于寄存器来说非常重要。最后，另一件事是
+
+111
+00:09:33,179 --> 00:09:37,199
+notice is that, that after reconstruction, the register allocation for algorithm is
+需要注意的是，重构后，算法的寄存器分配为
+
+112
+00:09:37,199 --> 00:09:40,670
+going, is architecture independent. I haven't shown you the algorithm so you
+去，是架构独立的。我还没给你看算法所以你
+
+113
+00:09:40,670 --> 00:09:44,249
+just have to believe the statement for the moment but it's going to turn out that
+暂时只需要相信这一说法，但事实会证明
+
+114
+00:09:44,249 --> 00:09:47,939
+were not going to depend on any property of the machine except for the number of
+我们不会依赖于机器的任何属性，除了
+
+115
+00:09:47,939 --> 00:09:50,999
+registers. So, that's the only thing we need to know about the machine in order to
+寄存器。所以，这是我们唯一需要知道的关于这台机器的事情
+
+116
+00:09:50,999 --> 00:09:54,230
+take a RIG and, and do register allocation using it.
+取一台钻机，并使用它进行寄存器分配。
+

@@ -1,0 +1,230 @@
+0
+00:00:00,760 --> 00:00:04,800
+To sum up our discussion of activations it's obvious I think that
+综上所述，我们对激活的讨论很明显，我认为
+
+1
+00:00:04,800 --> 00:00:09,140
+the activation tree depends on the runtime behavior of the program. So it depends on
+激活树取决于程序的运行时行为。所以这取决于
+
+2
+00:00:09,140 --> 00:00:12,700
+the runtime value who's exactly which procedures are called and what the
+谁是确切调用了哪些过程的运行时值，以及
+
+3
+00:00:12,700 --> 00:00:17,530
+activation tree turns out to be. Now, this was not illustrated in our examples but it
+激活树原来是。现在，我们的示例中没有说明这一点，但是它
+
+4
+00:00:17,530 --> 00:00:22,890
+should be obvious that the activation tree can be different for different inputs. And
+显然，对于不同的输入，激活树可以是不同的。和
+
+5
+00:00:22,890 --> 00:00:27,720
+so the programs I showed you didn't take input and so we didn't have, every time
+所以我向你们展示的程序不接受输入，所以我们没有，每次
+
+6
+00:00:27,720 --> 00:00:31,830
+you run those programs we'll get the same activation tree, playing general if
+你运行这些程序，我们会得到相同的激活树，如果
+
+7
+00:00:31,830 --> 00:00:35,010
+program takes input, it will execute differently and may call different
+程序接受输入，它将以不同的方式执行，并且可能调用不同的
+
+8
+00:00:35,010 --> 00:00:41,399
+procedures and different orders. And finally here's perhaps the most important
+程序和不同的命令。最后，这里可能是最重要的
+
+9
+00:00:41,399 --> 00:00:46,049
+point for an implementation point of view. Since activations are properly nested, we
+从实现的角度来看。由于激活是正确嵌套的，因此我们
+
+10
+00:00:46,049 --> 00:00:53,049
+can use a stack to implement of detract the currently active activations. So,
+可以使用堆栈来实现或减少当前活动的激活。所以,
+
+11
+00:00:53,769 --> 00:00:59,219
+let's see how we can use a stack to track activations. We'll use these examples that
+让我们看看如何使用堆栈来跟踪激活。我们将使用这些示例
+
+12
+00:00:59,219 --> 00:01:04,659
+we looked at before. And what I'm going to do is I'm going to show the activation
+我们之前看过了。我要做的是我要展示激活
+
+13
+00:01:04,659 --> 00:01:10,780
+tree over here on the left and I'm going to show the stack of currently executing
+树在左边，我将显示当前正在执行的堆栈
+
+14
+00:01:10,780 --> 00:01:14,820
+activations on the right. So the stack is not gonna keep track of the entire
+右侧的激活。所以堆栈不会记录整个
+
+15
+00:01:14,820 --> 00:01:19,350
+activation tree. It's only going to keep track of the activations that are
+激活树。它只会跟踪
+
+16
+00:01:19,350 --> 00:01:24,810
+currently running so at each step of the program, the stack should contain all of
+当前正在运行，因此在程序的每一步，堆栈都应该包含
+
+17
+00:01:24,810 --> 00:01:31,390
+the currently active or currently running activations. So, the tree we already saw
+当前活动或当前运行的激活。那么我们已经看到的这棵树
+
+18
+00:01:31,390 --> 00:01:36,980
+have the build and we begin by executing main so that will be the root of the tree
+有了构建，我们从执行main开始，这样它将成为树的根
+
+19
+00:01:36,980 --> 00:01:42,170
+And since the stack is supposed to have all of the currently running activations,
+并且由于堆栈应该具有所有当前运行的激活，
+
+20
+00:01:42,170 --> 00:01:49,170
+the stack will have to have main on it. So it will begin with just the procedure main
+堆栈上必须有Main。因此，它将从过程Main开始
+
+21
+00:01:49,500 --> 00:01:56,500
+And now main calls g And so g becomes a child of main And over here on the stack,
+现在Main调用g，因此g成为Main的子级，在堆栈上，
+
+22
+00:01:57,250 --> 00:02:04,250
+we would push g on to the stack And then G returns and what that means is that, that
+我们会将g推送到堆栈，然后G返回，这意味着，
+
+23
+00:02:07,050 --> 00:02:14,050
+G is no longer running and so G will get popped off the stack and then, the, the
+G不再运行，因此G将从堆栈中弹出，然后，
+
+24
+00:02:14,889 --> 00:02:20,319
+main procedure calls F and so F will get pushed on to the stack And you can see
+Main过程调用F，因此F将被推送到堆栈上，您可以看到
+
+25
+00:02:20,319 --> 00:02:24,989
+here that after G finishes we can pop it off and we can push on that and we
+在这里，在G完成后，我们可以弹出它，我们可以推动它，我们
+
+26
+00:02:24,989 --> 00:02:29,879
+maintain the environment that we have a stack of the currently running
+维护我们当前正在运行的堆栈的环境
+
+27
+00:02:29,879 --> 00:02:35,849
+activations. All right, then F is going to call G. I forgot to complete my tree here,
+激活。好的，那么F会打电话给G。我忘了把我的树补齐了，
+
+28
+00:02:35,849 --> 00:02:42,849
+So main calls f and then f calls g. All right, So now the stack at this point is
+所以main调用f，然后f调用g，好的，现在堆栈是
+
+29
+00:02:43,670 --> 00:02:50,670
+main f and g. And once g finishes running, it will be Popped off of the stack because
+一旦g运行完毕，它将从堆栈中弹出，因为
+
+30
+00:02:52,730 --> 00:02:58,859
+it is no longer executing. And then f will finish, and f will also get popped off the
+它不再执行。然后f会结束，f也会被弹出
+
+31
+00:02:58,859 --> 00:03:04,019
+stack and finally main will finish and main will also be popped off the stack.
+堆栈，最后Main将完成，Main也将从堆栈中弹出。
+
+32
+00:03:04,019 --> 00:03:07,709
+And so that's the idea. So that is how we can use the stack. So essentially when a
+这就是我们的想法。这就是我们使用堆栈的方式。所以基本上当一个
+
+33
+00:03:07,709 --> 00:03:11,870
+procedure is called we'll push an activation for that procedure on to the
+过程时，我们将把该过程的激活推送到
+
+34
+00:03:11,870 --> 00:03:16,840
+stack. And when the procedure returns, we will pop that activation off the stack.
+堆栈。当过程返回时，我们将从堆栈中弹出该激活。
+
+35
+00:03:16,840 --> 00:03:23,840
+And because activation lifetimes are properly nested this will work out. So, to
+因为激活生命周期被适当地嵌套，所以这将是可行的。所以，为了
+
+36
+00:03:23,939 --> 00:03:29,599
+conclude our discussion of activations, let's return to the runtime organization
+结束对激活的讨论，让我们返回到运行时组织
+
+37
+00:03:29,599 --> 00:03:34,430
+As you may recall. We have a block of memory that is allocated to the program
+你可能还记得。我们有一个分配给程序的挡路内存
+
+38
+00:03:34,430 --> 00:03:39,569
+and the first portion of that block is occupied by the code for the program
+挡路的第一部分被节目的代码占据
+
+39
+00:03:39,569 --> 00:03:44,919
+itself. And now in the rest of that memory that is allocated to the program, we are
+它本身。现在，在分配给程序的内存的睡觉中，我们
+
+40
+00:03:44,919 --> 00:03:48,180
+going to have to restore the data that the program needs to execute and one of the
+必须恢复程序需要执行的数据，并且其中一个
+
+41
+00:03:48,180 --> 00:03:52,799
+important structures that goes there is the stack of activations. So typically,
+去那里的重要结构是激活堆栈。所以通常情况下，
+
+42
+00:03:52,799 --> 00:03:59,620
+this will start after the code area. And the stack would grow towards the other end
+这将在代码区之后开始。堆栈就会朝另一端增长
+
+43
+00:03:59,620 --> 00:04:05,079
+of the memory space of the program and the stack will grow when procedures are called
+程序的内存空间的大小，当调用过程时堆栈将会增长
+
+44
+00:04:05,079 --> 00:04:09,879
+and it will shrink when procedures return. And as we'll see, there are other things
+当程序返回时，它会缩小。正如我们将看到的，还有其他一些事情
+
+45
+00:04:09,879 --> 00:04:15,239
+that go in this data area that we are going to be discussing in the upcoming videos.
+我们将在接下来的视频中讨论这一数据区域。
+

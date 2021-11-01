@@ -1,0 +1,95 @@
+0
+00:00:01,490 --> 00:00:04,870
+Context-free grammars are a big step towards being able to say what we want in
+上下文无关文法是朝着能够表达我们想要的内容迈出的一大步
+
+1
+00:00:04,870 --> 00:00:09,389
+a parser but, we still need some other things. First of all, a context-free
+一个解析器，但是，我们还需要一些其他的东西。首先，一个上下文无关的
+
+2
+00:00:09,389 --> 00:00:15,410
+grammar at least as we define it so far, just gives us a yes or no answer. Yes
+至少按照我们到目前为止的定义，语法只能给我们一个是或否的答案。是
+
+3
+00:00:15,410 --> 00:00:18,650
+something, yes a string is in the language of the Context-free grammar or no it is
+某样东西，是字符串是上下文无关文法的语言，还是不是
+
+4
+00:00:18,650 --> 00:00:24,130
+not. We also need a method for building a Parse Tree at the input. So in those cases
+不。我们还需要一种在输入端构建解析树的方法。所以在这些情况下
+
+5
+00:00:24,130 --> 00:00:27,269
+where it is on the language, we need to know how it's in the language. We need the
+它在语言中的位置，我们需要知道它是如何在语言中出现的。我们需要的是
+
+6
+00:00:27,269 --> 00:00:32,930
+actual Parse Tree not just yes or no. In the cases where the string is not in the
+实际的解析树不只是是或不是。在字符串不在
+
+7
+00:00:32,930 --> 00:00:35,860
+language, we have to be able to handle errors gracefully and give some kind of
+语言，我们必须能够优雅地处理错误，并给出某种
+
+8
+00:00:35,860 --> 00:00:40,400
+feedback to the programmer so we need a method for doing that. And finally if we
+反馈给程序员，所以我们需要一种方法来做到这一点。最后如果我们
+
+9
+00:00:40,400 --> 00:00:44,050
+have these two things we need an actual implementation of them in order to
+有了这两件事，我们需要它们的实际实现，以便
+
+10
+00:00:44,050 --> 00:00:50,340
+actually implement context-free grammars. One last comment before we wrap up this
+实际上实现了上下文无关文法。在我们结束这件事之前还有最后一条评论
+
+11
+00:00:50,340 --> 00:00:54,750
+video. The form of the context-free grammar can be important. Tools are often
+录像带。上下文无关文法的形式可能很重要。工具通常是
+
+12
+00:00:54,750 --> 00:01:00,010
+sensitive to the particular you write the grammar and while there are many ways to
+对你所写的语法的具体细节很敏感，虽然有很多方法可以
+
+13
+00:01:00,010 --> 00:01:04,439
+write a grammar for the same language, only some of them may be accepted by the
+编写同一种语言的语法，则只有部分语法可能会被
+
+14
+00:01:04,438 --> 00:01:08,770
+tools. And as we'll see there are cases where it's necessary to modify the grammar
+工具。正如我们将看到的，在某些情况下需要修改语法
+
+15
+00:01:08,770 --> 00:01:13,000
+in order to get the tools to accept it. This happens actually sometimes as well
+为了让工具接受它。这实际上有时也会发生。
+
+16
+00:01:13,000 --> 00:01:17,329
+with regular expressions but it's much less common. So normally for most regular
+使用正则表达式，但它不太常见。所以通常情况下，对于大多数普通的人来说
+
+17
+00:01:17,329 --> 00:01:21,890
+expressions you would want to write the tools would be able to digest them. That's
+您想要编写的工具表达式将能够消化它们。那是
+
+18
+00:01:21,890 --> 00:01:26,770
+fine. That's not also true. That's not true of an arbitrary context-free grammar.
+很好。这也不是真的。这不适用于任意的上下文无关文法。
+

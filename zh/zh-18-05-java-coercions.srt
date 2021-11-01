@@ -1,0 +1,420 @@
+0
+00:00:04,040 --> 00:00:07,990
+In this video, we're going to talk about Coercions which is a feature of type
+在这段视频中，我们将讨论强制，这是一种类型的特征
+
+1
+00:00:07,990 --> 00:00:12,380
+systems that appears in many languages and we will be looking specifically how
+以多种语言显示的系统，我们将具体了解
+
+2
+00:00:12,380 --> 00:00:19,380
+coercions are done in Java. Java allows primitive types to be coerced in certain
+强制是在Java中完成的。Java允许在某些情况下强制原语类型
+
+3
+00:00:22,020 --> 00:00:26,680
+context. And, coerced means converted from one type to another. So here's an example,
+上下文。而且，被胁迫的意思是从一种类型转换成另一种类型。这里有一个例子，
+
+4
+00:00:26,680 --> 00:00:32,780
+lets take the expression one + 2.0 and the difficulty with this expression is that
+让我们以表达式1+2.0为例，该表达式的困难在于
+
+5
+00:00:32,780 --> 00:00:39,770
+the, the one here is, is an integer and the 2.0 is a floating point number. And
+这里的是一个整数，2.0是一个浮点数。和
+
+6
+00:00:39,770 --> 00:00:45,710
+there is no way to add an int to a float directly. We either have to convert the
+无法将int直接添加到浮点数。我们要么必须将
+
+7
+00:00:45,710 --> 00:00:49,850
+integer to a float and then do the add as floating point numbers or convert the
+整数转换为浮点数，然后以浮点数形式进行加法运算，或者将
+
+8
+00:00:49,850 --> 00:00:53,850
+floating point number to an integer and then do the addition as integer addition.
+将浮点数转换为整数，然后将其作为整数加法进行加法。
+
+9
+00:00:53,850 --> 00:00:57,570
+So they have to be converted to a common representation, before we can actually do
+因此，我们必须先将它们转换为通用的表示形式，然后才能真正做到这一点
+
+10
+00:00:57,570 --> 00:01:01,730
+the operation. And the normal thing to do, and the thing that Java does, is to
+手术。通常要做的事情，也就是Java所做的事情，是
+
+11
+00:01:01,730 --> 00:01:08,730
+convert the integer to the floating point number 1.0. Now, a coercion the right way
+将整数转换为浮点数1.0。现在，以正确的方式进行胁迫
+
+12
+00:01:09,340 --> 00:01:13,580
+I think, to think of coercions is they're really just primitive functions that the
+我认为，考虑到强制，它们实际上只是原始函数，
+
+13
+00:01:13,580 --> 00:01:17,720
+compiler inserts for you. So it's like, you left out a function call and the
+编译器会为您插入。所以这就像，你省略了一个函数调用，而
+
+14
+00:01:17,720 --> 00:01:21,140
+compiler notices that and puts it in. So, in this particular example, what would be
+编译器注意到这一点并将其放入。那么，在这个特定的例子中，会是什么呢
+
+15
+00:01:21,140 --> 00:01:25,110
+the function call? Well, there, we can think of there being a primitive function
+函数调用？好的，在那里，我们可以想象有一个原始函数
+
+16
+00:01:25,110 --> 00:01:30,870
+that converts integers to floating point numbers in the obvious way. And so really
+它以显而易见的方式将整数转换为浮点数。所以真的
+
+17
+00:01:30,870 --> 00:01:36,140
+this expression here gets converted to the expression into float applied to the
+此表达式在此处转换为表达式，转换为应用于
+
+18
+00:01:36,140 --> 00:01:43,140
+number one plus 2.0. All right. So coercions are probably best thought of as
+一号加2.0号。好的。所以胁迫可能最好被认为是
+
+19
+00:01:44,470 --> 00:01:49,640
+a convenience for you, the programmer to let you avoid having to write some
+对您来说很方便，程序员可以让您不必编写一些
+
+20
+00:01:49,640 --> 00:01:54,659
+function calls. And, so where it is obvious that a type conversion is going on
+函数调用。因此，在很明显的情况下，类型转换正在进行
+
+21
+00:01:54,659 --> 00:01:59,820
+the compiler can insert the function that performs that type conversion for you. And
+编译器可以插入执行该类型转换的函数。和
+
+22
+00:01:59,820 --> 00:02:03,990
+most languages really have extensive coercions so the conversions are very,
+大多数语言确实有广泛的强制，所以转换非常，
+
+23
+00:02:03,990 --> 00:02:10,649
+very common particularly between numeric types and so this is not just Java. This
+非常常见，尤其是在数值类型之间，因此这不仅仅是Java。这
+
+24
+00:02:10,649 --> 00:02:16,150
+is really many different programming languages of all styles that have lots of
+实际上是各种风格的许多不同的编程语言，它们都有很多
+
+25
+00:02:16,150 --> 00:02:22,769
+differe nt kinds of coercions. Now, Java in particular distinguishes two kinds of
+不同种类的胁迫。现在，Java特别区分了两种
+
+26
+00:02:22,769 --> 00:02:27,430
+coercions and casts. You have widening coercions and these will always succeed.
+胁迫和施法。你有不断扩大的胁迫，这些总是会成功的。
+
+27
+00:02:27,430 --> 00:02:30,180
+Alright, so that means that Java will always put them in and there will never be
+好的，这意味着Java总是会把它们放进去，而且永远不会有
+
+28
+00:02:30,180 --> 00:02:34,129
+any complaining from the compiler or the runtime system about them and we already
+编译器或运行时系统对它们的任何抱怨，我们已经
+
+29
+00:02:34,129 --> 00:02:38,659
+saw one of those, so the conversion from int to float is an example of a widening
+我看到了其中的一个，所以从int到Float的转换就是一个扩展的例子
+
+30
+00:02:38,659 --> 00:02:44,540
+cast. Now, narrowing casts may fail if the data can't be converted to the desired
+演员阵容。现在，如果无法将数据转换为所需数据，则缩小转换可能会失败
+
+31
+00:02:44,540 --> 00:02:51,540
+type. So in particular, float to int well, this will work fine. Something like 2.0
+键入。所以，特别是浮点到整数，这会很好地工作。大约是2.0版
+
+32
+00:02:51,790 --> 00:02:57,099
+can be converted in obvious way to two but if you're converting something that
+可以明显地转换为2，但是如果您要转换的东西
+
+33
+00:02:57,099 --> 00:03:00,909
+doesn't have an integer representation something say like 2.5 you know, there's a
+没有整数表示，比如2.5，你知道，有一个
+
+34
+00:03:00,909 --> 00:03:06,219
+question of what we should do here. Okay, and for such narrowing casts, where there
+我们应该在这里做什么的问题。好的，对于这样缩小的演员阵容，哪里有
+
+35
+00:03:06,219 --> 00:03:09,069
+isn't a, a clear mapping, whether we should go or, you know or whether we
+不是一个清晰的地图，我们是应该去，还是你知道，或者我们
+
+36
+00:03:09,069 --> 00:03:15,879
+should try here or round up, or whatever then Java will actually complain and not
+应该在这里尝试或四舍五入或其他任何方式，那么Java实际上会抱怨，而不是
+
+37
+00:03:15,879 --> 00:03:22,879
+let you do it. Okay perhaps for better example of the kind of narrowing cast
+让你来做吧。好的，也许更好的例子是缩小铸型
+
+38
+00:03:23,650 --> 00:03:30,650
+that's that Java will complain about is something like a down cast. So if I have
+这就是Java会抱怨的类似于向下转换的东西。所以如果我有
+
+39
+00:03:31,290 --> 00:03:38,139
+two classes A and B. And B is a subtype of A and then I have something of type A.
+两个A类和B类，B是A的一个子类型，然后我有一些A类型的东西。
+
+40
+00:03:38,139 --> 00:03:45,139
+Well, I can cast it to B. I can say, let's say I have X which is a type A and then I
+嗯，我可以把它转换成B。我可以说，比方说我有X，它是A型的，然后我
+
+41
+00:03:46,389 --> 00:03:51,849
+can have an expression where I try to convert x to a B object. So here I have a
+可以有一个表达式，其中我尝试将x转换为B对象。所以在这里我有一个
+
+42
+00:03:51,849 --> 00:03:57,609
+cast, I've indicated that I want to treat this expression x as a B object and this
+强制转换时，我已经表示要将此表达式x视为B对象，而这
+
+43
+00:03:57,609 --> 00:04:01,790
+will type check, okay. So the, the compiler will let this through since B is
+我会检查打字，好的。所以，编译器会让它通过，因为B是
+
+44
+00:04:01,790 --> 00:04:06,249
+subtype of A. But at run time, it's actually going to check whether x is
+子类型A。但在运行时，它实际上将检查x是否为
+
+45
+00:04:06,249 --> 00:04:10,049
+actually a B object and if it's not you're going to get an exception. So this can
+实际上是一个B对象，如果不是，你会得到一个异常。所以这个可以
+
+46
+00:04:10,049 --> 00:04:14,599
+fail at run time if the object thatt x actually holds at the point of the cast is
+如果t x在强制转换时实际持有的对象是
+
+47
+00:04:14,599 --> 00:04:20,130
+not a B object. So the rule in Java is that narrowing cast must be explicit. You
+不是B对象。因此，Java中的规则是缩小类型转换必须是显式的。你
+
+48
+00:04:20,130 --> 00:04:25,540
+have to put the function in yourself. You have to put in the typecase in the code so
+必须把这个功能放在你自己身上。您必须在代码中输入类型大小写，所以
+
+49
+00:04:25,540 --> 00:04:30,280
+that it's obvious that you really want to do it, but widening casts in coercions can
+很明显你真的很想这么做，但是扩大强制投射范围可以
+
+50
+00:04:30,280 --> 00:04:34,160
+be implicit, so it's alright. If you're widening, if you're either promoting to a
+要含蓄，所以没关系。如果你在加宽，如果你要升职到
+
+51
+00:04:34,160 --> 00:04:39,350
+super type or you are converting between initial type where it's clear that the,
+超级类型或您正在初始类型之间进行转换，
+
+52
+00:04:39,350 --> 00:04:45,820
+one type embeds in the other then those can be filled in for you by the compiler.
+一种类型嵌入到另一种类型中，然后编译器可以为您填充这些类型。
+
+53
+00:04:45,820 --> 00:04:51,190
+And here's a little Java trivia question. So it turns out that there is one type in
+这里有一个关于Java的小问题。所以结果是有一种类型在
+
+54
+00:04:51,190 --> 00:04:57,430
+Java for which there are no coercions or casts defined. Okay so there are no
+没有为其定义强制或强制转换的Java。好的，所以没有
+
+55
+00:04:57,430 --> 00:05:02,680
+implicit conversions or even explicit conversions from that type to any other
+隐式转换，甚至从该类型到任何其他类型的显式转换
+
+56
+00:05:02,680 --> 00:05:07,810
+type. And the answer to the question, which is the only one, is bool. Okay so
+键入。而这个问题的答案，也是唯一的一个，是布尔式的。好的，那么
+
+57
+00:05:07,810 --> 00:05:14,810
+only the type boolean has no conercions or casts to another type. Now personally, I'm
+只有该类型的布尔值没有公差或强制转换为另一个类型。现在就我个人而言，我是
+
+58
+00:05:17,800 --> 00:05:24,100
+not a big fan of coercions. I think that it's clearly a convenience for
+我不太喜欢强迫行为。我认为这显然是一种便利，
+
+59
+00:05:24,100 --> 00:05:28,620
+programmers, it's clearly something that is widely accepted as being necessary in
+程序员，这显然是一件被广泛接受为必要的事情
+
+60
+00:05:28,620 --> 00:05:34,220
+programming languages because casts, implicit casts and conversions are so
+编程语言，因为强制转换、隐式强制转换和转换都是如此
+
+61
+00:05:34,220 --> 00:05:40,570
+ubiquitous but I do think that it tends to lead to programs that have behavior that's
+无处不在，但我确实认为它倾向于导致程序具有这样的行为
+
+62
+00:05:40,570 --> 00:05:44,300
+different from what the programmer probably expected. And, here's a good
+与程序员可能预期的不同。还有，这里有一个很好的
+
+63
+00:05:44,300 --> 00:05:48,780
+example from the language PL/1, which recalls stood for Programming Language one
+PL/1语言中的例子，该语言RECALL代表编程语言One
+
+64
+00:05:48,780 --> 00:05:53,890
+designed by IBM in the 1960s. And had many, many features in it so we've talked
+由IBM在20世纪60年代设计。有很多，很多功能，所以我们讨论了
+
+65
+00:05:53,890 --> 00:06:00,190
+about PL/1 a few times in this class. And one thing that PL/1 had was very extensive
+在这节课上讲了几遍PL/1。PL/1有一件事是非常广泛的
+
+66
+00:06:00,190 --> 00:06:04,700
+cast and coercions and this could lead us to some surprising behaviors. So here's an
+演员阵容和胁迫，这可能会导致一些令人惊讶的行为。所以这里有一个
+
+67
+00:06:04,700 --> 00:06:10,100
+example we have a, A, B, and C are strings of three characters so it's important to
+例如，a、A、B和C是三个字符的字符串，因此重要的是
+
+68
+00:06:10,100 --> 00:06:17,100
+know here that the length three is part of the type. So B is string '123' C is '456'
+这里要知道，长度三是字型的一部分。所以B是字符串‘123’，C是‘456’
+
+69
+00:06:17,780 --> 00:06:24,160
+and then A is going to be B + c and the question is what is A? And, and you
+然后A就是B+c，问题是A是什么？还有，还有你
+
+70
+00:06:24,160 --> 00:06:30,680
+probably won't guess, so let me show you what I think is the right answer. So first
+可能猜不出来，所以让我告诉你我认为正确的答案是什么。所以首先
+
+71
+00:06:30,680 --> 00:06:34,840
+of all the question is what happens with this + operation here? Well, so that is
+所有的问题是，这里的这个+操作会发生什么？嗯，那就是
+
+72
+00:06:34,840 --> 00:06:40,840
+going to be interpreted as an integer + so B and C are both going to be cast to
+将被解释为整数+所以B和C都将被强制转换为
+
+73
+00:06:40,840 --> 00:06:46,390
+integers and the, and this will be done as a integer arithmetic. So B will get
+整数和，这将作为整数算术来完成。所以B会得到
+
+74
+00:06:46,390 --> 00:06:52,540
+converted to the number 123. C will get conver ted to the number 456, okay? And
+已转换为数字123。C会把泰德转到456号，好吗？和
+
+75
+00:06:52,540 --> 00:06:59,540
+then we'll add them and we'll get out the number 579. Okay, so the result of this
+然后我们把它们相加，我们就会得到数字579。好的，那么这件事的结果是
+
+76
+00:07:00,620 --> 00:07:06,670
+expression is 579 but A is also a string of three characters so this has to be cast
+表达式为579，但A也是三个字符的字符串，因此必须强制转换
+
+77
+00:07:06,670 --> 00:07:11,580
+back to a string. Now, it turns out that this cast happens in two steps. First
+回到一根弦上。现在，事实证明，这个演员阵容分两个步骤进行。第一
+
+78
+00:07:11,580 --> 00:07:18,310
+this, this number here is cast to a string of the default length, okay. And the
+这个，这里这个数字是转换成一个默认长度的字符串，好的。以及
+
+79
+00:07:18,310 --> 00:07:25,310
+default length happens to be six so this is cast to a string looks like this.
+默认长度恰好是6，因此它被转换为如下所示的字符串。
+
+80
+00:07:25,580 --> 00:07:32,580
+There's three blanks followed by 579. And then that string of six characters is
+有三个空格，后面跟着579。然后这个六个字符的字符串是
+
+81
+00:07:33,200 --> 00:07:35,810
+converted to a string of three characters. And we just take the first three
+转换为三个字符的字符串。我们只选前三个
+
+82
+00:07:35,810 --> 00:07:42,810
+characters and so we get out that, and so the answer is that this program stores a
+字符，所以我们得到了这个结果，所以答案是这个程序存储了一个
+
+83
+00:07:43,920 --> 00:07:48,240
+string of three blanks in A. Which is probably not what was expected.
+A中有三个空格的字符串，这可能不是预期的。
+

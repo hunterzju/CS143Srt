@@ -1,0 +1,510 @@
+0
+00:00:03,620 --> 00:00:10,450
+In this short video, we're gonna take a look at interfaces in Java. Interfaces
+在这段简短的视频中，我们将看看Java中的接口。接口
+
+1
+00:00:10,450 --> 00:00:15,960
+specify relationships between classes without using inheritance. So, here is an
+在不使用继承的情况下指定类之间的关系。所以，这里有一个
+
+2
+00:00:15,960 --> 00:00:20,009
+example: uh, we have an interface here called the point interface. And a point
+示例：嗯，我们这里有一个接口，称为点接口。还有一点
+
+3
+00:00:20,009 --> 00:00:24,950
+interface can have a, a bunch of methods in it, and, and we just declare the, the
+接口中可以有一个、一组方法，我们只需声明
+
+4
+00:00:24,950 --> 00:00:28,399
+signature of those methods. You can also have other things besides methods, but uh,
+这些方法的签名。除了方法你还可以有其他的东西，但是呢，
+
+5
+00:00:28,399 --> 00:00:33,620
+the main thing that uh, they're used for usually is for a, a method interface. So
+这个通常主要是用来做一个，一个方法接口。所以
+
+6
+00:00:33,620 --> 00:00:37,030
+uh, here's an example of a particular method, the move method, and it takes some
+嗯，这里有一个特殊方法的例子，移动方法，它需要一些
+
+7
+00:00:37,030 --> 00:00:42,140
+arguments and has a particular return type. Now any other class, or any class,
+参数，并具有特定的返回类型。现在任何其他的班级，或者任何班级，
+
+8
+00:00:42,140 --> 00:00:45,899
+excuse me, that's going to implement the point interface has to provide a method
+打扰一下，要实现的Point接口必须提供一个方法
+
+9
+00:00:45,899 --> 00:00:50,429
+uh, with the same signature. So, if this, see because the point interface has a move
+呃，签名是一样的。因此，如果出现这种情况，请参见，因为点界面有一个移动
+
+10
+00:00:50,429 --> 00:00:55,969
+method, the. A class will have to have a move method with the same signature, as
+方法的基础上，提出了一种基于。类必须具有具有相同签名的Move方法，如下所示
+
+11
+00:00:55,969 --> 00:00:59,909
+the move method in the declared interface. And if the point interface had other
+声明的接口中的Move方法。如果该点接口具有其他
+
+12
+00:00:59,909 --> 00:01:04,180
+methods ah, then the point class would also have to implement those methods by,
+方法啊，那么Point类也必须通过，
+
+13
+00:01:04,180 --> 00:01:08,020
+you know having a method of the same name ah, with the appropriate types of
+你知道有一个同名的方法啊，有合适的类型的
+
+14
+00:01:08,020 --> 00:01:14,970
+arguments and result. Now it says in the Java language manual that Java programs
+论据和结果。现在它在Java语言手册中说Java程序
+
+15
+00:01:14,970 --> 00:01:19,050
+can use interfaces to make it unnecessary for related classes to share a common
+可以使用接口使相关类不必共享共同的
+
+16
+00:01:19,050 --> 00:01:24,640
+abstract super class or to add methods to objects. And the translation of that is
+抽象超类或向对象添加方法。这句话的翻译是
+
+17
+00:01:24,640 --> 00:01:29,280
+that interfaces play the same role as multiple inheritance in c plus, plus. So
+这些接口在c++中扮演着与多重继承相同的角色。所以
+
+18
+00:01:29,280 --> 00:01:36,280
+interfaces uh, are really analogous uh, to, to multiple inheritance. And the
+接口呢，真的是类似于呃，类似于多重继承。以及
+
+19
+00:01:36,570 --> 00:01:41,040
+reason for that, is that, a, a class can implement multiple interfaces. So, if I
+原因是，第一，一个类可以实现多个接口。所以，如果我
+
+20
+00:01:41,040 --> 00:01:46,790
+have a class x and it implements a three interfaces a, b, and c. This means an
+有一个类x，它实现了三个接口a、b和c。
+
+21
+00:01:46,790 --> 00:01:51,960
+extra object can be treated as an A object or B object or a C object in the
+额外的对象可以作为A对象、B对象或C对象在
+
+22
+00:01:51,960 --> 00:01:58,560
+appropriate context. So it's like or almost as if X has three superclasses A, B
+适当的上下文。所以它就像或者几乎就像X有三个超类A，B
+
+23
+00:01:58,560 --> 00:02:03,140
+and C. Now uh, there are some important differences uh, but there is the effect,
+和C现在呢有一些重要的区别呢，但是有效果，
+
+24
+00:02:03,140 --> 00:02:08,310
+and so if I wanted to have a class that gets functionality or implements a
+因此，如果我希望拥有一个获取功能的类或实现
+
+25
+00:02:08,310 --> 00:02:14,629
+functionality uh, several uh, uh, interfaces that's, I mean we do very
+功能性呃，几个呃，呃，接口，我的意思是我们非常
+
+26
+00:02:14,629 --> 00:02:18,370
+directly in java just by saying if the classes going to implement all those
+直接用java编写，只需说明类是否要实现所有这些
+
+27
+00:02:18,370 --> 00:02:23,879
+interfaces. >> Now here is an example of an application of that, so think about a
+接口。>>现在这是一个应用程序的示例，所以请考虑一下
+
+28
+00:02:23,879 --> 00:02:29,079
+graduate student ah, working at Stanford or some other university, so ah, typically
+研究生啊，在斯坦福或者其他的大学工作，所以啊，典型的
+
+29
+00:02:29,079 --> 00:02:33,969
+graduate students are students, okay they take classes and have property's that
+研究生就是学生，好吧，他们上课，而且有财产
+
+30
+00:02:33,969 --> 00:02:38,689
+students ah, have they get degrees and grades and things like that. >> Graduate
+学生啊，有没有拿到学位，拿到等级之类的东西。>>研究生
+
+31
+00:02:38,689 --> 00:02:42,010
+students also work for the University? >> They are often teaching assistants in
+学生也在大学工作？>他们经常是学校的助教。
+
+32
+00:02:42,010 --> 00:02:46,099
+classes or research assistant [inaudible] so there [inaudible] another role which is
+课堂或研究助理[听不见]所以还有另一个角色[听不见]是
+
+33
+00:02:46,099 --> 00:02:53,099
+university employee, and if I have gone to ah, trouble ah, in my. I, university
+大学职员，如果我去了啊，麻烦啊，在我的。我，大学
+
+34
+00:02:53,859 --> 00:02:59,139
+personnel management software to implement functionality to deal with students and to
+人事管理软件，实现处理学生和
+
+35
+00:02:59,139 --> 00:03:02,599
+implement functionality to deal with employees. Well, then I would like to make
+实现与员工打交道的功能。好的，那么我想做一个
+
+36
+00:03:02,599 --> 00:03:07,560
+use of that when I get around to thinking about how I'm going to implement uh, the
+当我考虑我要如何实现，嗯，这一点的时候，我就会用到这一点
+
+37
+00:03:07,560 --> 00:03:11,659
+functionality for graduate students and one way to do that. Would be if I had a
+为研究生提供的功能，以及实现这一功能的一种方法。如果我有一个
+
+38
+00:03:11,659 --> 00:03:16,249
+class with implement, if I had, excuse me, an interface for employees and interface
+带工具的类，如果我有一个员工接口和接口的话
+
+39
+00:03:16,249 --> 00:03:21,279
+for student, and I would say that graduate student could be both, okay. So a graduate
+对于学生来说，我想说研究生可以两者兼而有之，好吧。所以一个毕业生
+
+40
+00:03:21,279 --> 00:03:26,590
+student can implement both the employee interface and student interface. And, and
+学生可以实现员工界面和学生界面。还有，还有
+
+41
+00:03:26,590 --> 00:03:30,769
+the reason that's this is a good idea, is it is actually hard to do this if ah, you
+之所以说这是个好主意，是因为如果啊，你这么做其实很难
+
+42
+00:03:30,769 --> 00:03:35,209
+only have single inheritance. If you think about it, if I had set things up so that I
+只有一个继承人。如果你想一想，如果我设置了一些东西，这样我就可以
+
+43
+00:03:35,209 --> 00:03:38,859
+had some employee classes and some student classes and now I want to make graduate
+上过一些员工班和学生班，现在我想毕业了
+
+44
+00:03:38,859 --> 00:03:43,639
+students. Well now what am I going to do? Well if I have my employee class. I can
+学生们。那么现在我该怎么办呢？如果我有员工班的话。我可以的
+
+45
+00:03:43,639 --> 00:03:48,569
+make grad students a subclass of that but now how do I get the student functionality
+使研究生成为其中的一个子类，但是现在我如何获得学生功能呢？
+
+46
+00:03:48,569 --> 00:03:55,529
+and similarly. If I have a student class, I can make graduate student a subclass of
+同样的，也是如此。如果我有一个学生班，我可以让研究生成为
+
+47
+00:03:55,529 --> 00:03:58,730
+that. But now, how do I get the employee functionality? So in single inheritance,
+那。但是现在，我如何获得员工功能呢？所以在单一继承中，
+
+48
+00:03:58,730 --> 00:04:03,980
+you're forced to choose a single class to inherit from. And the advantage of
+您必须选择一个要继承的类。它的优点是
+
+49
+00:04:03,980 --> 00:04:08,249
+interfaces is that it will let you get functionality or implement functionality,
+接口是它将让您获得功能或实现功能，
+
+50
+00:04:08,249 --> 00:04:14,159
+or express the relationship, at least, of functionality to multiple kinds of things.
+或者至少表达功能与多种事物的关系。
+
+51
+00:04:14,159 --> 00:04:18,239
+And so I can have one, uh, graduate student class that implements both the
+所以我可以有一个，呃，研究生班级，它实现了
+
+52
+00:04:18,238 --> 00:04:25,239
+employee and the student functionality. So how are interfaces different from
+员工和学生功能。那么，接口与
+
+53
+00:04:26,180 --> 00:04:30,900
+inheritance? Well, probably the biggest difference is that it's not possible to
+继承？那么可能最大的区别就是不可能
+
+54
+00:04:30,900 --> 00:04:35,770
+implement interfaces as efficiently as inheritance. And that's why you have both.
+实现接口与继承一样高效。这就是为什么你两者都有的原因。
+
+55
+00:04:35,770 --> 00:04:40,139
+So you'd prefer to use inheritance, uh, if you can, because it's going to be more
+所以你更愿意使用继承，呃，如果你可以的话，因为它将会有更多的
+
+56
+00:04:40,139 --> 00:04:43,940
+efficient than interfaces. And what makes interfaces less efficient? Well, the
+比接口更高效。是什么降低了接口的效率？那么，这个
+
+57
+00:04:43,940 --> 00:04:48,340
+primary thing. Is that if the class is implementing interfaces need not be at
+主要的事情。是如果类正在实现接口，则不需要在
+
+58
+00:04:48,340 --> 00:04:53,860
+fixed offsets. In fact, we will not be able, in general, uh, to assign methods in
+固定偏移。实际上，我们一般不能，呃，把方法赋给
+
+59
+00:04:53,860 --> 00:04:59,750
+interfaces to fixed offsets inside of a class implementation or an object
+与类实现或对象内部的固定偏移量的接口
+
+60
+00:04:59,750 --> 00:05:04,919
+implementation. So let's take a look at an example. Here's our point interface again.
+实施。那么让我们来看一个例子。这又是我们的点界面。
+
+61
+00:05:04,919 --> 00:05:09,580
+Now say we have one class point when we saw this one before [inaudible]. And it
+现在假设我们在之前看到这个时有一个班级点数[听不见]。而且它
+
+62
+00:05:09,580 --> 00:05:12,919
+implements the move method has to implement the move method. And then we
+实现Move方法必须实现Move方法。然后我们
+
+63
+00:05:12,919 --> 00:05:16,139
+have another class that also points to point interface but it also implements
+我有另一个类，它也指向点接口，但它也实现了
+
+64
+00:05:16,139 --> 00:05:20,550
+some other stuff. Okay so, it might implement some other methods that aren't
+一些其他的东西。好的，因此，它可能会实现一些其他未实现的方法
+
+65
+00:05:20,550 --> 00:05:26,550
+part of that interface. So now how would we decide you know, where to put the move
+界面的一部分。那么现在我们将如何决定，你知道，把搬家的地点放在哪里呢？
+
+66
+00:05:26,550 --> 00:05:32,659
+method. Well the natural thing, that, that we've discussed. [inaudible] Say of course
+方法。这是我们讨论过的自然而然的事情。[听不见]当然可以说
+
+67
+00:05:32,659 --> 00:05:36,669
+[inaudible] is that the methods ah, would be laid out in the order in which they are
+[听不见]就是这些方法啊，会按照它们的顺序来排列
+
+68
+00:05:36,669 --> 00:05:40,919
+declared, so if we did that clearly the move method will not be ah, in the first
+声明了，所以如果我们这样做的话，清楚的移动方法将不会是啊，在第一个
+
+69
+00:05:40,919 --> 00:05:46,889
+position in both of these classes. Now. We could imagine, uh, a separate compiler
+在这两个类中都有位置。现在。我们可以想象，呃，一个单独的编译器
+
+70
+00:05:46,889 --> 00:05:51,479
+pass, that we're trying to sort the methods. So that, say, all the methods of
+通过，我们正在尝试对方法进行排序。所以，比方说，所有的方法
+
+71
+00:05:51,479 --> 00:05:55,539
+the point interface always appeared in the same position and in the same order in any
+点界面始终以相同的位置和顺序出现在任何
+
+72
+00:05:55,539 --> 00:06:01,139
+class, implements the point interface. But that doesn't work as soon as we have, um,
+类，实现Point接口。但那不会在我们有，嗯，
+
+73
+00:06:01,139 --> 00:06:05,639
+multiple interfaces being implemented. So let's say that the point two class here
+正在实施多个接口。所以我们假设这里的第二节课
+
+74
+00:06:05,639 --> 00:06:12,639
+implemented another interface A. So, how can we then implement interfaces? Well,
+实现了另一个接口A。那么，我们如何实现接口呢？井,
+
+75
+00:07:10,159 --> 00:07:15,189
+so, it's going to be a little more complex than usual to implement in this batch, say
+所以，比方说，在这一批中实现它将比通常情况下稍微复杂一些
+
+76
+00:07:15,189 --> 00:07:22,189
+to a method f, where e has some interface type. So if e is typed as having some
+方法f，其中e具有某种接口类型。所以如果e类型为有一些
+
+77
+00:07:23,300 --> 00:07:27,189
+interface and now we're calling it the f method of that interface, then we're going
+接口，现在我们将其称为该接口的f方法，然后
+
+78
+00:07:27,189 --> 00:07:30,460
+to have to do a little bit more work. And so here's one approach, this approach is
+不得不多做一点工作。所以这里有一种方法，这种方法是
+
+79
+00:07:30,460 --> 00:07:35,889
+actually quite inefficient, but you will see that it will work. And there are other
+实际上效率很低，但你会看到它会奏效的。还有其他的
+
+80
+00:07:35,889 --> 00:07:39,569
+approaches that are more efficient, but that's not particularly important, so
+更有效的方法，但这并不是特别重要，所以
+
+81
+00:07:39,569 --> 00:07:43,500
+here's one way that can work. So each class of implements interface is going to
+这里有一种方法可以奏效。所以每一类实现接口都将
+
+82
+00:07:43,500 --> 00:07:47,900
+have a look-up table associated with it that maps method names, the string names
+有一个与其相关联的查找表，该表映射方法名称、字符串名称
+
+83
+00:07:47,900 --> 00:07:53,389
+of methods, to those methods themselves. And then. Uh, we can hash the method names
+这些方法本身。然后。呃，我们可以散列这些方法的名称
+
+84
+00:07:53,389 --> 00:07:57,710
+for faster look-up and we can actually compute. Uh, those hashes at compile time.
+为了更快的查找，我们实际上可以进行计算。呃，编译时的那些散列。
+
+85
+00:07:57,710 --> 00:08:02,699
+And so the idea would be that if when we have an object. Ah, somewhere in the
+所以我们的想法是，如果我们有一个物体。啊，在这里的某个地方
+
+86
+00:08:02,699 --> 00:08:06,210
+object, probably at the dispatch pointer. The dispatch pointer you know will point
+对象，可能位于调度指针。您知道的调度指针将指向
+
+87
+00:08:06,210 --> 00:08:11,210
+off to a list of methods, sort of the normal methods of the class. But somewhere
+方法列表，类的常规方法。但是在某个地方
+
+88
+00:08:11,210 --> 00:08:15,240
+say maybe at the end of the dispatch table there will be another pointer to some kind
+假设在分派表的末尾可能会有另一个指向某种类型的指针
+
+89
+00:08:15,240 --> 00:08:22,240
+of look up table that maps names. Two, two methods to quote. Okay. So, somehow
+映射名称的查找表。两种，两种方式来引用。好吧。所以，不知何故
+
+90
+00:08:24,759 --> 00:08:29,039
+associated with every object of every class ah, we will have this look up table
+关联到每个类的每一个对象啊，我们都会有这个查询表
+
+91
+00:08:29,039 --> 00:08:34,620
+that will map ah, the, the names of interface methods to the actual codes for
+这将把啊，接口方法的名称映射到
+
+92
+00:08:34,620 --> 00:08:35,789
+those methods that influence them. All right and we'd already decided uh, that
+那些影响他们的方法。好的，我们已经决定了，呃，那
+
+93
+00:08:35,789 --> 00:08:35,889
+the, for the point interface that the move method should go first. It should be the
+对于点界面，应首先执行Move方法。它应该是
+
+94
+00:08:35,889 --> 00:08:35,899
+first method in the class. Well, if we had made a similar decision for the a
+类中的第一个方法。嗯，如果我们对a做了类似的决定
+
+95
+00:08:35,899 --> 00:08:35,909
+interface, some method in that interface that should always be listed first in the
+接口，接口中某些方法应该始终列在
+
+96
+00:08:35,909 --> 00:08:35,919
+give to all the methods and all the interfaces so that they can be maintained
+提供给所有方法和所有接口，以便它们可以维护
+
+97
+00:08:35,919 --> 00:08:35,930
+across all of the uh, classes that implement those interfaces. At least
+所有实现这些接口的呃类。至少
+
+98
+00:08:35,929 --> 00:08:35,940
+classes that are declared and all the interfaces that are declared. And that's
+声明的类和所有声明的接口。那就是
+
+99
+00:08:35,940 --> 00:08:35,950
+kind of un-Java. And that we don't want to uh, force people to declare all the
+有点不像Java。我们不想，呃，强迫人们申报所有
+
+100
+00:08:35,950 --> 00:08:35,959
+classes and the interfaces once and not be able to extend them in the future. Alright
+类和接口只有一次，以后就不能扩展了。好的，好的
+
+101
+00:08:35,958 --> 00:08:36,209
+so the bottom line is that methods in interfaces do not live at fixed process in
+因此，底线是接口中的方法不存在于
+

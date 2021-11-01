@@ -1,0 +1,390 @@
+0
+00:00:04,690 --> 00:00:07,980
+In this video, we're gonna continue our discussion of parsing with the idea of a
+在这段视频中，我们将继续讨论使用
+
+1
+00:00:07,980 --> 00:00:14,980
+derivation. So a derivation is a sequence of productions so beginning with the start
+派生。所以派生是一系列的产品，所以从开始开始
+
+2
+00:00:17,369 --> 00:00:22,820
+symbol, we can apply productions one at a time. In sequence and that produces a
+符号，我们可以一次应用一个产品。，这会产生一个
+
+3
+00:00:22,820 --> 00:00:28,500
+derivation. And a derivation can be drawn in a different way instead of as a linear
+派生。并且可以用不同的方式绘制派生，而不是将其绘制为线性
+
+4
+00:00:28,500 --> 00:00:34,550
+sequence of replacements, we can draw it as a tree. So for example, if I have a
+替换序列，我们可以把它画成一棵树。例如，如果我有一个
+
+5
+00:00:34,550 --> 00:00:40,109
+nonterminal x it appears in a derivation, then when I replace x, I can represent
+非端点x，它出现在派生中，那么当我替换x时，我可以表示
+
+6
+00:00:40,109 --> 00:00:46,960
+that by making the children Of x, the left hand side of the rule that I used to
+通过将x的子代设为我以前使用的规则的左手边
+
+7
+00:00:46,960 --> 00:00:53,960
+replace x. So I applied production x goes to y1 to yn, I add the y1 to yn is
+替换x，所以我把x的乘积应用到y1到yn，我把y1加到yn是
+
+8
+00:00:54,879 --> 00:01:01,499
+children of x in the tree that I'm building up. Let's do an example. Here is
+我正在建造的那棵树上有x的孩子。让我们举个例子。这就是
+
+9
+00:01:01,499 --> 00:01:06,010
+our simple grammar of arithmetic expressions and let's consider this
+我们简单的算术表达式语法，让我们考虑一下
+
+10
+00:01:06,010 --> 00:01:11,720
+particular string id id + id. So what we're going to do now is we're going to
+特定字符串id+id。所以我们现在要做的是
+
+11
+00:01:11,720 --> 00:01:16,690
+parse this string and we're going to show how to produce a derivation for the string
+解析该字符串，我们将展示如何生成该字符串的派生
+
+12
+00:01:16,690 --> 00:01:23,690
+and also at the same time build the tree. And here it is, Over here, there is
+同时也在建造这棵树。这就是了，在这里，这就是
+
+13
+00:01:25,030 --> 00:01:30,680
+derivation beginning in e and ending in the string that we're interested in with
+从e开始，以我们感兴趣的字符串结束的派生
+
+14
+00:01:30,680 --> 00:01:36,100
+one production applied each step along the way and here is the corresponding tree and
+在此过程中，每一步都应用了一个产品，下面是相应的树和
+
+15
+00:01:36,100 --> 00:01:43,100
+this is called a parse tree. This is a parse tree of this expression or this
+这称为解析树。这是此表达式或此表达式的分析树
+
+16
+00:01:45,900 --> 00:01:51,650
+input string. So let's walk through this derivation in detail. The right side in
+输入字符串。所以让我们详细介绍一下这个推导过程。中的右侧
+
+17
+00:01:51,650 --> 00:01:55,840
+red, we're going to have the tree that we're building up. And on the left side in
+瑞德，我们将有一棵我们正在建造的树。在左边的
+
+18
+00:01:55,840 --> 00:02:00,360
+blue, we're going to have the steps in the derivation that we've taken so far. So
+蓝色，我们将会有我们到目前为止所做的推导中的步骤。所以
+
+19
+00:02:00,360 --> 00:02:05,030
+initially, our derivation consists of just the start symbol e and our tree consists
+最初，我们的派生只由开始符号e组成，而我们的树由
+
+20
+00:02:05,030 --> 00:02:11,349
+of just the root which is also the start symbol. So the first step is that we have
+也就是开始符号的根。所以第一步是我们有
+
+21
+00:02:11,349 --> 00:02:17,000
+a production e goes to e + e and what that means is over on the tree, we take the
+乘积e转到e+e，这意味着在树上，我们取
+
+22
+00:02:17,000 --> 00:02:24,000
+root of the tree and we make, we give it three children e + ne. So now, we replace
+树根，我们做，我们给它三个孩子e+ne。所以现在，我们把
+
+23
+00:02:25,830 --> 00:02:32,830
+the first t by e z. We use the production e goes to e z and that means
+第一个t by e z，我们用乘积e到e z，这意味着
+
+24
+00:02:33,290 --> 00:02:39,680
+we take the first e in the tree and we give it to three children, e
+我们把树上的第一个e送给三个孩子，e
+
+25
+00:02:39,680 --> 00:02:46,020
+[inaudible]. Continuing along we take the fi rst e here that remains in this
+[听不见]。继续往前走，我们走这里的第一条路，那就是留在这里的第一条路。
+
+26
+00:02:46,020 --> 00:02:51,600
+expression and we replace it by id which means we make id a child of the left most
+表达式，我们将其替换为id，这意味着我们将id设为最左边的子级。
+
+27
+00:02:51,600 --> 00:02:58,130
+e in the tree that we're building. And then we replace the second e by id using
+E在我们正在建造的树上。然后我们用id替换第二个e，使用
+
+28
+00:02:58,130 --> 00:03:02,790
+the production e goes to id and finally, we use the same thing with the third e and
+乘积e转到id，最后，我们对第三个e使用相同的东西，
+
+29
+00:03:02,790 --> 00:03:08,520
+now, we have completed our Parse Tree. So here again, from the start symbol to the
+现在，我们已经完成了我们的解析树。所以这里再一次，从开始符号到
+
+30
+00:03:08,520 --> 00:03:13,290
+string, we were interested in parsing and in the process we built up this Parse Tree
+字符串，我们对解析很感兴趣，在这个过程中我们构建了这个解析树
+
+31
+00:03:13,290 --> 00:03:18,990
+of the expression. Now there are lots of interesting things to say about parse
+表达式的。现在关于解析有很多有趣的事情要说
+
+32
+00:03:18,990 --> 00:03:23,840
+trees. So first of all, parse trees have terminals at the leaves and nonterminals
+树木。因此，首先，解析树在叶子和非终结点都有终结点
+
+33
+00:03:23,840 --> 00:03:29,370
+at the interior nodes and furthermore, in-order traversal of the leaves is the
+在内部节点处，此外，叶的顺序遍历是
+
+34
+00:03:29,370 --> 00:03:34,370
+original input. So let's back up and look at our example and confirm all this. If we
+原始输入。因此，让我们回顾一下我们的示例，并确认所有这些。如果我们
+
+35
+00:03:34,370 --> 00:03:41,370
+look at the leaves, we can see that they are all terminals, Okay? And the interior
+看看树叶，我们可以看到它们都是终端，好吗？以及内部
+
+36
+00:03:41,620 --> 00:03:45,380
+nodes are all nonterminals. In this case, it's only one nonterminal in our language,
+节点都是非终结点。在这种情况下，它在我们的语言中只有一个非终结符，
+
+37
+00:03:45,380 --> 00:03:50,800
+all the interior nodes are e and the leaves are the terminals of the string.
+所有内部节点都是e，叶子是字符串的末端。
+
+38
+00:03:50,800 --> 00:03:56,319
+And then we can see if we do an inward reversal of the leaves, we get exactly
+然后我们可以看到，如果我们将树叶向内翻转，我们就会得到
+
+39
+00:03:56,319 --> 00:04:02,080
+this input string that we started with. Furthermore, the Parse Tree shows the
+我们开始时使用的这个输入字符串。此外，解析树显示了
+
+40
+00:04:02,080 --> 00:04:06,319
+association of the operations and the input string does not. So you may notice
+操作和输入字符串的关联不会。所以你可能会注意到
+
+41
+00:04:06,319 --> 00:04:10,180
+here that the way that this Parse Tree is constructed, the times binds more tightly
+在这里，这棵解析树的构建方式将时间更紧密地捆绑在一起
+
+42
+00:04:10,180 --> 00:04:17,049
+than the plus because the times is a sub-tree. Of the tree containing plus. And
+因为《泰晤士报》是一棵子树。包含加号的树的。和
+
+43
+00:04:17,048 --> 00:04:21,880
+so this means that we would do the e e first before we would add e and some, some
+所以这意味着我们会先做e，然后再加e和一些，一些
+
+44
+00:04:21,880 --> 00:04:26,900
+of you may have wondered well, how did I know. To pick this Parse Tree because
+你们中的一些人可能想知道，我是怎么知道的。选择此解析树是因为
+
+45
+00:04:26,900 --> 00:04:30,250
+actually if you think about it, there's another derivation. Actually there are
+实际上，如果你仔细想想，还有另一种推导。实际上有
+
+46
+00:04:30,250 --> 00:04:35,310
+several derivations that will give me a different Parse Tree where the plus, where
+几个派生，它们将给我一个不同的解析树，加号和位置
+
+47
+00:04:35,310 --> 00:04:40,060
+the times is towards the root and the plus is nested inside the times. So let's not
+Times指向根，加号嵌套在Times中。所以我们不要
+
+48
+00:04:40,060 --> 00:04:44,770
+worry about that for right now, and let's just say that somehow we knew that this
+现在先担心这个问题，我们只能说，不知何故，我们知道这一点
+
+49
+00:04:44,770 --> 00:04:49,400
+was the Parse Tree we wanted and I gave you a derivation that produces that Parse
+是我们想要的解析树，我给了您一个派生来生成该解析
+
+50
+00:04:49,400 --> 00:04:54,580
+Tree. Continuing on, the previous derivation I showed you is actually a very
+树。继续，我给你们展示的前一个派生实际上是一个非常
+
+51
+00:04:54,580 --> 00:04:58,900
+special derivation. It's what's called a leftmost derivation where each step will
+特殊派生。这就是所谓的最左边的派生，每一步
+
+52
+00:04:58,900 --> 00:05:04,470
+replace the leftmost nonterminal in our string of terminals and nonterminals. And
+替换我们的终结符和非终结符字符串中最左边的非终结符。和
+
+53
+00:05:04,470 --> 00:05:08,960
+there's a natural and equivalent notion of a rightmost derivation and here it is.
+最右边的派生有一个自然而等价的概念，这就是它。
+
+54
+00:05:08,960 --> 00:05:13,960
+Here is a rightmost derivation for the same string. Again, beginning with the
+下面是同一字符串最右侧的派生结果。同样，从
+
+55
+00:05:13,960 --> 00:05:17,520
+start symbol ending with a string we're interested in. And notice that at each
+开始符号以我们感兴趣的字符串结尾。请注意，在每个
+
+56
+00:05:17,520 --> 00:05:22,440
+step, we're replacing the rightmost non-terminal. So here, we replace the only
+步骤，我们要替换最右边的非终结点。所以在这里，我们用唯一的
+
+57
+00:05:22,440 --> 00:05:27,600
+non-terminal e and we get e + c. And then in the second step, we replace the second
+非末尾e，我们得到e+c，然后在第二步，我们替换第二个
+
+58
+00:05:27,600 --> 00:05:32,940
+non-terminal e with id and so on for the rest of the string. So let's just
+非终结符e带有id，依此类推，用于睡觉的字符串。所以让我们就这样
+
+59
+00:05:32,940 --> 00:05:36,810
+illustrate this entirely with our little picture here of the tree and the
+完全用我们这里的树和树的小图片来说明这一点
+
+60
+00:05:36,810 --> 00:05:40,070
+derivation simultaneously so once again over here is our tree and this is the
+同时派生所以这里再一次是我们的树，这是
+
+61
+00:05:40,070 --> 00:05:45,180
+root, the start symbol e and, and in blue is our derivation so we begin by replacing
+根，开始符号e和，蓝色是我们的派生，所以我们从替换
+
+62
+00:05:45,180 --> 00:05:50,150
+e by e + e. That's the only nonterminal so it's the rightmost one and then working
+乘以e+e，这是唯一的非终结符，所以它是最右边的，然后就可以工作了
+
+63
+00:05:50,150 --> 00:05:55,500
+from the right side of the tree, we replace the right e by id and then the
+在树的右侧，我们用id替换右边的e，然后用
+
+64
+00:05:55,500 --> 00:06:01,360
+left id gets replaced by e z. And now the right most e that remains is replaced
+左边的id被替换为e z，现在剩下的最右边的e被替换
+
+65
+00:06:01,360 --> 00:06:08,360
+by id and finally the only e that remains is also replaced by id. Now I want to
+通过id，最后剩下的唯一e也被id替换。现在我想要
+
+66
+00:06:09,150 --> 00:06:13,389
+point out that the rightmost and leftmost derivations I showed you have exactly the
+指出我向您展示的最右边和最左边的派生恰好具有
+
+67
+00:06:13,389 --> 00:06:19,729
+same Parse Tree. And, this was not an accident. Every Parse Tree has a rightmost
+相同的解析树。而且，这不是意外。每个解析树都有一个最右边的
+
+68
+00:06:19,729 --> 00:06:25,120
+and a leftmost derivation. It's just about the order in which the branches are added.
+和最左边的派生。这只是关于添加分支的顺序。
+
+69
+00:06:25,120 --> 00:06:31,979
+So for example, if I have the first production e goes to e + e, now I have a
+例如，如果我有第一个乘积e转到e+e，现在我有一个
+
+70
+00:06:31,979 --> 00:06:37,080
+choice on how to build my tree. I can either work on. This sub-tree or I can
+关于如何建造我的树的选择。我要么继续工作。这棵子树或者我可以
+
+71
+00:06:37,080 --> 00:06:41,740
+work on that sub-tree. And if I build this one first, that will be a rightmost
+在那棵子树上工作。如果我先建造这个，那将是最右边的
+
+72
+00:06:41,740 --> 00:06:45,889
+derivation. If I continue to always work on the rightmost non-terminal of course,
+派生。当然，如果我总是在最右边的非终端上工作，
+
+73
+00:06:45,889 --> 00:06:50,840
+And if I work on this one first, I can use that to do a leftmost derivation. Now it's
+如果我先做这个，我可以用它来做最左边的推导。现在它是
+
+74
+00:06:50,840 --> 00:06:54,820
+important also to realize that there are many derivations besides rightmost and
+同样重要的是要认识到，除了最右边的和之外，还有许多派生
+
+75
+00:06:54,820 --> 00:06:59,759
+leftmost. I could, I could choose non-terminals in some random order to do
+最左边。我可以，我可以随机选择非终结点来做
+
+76
+00:06:59,759 --> 00:07:04,570
+my replacements. But th e rightmost and leftmost ones are the ones that we're most
+我的接班人。但是最右边和最左边的是我们最
+
+77
+00:07:04,570 --> 00:07:05,349
+concerned with.
+关心的是。
+

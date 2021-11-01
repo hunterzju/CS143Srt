@@ -1,0 +1,565 @@
+0
+00:00:02,040 --> 00:00:06,560
+Up to this point a finite automaton consumes a character of input
+至此，有限自动机消耗输入的一个字符
+
+1
+00:00:06,560 --> 00:00:09,920
+every time it makes a move. So if you can't make any move at all, the input
+每次它有动作的时候。所以如果你根本不能动，输入的
+
+2
+00:00:09,920 --> 00:00:16,000
+pointer advances. Now we're talking about a new kind of move, the epsilon move and
+指针前进。现在我们在讨论一种新的动作，ε动作，
+
+3
+00:00:16,000 --> 00:00:19,840
+the idea behind the epsilon move is that the machine can make a state transition
+epsilon移动背后的想法是机器可以进行状态转换
+
+4
+00:00:19,840 --> 00:00:26,840
+without consuming input, So for example if I have my states and I'm in state A and my
+而不消耗输入，例如，如果我有我的州，并且我处于状态A和我的
+
+5
+00:00:28,829 --> 00:00:35,829
+input. And let's just say that we have x1, x2, x3 and for some reason we're about to
+输入。假设我们有x1，x2，x3，出于某种原因，我们将要
+
+6
+00:00:41,440 --> 00:00:48,000
+read x2. When we make an Epsilon move the machine changes state but the input
+阅读x2。当我们移动Epsilon时，机器会改变状态，但输入
+
+7
+00:00:48,000 --> 00:00:53,400
+pointer stays in exactly the same place. So the new configuration of the machine
+指针保持在完全相同的位置。所以这台机器的新配置
+
+8
+00:00:53,400 --> 00:00:57,940
+that reinstate b, but our input pointer is still waiting to meet x2. So, you can
+这恢复了b，但我们的输入指针仍在等待与x2相遇。所以，你可以
+
+9
+00:00:57,940 --> 00:01:02,070
+think of an epsilon move is a kind of free move from the machine it can, it can move
+想想看，ε移动是一种自由移动，它可以从机器上自由移动，它可以移动
+
+10
+00:01:02,070 --> 00:01:07,330
+to a different state without consuming any input. And just to be clear here the
+转换到不同的状态，而不消耗任何输入。在这里我只想说清楚
+
+11
+00:01:07,330 --> 00:01:11,310
+machine does not have to make the epsilon move. It's a choice so they can decide
+机器不必使ε移动。这是一个选择，这样他们就可以决定
+
+12
+00:01:11,310 --> 00:01:18,310
+whether to make the epsilon move or not. Now epsilon move, the first time we have
+是否使ε移动。现在埃西隆开始行动，这是我们第一次
+
+13
+00:01:20,159 --> 00:01:23,740
+mentioned the possibility that a finite automata might have a choice and what
+提到了有限自动机可能有选择的可能性
+
+14
+00:01:23,740 --> 00:01:28,000
+moves it makes. There's actually an important distinction between automata
+它做出的动作。实际上自动机和自动机之间有一个重要的区别
+
+15
+00:01:28,000 --> 00:01:33,390
+that have choices and those have don't. So deterministic finite automata have two
+有选择的和没有选择的。所以确定性有限自动机有两个
+
+16
+00:01:33,390 --> 00:01:38,830
+properties, first of all, they have no epsilon moves so they must always consumed
+属性，首先，它们没有epsilon移动，因此必须始终使用
+
+17
+00:01:38,830 --> 00:01:44,820
+input. And second, they only have one transition per input per state. What do I
+输入。其次，每个状态的每个输入只有一个转换。我该怎么做
+
+18
+00:01:44,820 --> 00:01:50,640
+mean by that? That means that if I look at any state in the deterministic automaton,
+你的意思是？这意味着如果我观察确定性自动机中的任何状态，
+
+19
+00:01:50,640 --> 00:01:55,700
+they can never have something like this where they have two possible moves for the
+他们永远不会有这样的事情，因为他们有两个可能的动作
+
+20
+00:01:55,700 --> 00:02:00,830
+same input. All the outgoing edges in the deterministic automaton must have
+同样的输入。确定性自动机中的所有传出边必须具有
+
+21
+00:02:00,830 --> 00:02:07,560
+different input labels. And then Nondeterministic Finite Automata are just
+不同的输入标签。那么非确定性有限自动机就是
+
+22
+00:02:07,560 --> 00:02:12,609
+those not deterministic. So in particular a Nondeterministic Automata can have
+那些不是确定性的。因此，特别是非确定性自动机可以具有
+
+23
+00:02:12,609 --> 00:02:17,150
+epsilon moves so it can choose to move to another state without consuming input and
+Epsilon会移动，因此它可以选择移动到另一个状态，而无需消耗输入和
+
+24
+00:02:17,150 --> 00:02:20,959
+it could also have multiple transitions for one input in a given state so
+对于处于给定状态的一个输入，它还可以有多个转换，因此
+
+25
+00:02:20,959 --> 00:02:27,959
+something like this, is okay for a Nondeterministic Automata. Yeah. Let me
+像这样的东西，对于非确定性自动机来说是可以的。嗯。让我
+
+26
+00:02:28,260 --> 00:02:33,889
+just point out really epsilon moves are enough to create a non-deterministic
+只需指出，ε的移动就足以创建一个不确定的
+
+27
+00:02:33,889 --> 00:02:37,959
+automata and then at the second case where you have multiple transitions on the same
+自动机，然后在第二种情况下，在同一自动机上有多个转换
+
+28
+00:02:37,959 --> 00:02:42,969
+input can be simulated just by a slightly more complicated machine with epsilon move
+输入可以通过带有epsilon移动稍微复杂的机器来模拟
+
+29
+00:02:42,969 --> 00:02:48,499
+so for example I can draw this machine in the following way. I can have or I can
+举个例子，我可以用下面的方法画这台机器。我可以拥有或者我可以
+
+30
+00:02:48,499 --> 00:02:53,180
+simulate the machine that circled there in the following way. I can have a state with
+按照以下方式模拟在那里转圈的机器。我可以和一个州
+
+31
+00:02:53,180 --> 00:03:00,180
+two epsilon moves and then. Each of those states has a move on A so I were to label
+两个ε动作，然后。这些州中的每一个都有A上的移动，所以我给A贴上标签
+
+32
+00:03:01,769 --> 00:03:06,809
+the states one, two, and three. Then this would be the state that corresponds to
+州一，州二，州三。则这将是对应于
+
+33
+00:03:06,809 --> 00:03:10,659
+one. And this would be the state that corresponds to two and this state be, be
+一。这就是对应于2的状态，这个状态是，是
+
+34
+00:03:10,659 --> 00:03:15,540
+the state that corresponds to three. So anytime that we have multiple moves out of
+与三相对应的状态。所以每当我们有多个动作离开的时候
+
+35
+00:03:15,540 --> 00:03:19,549
+the state on a single input we could always replace that by a few more states
+一个输入上的状态，我们总是可以用更多的几个状态来替换它
+
+36
+00:03:19,549 --> 00:03:24,879
+with epsilon moves and have every state in the machine only have a single transition
+使用epsilon移动，并使机器中的每个状态只有一个转换
+
+37
+00:03:24,879 --> 00:03:29,779
+for every possible input. So really the only fundamental difference between the
+所有可能的输入。所以真正的根本区别在于
+
+38
+00:03:29,779 --> 00:03:33,409
+deterministic automata and non-deterministic automata is w hether
+确定性自动机和非确定性自动机是两种不同的自动机
+
+39
+00:03:33,409 --> 00:03:40,409
+they have epsilon moves or not. A key property of a Deterministic Automata is
+他们有没有埃西隆动作。确定性自动机的一个关键性质是
+
+40
+00:03:40,549 --> 00:03:45,049
+that it can only take one path through the state graph per input. So this is per
+它在每个输入中只能采用一条通过状态图的路径。所以这是PER
+
+41
+00:03:45,049 --> 00:03:51,329
+input. What do I mean by that? Well, the automaton always begins at the start state
+输入。我这么说是什么意思？嗯，自动机总是从开始状态开始
+
+42
+00:03:51,329 --> 00:03:55,229
+and let's take a very simple input string like ABC and if we can look at the
+让我们来看一个非常简单的输入字符串，比如abc，如果我们可以看一下
+
+43
+00:03:55,229 --> 00:04:02,229
+sequence of states that the Deterministic Automaton will take, For that input, this
+确定性自动机对于该输入将采用的状态序列，这
+
+44
+00:04:04,339 --> 00:04:08,609
+path through the state graph is completely determined by the input because again it
+通过状态图的路径完全由输入确定，因为它
+
+45
+00:04:08,609 --> 00:04:12,959
+has no choice. In a given state, this can be one transition label day and this
+别无选择。在给定状态下，这可以是一个转换标签日，并且此
+
+46
+00:04:12,959 --> 00:04:16,130
+continue to a state that it only has one transition labeled b and that goes to
+继续到这样一种状态，即它只有一个标记为b的转换，该状态将转到
+
+47
+00:04:16,130 --> 00:04:20,840
+another state that only has one transition labeled c. And so, every input determines
+另一种状态，它只有一个标记为c的转换。因此，每个输入都确定
+
+48
+00:04:20,839 --> 00:04:26,280
+the path through the state graph of the automata will take. And, this is not true
+通过自动机的状态图的路径将采用。而且，这不是真的
+
+49
+00:04:26,280 --> 00:04:32,840
+for Nondeterministic Automata. So, it might be for example. That beginning in
+用于非确定自动机。所以，它可能是一个例子。开始于
+
+50
+00:04:32,840 --> 00:04:39,840
+the start state and on input a that there is some state I can go to on that input a
+开始状态，且在输入A上存在我可以在输入A上转到某个状态
+
+51
+00:04:40,220 --> 00:04:46,090
+but there maybe another transition labeled a that would take me to a different state
+但也许还有另一个标记为a的过渡会把我带到一个不同的状态
+
+52
+00:04:46,090 --> 00:04:49,880
+so the automaton might be able to go to one of two different states and again
+所以自动机可能会进入两种不同的状态中的一种，然后再一次
+
+53
+00:04:49,880 --> 00:04:53,950
+there might be also epsilon transitions. And so what happens with Nondeterministic
+也可能存在ε跃迁。那么，非确定性会发生什么呢？
+
+54
+00:04:53,950 --> 00:05:00,320
+Automata is that in general as they proceed to the state graph is they execute
+自动机通常是指，当它们前进到状态图时，它们会执行
+
+55
+00:05:00,320 --> 00:05:06,740
+on the input, they could wind up in any number of different states. Okay. And the
+在输入时，它们可能会进入任意数量的不同状态。好吧。以及
+
+56
+00:05:06,740 --> 00:05:12,340
+rule with the non-deterministic automaton about when it accepts is that it accepts
+非确定性自动机关于它何时接受的规则是它接受
+
+57
+00:05:12,340 --> 00:05:19,340
+if any path accepts. So if NFA Accepts, If some Choices Lead to an accepting state at
+如果有任何路径接受的话。因此，如果NFA接受，如果某些选择导致接受状态为
+
+58
+00:05:31,600 --> 00:05:38,600
+the end of the input. Now there's a [inaudible] automaton, I can choose what
+输入的末尾。现在有个[听不见的]自动机，我可以选择
+
+59
+00:05:39,600 --> 00:05:43,140
+move to make and as long as there are some choice it can make, then we'll get it to
+移动到作出，只要有一些选择它可以做，然后我们会得到它
+
+60
+00:05:43,140 --> 00:05:47,590
+an accepting state. So let's say switching colors here that you know this was an
+一种接受的状态。所以让我们假设在这里切换颜色，你知道这是一个
+
+61
+00:05:47,590 --> 00:05:53,450
+accepting state down here and they took this path. Then it would accept and maybe
+在这里接受州政府，他们走了这条路。然后它就会接受，也许
+
+62
+00:05:53,450 --> 00:05:56,950
+all of these other pass are rejecting pass, that doesn't matter. As long as
+所有这些其他的传球都是拒绝传球的，这都无关紧要。只要
+
+63
+00:05:56,950 --> 00:06:01,980
+there is one path, a one set of choices the NFA could make to get it to an
+有一条途径，NFA可以做出一套选择来将它带到
+
+64
+00:06:01,980 --> 00:06:05,640
+accepting state at the end of the input, then we say that, that string is in the
+在输入的末尾接受状态，那么我们就说，该字符串在
+
+65
+00:06:05,640 --> 00:06:12,640
+language of the NFA. The fact that NFAs could get into multiple different states
+NFA的语言。事实上，NFA可能会进入多个不同的状态
+
+66
+00:06:13,470 --> 00:06:18,840
+depending on the choices they make during a run is important and will actually play
+取决于他们在跑步过程中做出的选择是很重要的，而且实际上会起作用
+
+67
+00:06:18,840 --> 00:06:23,340
+central role in the future video, so we're gonna do a quick example here to just make
+在未来的视频中扮演核心角色，所以我们将在这里做一个简单的示例
+
+68
+00:06:23,340 --> 00:06:28,580
+sure that this is clear. So here's a little automaton and note that it is
+当然，这一点很清楚。这里有一个小机器人，请注意，它是
+
+69
+00:06:28,580 --> 00:06:33,360
+Nondeterministic Automata from the start state there are two possible moves input
+非确定性自动机从开始状态有两种可能的移动输入
+
+70
+00:06:33,360 --> 00:06:38,300
+zero. And what we're going to do is just walk through in execution of this machine
+零。我们要做的就是在这台机器的执行过程中
+
+71
+00:06:38,300 --> 00:06:44,310
+on a sample input and see what different states it can get into. So we begin at the
+在一个示例输入上，看看它可以进入哪些不同的状态。所以我们从
+
+72
+00:06:44,310 --> 00:06:48,710
+start state and we should probably label our states actually so that we can refer
+开始状态，我们可能应该标记我们的状态，这样我们就可以引用
+
+73
+00:06:48,710 --> 00:06:55,710
+to them. Let's call them A, B, and C. And let's say at the first input is one and so
+对他们来说。我们称它们为A、B和C。假设第一个输入是1，所以
+
+74
+00:06:56,400 --> 00:07:01,170
+what does that mean? That means we'll take this transition. We'll just go from the
+那是什么意思？这意味着我们将接受这个过渡。我们就从
+
+75
+00:07:01,170 --> 00:07:04,340
+start state and come back to the start state and so the set of states that the
+开始状态并返回到开始状态，因此
+
+76
+00:07:04,340 --> 00:07:09,710
+machine could be in after the first transition is just the set A. So it's
+机器可能在第一次转换后就是集合A，所以它是
+
+77
+00:07:09,710 --> 00:07:15,000
+guaranteed to still be in the start state. So there's no, no choices with the first
+保证仍然处于启动状态。所以第一个没有，没有选择
+
+78
+00:07:15,000 --> 00:07:19,120
+move. Now let's say at the second input character is a zero and now we do have a
+移动。现在让我们假设第二个输入字符是零，现在我们确实有一个
+
+79
+00:07:19,120 --> 00:07:25,010
+choice. We could either go to state B or we could go to state A. And, we could
+选择。我们可以去B州，也可以去A州。
+
+80
+00:07:25,010 --> 00:07:32,010
+think of this then as a set of possibilities that after we execute this
+那么可以把这看作是一系列的可能性，在我们执行完这项任务之后
+
+81
+00:07:32,080 --> 00:07:36,700
+move, this transition, the machine could be in anyone of the set of states and
+移动，这个转换，机器可以处于这组状态中的任何一个，并且
+
+82
+00:07:36,700 --> 00:07:41,000
+actually this completely characterizes the possibilities for the machine. We've only
+实际上，这完全体现了这台机器的可能性。我们只有
+
+83
+00:07:41,000 --> 00:07:46,280
+read the second input character and now we could be in a set of states, okay? And we
+读取第二个输入字符，现在我们可能处于一组状态，好吗？而我们
+
+84
+00:07:46,280 --> 00:07:53,280
+could be either in state a or in state b. And so now let's say we read another zero.
+可能是在状态a，也可能是在状态b，那么现在假设我们读取的是另一个0。
+
+85
+00:07:55,330 --> 00:08:01,110
+And where could we go then, well if we're in state B we could make the transition to
+那么我们可以去哪里呢，如果我们在B州，我们可以过渡到
+
+86
+00:08:01,110 --> 00:08:07,990
+state C but if we're in state A then we'll make the transition either to state B or
+状态C，但如果我们在状态A，那么我们将转换到状态B或
+
+87
+00:08:07,990 --> 00:08:14,040
+again to state A. So in fact we could be in anyone of the three states if we read
+再回到A州，事实上，如果我们读到这三个州中的任何一个，我们都有可能处于这三个州中的任何一个州
+
+88
+00:08:14,040 --> 00:08:21,040
+another zero. Okay? And now you, I think you can see w hat the rule is. So in every
+又是一个零。好吧?现在你，我想你可以看到规则是什么了。所以在每一个
+
+89
+00:08:22,630 --> 00:08:29,630
+step a Nondeterministic Automata is in a set of states of the machine and when it
+步骤非确定自动机处于机器的一组状态，并且当它
+
+90
+00:08:29,780 --> 00:08:33,430
+reason, the input we consider all the possible moves it can make to compute the
+原因是，我们考虑它可以进行的所有可能的移动来计算
+
+91
+00:08:33,429 --> 00:08:38,159
+complete set of states that could be in at the next step of the machine. Okay? And
+机器下一步可能处于的完整状态集。好吧?和
+
+92
+00:08:38,159 --> 00:08:43,180
+then the, the, finally has to decide whether the machine accepts while we look
+然后，最后要决定我们看的时候机器是不是接受
+
+93
+00:08:43,179 --> 00:08:48,199
+at the final state after the last bid of input is red and if there's any I'm sorry,
+在最后一次出价输入后的最终状态是红色的，如果有的话，我很抱歉，
+
+94
+00:08:48,199 --> 00:08:53,149
+we look at the last set of states after the last input character is red and if
+我们查看最后一个输入字符为红色之后的最后一组状态，如果
+
+95
+00:08:53,149 --> 00:08:57,160
+there's any final state in that set, then the machine accepts and in this case,
+在该集合中有任何最终状态，然后机器接受，在这种情况下，
+
+96
+00:08:57,160 --> 00:09:02,740
+after we read zero, we see that in accepting state c is in the set of
+在我们读取零之后，我们看到在接受中，状态c在
+
+97
+00:09:02,740 --> 00:09:06,579
+possible states. So what that means is, if there was some sort of choices that the
+可能的状态。所以这意味着，如果有某种选择，
+
+98
+00:09:06,579 --> 00:09:09,959
+machine could make, that we'll get it into the final state at the end of the input
+我们将在输入结束时使其进入最终状态
+
+99
+00:09:09,959 --> 00:09:14,999
+and so with the machine. Accepts this input, okay? So if there's a final state
+机器也是如此。接受这个输入，好吗？所以如果有一个最终状态
+
+100
+00:09:14,999 --> 00:09:21,999
+in the final set of possible states, then the Nondeterministic machine accepts. It
+在最后一组可能的状态中，非确定性机器接受。它
+
+101
+00:09:22,279 --> 00:09:26,779
+turns out that NFA's and DFA's are recognized exactly the same languages and
+事实证明，NFA和DFA被识别为完全相同的语言，并且
+
+102
+00:09:26,779 --> 00:09:31,600
+particularly the regular languages. So NFA's, DFA's and regular expressions all
+尤其是常规语言。所以NFA、DFA和正则表达式
+
+103
+00:09:31,600 --> 00:09:36,480
+have equivalent power. They can only specify regular languages. Dfa's are
+拥有同等的能量。它们只能指定常规语言。DFA是
+
+104
+00:09:36,480 --> 00:09:41,220
+definitely faster to execute primarily or entirely because there are no choices to
+主要或全部执行的速度肯定更快，因为没有选择
+
+105
+00:09:41,220 --> 00:09:46,220
+consider so a DFA and just follow a single path through the state graph where with
+将其视为DFA，在状态图中只遵循一条路径，其中
+
+106
+00:09:46,220 --> 00:09:50,589
+NFA we have to keep track potentially of the set of choices in the NFA and we might
+我们必须潜在地跟踪NFA中的选择集，并且我们可能
+
+107
+00:09:50,589 --> 00:09:56,199
+be in set of states. However there are some advantages to NFA so they are in
+处于一组状态。然而，NFA也有一些优势，所以他们在
+
+108
+00:09:56,199 --> 00:10:03,199
+general much smaller. And DFA's, In fact, they can be exponentially smaller so the
+一般要小得多。而DFA的，事实上，它们可以指数级地更小，所以
+
+109
+00:10:03,930 --> 00:10:10,930
+smallest. Nfa, Maybe much, much smaller than the smallest equivalent DFA for the
+最小的。NFA，可能比最小的等效DFA要小得多
+
+110
+00:10:13,449 --> 00:10:17,829
+same language, And, there's, so essentially there's a space time tradeoff
+同样的语言，而且，本质上说，这是一个时空的权衡
+
+111
+00:10:17,829 --> 00:10:24,459
+between NFAs and DFAs. Nfas might be more compact but DFAs will be faster to
+在NFA和DFAS之间。NFA可能更紧凑，但DFA将更快地
+
+112
+00:10:24,459 --> 00:10:25,019
+execute.
+执行。
+

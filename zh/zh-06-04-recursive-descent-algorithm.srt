@@ -1,0 +1,745 @@
+0
+00:00:04,150 --> 00:00:08,420
+Welcome back. In this video, I'm going to outline a general algorithm for recursive
+欢迎回来。在这段视频中，我将概述递归的一般算法
+
+1
+00:00:08,420 --> 00:00:15,420
+descent parsing. Before I dive into the details of the recursive descent parsing
+下降解析。在深入了解递归下降解析的细节之前
+
+2
+00:00:17,600 --> 00:00:21,179
+algorithm, let me justify a couple of small things that we're going to use
+算法，让我来证明我们要用到的几个小东西
+
+3
+00:00:21,179 --> 00:00:25,929
+throughout this video. Token is going to be a type and we're gonna be writing codes
+在这段视频中。Token将是一种类型，我们将编写代码
+
+4
+00:00:25,929 --> 00:00:30,349
+and so token would be the type of all the tokens. And the particular tokens that
+因此令牌将是所有令牌的类型。以及特定的令牌，
+
+5
+00:00:30,349 --> 00:00:35,800
+we'll use in the example are things like int, open-pare, close-paren, + and and
+我们将在该示例中使用int、open-pare、close-paren、+和AND之类的内容
+
+6
+00:00:35,800 --> 00:00:42,620
+so token is a type and these things are instances, values of that type. And then
+所以Token是一种类型，这些东西是实例，是该类型的值。然后
+
+7
+00:00:42,620 --> 00:00:47,850
+we're going to need a global variable called next that points to the next token
+我们将需要一个名为next的全局变量，它指向下一个令牌
+
+8
+00:00:47,850 --> 00:00:54,370
+in the input string. And if you recall from the previous video, we used a big
+在输入字符串中。如果你还记得之前的视频，我们用了一个很大的
+
+9
+00:00:54,370 --> 00:00:59,760
+arrow to point into the input to indicate our current position. The global variable
+箭头指向输入以指示我们的当前位置。全局变量
+
+10
+00:00:59,760 --> 00:01:06,760
+next is going to play the same role in our code. So let's begin. The first thing
+Next将在我们的代码中扮演相同的角色。那么让我们开始吧。第一件事是
+
+11
+00:01:06,880 --> 00:01:11,300
+we're going to do is define a number of Boolean functions and one function we have
+我们要做的是定义一些布尔函数和我们拥有的一个函数
+
+12
+00:01:11,300 --> 00:01:17,220
+to define is one that matches the given token in the input. So how does this work?
+要定义的是与输入中的给定令牌匹配的令牌。那么这是怎么运作的呢？
+
+13
+00:01:17,220 --> 00:01:23,310
+Well, it takes this argument, a token, okay this is a type token again. And, and
+它接受这个参数，一个令牌，好的，这又是一个类型令牌。还有，还有
+
+14
+00:01:23,310 --> 00:01:27,640
+then it just checks whether that matches what's currently pointed to in the input
+然后，它只检查它是否与输入中当前指向的内容匹配
+
+15
+00:01:27,640 --> 00:01:32,500
+string so is t okay equal to the thing pointed by next and notice there's a side
+字符串，那么是否可以等于下一个所指的对象，请注意有一个侧面
+
+16
+00:01:32,500 --> 00:01:38,530
+effect, we increment the next pointer. And what's returned then is a Boolean. This is
+效果，我们递增下一个指针。然后返回的是一个布尔值。这是
+
+17
+00:01:38,530 --> 00:01:44,210
+either true or false. So yes the token that we passed in matches the input or no
+对或错。所以是的，我们传递的令牌与输入匹配还是不匹配
+
+18
+00:01:44,210 --> 00:01:49,590
+it doesn't. And again, just to stress this, those at the next pointer is
+不是这样的。再次强调一下，下一个指针上的那些
+
+19
+00:01:49,590 --> 00:01:56,080
+incremented regardless of whether the match succeeded or failed. Now, another
+无论匹配成功还是失败，都会递增。现在，又来了一个
+
+20
+00:01:56,080 --> 00:01:59,549
+thing we need to check for a matchup is the int production of asset. This is a
+我们需要检查匹配的是资产的内部生产。这是一个
+
+21
+00:01:59,549 --> 00:02:06,549
+particular production of a particular nonterminal s. And we'll denote that by a
+特定非终结点s的特定结果。我们将用一个
+
+22
+00:02:08,158 --> 00:02:11,989
+function that returns a Boolean and is written as s sub n. So this is, this is a
+返回布尔值的函数，写为s subn。所以这是，这是一个
+
+23
+00:02:11,989 --> 00:02:18,150
+function that only checks for the success of one production of s. And when that, I
+函数，该函数只检查s的一次生产是否成功。
+
+24
+00:02:18,150 --> 00:02:21,389
+won't write out the code for that now, we'll see that in a minute. And then we're
+现在不会写出代码，我们马上就会看到。然后我们就会
+
+25
+00:02:21,389 --> 00:02:26,430
+gonna need another func tion that tries all the productions of s so this one is
+我需要另一个函数来尝试s的所有结果，所以这个函数是
+
+26
+00:02:26,430 --> 00:02:30,959
+going to be called just s with no subscript, no subscript and so with this
+将只调用s，不带下标，也不带下标，因此
+
+27
+00:02:30,959 --> 00:02:35,859
+one, we'll succeed if any production of s can match the input, alright. So we're
+第一，如果s的任何产品都能匹配输入，我们就会成功，好吧。所以我们要
+
+28
+00:02:35,859 --> 00:02:41,469
+going to have two classes of functions for each nonterminal. One class that where
+每个非终端都有两类函数。一节课，在那里
+
+29
+00:02:41,469 --> 00:02:44,609
+there's one function per production and it checks, it checks just whether that
+每个产品有一个函数，它检查，它只检查是否
+
+30
+00:02:44,609 --> 00:02:48,760
+production can match the input and then one that combines all the productions for
+产品可以与输入匹配，然后是将所有产品组合在一起的产品
+
+31
+00:02:48,760 --> 00:02:53,139
+that particular nonterminal together and checks whether any of them can match the
+该特定非终结符放在一起，并检查它们中是否有任何一个可以与
+
+32
+00:02:53,139 --> 00:03:00,139
+input. Okay, that's the general plan. Now, let's see how this works for some specific
+输入。好的，这就是总体计划。现在，让我们看看这是如何工作的，对于一些特定的
+
+33
+00:03:00,980 --> 00:03:05,819
+productions, and we'll just use the same grammar that we used in the last video.
+制作，我们将只使用上一个视频中使用的语法。
+
+34
+00:03:05,819 --> 00:03:10,349
+The first production of that grammar is e goes to t and now we wanted to do is we
+这个语法的第一个结果是e to t，现在我们想要做的是
+
+35
+00:03:10,349 --> 00:03:15,709
+want to write the functions that are needed to decide whether this production
+我想要编写决定此生产是否需要的函数
+
+36
+00:03:15,709 --> 00:03:21,340
+matches some input. And this one happens to be simplicity itself and it's easy to
+匹配一些输入。而这个恰好是简单性本身，很容易
+
+37
+00:03:21,340 --> 00:03:25,249
+see why. So we're, first of all, we're writing the function e1, this is the
+看看为什么。所以我们，首先，我们写的是函数E1，这是
+
+38
+00:03:25,249 --> 00:03:30,069
+function that deals with the first production for e and succeeds returns true
+处理e的第一个结果并成功的函数返回true
+
+39
+00:03:30,069 --> 00:03:34,680
+only if this production succeeds in matching some input. Well. How would this
+只有在此产品成功匹配某些输入的情况下。井。这是怎么回事
+
+40
+00:03:34,680 --> 00:03:39,400
+production match any input? Well it can only match some input if some production
+生产是否与任何投入相匹配？嗯，它只能与一些投入相匹配，如果一些生产
+
+41
+00:03:39,400 --> 00:03:43,949
+of t matches the input and we have name for that function, that's the function t
+匹配输入，我们有该函数的名称，这就是函数t
+
+42
+00:03:43,949 --> 00:03:50,949
+which tries all the different productions for t. So e1 succeeds returns true exactly
+它尝试t的所有不同结果。因此，e1 SUCCESS恰好返回TRUE
+
+43
+00:03:51,069 --> 00:03:57,749
+when t succeeds returns true and that's all there is to this first production. For
+当t成功时，返回TRUE，这就是第一个结果的全部内容。为
+
+44
+00:03:57,749 --> 00:04:01,689
+the second production, we have a little more work to do. Now, e will succeed if t
+第二部，我们还有一些工作要做。现在，如果你能做到这一点，我们就会成功。
+
+45
+00:04:01,689 --> 00:04:07,969
++ e can match some of the input and how does that work? Well first, t has to match
++e可以匹配一些输入，这是如何工作的？首先，t必须匹配
+
+46
+00:04:07,969 --> 00:04:12,409
+some of the input so some production of t has to match a portion of the input and
+一些输入，所以t的一些结果必须与输入的一部分相匹配，并且
+
+47
+00:04:12,409 --> 00:04:18,070
+after that, we have to find a + in the input following whatever t matched and if
+在那之后，我们必须在输入中找到一个+，跟在匹配的t后面，如果
+
+48
+00:04:18,070 --> 00:04:24,620
++ matches then, some production for e has to match some portion of the input. And
++匹配，e的一些结果必须匹配输入的某一部分。和
+
+49
+00:04:24,620 --> 00:04:28,620
+notice the use of the short circuiting double end here. So this is actually
+请注意此处使用的短路双端。所以这实际上是
+
+50
+00:04:28,620 --> 00:04:33,770
+important where you're exploiting the semantics of do uble end and C and C++
+重要的是您要在哪里利用double end以及C和C++的语义
+
+51
+00:04:33,770 --> 00:04:38,840
+which evaluates. The arguments to the double end in left to right orders. So
+它会评估。双端的参数按从左到右的顺序排列。所以
+
+52
+00:04:38,840 --> 00:04:43,580
+first, t will execute and notice that t has embedded within its side effects on
+首先，t将执行并注意到t已经嵌入到它的副作用中。
+
+53
+00:04:43,580 --> 00:04:49,110
+the pointer into the input. So it's incrementing the next pointer and
+将指针指向输入。所以它会递增下一个指针
+
+54
+00:04:49,110 --> 00:04:54,259
+incrementing exactly however far t makes it. So whatever t manages to match, the
+精确地递增，不管距离有多远。因此，无论t设法匹配到什么，
+
+55
+00:04:54,259 --> 00:04:58,240
+next pointer will advance that far. When this function returns, it's left pointing
+下一个指针会前进那么远。当此函数返回时，它指向左侧
+
+56
+00:04:58,240 --> 00:05:03,150
+to the next terminal that t did not match and that needs to be a plus. And the call
+到t不匹配的下一个终端，这需要一个加号。还有那通电话
+
+57
+00:05:03,150 --> 00:05:07,759
+of term will increment the next pointer again which is exactly where e should pick
+将再次递增下一个指针，这正是e应该选择的位置
+
+58
+00:05:07,759 --> 00:05:12,750
+up and whatever e can match it will increment the next pointer just beyond
+向上，无论与之匹配的是什么e，都会将下一个指针递增到略高于
+
+59
+00:05:12,750 --> 00:05:17,520
+that. So, that the rest of the grammar outside of this particular call can match
+那。因此，此特定调用之外的语法睡觉可以匹配
+
+60
+00:05:17,520 --> 00:05:22,210
+it And then notice that this particular function is called e2 because this is the
+然后注意，这个特定的函数被称为e2，因为这是
+
+61
+00:05:22,210 --> 00:05:29,169
+function for the second production for e. Well, we have one more thing to deal with
+第二次生产的功能。嗯，我们还有一件事要处理。
+
+62
+00:05:29,169 --> 00:05:34,280
+for e and that is the function e itself. We need to write the function that will
+这就是函数e本身。我们需要编写一个函数，该函数将
+
+63
+00:05:34,280 --> 00:05:38,669
+match any alternative for e and since it's only these two productions, it just has to
+匹配e的任何替代方案，因为它只有这两个产品，所以它必须
+
+64
+00:05:38,669 --> 00:05:42,629
+match one of these two productions And that; this is where the backtracking is
+匹配这两个产品中的一个；这就是回溯的地方
+
+65
+00:05:42,629 --> 00:05:48,220
+dealt with. Now the only bit of state that we have to worry about in the backtracking
+处理好了。现在我们在回溯过程中唯一需要担心的是
+
+66
+00:05:48,220 --> 00:05:53,960
+Is this next pointer so that needs to be restored if we ever have to undo our
+下一个指针是否需要恢复，如果我们必须撤消
+
+67
+00:05:53,960 --> 00:05:58,020
+decisions. And so the way we accomplish that is we just have a local variable to
+决定。所以我们实现这一点的方法是，我们只需要一个局部变量
+
+68
+00:05:58,020 --> 00:06:02,210
+this function called save that records the position of the next pointer before we do
+此函数调用save，在我们执行此操作之前记录下一个指针的位置
+
+69
+00:06:02,210 --> 00:06:07,180
+anything. So before we try to match any input, we just remember where the next
+什么都行。因此，在尝试匹配任何输入之前，我们只需记住下一个
+
+70
+00:06:07,180 --> 00:06:14,180
+point started when this function was called. Okay? And now to do to, to do the
+调用此函数时开始的点。好吧?现在去做，去做
+
+71
+00:06:14,830 --> 00:06:21,389
+alternative matching, we first try e1. And we see if it succeeds and if it, if it
+替代匹配，我们首先尝试E1。我们看看它是否成功，如果它，如果它
+
+72
+00:06:21,389 --> 00:06:26,479
+doesn't succeed, actually let's do the succeeds case first. If this succeeds, if
+不成功，其实让我们先做成功的案例。如果此操作成功，如果
+
+73
+00:06:26,479 --> 00:06:33,479
+this returns true then The semantics of double or here, it means we don't evaluate
+这将返回TRUE，然后返回DOUBLE的语义，否则在这里，它意味着我们不求值
+
+74
+00:06:33,689 --> 00:06:37,020
+e2 so this will not be evaluated. The second component here will not be
+E2，因此不会对其进行评估。这里的第二个组件不会是
+
+75
+00:06:37,020 --> 00:06:41,870
+evaluated if e1, if e1 returns true. It'll short circuit cuz it knows that it's going
+如果E1返回TRUE，则求值为E1。它会短路，因为它知道它会
+
+76
+00:06:41,870 --> 00:06:46,770
+be tru e no matter what and it'll just stop there. And notice that whatever side
+不管发生什么，都要真诚，事情就到此为止了。请注意，无论哪一方
+
+77
+00:06:46,770 --> 00:06:52,439
+effects e1 has on the next pointer will be retained and will remember and when we
+E1对下一个指针的影响将被保留，并将记住
+
+78
+00:06:52,439 --> 00:06:56,050
+return true, the next pointer will be left pointing to the next piece of unconsumed
+返回TRUE，则下一个指针将指向下一个未使用的
+
+79
+00:06:56,050 --> 00:07:00,120
+input. Now, let's consider what happens if e1 returns false. Well if e1 returns
+输入。现在，让我们考虑一下如果E1返回False会发生什么。如果E1回来了
+
+80
+00:07:00,120 --> 00:07:04,580
+false, well then the only way this or can be true is if the second component is
+假，那么这个或可以为真的唯一方式是如果第二个组件是
+
+81
+00:07:04,580 --> 00:07:08,120
+true. And what's the first thing we do? The first thing we do is restore the next
+没错。我们要做的第一件事是什么？我们要做的第一件事是恢复下一个
+
+82
+00:07:08,120 --> 00:07:13,849
+pointer. Okay, before we try e2. And if each returns true, then the whole thing
+指针。好的，在我们尝试e2之前。如果每个结果都是真的，那么整件事
+
+83
+00:07:13,849 --> 00:07:19,800
+returns true and, and the e function succeeds. If the e function fails, well
+返回TRUE AND，e函数成功。如果e函数失败，那么
+
+84
+00:07:19,800 --> 00:07:23,439
+they were out of alternatives for e and the failure is gonna be returned to the
+他们别无选择，失败将被送回
+
+85
+00:07:23,439 --> 00:07:28,719
+next higher level production, in our derivation and it will have to backtrack
+下一个更高水平的生产，在我们的派生中，它将不得不回溯
+
+86
+00:07:28,719 --> 00:07:35,169
+and try another alternative. Now finally, what about this particular statement next
+再试试另一种选择。现在最后，下面这句特别的话是怎么说的呢
+
+87
+00:07:35,169 --> 00:07:42,169
+= save here. Well, this is not strictly needed. Notice that here we save the next
+=保存在此处。嗯，这并不是严格需要的。请注意，这里我们保存了下一个
+
+88
+00:07:43,310 --> 00:07:46,580
+pointer in the save variable and then the first thing, the very first thing we do if
+指针放在save变量中，然后第一件事，我们要做的第一件事是
+
+89
+00:07:46,580 --> 00:07:50,599
+we copy it back over the next again. This is just for uniformity to make all the
+我们再把它复制回下一个。这只是为了统一，以使所有的
+
+90
+00:07:50,599 --> 00:07:53,409
+productions look the same but since this is the very first production, we actually
+产品看起来是一样的，但是因为这是第一次生产，所以我们实际上
+
+91
+00:07:53,409 --> 00:08:00,409
+don't need this assignment statement if we don't want to have it. So let's turn our
+如果我们不想要这个赋值语句，就不需要它。所以让我们把我们的
+
+92
+00:08:01,909 --> 00:08:07,969
+attention to the non-terminal t. There are three productions. The first one is the t
+注意非终结点t。有三部作品。第一个是t
+
+93
+00:08:07,969 --> 00:08:14,060
+goes to int. And that's a simple one to write. We just have to match the terminal
+转到INT。这是一个写起来很简单的问题。我们只需要匹配航站楼
+
+94
+00:08:14,060 --> 00:08:19,490
+int so the next thing in the input has to be an integer and if it is, then t1
+因此输入中的下一项必须是整数，如果是，则t1
+
+95
+00:08:19,490 --> 00:08:26,490
+succeeds. T2 is slightly more complex. That's the production int t, t goes to
+成功了。T2稍微复杂一些。这就是生产int t，t要去的地方
+
+96
+00:08:27,060 --> 00:08:32,039
+int t so we have to match an int in the input followed by a followed by
+所以我们必须在输入中匹配一个int，后面跟一个
+
+97
+00:08:32,039 --> 00:08:39,039
+something that matches any production of t. The third production is t goes to (e).
+与t的任何乘积相匹配的东西。第三个乘积是t到(E)。
+
+98
+00:08:40,789 --> 00:08:46,820
+So, what has to happen? We have to match an open-paren first and then. Something
+那么，该怎么做呢？我们必须先配上一个开阔的帕伦，然后再配上一个。某物
+
+99
+00:08:46,820 --> 00:08:50,640
+that matches one of the productions of e, we call the function e there and then
+匹配e的一个乘积，我们在那里调用函数e，然后
+
+100
+00:08:50,640 --> 00:08:54,950
+finally a close-paren. And then putting all three of these together in the
+最后是一个势均力敌的伙伴。然后把这三个放在一起
+
+101
+00:08:54,950 --> 00:08:58,640
+function t that tries all three alternatives, we just have exactly the
+函数t，该函数尝试所有三种可选方案，我们只有
+
+102
+00:08:58,640 --> 00:09:05,280
+same structure we had for e. So we saved the current input pointer and then we try
+与e的结构相同。因此我们保存了当前输入指针，然后尝试
+
+103
+00:09:05,280 --> 00:09:11,030
+the alternatives t1, t2 and t3 in order and each step we restore the input point
+方案T1、T2和T3按顺序排列，每一步我们都恢复输入点
+
+104
+00:09:11,030 --> 00:09:18,030
+before we try the next alternative. Start the parser up, we have to initialize the
+在我们尝试下一个替代方案之前。启动解析器，我们必须初始化
+
+105
+00:09:21,250 --> 00:09:25,280
+next pointer to point to the first token in the input stream and we have to invoke
+Next指针指向输入流中的第一个令牌，我们必须调用
+
+106
+00:09:25,280 --> 00:09:29,120
+the function that matches anything derivable from the start symbols. So in
+与可从起始符号派生的任何内容相匹配的函数。所以在
+
+107
+00:09:29,120 --> 00:09:36,120
+this case, that's just the function e. And recursive descent parsers are really easy
+在本例中，这只是函数e。递归下降解析器非常简单
+
+108
+00:09:36,770 --> 00:09:41,210
+to implement by hand. In fact, people often do implement them by hand and just
+手工实施手工实施事实上，人们经常手工实现它们，而且只是
+
+109
+00:09:41,210 --> 00:09:48,210
+following the discipline that I showed the previous slides. To wrap up this video,
+遵循我在前面的幻灯片中展示的规则。为了结束这段视频，
+
+110
+00:09:49,200 --> 00:09:53,120
+let's work through a complete example. So here's our grammar, and here is all the
+让我们来完成一个完整的示例。所以这是我们的语法，这是所有的
+
+111
+00:09:53,120 --> 00:09:58,690
+code for the recursive descent parser for this grammar and here is the input that
+此语法的递归下降解析器的代码，下面是
+
+112
+00:09:58,690 --> 00:10:05,350
+we'll be looking at and we're gonna just mark the next pointer pointing to the
+我们将查看，我们只需标记下一个指针，指向
+
+113
+00:10:05,350 --> 00:10:10,520
+initial token of the input, all right? And I'll also draw the Parse Tree that we're
+输入的初始令牌，好吗？我还会画出我们正在
+
+114
+00:10:10,520 --> 00:10:15,350
+constructing at the same time. So we'll begin by invoking the start symbol so,
+同时施工。因此，我们将从调用开始符号开始，
+
+115
+00:10:15,350 --> 00:10:20,750
+we're gonna be trying to derive something from e. And the first thing we'll do is
+我们会试着从e派生出一些东西。我们要做的第一件事是
+
+116
+00:10:20,750 --> 00:10:26,050
+we'll try the first production. So we'll try e1, and what does e1 do? E1 is going
+我们将试试看第一部作品。那么我们将尝试E1，那么E1做什么呢？E1要走了
+
+117
+00:10:26,050 --> 00:10:31,250
+to try t. It's gonna try to derive something from t. So, our possible Parse
+来尝试t。它会尝试从t中推导出一些东西。所以，我们可能的解析
+
+118
+00:10:31,250 --> 00:10:36,890
+Tree looks like this. And so we invoke t and what is t going to do is we're going
+树是这样的。所以我们调用t，我们要做的是
+
+119
+00:10:36,890 --> 00:10:42,460
+to try all three productions for t in order and so I was gonna call t1 and we'll
+来按顺序尝试所有三部作品，所以我要打电话给T1，我们将
+
+120
+00:10:42,460 --> 00:10:47,040
+see that t1 is going to fail because it's going try it an int so I won't put it in
+看到t1将失败，因为它将尝试一个int，所以我不会将其放入
+
+121
+00:10:47,040 --> 00:10:50,000
+the parse tree since it isn't going to work but the int is not going to match the
+语法分析树，因为它不会工作，但是int不会与
+
+122
+00:10:50,000 --> 00:10:54,820
+open-paren. So that's going to return false which will cause us to backtrack. It
+敞开-帕伦。所以这将返回假，这将导致我们回溯。它
+
+123
+00:10:54,820 --> 00:11:01,340
+will reset The, the input pointer, okay? And, to the beginning of the string and
+会重新设置输入指针，好吗？并且，添加到字符串的开头，并且
+
+124
+00:11:01,340 --> 00:11:07,670
+then it'll try t2. And t2 is also going to ask, well is the input pointer = an int?
+那么它将尝试T2。T2也会问，输入指针=整数吗？
+
+125
+00:11:07,670 --> 00:11:12,870
+And recall that the term function here always increments the input pointer. So in
+回想一下，这里的术语函数总是递增输入指针。所以在
+
+126
+00:11:12,870 --> 00:11:18,430
+fact, this pointer is going to move over one, one tok en but this is going to
+事实上，这个指针会移动到1，1个标记的上方，但这是
+
+127
+00:11:18,430 --> 00:11:23,440
+return false because int doesn't match open-paren. So we'll come back here. The
+返回false，因为int与open-paren不匹配。所以我们会回到这里。这个
+
+128
+00:11:23,440 --> 00:11:26,850
+input point will be restored back to the beginning of the string and then it's
+输入点将恢复到字符串的开头，然后
+
+129
+00:11:26,850 --> 00:11:30,770
+gonna try the alternative t3. Now, when we finally get the t3, something good is
+我要试试另一种T3。现在，当我们最终拿到T3的时候，好消息是
+
+130
+00:11:30,770 --> 00:11:34,470
+going to happen. First thing it's going to do is going to ask is the first thing in
+会发生的。它要做的第一件事就是问
+
+131
+00:11:34,470 --> 00:11:41,470
+input an open-paren, And in fact, it is. And so the input pointer will advance to
+输入一个开放的Paren，事实上，它就是。因此输入指针将前进到
+
+132
+00:11:41,690 --> 00:11:47,750
+point to the int. And then it's going to try to match something derivable from e so
+指向int。然后它会试着匹配从e派生出来的东西，所以
+
+133
+00:11:47,750 --> 00:11:53,680
+now we have our first recursive call to e. We're back here at e and it's going to try
+现在我们有了对e的第一个递归调用。
+
+134
+00:11:53,680 --> 00:12:00,680
+e1 first and then e2. And so it calls e1 and e1 will only match something if it can
+先是e1，然后是e2。所以它调用e1，并且e1只有在可能的情况下才会匹配
+
+135
+00:12:02,930 --> 00:12:08,680
+match t. Okay, so this is, we're down here inside of e now and now we're going to
+匹配t。好的，这就是，我们现在在e里面，现在我们要
+
+136
+00:12:08,680 --> 00:12:15,680
+call t. And what's t going to do was going to try all three productions for t in
+打电话给t。t要做的是尝试所有三部作品。
+
+137
+00:12:17,270 --> 00:12:22,760
+order. The first one of which happens to be the single token int and that is going
+请遵守秩序。其中第一个恰好是单个令牌int，它将
+
+138
+00:12:22,760 --> 00:12:28,170
+to match. It's going to call term int; t1 is calling term int so that matches the
+来匹配。它将调用术语int；t1调用术语int，因此它与
+
+139
+00:12:28,170 --> 00:12:33,880
+next token in the input stream. So, we're happy about that. The input pointer
+输入流中的下一个令牌。所以，我们对此感到高兴。输入指针
+
+140
+00:12:33,880 --> 00:12:40,880
+advances again. And now, we return through all these levels of calls. T1 succeeds
+再次前进。现在，我们回到所有这些级别的电话中。T1成功
+
+141
+00:12:41,170 --> 00:12:48,170
+which means that t succeeds, which means that e succeeds. Okay. And now we're back
+这意味着t成功了，这意味着e成功了。好吧。现在我们又回来了
+
+142
+00:12:49,040 --> 00:12:55,350
+here in the production for t3 and we're going to ask well is the next thing that
+在T3的制作过程中，我们要问的是下一件事
+
+143
+00:12:55,350 --> 00:13:00,570
+we see in the input a close-paren? And it did it is and so a close-paren we'll be
+我们在输入中看到了一个势均力敌的伙伴？它做到了，所以我们将是势均力敌的伙伴
+
+144
+00:13:00,570 --> 00:13:07,570
+recorded. And now t3 will succeed which means that t succeeds, this t succeeds and
+已录制。现在t3成功了，这意味着t成功了，这个t成功了，
+
+145
+00:13:07,890 --> 00:13:12,470
+finally we'll return to the root call e and that returns true which means that the
+最后，我们将返回根调用e，它返回true，这意味着
+
+146
+00:13:12,470 --> 00:13:17,160
+Parse succeeded. That plus the fact that we are now at the end of the input, there
+解析成功。再加上我们现在处于输入的末尾，
+
+147
+00:13:17,160 --> 00:13:22,430
+is no more input to consume and we have returned from the start symbol with true
+不再有要使用的输入，并且我们从开始符号返回的值为true
+
+148
+00:13:22,430 --> 00:13:24,930
+and so we have successfully parse the input string.
+因此，我们已经成功地解析了输入字符串。
+

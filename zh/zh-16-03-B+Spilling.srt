@@ -1,0 +1,105 @@
+0
+00:00:01,189 --> 00:00:07,340
+To summarize this video, register allocation is one of the most important jobs that a compiler
+综上所述，寄存器分配是编译器最重要的工作之一
+
+1
+00:00:07,340 --> 00:00:11,740
+performs. And it's really, these days they must have an any kind of reasonable
+执行。而且真的，这些天他们肯定有一种任何一种合情合理的
+
+2
+00:00:11,740 --> 00:00:15,499
+production compiler. And, the reason you need it is because the inter-media
+生产编译器。而且，你需要它的原因是因为中间媒体
+
+3
+00:00:15,499 --> 00:00:19,320
+code just generally uses too many temporaries. We're allowed to be a little
+代码通常只是使用了太多的临时函数。我们被允许有一点
+
+4
+00:00:19,320 --> 00:00:24,240
+bit sloppy with intermediate code precisely because we have good register allocation
+中间代码的位马虎正是因为我们有很好的寄存器分配
+
+5
+00:00:24,240 --> 00:00:27,640
+algorithms. And the other reason, registers are just a very important
+算法。另一个原因是，寄存器是非常重要的
+
+6
+00:00:27,640 --> 00:00:32,750
+resource in making good user registers. Having some procedure for making
+做好用户注册所需的资源。有一些制作过程
+
+7
+00:00:32,750 --> 00:00:36,879
+efficient use of the registers. Leads to much, much better code in the end,
+有效利用寄存器。最终会产生更好的代码，
+
+8
+00:00:36,879 --> 00:00:41,659
+much more efficient code. Now. The register allocation algorithm I described
+更高效的代码。现在。我描述的寄存器分配算法
+
+9
+00:00:41,659 --> 00:00:47,960
+here is really targeted at risk machine. So, for risk machine reduce instruction set
+这里真正针对的是风险机器。因此，对于风险机器缩减指令集
+
+10
+00:00:47,960 --> 00:00:53,089
+computer what kind of machine. You can pretty much take the register allocation algorithm
+电脑是什么样的机器。您几乎可以采用寄存器分配算法
+
+11
+00:00:53,089 --> 00:00:57,319
+that I described and if any for those machines it would work out of the box.
+这是我描述的，如果那些机器有的话，它可以开箱即用。
+
+12
+00:00:57,319 --> 00:01:02,339
+CISC machines - which stands for complex instructions for computers - often
+CISC机器-代表计算机的复杂指令-通常
+
+13
+00:01:02,339 --> 00:01:07,840
+have restrictions on how the register can be used. Certain operation can only work with
+对如何使用寄存器有限制。某些操作只能与
+
+14
+00:01:07,840 --> 00:01:11,250
+certain registers. You may have register to different sizes that can only
+某些寄存器。您可能有不同大小的注册，只能
+
+15
+00:01:11,250 --> 00:01:16,420
+hold certain values. And so it becomes more complicated to register allocation for
+保持一定的价值观。因此，为其分配寄存器变得更加复杂
+
+16
+00:01:16,420 --> 00:01:21,140
+such machines. What people have done is to adapt the graph coloring procedure that
+这样的机器。人们所做的是修改图形着色过程，
+
+17
+00:01:21,140 --> 00:01:27,420
+I described here. So, the basic idea is exactly the same and you would recognize
+我在这里描述过。所以，基本概念是完全相同的，你会认识到
+
+18
+00:01:27,420 --> 00:01:30,650
+those algorithms is being primarily the graph color algorithms that
+这些算法主要是图形颜色算法，
+
+19
+00:01:30,650 --> 00:01:36,750
+we discussed. There are just additional. Steps in those algorithms and places where
+我们讨论过。只有一些额外的。这些算法和位置中的步骤
+
+20
+00:01:36,750 --> 00:01:40,340
+the particular constraints are what registers can be used have to be observed.
+具体的约束是必须观察可以使用什么寄存器。
+

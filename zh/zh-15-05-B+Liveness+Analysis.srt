@@ -1,0 +1,125 @@
+0
+00:00:01,670 --> 00:00:05,600
+To wrap up and summarize our discussion of the global analysis of control flow graphs,
+为了总结和总结我们对控制流图全局分析的讨论，
+
+1
+00:00:05,600 --> 00:00:10,050
+we've talked about two kinds of analysis in the past several videos. Constant
+在过去的几个视频中，我们已经谈到了两种分析。常量
+
+2
+00:00:10,050 --> 00:00:15,190
+propagation is what is called a forwards analysis Because information is pushed
+传播是所谓的向前分析，因为信息被推送
+
+3
+00:00:15,190 --> 00:00:19,910
+from the inputs to the outputs. So if you think about a control flow graph. What
+从输入到输出。所以如果你考虑一下控制流图。什么
+
+4
+00:00:19,910 --> 00:00:23,440
+happens in control flow analysis is that information flows in this direction.
+在控制流分析中发生的情况是信息在这个方向上流动。
+
+5
+00:00:23,440 --> 00:00:27,710
+It flows in the same direction as computation. If I have a constant up here
+它与计算方向相同。如果我这里有一个常量
+
+6
+00:00:27,710 --> 00:00:32,780
+x is assigned constant down here, and x is used later on and that constant will flow
+x在这里被赋值为常量，稍后使用x，该常量将会流动。
+
+7
+00:00:32,780 --> 00:00:38,019
+forward to the uses. Okay So information flows in the same direction as computation.
+展望未来的用途。好的，所以信息流动的方向和计算是一样的。
+
+8
+00:00:38,019 --> 00:00:42,569
+Liveness on the other hand is a backwards analysis. Information is pushed
+另一方面，活跃度是一种逆向分析。推送信息
+
+9
+00:00:42,569 --> 00:00:48,589
+from outputs back towards inputs. So here in this example and let me change
+从输出回到输入。所以在这个例子中，让我更改一下
+
+10
+00:00:48,589 --> 00:00:55,589
+colors. Here we see that x is live before the statement. And that liveness gets propagated
+颜色。这里我们看到x在语句之前是活动的。这种活跃度就会被传播
+
+11
+00:00:55,749 --> 00:00:59,709
+in the other direction. It gets propagated against the control, against the
+在另一个方向。它针对控件传播，针对
+
+12
+00:00:59,709 --> 00:01:06,709
+flow, of execution, backwards towards the beginning of the program.
+执行流程，向后向程序开始的方向流动。
+
+13
+00:01:07,109 --> 00:01:11,789
+So they're many other kinds of global flow analysis in the literature. The
+所以它们是文献中的许多其他类型的全球流动分析。这个
+
+14
+00:01:11,789 --> 00:01:15,579
+constant propagation analysis and the liveness analysis are two of the most important.
+恒定传播分析和活性分析是其中最重要的两个。
+
+15
+00:01:15,579 --> 00:01:18,049
+There is a number of others that are also very important and many, many
+还有一些其他的也非常重要，而且很多，很多
+
+16
+00:01:18,049 --> 00:01:22,469
+more that people have investigated. Almost all these analyses can be classified
+更多的是人们已经调查过的。几乎所有这些分析都可以归类
+
+17
+00:01:22,469 --> 00:01:25,950
+as either forward or backward. There are some analyses and some important
+不是向前就是向后。有一些分析和一些重要的
+
+18
+00:01:25,950 --> 00:01:30,380
+ones that are neither forward nor backward. That information is basically pushed
+既不向前也不向后的。这些信息基本上是推送的
+
+19
+00:01:30,380 --> 00:01:34,469
+in both directions. And the other thing is that the, almost all the analyses
+两个方向都有。另一件事是，几乎所有的分析
+
+20
+00:01:34,469 --> 00:01:38,729
+in the literature that do global flow analysis anyway also follow this methodology
+无论如何，在进行全局流分析的文献中也遵循这种方法
+
+21
+00:01:38,729 --> 00:01:43,619
+of local Rules that relay information between adjacent program points.
+在相邻节目点之间中继信息的本地规则。
+
+22
+00:01:43,619 --> 00:01:47,780
+So it, it's the local rules part that's important. So we break down the complicate
+所以，当地的规定才是最重要的。所以我们把复杂的
+
+23
+00:01:47,780 --> 00:01:52,219
+d problem of analyzing an entire control flow graph into a collection
+将整个控制流图分析为集合的三维问题
+
+24
+00:01:52,219 --> 00:01:55,939
+of rules that only do ver, propagate information very, very locally.
+这些规则只会非常非常本地地传播信息。
+

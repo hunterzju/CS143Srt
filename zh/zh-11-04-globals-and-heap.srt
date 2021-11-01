@@ -1,0 +1,405 @@
+0
+00:00:03,939 --> 00:00:08,460
+In this video, we are going to continue or discussion of run time organization by
+在本视频中，我们将通过以下方式继续或讨论运行时组织
+
+1
+00:00:08,460 --> 00:00:15,460
+talking about how compilers handle global variables and heap data structures. Let's
+谈论编译器如何处理全局变量和堆数据结构。我们走吧
+
+2
+00:00:17,390 --> 00:00:20,970
+start by talking about global variables. The basic properties of the global
+从讨论全局变量开始。全局的基本属性
+
+3
+00:00:20,970 --> 00:00:25,250
+variables that all the references point to the same object. That what it means to be
+所有引用都指向同一对象的变量。这就是它的意义所在
+
+4
+00:00:25,250 --> 00:00:30,730
+global And for this reason, we can't store all the variables in the activation record
+全局的，因此，我们不能存储激活记录中的所有变量
+
+5
+00:00:30,730 --> 00:00:34,530
+because the activation record if, of course, is the allocated. When the
+因为当然，如果激活记录是分配的。当
+
+6
+00:00:34,530 --> 00:00:39,989
+activation completes and that would be the allocated global variable. So. The way
+激活完成，这将是分配的全局变量。所以。这条路
+
+7
+00:00:39,989 --> 00:00:43,870
+that little variables are implemented is that all global are signed the fix address
+实现的小变量是所有全局变量都用固定地址签名
+
+8
+00:00:43,870 --> 00:00:48,350
+once And these variables with fixed addresses are said to be statically
+这些具有固定地址的变量称为静态变量
+
+9
+00:00:48,350 --> 00:00:52,859
+allocated because they're allocated essentially at compiled times. So the
+分配是因为它们基本上是在编译时分配的。因此，
+
+10
+00:00:52,859 --> 00:00:57,639
+compiler decides where they going to live and then they will live there in all
+编译器决定他们将住在哪里，然后他们将全部住在那里
+
+11
+00:00:57,639 --> 00:01:01,729
+executions of the program And depending on the language, there may be other
+程序的执行，根据语言的不同，可能还有其他
+
+12
+00:01:01,729 --> 00:01:07,040
+statically allocated values and we'll actually see some later on but they behave
+静态分配的值，我们稍后会看到一些，但它们的行为
+
+13
+00:01:07,040 --> 00:01:13,040
+just the same as global variables. So I think global variables changes our run
+就像全局变量一样。所以我认为全局变量改变了我们的运行
+
+14
+00:01:13,040 --> 00:01:18,130
+time organization picture a little bit. First we have the code as before, and
+有点时间组织图。首先，我们有和以前一样的代码，然后
+
+15
+00:01:18,130 --> 00:01:21,640
+then, immediately after the code is typically all of the static data. So these
+然后，紧跟在代码后面的通常是所有的静电数据。所以这些都是
+
+16
+00:01:21,640 --> 00:01:25,450
+are the global variables and other static object, things that have fixed addresses
+是全局变量和其他静电对象，都是有固定地址的东西
+
+17
+00:01:25,450 --> 00:01:30,460
+for the duration of the execution of the program and then the stack comes after
+在程序执行期间，然后堆栈在
+
+18
+00:01:30,460 --> 00:01:35,630
+that. So the stack will start at the end of the static data area and grow towards
+那。因此，堆栈将从静电数据区的末尾开始，并向
+
+19
+00:01:35,630 --> 00:01:42,630
+the end of the program's allocated memory. Trying out to the heat, any value that,
+程序分配的内存的末尾。在高温下试一试，任何值，
+
+20
+00:01:42,920 --> 00:01:47,260
+that outlives the procedure that creates it also cannot be stored in the activation
+它的存留时间超过创建它的过程，也不能存储在激活中
+
+21
+00:01:47,260 --> 00:01:50,890
+record. Let's take a look at this example. So here we have a procedure foo
+录音。让我们看一下这个例子。所以这里我们有一个过程foo
+
+22
+00:01:50,890 --> 00:01:56,150
+and let's take a look at the activation record or frame for foo. Now let's
+让我们来看看foo的激活记录或帧。现在让我们
+
+23
+00:01:56,150 --> 00:02:03,020
+say that a foo allocates a bar object and that we're going to store that object in
+假设foo分配了一个bar对象，我们将把该对象存储在
+
+24
+00:02:03,020 --> 00:02:08,039
+foo activation And now when this method returns, of course the activation record
+FOO激活，现在当此方法返回时，当然是激活记录
+
+25
+00:02:08,038 --> 00:02:12,660
+would be de-allocated so the bar obj ect will also go away but that won't work here
+将被取消分配，因此BAR对象也将消失，但这在这里不起作用
+
+26
+00:02:12,660 --> 00:02:17,620
+because notice that the dynamically allocated object - the object we allocated
+因为请注意动态分配的对象-我们分配的对象
+
+27
+00:02:17,620 --> 00:02:22,500
+during the execution of foo - is also the results of foo so this has to be, this has
+在执行foo的过程中-也是foo的结果，所以这必须是，这是
+
+28
+00:02:22,500 --> 00:02:29,500
+to be accessible to foo's caller. After [inaudible] exits And so what that means
+以便于Foo的呼叫者访问。在[听不见]出口之后，那是什么意思？
+
+29
+00:02:30,390 --> 00:02:34,800
+is that this borrow object and all dynamically allocated data has to be
+这个借用对象和所有动态分配的数据必须
+
+30
+00:02:34,800 --> 00:02:37,910
+stored some place other than the activation record and language is what
+存储激活记录和语言之外的其他位置是什么
+
+31
+00:02:37,910 --> 00:02:44,910
+dynamically allocated data generally use a heap for that purpose. At this
+为此，动态分配的数据通常使用堆。在这个时候
+
+32
+00:02:45,160 --> 00:02:48,780
+point, we can summarize the different kinds of data that the language of
+这一点，我们可以总结出语言的不同类型的数据
+
+33
+00:02:48,780 --> 00:02:54,260
+implementation has to deal with. First there is the code and in many languages, I
+实施必须处理。首先是代码，在许多语言中，我
+
+34
+00:02:54,260 --> 00:03:01,260
+shouldn't say most. In many languages. The code is fixed size and read only. I mean
+不应该说的最多。在许多语言中。代码是固定大小的，并且是只读的。我是说
+
+35
+00:03:01,880 --> 00:03:06,200
+that the compiler creates all the code that will be used in the execution of the
+编译器创建将在执行
+
+36
+00:03:06,200 --> 00:03:10,819
+program and that could be allocated once. It should say that there are many
+程序，并且可以分配一次。应该说有很多
+
+37
+00:03:10,819 --> 00:03:16,060
+languages also were this is not true and code can be dynamically created at one
+语言也认为这不是真的，代码可以一次动态创建
+
+38
+00:03:16,060 --> 00:03:23,060
+time. The static area. Would contain data with six addresses and this would be
+时间到了。静电地区。将包含具有六个地址的数据，这将是
+
+39
+00:03:23,060 --> 00:03:28,160
+things like global variables and this is also typically fixed size and it was maybe
+比如全局变量，这通常也是固定的大小，它可能
+
+40
+00:03:28,160 --> 00:03:34,020
+readable and writable as opposed to the code which I generally don't want to be
+可读性和可写性，而不是我通常不想要的代码
+
+41
+00:03:34,020 --> 00:03:39,340
+able to write. And then a stack is used to contain an activation record for each
+会写字。然后使用堆栈来包含每个对象的激活记录
+
+42
+00:03:39,340 --> 00:03:44,090
+currently active procedure and the activation record is generally fixed size
+当前活动过程和激活记录通常是固定大小
+
+43
+00:03:44,090 --> 00:03:47,489
+so each activation record for each particular kind of procedure has a fixed
+因此，每种特定类型过程的每个激活记录都有一个固定的
+
+44
+00:03:47,489 --> 00:03:50,770
+size and this will contain all the local information, the local variables
+大小，这将包含所有本地信息、本地变量
+
+45
+00:03:50,770 --> 00:03:55,760
+contemporaries that needed to execute a particular activation. And finally, the
+需要执行特定激活的同时代人。最后，
+
+46
+00:03:55,760 --> 00:04:00,930
+heap is for everything else. So the heap is just for all the data that doesn't fit
+堆是用来处理其他所有事情的。所以堆只适用于所有不适合的数据
+
+47
+00:04:00,930 --> 00:04:07,129
+into other categories. This includes all of the dynamically allocated data And if
+归入其他类别。这包括所有动态分配的数据，如果
+
+48
+00:04:07,129 --> 00:04:11,940
+you are familiar with C, then the heap in C is managed by the programmer using
+您熟悉C，然后C中的堆由程序员使用
+
+49
+00:04:11,940 --> 00:04:18,940
+[inaudible] in Java, you have new. For dynamically allocating data and then
+[听不见]在爪哇，你有了新的。用于动态分配数据，然后
+
+50
+00:04:19,940 --> 00:04:25,400
+garbage collection actually takes care of reclaiming data from the heap that is no
+垃圾收集实际上负责从堆中回收不为
+
+51
+00:04:25,400 --> 00:04:31,590
+longer used. Now many lang uage implementations use both the heap and the
+用得更久了。现在，许多语言实现同时使用堆和
+
+52
+00:04:31,590 --> 00:04:35,430
+stack and there is a little bit of an issue here because both the heap and the
+堆栈，这里有一个小问题，因为堆和
+
+53
+00:04:35,430 --> 00:04:40,470
+stack grow. And so we have to take care that they don't grow into each and step on
+堆栈增长。所以我们必须小心，不要让它们长到每一只脚上
+
+54
+00:04:40,470 --> 00:04:46,570
+each other's data And there is a very nice and simple solution to this and as a start
+每个人的数据，有一个非常好的和简单的解决方案，并作为一个开始
+
+55
+00:04:46,570 --> 00:04:50,280
+to heap and the stack at opposite ends of memory and let them grow towards each
+将堆和堆栈放在内存的相反两端，并让它们朝着各自的方向增长
+
+56
+00:04:50,280 --> 00:04:57,280
+other. So, let's take another look at our Runtime Organization picture And just for
+其他的。那么，让我们再看一看我们的运行时组织图，只是为了
+
+57
+00:04:59,080 --> 00:05:04,370
+review, first we have the code and then we have the static data. And then we have the
+回顾一下，首先我们有代码，然后我们有静电的数据。然后我们就有了
+
+58
+00:05:04,370 --> 00:05:11,370
+stack which grows towards in this case the high address allocated to the program And,
+在这种情况下朝着分配给程序的高地址增长的堆栈，
+
+59
+00:05:11,680 --> 00:05:15,840
+notice that the stack doesn't necessarily just grow as procedure three terms, stack
+请注意，堆栈并不一定像过程三项堆栈那样增长
+
+60
+00:05:15,840 --> 00:05:20,220
+will also shrink. So as the program runs the stack will get bigger or smaller
+也会缩小。因此，当程序运行时，堆栈将变得更大或更小
+
+61
+00:05:20,220 --> 00:05:25,460
+depending on how many procedures are currently running. And the heap will start
+取决于当前正在运行的过程数。然后堆将启动
+
+62
+00:05:25,460 --> 00:05:29,840
+at the other end of memory and grow towards the lower address and so we
+在内存的另一端，并朝着较低的地址增长，因此我们
+
+63
+00:05:29,840 --> 00:05:34,180
+allocate objects we'll be allocating from the back memory or the end of the memory
+分配我们将从后台内存或内存末尾分配的对象
+
+64
+00:05:34,180 --> 00:05:41,180
+allocated the program up towards the top of stack And If these two points have ever
+将程序分配到堆栈顶部，如果这两个点
+
+65
+00:05:41,630 --> 00:05:45,540
+become equal and whether the two pointers. So, we have a stack allocation pointer
+变得相等，以及这两个指针是否相等。因此，我们有一个堆栈分配指针
+
+66
+00:05:45,540 --> 00:05:49,710
+which says where we are going to allocate the next stack frame. And we have a heap
+这表明我们将在哪里分配下一个堆栈帧。我们有一堆
+
+67
+00:05:49,710 --> 00:05:54,530
+allocation point where it says where will allocate the next object if we have
+分配点，它告诉我们，如果有，将在哪里分配下一个对象
+
+68
+00:05:54,530 --> 00:05:58,020
+another dynamically allocated object. As long as one of these two pointers don't
+另一个动态分配的对象。只要这两个指针中的一个不
+
+69
+00:05:58,020 --> 00:06:03,100
+cross, as long as it never become equal then the program has memory to either add
+交叉，只要它永远不会变得相等，那么程序就有内存可以相加
+
+70
+00:06:03,100 --> 00:06:07,240
+another stack frame or another dynamically allocated object and the program can
+另一堆栈帧或另一动态分配的对象，并且该程序可以
+
+71
+00:06:07,240 --> 00:06:11,770
+continue away. If these programs ever become equal then the program is in fact
+继续走吧。如果这些程序曾经变得平等，那么程序实际上是
+
+72
+00:06:11,770 --> 00:06:17,650
+out of memory and at that point the run time system will abort the program or try
+内存不足，此时运行时系统将中止程序或尝试
+
+73
+00:06:17,650 --> 00:06:22,490
+to get more memory from the operating or take some other course of action to deal
+从操作中获得更多内存或采取其他措施来处理
+
+74
+00:06:22,490 --> 00:06:26,880
+with the fact. If there is no there is no more memory But as long as these two
+事实是。如果没有，就没有更多的内存，但只要这两个
+
+75
+00:06:26,880 --> 00:06:31,330
+pointers don't cross, notice that this design Allows the heap and the stack to
+指针不会交叉，请注意，此设计允许堆和堆栈
+
+76
+00:06:31,330 --> 00:06:38,330
+share this, this data area in whatever way suits the program best. So, this same
+以最适合程序的方式共享此数据区。所以，这也是一样的
+
+77
+00:06:39,199 --> 00:06:42,650
+design without any changes will work for programs that needed a lot of heap and
+无需任何更改的设计将适用于需要大量堆和
+
+78
+00:06:42,650 --> 00:06:47,190
+only a little stack and for programs that need a lot of stack and only a little heap
+只有很小的堆栈，对于需要很多堆栈和只需要很少堆的程序来说
+
+79
+00:06:47,190 --> 00:06:50,740
+and things will have a rough balance between stack and heap as long as they
+堆栈和堆之间的关系会大致平衡，只要它们
+
+80
+00:06:50,740 --> 00:06:53,629
+don't exceed the total memory allocated to the program.
+不要超过分配给程序的总内存。
+

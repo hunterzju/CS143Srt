@@ -1,0 +1,655 @@
+0
+00:00:03,879 --> 00:00:06,790
+In this video, we're gonna begin our discussion of parsing technology with
+在本视频中，我们将从以下内容开始讨论解析技术
+
+1
+00:00:06,790 --> 00:00:13,790
+context-free grammars. Now as we know, not all strings of tokens are actually valid
+上下文无关文法。现在我们知道，并不是所有的标记字符串都是有效的
+
+2
+00:00:15,920 --> 00:00:21,409
+programs and the parser has to tell the difference. It has to know which strings
+程序和解析器必须分辨出不同之处。它必须知道哪些字符串
+
+3
+00:00:21,409 --> 00:00:25,009
+of tokens are valid and which ones are invalid and give error messages for the
+的令牌是有效的，哪些是无效的，并给出
+
+4
+00:00:25,009 --> 00:00:29,769
+invalid ones. So, we need some way of describing the valid strings of tokens and
+无效的。因此，我们需要某种方式来描述有效的令牌字符串和
+
+5
+00:00:29,769 --> 00:00:33,660
+then some kind of algorithm for distinguishing the valid and invalid
+然后给出一种区分有效和无效的算法
+
+6
+00:00:33,660 --> 00:00:40,660
+strings of tokens from each other. Now we've also discussed that programming
+来自彼此的一串串代币。现在我们还讨论了编程
+
+7
+00:00:41,230 --> 00:00:46,090
+languages have a natural recursive structure, So for example in Cool, an
+语言有一种自然的递归结构，例如在Cool中，
+
+8
+00:00:46,090 --> 00:00:50,530
+expression That can be anyone of a very large number of things. So two of the
+可以是大量事物中的任何一个的表达式。所以有两个
+
+9
+00:00:50,530 --> 00:00:54,410
+things that can be are an if expression and a while expression but these
+可以是IF表达式和WHILE表达式，但这些
+
+10
+00:00:54,410 --> 00:00:59,050
+expressions are themselves recursively composed of other expressions. So for
+表达式本身由其他表达式递归组成。所以对于
+
+11
+00:00:59,050 --> 00:01:03,040
+example, the predicate of an if is a, a [inaudible] expression as is the then
+例如，IF的谓词是一个[听不见的]表达式，就像THEN一样
+
+12
+00:01:03,040 --> 00:01:09,579
+branch and the else branch and in a while loop the termination test is an expression
+分支和Else分支，在WHILE循环中，终止测试是一个表达式
+
+13
+00:01:09,579 --> 00:01:15,009
+and so is the loop body. And context-free grammars are in natural notation for
+循环体也是如此。而上下文无关文法是以自然符号表示的
+
+14
+00:01:15,009 --> 00:01:22,009
+describing such recursive structures. So within a context-free grammar so formally
+描述这种递归结构。所以在如此正式的上下文无关文法中
+
+15
+00:01:23,210 --> 00:01:30,210
+it consist a set of terminals t, a set of nonterminals n, a start symbol s and s is
+它由一组终端t、一组非终端n、开始符号s和s是
+
+16
+00:01:30,479 --> 00:01:36,170
+one of the nonterminals and a set of productions and what's a production? A
+其中一个非终端和一套产品，什么是产品？一个
+
+17
+00:01:36,170 --> 00:01:43,170
+production is a symbol followed by an arrow followed by a list of symbols. And
+产品是一个符号，后跟一个箭头和一个符号列表。和
+
+18
+00:01:44,039 --> 00:01:49,369
+these symbols, there are certain rules about them so the x thing on the left hand
+这些符号，有一定的规则，所以左手上的x
+
+19
+00:01:49,369 --> 00:01:53,479
+side of the arrow has to be a nonterminal. That's what it means to be on the left
+箭头的一侧必须是非终端。这就是站在左边的意义所在
+
+20
+00:01:53,479 --> 00:01:57,770
+hand side so the set of things on the left hand side of productions are exactly the
+所以产品左边的那组东西正好是
+
+21
+00:01:57,770 --> 00:02:03,359
+nonterminals. And then the right hand side every yi on the right hand side can be
+非终端。然后在右手边，右手边的每个彝族人都可以
+
+22
+00:02:03,359 --> 00:02:08,539
+either a nonterminal or it can be a terminal or it can be the special symbol
+可以是非终端，也可以是终端，也可以是特殊符号
+
+23
+00:02:08,538 --> 00:02:15,539
+epsilon. So let's do a simple example of a Context-free Grammar. Strings of balanced
+埃普西隆。让我们做一个上下文无关文法的简单例子。平衡字符串
+
+24
+00:02:18,360 --> 00:02:23,630
+parenthesis which we discussed in an earlier video can be expressed as follows.
+我们在前面的视频中讨论的括号可以表示如下。
+
+25
+00:02:23,630 --> 00:02:30,200
+So, we have our start symbol and. One possibility for a string o f balanced
+所以我们有我们的开始符号和。平衡字符串的一种可能性
+
+26
+00:02:30,200 --> 00:02:34,750
+parentheses is that it consists of an open paren on another string of balanced
+括号是由另一个平衡字符串上的左帕伦组成的
+
+27
+00:02:34,750 --> 00:02:39,780
+parentheses and a close paren. And, the other possibility for a string of balanced
+圆括号和接近的帕伦。而且，另一种可能性是一串平衡的
+
+28
+00:02:39,780 --> 00:02:44,000
+parentheses that is empty because the empty string is also a string of balanced
+括号为空，因为空字符串也是平衡的字符串
+
+29
+00:02:44,000 --> 00:02:49,290
+parentheses. So, there are two productions for this grammar and just to go over the
+括号。因此，这个语法有两个结果，我们来回顾一下
+
+30
+00:02:49,290 --> 00:02:55,760
+to, to relate this example to the formal definition we gave on the previous slide,
+为了把这个例子和我们在上一张幻灯片上给出的正式定义联系起来，
+
+31
+00:02:55,760 --> 00:03:02,760
+what is our set of nine terminals, it's just. The singles nonterminal s, what our
+我们的九个终端是什么，它只是。单打非终结者，我们的
+
+32
+00:03:04,280 --> 00:03:10,710
+terminal symbols in this context-free grammar is just open and close paren. No
+在这个上下文无关文法中，末尾符号只是打开和关闭Paren。不是的
+
+33
+00:03:10,710 --> 00:03:15,690
+other symbols. What's the start symbol? Well, it's s. It's the only nonterminal so
+其他符号。开始符号是什么？嗯，是s。这是唯一的非终点站
+
+34
+00:03:15,690 --> 00:03:20,900
+it has to be the start symbol but generally we will, when we give grammars
+它必须是开始符号，但通常情况下，当我们给出语法时，我们会这样做
+
+35
+00:03:20,900 --> 00:03:24,260
+the first production will name a start symbol so rather than name and explicitly
+第一个产品将这样命名一个开始符号，而不是明确地命名和
+
+36
+00:03:24,260 --> 00:03:28,960
+whichever production occurs first the symbol on the left hand side will be the
+无论哪个产品首先发生，左侧的符号都将是
+
+37
+00:03:28,960 --> 00:03:35,820
+nonterminal for that particular context-free grammar. And then finally,
+该特定上下文无关文法的非终止符。然后最后，
+
+38
+00:03:35,820 --> 00:03:39,340
+what are the productions with the, we said there could be a set of productions and
+有什么制作，我们说可以有一套制作，
+
+39
+00:03:39,340 --> 00:03:46,340
+here are the two productions for this particular Context-Free Grammar. Now,
+下面是这个特定的上下文无关文法的两个成果。现在,
+
+40
+00:03:47,510 --> 00:03:52,260
+productions can be read as rules. So, let's write down one of our productions
+产品可以理解为规则。那么，让我们写下我们的一部作品
+
+41
+00:03:52,260 --> 00:03:58,350
+from the from the example grammar and what does this mean? This means wherever we see
+根据示例语法，这是什么意思？这意味着无论我们在哪里看到
+
+42
+00:03:58,350 --> 00:04:05,100
+an s, we can replace it by the string of symbols on the right hand side. So,
+如果是s，我们可以用右手边的符号串替换它。所以,
+
+43
+00:04:05,100 --> 00:04:09,850
+Wherever I see an s I can substitute and I can take the s out. If that important, I
+只要我看到S，我就能买到替身，我就能把S带出去。如果这很重要，我
+
+44
+00:04:09,850 --> 00:04:14,780
+remove the s that appears on the left side and I replace it by the string of symbols
+删除出现在左侧的s，我将其替换为符号字符串
+
+45
+00:04:14,780 --> 00:04:18,569
+on the right hand side so productions can be read as replacement rule so right hand
+在右手边，所以乘积可以理解为替换规则，所以右手边
+
+46
+00:04:18,569 --> 00:04:25,370
+side replaces the left hand side. So here's a little more formal description of
+侧边替换左手边。所以这里有一个更正式的描述
+
+47
+00:04:25,370 --> 00:04:29,380
+that process. We begin with the string that has only the start symbol s, so we
+这个过程。我们从只有开始符号s的字符串开始，所以我们
+
+48
+00:04:29,380 --> 00:04:36,350
+always start with just the start symbol. And now, we look at our string initially
+始终仅以开始符号开头。现在，我们首先看一下我们的弦
+
+49
+00:04:36,350 --> 00:04:39,780
+it's just a start symbol but it changes overtime, and we can replace any
+这只是一个开始符号，但随着时间的推移它会改变，我们可以替换任何
+
+50
+00:04:39,780 --> 00:04:44,100
+non-terminal in the string by the right hand side, side of some production for
+非端子在串的右手边，边上有一些为生产用的
+
+51
+00:04:44,100 --> 00:04:48,250
+that non-terminal. So for exam ple, I can replace a non-terminal x by the right hand
+那个非终结者。例如，我可以用右手替换非终端x
+
+52
+00:04:48,250 --> 00:04:54,910
+side of some production for x. X in this case, x goes to y1 through yn. And then we
+在这种情况下，x等于y1到yn。然后我们
+
+53
+00:04:54,910 --> 00:04:59,520
+just repeat step two over and over again until there are no non-terminals left
+只需一遍又一遍地重复第二步，直到没有非终端
+
+54
+00:04:59,520 --> 00:05:05,370
+until the string consist of only terminals. And at that point, we're done.
+直到字符串仅由端子组成。在这一点上，我们就完了。
+
+55
+00:05:05,370 --> 00:05:11,040
+So, to write this out slightly more formally, a single step here consist of a
+因此，为了更正式地写出这一点，这里的单个步骤由一个
+
+56
+00:05:11,040 --> 00:05:16,690
+state which is a, which is a string of symbols, so this can be terminals and
+状态是a，这是一个符号字符串，所以这可以是终端和
+
+57
+00:05:16,690 --> 00:05:23,690
+non-terminals. And, somewhere in the string is a non-terminal x and there is a
+非终端。并且，字符串中的某个位置是非末尾x，并且有一个
+
+58
+00:05:24,030 --> 00:05:30,440
+production for x, in our grammar. So this is part of the grammar, okay? This is a
+在我们的语法中，x的乘积。所以这是语法的一部分，好吗？这是一个
+
+59
+00:05:30,440 --> 00:05:37,440
+production And we can use now production to take a step from, to a new state Where
+生产，我们可以利用现在的生产来迈出一步，从一个新的状态，到一个新的状态，
+
+60
+00:05:42,700 --> 00:05:49,700
+we have replaced X by the right hand side of the production, Okay? So this is one
+我们已经用制作的右手边取代了X，好吗？所以这是一个
+
+61
+00:05:53,440 --> 00:06:00,440
+step of a context-free derivation. So now if you wanted to do multiple steps, we
+上下文无关派生的步骤。所以现在如果你想做多个步骤，我们
+
+62
+00:06:03,880 --> 00:06:10,580
+could have a bunch of steps, alpha zero goes to alpha one goes to alpha two and
+可能有一堆步骤，阿尔法0到阿尔法1，阿尔法2，然后
+
+63
+00:06:10,580 --> 00:06:15,690
+these are strings now. Alpha i's are all strings and as we go along we eventually
+现在这些都是弦了。阿尔法i都是弦，当我们前进的时候，我们最终
+
+64
+00:06:15,690 --> 00:06:22,690
+get to some strong alpha n, alright. And then we say that alpha zero rewrites in
+找一个强壮的阿尔法n，好的。然后我们说阿尔法零重写
+
+65
+00:06:22,840 --> 00:06:28,930
+zero or more steps to alpha n so this means n zero, greater than or equal to
+零个或多个步长到αn，因此这意味着n为零，大于或等于
+
+66
+00:06:28,930 --> 00:06:35,110
+zero steps. Okay. So this is just a short hand for saying there is some sequence of
+零步法。好吧。所以这只是一种速记，意思是说有一些序列
+
+67
+00:06:35,110 --> 00:06:40,070
+individual productions. Individual rules being applied to a string that gets us
+个人作品。将单独的规则应用于一个字符串，该字符串使我们
+
+68
+00:06:40,070 --> 00:06:43,960
+from the string alpha string zero to the string alpha n and remember that in
+从字符串alpha string 0到字符串alpha n，并记住在
+
+69
+00:06:43,960 --> 00:06:47,240
+general we start with just the start symbol and so we have a whole bunch of
+一般说来，我们从开始符号开始，所以我们有一大堆
+
+70
+00:06:47,240 --> 00:06:54,240
+sequence of steps like this that get us from start symbol to some other string. So
+像这样的一系列步骤，让我们从开始符号转到其他字符串。所以
+
+71
+00:06:56,270 --> 00:07:01,510
+finally, we can define the language of a Context-Free Grammar. So, [inaudible]
+最后，我们可以定义上下文无关文法的语言。所以，[听不见]
+
+72
+00:07:01,510 --> 00:07:06,229
+context-free grammar has a start symbol s, so then the language of the context-free
+上下文无关文法有一个起始符号s，因此语言的上下文无关性
+
+73
+00:07:06,229 --> 00:07:12,160
+grammar is gonna be the string of symbols alpha one through alpha n such that for
+语法将是从alpha1到alphan的符号串，这样对于
+
+74
+00:07:12,160 --> 00:07:19,070
+all i. Alpha i is an element of the terminals of g, okay. So t here is the set
+所有的i，αi都是g的终结点的一个元素，好的。那么，这就是布景。
+
+75
+00:07:19,070 --> 00:07:26,070
+of terminals of g and s goes, the start symbol s goes in zero or more steps to
+在g和s的端子中，开始符号s在零个或多个步骤中到达
+
+76
+00:07:27,010 --> 00:07:33,680
+alpha one, I'm sorry a1 to an, okay. And so we're just saying, this is just saying
+阿尔法一号，对不起，A1呼叫A，好的。所以我们只是在说，这只是在说
+
+77
+00:07:33,680 --> 00:07:37,910
+that all the strings of terminals that I can derive beginning with just the start
+我可以派生的所有终端字符串都从开头开始
+
+78
+00:07:37,910 --> 00:07:44,910
+symbol, those are the strings in the language. So the name terminal comes from
+符号，这些是语言中的字符串。所以终端这个名字来源于
+
+79
+00:07:46,360 --> 00:07:49,759
+the fact that once terminals are included in the string, there is no rule of
+事实上，一旦字符串中包括了终端，就没有规则
+
+80
+00:07:49,759 --> 00:07:54,610
+replacing them. That is once the terminal is generated, it's a permanent feature of
+替换它们。也就是说，一旦终端生成，它就是
+
+81
+00:07:54,610 --> 00:07:58,770
+the string and in applications to programming languages and context-free
+字符串和在应用程序中的编程语言和上下文无关
+
+82
+00:07:58,770 --> 00:08:03,919
+grammars, the terminals are to be the tokens of the language that we are
+语法，终端将成为我们所在语言的标志
+
+83
+00:08:03,919 --> 00:08:09,900
+modeling with our context-free grammar. With that in mind, let's try the
+用我们的上下文无关文法建模。考虑到这一点，让我们尝试一下
+
+84
+00:08:09,900 --> 00:08:14,509
+context-free grammar for a fragment of [inaudible]. So, [inaudible] expressions,
+[听不见]片段的上下文无关文法。所以，[听不见]表情，
+
+85
+00:08:14,509 --> 00:08:18,850
+we talked about these earlier, but one possibility for a [inaudible] expression
+我们早些时候谈过这些，但有一种可能是[听不见的]表情
+
+86
+00:08:18,850 --> 00:08:25,850
+is that it's an if statement or an if expression. And, we call that [inaudible]
+它是if语句还是if表达式。我们称之为[听不见]
+
+87
+00:08:28,180 --> 00:08:35,180
+if statements have three parts. And they end with the keyword [inaudible] which is
+IF语句由三部分组成。它们以关键字[听不见]结束，该关键字是
+
+88
+00:08:36,270 --> 00:08:42,120
+a little bit unusual. And so looking at this looking at this particular rule, we
+有点不寻常。所以看看这个，看看这条特殊的规则，我们
+
+89
+00:08:42,120 --> 00:08:45,870
+can see some conventions that way, that are pretty standard and that we'll use so
+我可以这样看一些约定，它们是非常标准的，我们将使用
+
+90
+00:08:45,870 --> 00:08:50,210
+that non-terminals are in all caps. Okay, so in this case was just [inaudible] we'll
+非终结符都是大写的。好的，所以在这种情况下我们只是[听不见]
+
+91
+00:08:50,210 --> 00:08:56,960
+try that in caps and then the terminal symbols are in, in lower case, all right?
+试着用大写字母写，然后终端符号就是小写的，好吗？
+
+92
+00:08:56,960 --> 00:09:03,960
+And another possibility Is that it could be a while expression. And finally the
+另一种可能性是，它可能是一个While表达式。最后是
+
+93
+00:09:12,790 --> 00:09:19,790
+last possibility Is that it could be identifier id and there actually many,
+最后一种可能性是它可以是标识符ID并且实际上有许多，
+
+94
+00:09:20,050 --> 00:09:26,020
+many more possibilities and lots of other cases for expressions and let me just show
+表达式有更多的可能性和更多的其他情况，让我来展示一下
+
+95
+00:09:26,020 --> 00:09:32,260
+you one bit of notation to make things look a little bit nicer. So we have many
+你只要做一点记号，就能让东西看起来好一点。所以我们有很多
+
+96
+00:09:32,260 --> 00:09:36,270
+we have many productions for the same non-terminal. We usually group those
+我们有很多同一种非终端机的产品。我们通常把那些
+
+97
+00:09:36,270 --> 00:09:41,120
+together in the grammar and we only write a non-terminal on the right hand side once
+一起在语法中使用，我们只在右边写一次非终结符
+
+98
+00:09:41,120 --> 00:09:45,450
+and then we write explicit alternative. So this is actually. Completely the same as
+然后我们写出显式的替代方案。所以这实际上是。完全相同于
+
+99
+00:09:45,450 --> 00:09:50,750
+writing out expert arrow two more times but we here we just is, this is just a way
+又写了两次专家箭头，但是我们在这里我们只是，这只是一种方式
+
+100
+00:09:50,750 --> 00:09:54,350
+of grouping these three productions together and saying that expr- is the
+将这三部作品组合在一起，并说Expr-是
+
+101
+00:09:54,350 --> 00:10:00,810
+non-terminal for all three right hand sides. Let's take a look at some of the
+所有三个右手边均为非终端。让我们来看看一些
+
+102
+00:10:00,810 --> 00:10:04,880
+strings on the language of this Context- Free Grammar. So, a valid Kuhl expression
+此上下文无关文法的语言上的字符串。因此，有效的Kuhl表达式
+
+103
+00:10:04,880 --> 00:10:09,790
+is just a single identifier and that's easy to see because EXPR is our start
+只有一个标识符，这很容易看到，因为expr是我们的起点
+
+104
+00:10:09,790 --> 00:10:14,029
+symbol, I'll call it EXPR. And, so the production it does says it goes to id. So
+符号，我称它为Expr。所以，它的制作说明它是给id的。所以
+
+105
+00:10:14,029 --> 00:10:17,540
+I can take the start symbol directly to a string of terminals, a single variable
+我可以将开始符号直接带到一个终端字符串，即单个变量
+
+106
+00:10:17,540 --> 00:10:24,540
+name is a valid Kuhl expression. Another example is an e-th expression where e-th
+名称是有效的Kuhl表达式。另一个示例是第e个表达式，其中e-
+
+107
+00:10:24,790 --> 00:10:30,550
+of the subexpressions is just a variable name. So this is perfectly fine structure
+子表达式的名称只是一个变量名。所以这是一个完美的结构
+
+108
+00:10:30,550 --> 00:10:35,810
+for a Kuhl expression. Similarly I can do the same thing with the while expression.
+用于Kuhl表达式。类似地，我可以使用WHILE表达式做同样的事情。
+
+109
+00:10:35,810 --> 00:10:40,330
+I can take the structure of a while and then replace each of the subexpressions
+我可以采用While的结构，然后替换每个子表达式
+
+110
+00:10:40,330 --> 00:10:45,649
+just with a single variable name and that would be a syntactically valid cool while
+只有一个变量名，这在语法上是有效的
+
+111
+00:10:45,649 --> 00:10:51,420
+loop. There are more complicated expressions so for example, here we have a
+循环。还有更复杂的表达式，例如，这里有一个
+
+112
+00:10:51,420 --> 00:10:54,930
+why loop as the predicate of an if expression. That's something you might
+WHINE循环作为IF表达式的谓词。这是你可能会做的事
+
+113
+00:10:54,930 --> 00:10:59,810
+normally think or writing but perfectly well form and tactically. Similarly, I
+正常的思考或写作，但形式和战术都很好。同样，我
+
+114
+00:10:59,810 --> 00:11:04,380
+could have an if statement or an if expression as the predicate of and if it's
+可以使用IF语句或IF表达式作为AND的谓词，如果
+
+115
+00:11:04,380 --> 00:11:09,610
+inside of an if expression. So, so nested if expressions like this one are also
+IF表达式内部。所以，如果像这样的表达式也是嵌套的
+
+116
+00:11:09,610 --> 00:11:16,610
+syntactically valid. Let's do another grammar, this time for simple arithmetic
+句法上有效。让我们来做另一个语法，这一次是简单的算术
+
+117
+00:11:18,180 --> 00:11:21,790
+expressions. So, we'll have our start symbol and only non-terminal for this
+表情。因此，我们将有我们的开始符号，并且这是唯一的非终止符号
+
+118
+00:11:21,790 --> 00:11:27,390
+grammar be called e and one of the possibilities while e could be the sum of
+语法称为e，这是一种可能性，而e可以是
+
+119
+00:11:27,390 --> 00:11:32,330
+expressions. Or and remember this is an alternative notation for e arrow. It's
+表情。或者记住，这是e箭头的另一种表示法。它是
+
+120
+00:11:32,330 --> 00:11:36,920
+just a way of saying I'm going to use the nonterminal for another production. We can
+这只是一种说法，我要用非终端来制作另一部作品。我们可以的
+
+121
+00:11:36,920 --> 00:11:40,480
+have a sum of two expressions or we could have the Multiplication of two
+有两个表达式的和，或者我们可以有两个表达式的乘法
+
+122
+00:11:40,480 --> 00:11:44,580
+expressions. And then we could have expressions that appear inside the
+表情。然后我们可以让表达式出现在
+
+123
+00:11:44,580 --> 00:11:48,800
+parentheses, so parenthesized expressions. And just to keep things simple, we could
+括号，所以用括号括起表达式。为了简单起见，我们可以
+
+124
+00:11:48,800 --> 00:11:54,540
+just have as our base, only base case simple identifier so variable names. And
+只是有了我们的基础，才有了基础简单的标识符这样的变量名。和
+
+125
+00:11:54,540 --> 00:12:01,540
+here's a small grammar over plus and times to see and in parentheses and variable
+下面是一个关于加号和乘法的小语法，可以在括号和变量中查看
+
+126
+00:12:01,550 --> 00:12:06,240
+names. [inaudible] a few elements of this language. So for example, a single
+名字。[听不见]这种语言的一些元素。举个例子，一个单一的
+
+127
+00:12:06,240 --> 00:12:13,240
+variable name is a perfectly good element of the language id + id is also in this
+变量名是语言id+id的完美元素
+
+128
+00:12:14,720 --> 00:12:21,720
+language. Which s is id + id id and we could also use parens to group things so
+语言。哪个s是id+id id，我们也可以使用括号来分组，这样
+
+129
+00:12:24,430 --> 00:12:31,200
+we could say id + id id that's also something you can generate using these
+我们可以说id+id id，这也是您可以使用这些
+
+130
+00:12:31,200 --> 00:12:35,560
+rules and so on and so forth. There are many, many more strings in this language.
+规则等等。在这种语言中有很多很多的字符串。
+

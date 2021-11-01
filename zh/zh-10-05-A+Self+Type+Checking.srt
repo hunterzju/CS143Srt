@@ -1,0 +1,435 @@
+0
+00:00:03,919 --> 00:00:07,259
+In this video we are going to use what we have learned so far about self-type to
+在这段视频中，我们将使用我们目前所学到的关于自我类型的知识来
+
+1
+00:00:07,259 --> 00:00:13,970
+incorporate the self-type into the type checking rules for Cool. First let's
+将自类型合并到Cool的类型检查规则中。首先让我们
+
+2
+00:00:13,970 --> 00:00:18,429
+remind ourselves what the type checking rules for Cool actually prove. So the
+提醒我们Cool的类型检查规则实际上证明了什么。因此，
+
+3
+00:00:18,429 --> 00:00:23,570
+sentences in the type logic look like this, and they prove things are the form
+类型逻辑中的句子看起来是这样的，它们证明了事物就是
+
+4
+00:00:23,570 --> 00:00:28,410
+that some expression has some type, and they do that under the assumption that
+一些表达式有某种类型，他们这样做是在假设
+
+5
+00:00:28,410 --> 00:00:34,120
+object identifiers have some types given by O, methods have signatures given by M,
+对象标识符有一些由O给出的类型，方法有由M给出的签名，
+
+6
+00:00:34,120 --> 00:00:37,989
+and the enclosing class, the current class in which E sits, in, in which we are doing
+而封闭的类，也就是E所在的当前类，也就是我们正在做的
+
+7
+00:00:37,989 --> 00:00:43,889
+our type checking, is class C. And the whole reason for this additional piece
+我们的类型检查是C类，而这个附加部分的全部原因是
+
+8
+00:00:43,889 --> 00:00:48,620
+here we haven't actually discussed this before why we needed this C. It is because
+在这里，我们实际上没有讨论过为什么我们需要这个C。这是因为
+
+9
+00:00:48,620 --> 00:00:54,510
+self-types meaning depends on the enclosing class. So if you recall we.
+自我类型的意义取决于所包围的班级。所以如果你还记得我们。
+
+10
+00:00:54,510 --> 00:01:01,510
+Introduce this notation, self type sub C to record and what class a particular
+介绍这个符号，自己类型子C来记录，以及一个特定的类是什么
+
+11
+00:01:01,709 --> 00:01:06,490
+occurrence of self-type sits. And this C in the environment is exactly that
+自体式坐姿的发生。环境中的这个C就是
+
+12
+00:01:06,490 --> 00:01:09,909
+subscript, it is tracking what class we are in. So when we see occurrences, an
+下标，它在跟踪我们所在的班级。所以当我们看到事件发生时，一个
+
+13
+00:01:09,909 --> 00:01:16,909
+occurrence of self-type we know what kind of self-type. We're talking about so now
+自我类型的发生我们知道什么样的自我类型。我们现在谈论的是
+
+14
+00:01:16,909 --> 00:01:21,640
+I'm ready to actually give the type rules that use self-type. And for the most part,
+我已经准备好实际给出使用self类型的类型规则。在很大程度上，
+
+15
+00:01:21,640 --> 00:01:26,859
+this is really easy, because the rules just remain the same. That is, they look
+这真的很容易，因为规则只是保持不变。也就是说，他们看起来
+
+16
+00:01:26,859 --> 00:01:30,679
+the same, but they're actually a little bit different, because they use the new
+相同，但实际上有一点不同，因为它们使用新的
+
+17
+00:01:30,679 --> 00:01:34,869
+sub typing and least upper bound operations that we defined before. So for
+前面定义的子类型和最小上界操作。所以对于
+
+18
+00:01:34,869 --> 00:01:40,710
+example, here is the rule for assignment, and this looks identical to the rule for
+例如，下面是赋值规则，它看起来与
+
+19
+00:01:40,710 --> 00:01:46,979
+assignment that we discussed several videos ago. But notice that this use of
+我们在几个视频之前讨论过的作业。但请注意，这种使用
+
+20
+00:01:46,979 --> 00:01:51,670
+sub-typing here is now the extended definition of sub-typing to incorporate
+这里的子类型现在是子类型的扩展定义，
+
+21
+00:01:51,670 --> 00:01:56,020
+self-type. So now this rule works with self-type as well as with the normal class
+自我类型。现在这条规则既适用于Self类型，也适用于Normal类
+
+22
+00:01:56,020 --> 00:02:02,319
+names. Now there are some rules that have change in the presents of self-type. And
+名字。现在有一些规则在自我类型的呈现上有了变化。和
+
+23
+00:02:02,319 --> 00:02:07,630
+in particular the dispatch rules need to be updated. So here is the old rule for
+具体地说，需要更新派单规则。所以这是一个古老的规则
+
+24
+00:02:07,630 --> 00:02:13,340
+dynamic dispatch. And this rule, this part of the rule, actually doesn't change. It
+动态调度。这条规则，规则的这一部分，实际上是不变的。它
+
+25
+00:02:13,340 --> 00:02:17,010
+stays the same. But, I just wanna point out the essential restriction in this
+保持不变。但是，我只想指出这一点的本质限制
+
+26
+00:02:17,010 --> 00:02:21,610
+rule, is that the return type of the method could not be self-type. And that's
+规则是该方法的返回类型不能为自类型。那就是
+
+27
+00:02:21,610 --> 00:02:25,180
+actually the place where self-type buys us something. So the whole purpose of having
+实际上，自我型给我们买东西的地方。所以我们要做的就是
+
+28
+00:02:25,180 --> 00:02:29,480
+self-type is to have methods who's return type is self-type. Because that's were we
+Self类型是指具有返回类型为Self类型的方法。因为那就是我们
+
+29
+00:02:29,480 --> 00:02:35,780
+actually get the extra expressive power. And know we have to consider the case, now
+实际上获得了额外的表现力。并且知道我们现在必须考虑这个案子
+
+30
+00:02:35,780 --> 00:02:39,629
+that we have self typing we done all this work, what if the methods return type is
+我们有自己的类型，我们完成了所有这些工作，如果方法返回的类型是
+
+31
+00:02:39,629 --> 00:02:44,909
+self type. How are we going to type check that? Well here's the rule. So as usual,
+自我类型。我们要怎么打字检查一下？嗯，规则是这样的。所以像往常一样，
+
+32
+00:02:44,909 --> 00:02:50,140
+we type check the. The expression that we're dispatching to that's E zero and all
+我们键入check。我们要分派给它的表达式是E0和All
+
+33
+00:02:50,140 --> 00:02:53,420
+of the argument and we just get their type. And their just type checked in the
+而我们只是得到了他们的类型。并且他们刚刚的类型签入了
+
+34
+00:02:53,420 --> 00:02:59,349
+same environmental as the entire expression. And now just like before we
+与整个表达式的环境相同。现在，就像以前一样，我们
+
+35
+00:02:59,349 --> 00:03:06,349
+look up in class T0 the type of E0, the method F and we get its signature. Okay.
+在类T0中查找E0的类型，方法F，我们就得到了它的签名。好吧。
+
+36
+00:03:07,010 --> 00:03:10,610
+And then we have to check that the arguments conform. That every actual
+然后我们必须检查论点是否一致。每一个实际的
+
+37
+00:03:10,610 --> 00:03:15,060
+argument, E1 through En, has a type that's compatible with the corresponding formal
+参数e1到en的类型与相应的形式
+
+38
+00:03:15,060 --> 00:03:20,430
+parameter in the method signature. And if all of that works out, then we can say
+方法签名中的参数。如果所有这些都成功了，那么我们可以说
+
+39
+00:03:20,430 --> 00:03:26,409
+that this dispatch is going to have type, oh look, T0. So where did that come from?
+这个调度的类型是，哦，看，T0。那这是从哪里来的呢？
+
+40
+00:03:26,409 --> 00:03:32,689
+Well, the return type is self-type. And so the result of this entire dispatch is
+嗯，返回类型是Self类型。所以整个调度的结果是
+
+41
+00:03:32,689 --> 00:03:36,930
+going to be the type of whatever e zero was. E zero is the self-parameter.
+将会是类似于eZero的类型。E零是自参数。
+
+42
+00:03:36,930 --> 00:03:43,689
+Whatever type we got for e zero, that is a sound static type for the result of the
+不管我们得到的是什么类型的eZero，这都是一个声音静电类型，它的结果是
+
+43
+00:03:43,689 --> 00:03:50,689
+entire expression. So we simply use the type of e zero as the type of the entire,
+整个表达式。所以我们简单地使用e0的类型作为整体的类型，
+
+44
+00:03:51,060 --> 00:03:58,060
+static, the entire dynamic dispatch. Now recall the full parameters of a function
+静电，整个动态调度。现在回想一下函数的完整参数
+
+45
+00:03:59,200 --> 00:04:04,319
+cannot have type self type, but the actual arguments can have type self type, and the
+不能具有类型Self类型，但实际参数可以具有类型Self类型，并且
+
+46
+00:04:04,319 --> 00:04:08,930
+extended sub typing relationship will handle that case just fine. One
+扩展子类型关系将很好地处理这种情况。一
+
+47
+00:04:08,930 --> 00:04:13,260
+interesting detail is that the dispatch expression itself could have a type,
+有趣的细节是调度表达式本身可以有一个类型，
+
+48
+00:04:13,260 --> 00:04:20,260
+self-type. And, so what do I mean by that, well, let's think about E zero.
+自我类型。那么，我这么说是什么意思，让我们考虑一下E0。
+
+49
+00:04:22,450 --> 00:04:26,880
+Dispatching to method F, and then what happens if E zero has type self type? What
+调度到方法F，然后如果E0具有类型Self类型，会发生什么情况？什么
+
+50
+00:04:26,880 --> 00:04:33,190
+if we can prove that E zero has type self type. And the problem here is that we need
+如果我们能证明E0有自型。这里的问题是我们需要
+
+51
+00:04:33,190 --> 00:04:39,150
+to lo okay up, in the, in the M environment, in the method environment, in
+往上看，在M环境中，在方法环境中，在
+
+52
+00:04:39,150 --> 00:04:44,640
+some class. The definition of or the signature of method F/, we have to get
+一些阶级。方法F/的定义或签名，我们必须得到
+
+53
+00:04:44,640 --> 00:04:49,650
+back that type signature so we can do the rest of that type checking. And if E0 has
+返回该类型签名，以便我们可以进行该类型检查的睡觉。如果E0有
+
+54
+00:04:49,650 --> 00:04:53,630
+type soft type normally we use the type of E0 to do that, to do that look up. What
+通常我们使用E0的类型来做这件事，为了做那个查找。什么
+
+55
+00:04:53,630 --> 00:04:59,470
+type do we use here? Well, if this whole thing is occurring in class C. If we have,
+我们在这里使用的类型是什么？如果整件事都发生在C班如果我们有，
+
+56
+00:04:59,470 --> 00:05:05,510
+if we're type checking in class C. >> You just put the line there. >> And it's safe
+如果我们在类C中进行类型检查，您只需将行放在那里即可。>>而且很安全
+
+57
+00:05:05,510 --> 00:05:11,190
+and this is a soft type sub c and as always it's safe to replace soft type sub
+这是软类型SUB c，和往常一样，替换软类型SUB是安全的
+
+58
+00:05:11,190 --> 00:05:17,700
+c by c. So, we'll just use the class c there. The correct class that we are type
+乘以，所以我们在那里只使用类。我们键入的正确类
+
+59
+00:05:17,700 --> 00:05:24,700
+checking in to look up the method name test. We have to make similar changes to
+签入以查找方法名测试。我们必须做出类似的改变
+
+60
+00:05:25,760 --> 00:05:30,130
+the rules for static dispatch. So, here is the original rule for the static dispatch
+静电派单的规则。因此，这是静电派遣的原始规则
+
+61
+00:05:30,130 --> 00:05:34,050
+and... And again, this part of the rule will not change. Uh... This... This
+而且..。再说一次，规则的这一部分不会改变。呃..。这个。这
+
+62
+00:05:34,050 --> 00:05:41,050
+handles the case, where the return type of the method is not the self-type. But if
+处理方法的返回类型不是Self类型的情况。但是如果
+
+63
+00:05:41,710 --> 00:05:44,850
+the return type of the method is self-typed, then the rule looks a little
+该方法的返回类型是自类型的，那么规则看起来有点
+
+64
+00:05:44,850 --> 00:05:50,300
+bit different. So, we, once again we type check, the, expression that we're
+有点不一样。所以，我们，我们再一次键入check，我们正在
+
+65
+00:05:50,300 --> 00:05:54,650
+dispatching to and all the arguments in the same environment as that of the entire
+将所有参数调度到与整个
+
+66
+00:05:54,650 --> 00:06:00,240
+expression. We have to check that the class we're dispatching to, the type t
+表达式。我们必须检查我们要调度到的类、类型t
+
+67
+00:06:00,240 --> 00:06:06,770
+zero, is a sub type of the class, named in the static dispatch. We have to look up
+零，是类的子类型，在静电调度中命名。我们得往上看
+
+68
+00:06:06,770 --> 00:06:11,050
+the method. It has to exist in that class that we're statically dispatching to. So
+该方法。它必须存在于我们静态调度到的那个类中。所以
+
+69
+00:06:11,050 --> 00:06:15,560
+we have to look up in class T, the method F and get its signature. And then we have
+我们必须在类T中查找方法F，并获得它的签名。然后我们就有了
+
+70
+00:06:15,560 --> 00:06:20,180
+to check that the actual arguments conform to the formal parameters of their types.
+检查实际参数是否与其类型的形参一致。
+
+71
+00:06:20,180 --> 00:06:24,000
+If the types of the arguments match the types, the declared types of the formal
+如果参数的类型与类型匹配，则正式
+
+72
+00:06:24,000 --> 00:06:28,800
+parameters. And then, the only thing that's kind of curious about this rule, is
+参数。然后，这条规则唯一让人好奇的是
+
+73
+00:06:28,800 --> 00:06:35,800
+that the result type here is, again, T zero. And, why is that right? It could
+这里的结果类型也是T0。那么，为什么会这样呢？它可能会
+
+74
+00:06:36,270 --> 00:06:41,460
+have been a, a T. It could have been the type to which we statically dispatched.
+已经是一个，一个T。它可能是我们静态调度到的那种类型。
+
+75
+00:06:41,460 --> 00:06:46,340
+And it's not because self-type is the type of the self-parameter. And even though
+这并不是因为自我类型是自我参数的类型。即使是这样
+
+76
+00:06:46,340 --> 00:06:51,960
+we're dispatching to a method in class T , the self-parameter still has type T0. And
+我们正在调度到类T中的一个方法，自参数的类型仍然是T0。和
+
+77
+00:06:51,960 --> 00:06:56,970
+recall that T0 is a subtype of T. So we use the static dispatch to reach a method
+回想一下，T0是T的子类型，因此我们使用静电调度来到达一个方法
+
+78
+00:06:56,970 --> 00:07:01,740
+definition that's hidden potentially by overwrite, overwritten methods, in the
+定义可能被重写、重写的方法隐藏在
+
+79
+00:07:01,740 --> 00:07:04,810
+subclasses. But that doesn't change the type of the self-parameter. The
+子类。但这不会改变自参数的类型。这个
+
+80
+00:07:04,810 --> 00:07:09,310
+self-parameter still has type T0 even though we're running a method. Of the, in
+即使我们正在运行一个方法，自参数仍然具有类型T0。的，在
+
+81
+00:07:09,310 --> 00:07:16,310
+a superclass of G,0. There two new rules for self- type. One involves the
+G的一个超类，0。关于自我类型有两条新规则。一个涉及到
+
+82
+00:07:16,680 --> 00:07:21,640
+self-object. So, the self-object has type self-type sub-C. And notice this is one of
+自我客体。因此，自我对象的类型为自身类型子C。请注意，这是其中一个
+
+83
+00:07:21,640 --> 00:07:25,370
+those places where we need to know the enclosing class. So, we know what kind of
+那些我们需要知道其所属班级的地方。所以我们知道是什么样的
+
+84
+00:07:25,370 --> 00:07:30,220
+self-type we're referring to. And similarly there's a rule for allocating
+我们指的是自我类型。类似地，也有一条分配规则
+
+85
+00:07:30,220 --> 00:07:34,780
+something of type self-type. So, a, the expression new self-type also produces
+自我类型的东西。所以，第一，表达新的自我类型也会产生
+
+86
+00:07:34,780 --> 00:07:36,900
+something of type self-type sub-C.
+自体型的东西，分C型的。
+

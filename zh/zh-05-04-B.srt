@@ -1,0 +1,570 @@
+0
+00:00:01,819 --> 00:00:06,590
+Now there are several ways to eliminate ambiguity from a grammar and the most direct
+现在有几种方法可以从语法上消除歧义，而最直接的方法
+
+1
+00:00:06,590 --> 00:00:10,099
+method which we'll talk about first is just to rewrite the grammar so it's an
+我们将首先讨论的方法只是重写语法，因此它是一个
+
+2
+00:00:10,099 --> 00:00:14,579
+ambiguous. That is to write a new grammar that generates the same language as the old
+模棱两可。也就是说，编写一个生成与旧语法相同的语言的新语法
+
+3
+00:00:14,579 --> 00:00:21,470
+grammar but it only has a single Parse tree for each string. So here's a, a rewrite
+语法，但是它对每个字符串只有一个解析树。所以这是一个重写
+
+4
+00:00:21,470 --> 00:00:25,130
+of the grammar we've been looking at and let's write down our favorite input
+我们一直在看的语法，让我们写下我们最喜欢的输入
+
+5
+00:00:25,130 --> 00:00:32,130
+string one more time, id id + id. And let's look at how that string will be parsed
+再来一次字符串，id id+id。让我们看看该字符串将如何解析
+
+6
+00:00:35,489 --> 00:00:39,960
+according to this new grammar so it begin with the start symbol e and now notice
+根据这个新语法，它以开始符号e开始，现在请注意
+
+7
+00:00:39,960 --> 00:00:44,739
+that e can no longer generate a plus or a times. In fact we separated the
+e不能再生成加号或乘以。事实上，我们将
+
+8
+00:00:44,739 --> 00:00:51,020
+grammar now into two sets of productions, two nonterminals and e controls the generation
+语法现在分为两组产生式、两个非终结式和e控制式生成
+
+9
+00:00:51,020 --> 00:00:57,660
+of plus and e prime controls the generation of multiplications, okay. And
+加和e的质数控制乘法的产生，好的。和
+
+10
+00:00:57,660 --> 00:01:04,660
+so in originally of + we have to use the production e prime + e. There is no other
+所以在原来的<foreign language=“English”>of</foreign>中，我们必须使用乘积e‘+e，没有其他的。
+
+11
+00:01:05,710 --> 00:01:11,500
+way to do it. And now if we look at e prime, what can e prime do? Well, e prime
+干得好。现在如果我们看看e，能做什么呢？嗯，e素数
+
+12
+00:01:11,500 --> 00:01:16,860
+can generate an identifier times something and if you look at the grammar that
+可以生成一个标识符乘以某物，如果你看一下语法，
+
+13
+00:01:16,860 --> 00:01:21,290
+is the only production that can generate identifier times something else.
+是唯一可以生成标识符乘以其他值的产品。
+
+14
+00:01:21,290 --> 00:01:25,350
+The only other possibility involving times is to generate apprenticed expression which
+涉及时间唯一另一种可能性是生成学徒表达式，该表达式
+
+15
+00:01:25,350 --> 00:01:31,490
+clearly won't match the string that we're trying to pars E. So we have to use
+显然与我们试图解析E的字符串不匹配，所以我们必须使用
+
+16
+00:01:31,490 --> 00:01:38,490
+this production Id e prime. Well now in order to match the string, we can see that
+这部作品的编号是最好的。现在为了匹配字符串，我们可以看到
+
+17
+00:01:41,470 --> 00:01:46,759
+this e prime, the second, the one remaining e prime here has to go to id because
+这个e素数，第二个，这里剩下的一个e素数必须用id表示，因为
+
+18
+00:01:46,759 --> 00:01:50,290
+sandwiched in between the times and the plus is a single id, there's only
+夹在时间和加号之间的是一个单一的id，只有
+
+19
+00:01:50,290 --> 00:01:54,820
+one production that will do that so that's completely unique and determined. And finally,
+一部将做到这一点的作品，因此这是完全独特和坚定的。最后，
+
+20
+00:01:54,820 --> 00:02:00,939
+we have the last e over here which we want to use to produce an id. Well
+我们这里有最后一个e，我们要用它来生成id。井
+
+21
+00:02:00,939 --> 00:02:07,939
+how can we do that? Well, the e can go to e prime. In fact it has to and then
+我们怎么能做到这一点呢？嗯，e可以变成e的质数。事实上，它不得不这样做，然后
+
+22
+00:02:08,149 --> 00:02:15,149
+the e prime can go to id by itself, and there. We've manage to parse the string. So
+e素数可以自己变成id，就在那里。我们已经设法分析了这个字符串。所以
+
+23
+00:02:15,660 --> 00:02:19,390
+in general what does this grammar doing, well we do say we stratify the grammar.
+一般说来，这个语法是做什么的，我们确实说我们把语法分层了。
+
+24
+00:02:19,390 --> 00:02:24,890
+We've divided the productions into two classes. One that handles times and
+我们把这些作品分成两类。一个处理时间和时间的人
+
+25
+00:02:24,890 --> 00:02:30,940
+one that handles times and there's one nonterminal for each, each operator so. The
+一个处理时间，每个操作符都有一个非终结符。这个
+
+26
+00:02:30,940 --> 00:02:36,910
+e productions control the generation of plus and let's just look at what happens
+E产品控制着加号的生成，让我们来看看会发生什么
+
+27
+00:02:36,910 --> 00:02:42,360
+with that. So if I, e can go to e prime + e and just sticking with the e productions,
+就凭这一点。所以如果我，e可以去e+e，然后坚持e的制作，
+
+28
+00:02:42,360 --> 00:02:46,630
+what can happen to this e here? Well, we could do it again, E prime
+这里会发生什么事呢？嗯，我们可以再来一次，E总理
+
+29
+00:02:46,630 --> 00:02:53,630
++ e prime + e. And if we do it one more time, we'll have e prime + e prime + e prime
+如果我们再做一次，我们就会得到
+
+30
+00:02:55,360 --> 00:03:01,560
++ e. And in general, I think you see the pattern, we can generate any number of
+一般来说，我想你可以看到这个模式，我们可以产生任意数量的
+
+31
+00:03:01,560 --> 00:03:08,270
+e primes summed together. And finally, that trailing e, there's always one e left
+E个素数加在一起。最后，尾随的e，总是剩下一个e
+
+32
+00:03:08,270 --> 00:03:12,780
+at the end. Eventually that e, when we want to stop generating pluses, has to be
+在最后。最终，当我们想要停止产生正数时，e必须是
+
+33
+00:03:12,780 --> 00:03:18,840
+rewritten to e prime. So in the end, we'll get a sequence of pluses of, of e primes separated
+重写为e素数。所以最后，我们会得到e个素数的加号序列
+
+34
+00:03:18,840 --> 00:03:23,400
+by pluses, okay? That's what e prime can do. I'm sorry, that's what e can
+加号，好吗？这就是e总理能做的。我很抱歉，这就是我们能做的
+
+35
+00:03:23,400 --> 00:03:30,400
+do. Now let's look at what e prime can do. So, e prime. And let's just focus on the first
+做。现在让我们看看e素数能做些什么。所以，e质数。我们只关注第一个
+
+36
+00:03:31,040 --> 00:03:35,600
+two productions. As we can see at the first two productions are handling identifiers
+两部作品。正如我们在前两个产品中看到的那样，它们正在处理标识符
+
+37
+00:03:35,600 --> 00:03:39,820
+times something and then the last two productions are handling parenthesized
+乘以一些东西，然后最后两个结果处理的是括号
+
+38
+00:03:39,820 --> 00:03:43,680
+expression but you know I hope you the symmetry that it's, it's really
+表达，但你知道，我希望你的对称性，它真的
+
+39
+00:03:43,680 --> 00:03:47,200
+the same idea for identifiers and parenthesized expressions. So we'll just do
+标识符和带括号的表达式也是如此。所以我们就这么做
+
+40
+00:03:47,200 --> 00:03:53,340
+identifiers just to keep the slide from getting too crowded. So e prime can go to
+标识符只是为了防止幻灯片变得太拥挤。所以e质数可以转到
+
+41
+00:03:53,340 --> 00:04:00,340
+id e p rime. Well, we can repeat that, we can go to id. id e prime and we can repeat
+我认出了我的名字。嗯，我们可以重复一遍，我们可以去找身份证。我是素数，我们可以重复
+
+42
+00:04:06,220 --> 00:04:09,820
+that again and I hope you're beginning to see the same pattern. This is
+我希望你们开始看到同样的模式。这是
+
+43
+00:04:09,820 --> 00:04:16,820
+the same idea as with plus. And when we wind up with n is a bunch of identifiers multiplied
+与加号的概念相同。当我们最终得到n是一串标识符乘以
+
+44
+00:04:19,160 --> 00:04:25,200
+together, alright. Because that trailing e prime in this case, in the end,
+一起来，好吗。因为在这种情况下，最后的e素数，
+
+45
+00:04:25,200 --> 00:04:32,010
+can be rewritten to id. Now, in the case of e prime there are actually two alternatives.
+可以重写为id。现在，在e素数的情况下，实际上有两种选择。
+
+46
+00:04:32,010 --> 00:04:35,280
+We could either be generating id's or we could be generating
+我们可以生成id，也可以生成
+
+47
+00:04:35,280 --> 00:04:41,460
+parenthesized expression. So really, for each of these id's it could have been a parenthesized
+带括号的表达式。所以说真的，这些id的每一个都可以用括号括起来
+
+48
+00:04:41,460 --> 00:04:45,190
+expression. So let me just write some parenthesized e's down here just
+表达式。所以让我在下面写几个带括号的e
+
+49
+00:04:45,190 --> 00:04:50,370
+to remind us that we have an alternative and in the end, we wind up with,
+提醒我们有另一种选择，最终，我们会得到，
+
+50
+00:04:50,370 --> 00:04:57,370
+you know? A string of identifiers or parenthesized expressions separated by times,
+你知道?由时间分隔的标识符串或带括号的表达式，
+
+51
+00:04:57,710 --> 00:05:04,340
+Okay? Alright right, so I hope you see how this works. There's the, the way that
+好吧?好的，好的，我希望你们能看到这是怎么回事。有一种，有一种方式，就是
+
+52
+00:05:04,340 --> 00:05:09,690
+the grammar set up because we have these two separate groups of productions.
+语法之所以成立，是因为我们有这两组不同的产品。
+
+53
+00:05:09,690 --> 00:05:15,720
+All the pluses must be generated Before any of the times. The times are gonna be nested
+所有的加号都必须在任何时候之前产生。时代将会是嵌套的
+
+54
+00:05:15,720 --> 00:05:19,850
+more deeply inside the Parse tree than the pluses. The pluses are generated
+比加号更深入分析树的内部。产生了加号
+
+55
+00:05:19,850 --> 00:05:24,160
+at the outer most level and then the e primes will generate the times inside the
+在最外层，然后e素数将在
+
+56
+00:05:24,160 --> 00:05:29,800
+pluses. And so the grammar enforces that times is gonna buy more tightly than plus.
+加号。所以语法规定，乘以比加买得更紧。
+
+57
+00:05:29,800 --> 00:05:35,220
+The last detail that's worth pointing out here is I've noticed inside of the parenthesized
+这里值得指出的最后一个细节是，我注意到括号内
+
+58
+00:05:35,220 --> 00:05:40,170
+expression, we have an e, not an e prime. And why is that? Well once
+表达式，我们有e，而不是e素数。为什么会这样呢？嗯，有一次
+
+59
+00:05:40,170 --> 00:05:43,770
+we're inside of a parenthesized expression, the whole purpose of parentheses
+我们在一个带括号的表达式中，括号的全部用途
+
+60
+00:05:43,770 --> 00:05:48,230
+is to show the explicit association and so that we can have pluses
+就是显示明确的关联，这样我们就可以有加号
+
+61
+00:05:48,230 --> 00:05:54,200
+inside of times by using parentheses. And that's all that, that, that's the significance
+在时间内使用括号。这就是所有的，这，这就是意义所在
+
+62
+00:05:54,200 --> 00:06:01,200
+of using e in this part of the grammar rather than e prime. To review,
+在语法的这一部分使用e而不是e质数。回顾一下，
+
+63
+00:06:02,410 --> 00:06:07,910
+We started out with a grammar and A string we wanted to parse, id id + id, but
+我们从语法和我们想要解析的字符串(id、id+id)开始，但是
+
+64
+00:06:07,910 --> 00:06:11,570
+that grammar gave us two distinct Parse trees for the string and here are the
+该语法为字符串提供了两个截然不同的解析树，下面是
+
+65
+00:06:11,570 --> 00:06:15,990
+two Parse trees again. And by rewriting the grammar, we were able to eliminate
+又是两棵解析树。通过重写语法，我们能够消除
+
+66
+00:06:15,990 --> 00:06:20,030
+this Parse tree on the right. So, this Parse tree is no longer p ossible.
+右边的这棵解析树。因此，此解析树不再可行。
+
+67
+00:06:20,030 --> 00:06:24,780
+The Parse tree on the left is modified, there's more symbols in it now.
+左边的解析树被修改了，现在里面有更多的符号。
+
+68
+00:06:24,780 --> 00:06:30,980
+I mean for example, this became an e prime and there was a chain here of non-terminals,
+我的意思是，例如，这变成了一个e质数，这里有一个非终结点的链条，
+
+69
+00:06:30,980 --> 00:06:33,820
+this e went to e prime and went to id and there was some other minor
+这个e转到了e质数，转到了id，还有一些其他的小调。
+
+70
+00:06:33,820 --> 00:06:39,330
+changes in here so the Parse tree is not exactly the same as before but. We were able
+此处的更改使解析树与以前不完全相同，但是。我们能够
+
+71
+00:06:39,330 --> 00:06:46,330
+to get a parse where the times binds more tightly than the plus. So, now let's
+以获得时间比加号更紧密绑定的解析。那么现在让我们
+
+72
+00:06:47,810 --> 00:06:52,370
+consider another interesting example. If, then, else expressions were the else is optional
+考虑另一个有趣的例子。那么，如果ELSE表达式是可选的，则ELSE是可选的
+
+73
+00:06:52,370 --> 00:06:59,370
+and here's one way to write that grammar. Here we have a if, then, else And
+这里有一种写语法的方法。在这里，我们有一个如果，然后，否则
+
+74
+00:06:59,669 --> 00:07:05,030
+the usual way. But then we also have a production where there is no else. So that's
+就像往常一样。但是我们也有一部没有其他作品的作品。所以这就是
+
+75
+00:07:05,030 --> 00:07:08,300
+the case where the else is optional and then maybe there are some other kinds
+在这种情况下，Else是可选的，然后可能会有一些其他类型
+
+76
+00:07:08,300 --> 00:07:11,400
+of expressions that we don't need to concern ourselves with those. We'll just focus
+一系列我们不需要关心的表达方式。我们只需要集中精力
+
+77
+00:07:11,400 --> 00:07:16,760
+on the if and else piece. The problem is, at this particular if, then, else
+在IF和ELSE部分。问题是，在这个特定的如果，那么，否则
+
+78
+00:07:16,760 --> 00:07:23,340
+expression has two possible Parse tree. On the one hand, the else might belong
+表达式有两种可能的解析树。一方面，其他的可能属于
+
+79
+00:07:23,340 --> 00:07:30,340
+to the outer if, That is, this particular. Inner if might have no else and.
+到外面，如果，也就是，这个特殊的。内在的如果可能没有其他的和。
+
+80
+00:07:30,930 --> 00:07:37,930
+The else would be associated with the outer if. The other possibility is that the
+ELSE将与外部IF相关联。另一种可能性是
+
+81
+00:07:38,260 --> 00:07:43,120
+else belongs to the inner if that we have this structure if then else is nested
+Else属于内部，如果我们有这个结构，如果Else是嵌套的
+
+82
+00:07:43,120 --> 00:07:50,120
+inside of an if then that has no else statement. And in, what we want in on the
+在If Then内部，它没有Else语句。在这里面，我们想要的是
+
+83
+00:07:51,460 --> 00:07:55,930
+programming language I know of is the second form. We want else's to associate to
+我知道的编程语言是第二种形式。我们想要将其他的关联到
+
+84
+00:07:55,930 --> 00:08:02,930
+the closest matching if then and not one that's further away. We can write a grammar
+最接近的匹配，如果是这样的话，而不是更远的匹配。我们可以写一本语法
+
+85
+00:08:03,560 --> 00:08:07,669
+to express the desired association. The property we want is that
+来表达想要的联想。我们想要的财产是
+
+86
+00:08:07,669 --> 00:08:12,490
+every else should match the closest unmatched then. So whenever we see an else,
+那么所有其他的都应该匹配最接近的无与伦比的。所以每当我们看到另一个，
+
+87
+00:08:12,490 --> 00:08:16,699
+we want it to be associated with the closest then that doesn't already have a closer
+我们希望它与最接近的相关联，而不是已经有更近的
+
+88
+00:08:16,699 --> 00:08:21,280
+matching else. So that means that the if statements are going to be divided
+与其他的相匹配。这意味着if语句将被分割
+
+89
+00:08:21,280 --> 00:08:26,940
+into two categories. We'll have the matched if's, those that have all of the then
+分为两类。我们会有匹配的IF，那些有所有THEN的
+
+90
+00:08:26,940 --> 00:08:30,850
+statements nested within them matched with an else. And the unmatched if's where
+其中嵌套的语句与Else匹配。和无与伦比的如果在哪里
+
+91
+00:08:30,850 --> 00:08:37,850
+some then's then expression inside of the unmatched if that has no matching else. So,
+一些THEN的THEN表达式位于未匹配的If中，如果没有匹配的其他表达式。所以,
+
+92
+00:08:39,570 --> 00:08:43,000
+when matched ifs look like, well tha t's pretty straight forward, I, and if, then,
+当匹配的if看起来像是，嗯，这是相当直截了当的，我，如果，那么，
+
+93
+00:08:43,000 --> 00:08:48,110
+else is a matched if most have, must have both of them and an else and any nested
+Else是匹配的，如果大多数都有，则必须同时具有它们和Else以及任何嵌套的
+
+94
+00:08:48,110 --> 00:08:55,110
+if statements on both branches must, must also have matching else's. And,
+如果两个分支上的语句都必须，也必须具有与其他语句匹配的语句。
+
+95
+00:08:55,510 --> 00:09:00,060
+if you have any other kind of a constructs that's not an if and else, that's also considered
+如果您有任何其他类型的a结构，而不是if和Else，这也是可以考虑的
+
+96
+00:09:00,060 --> 00:09:06,790
+a matched if. What about the unmatched if's? One possibility is that they,
+一个匹配的如果。那无与伦比的如果呢？一种可能是他们，
+
+97
+00:09:06,790 --> 00:09:10,310
+it's simply an unmatched if, that there is no else. So we have if and then and
+这简直是一个无与伦比的如果，那就是没有其他的了。所以我们有如果和然后
+
+98
+00:09:10,310 --> 00:09:17,310
+no matching else out here. And now the crucial case, what if we have an if and else?
+这里没有比得上的了。现在关键的情况是，如果我们有一个“如果”和“否则”呢？
+
+99
+00:09:18,460 --> 00:09:24,200
+So that the top level if then has a matching else but then the unmatched if is
+因此顶层IF THEN有一个匹配的ELSE，但是不匹配的IF是
+
+100
+00:09:24,200 --> 00:09:30,460
+somewhere inside. Well, then we claim that the unmatched if has to be in the else branch,
+在里面的某个地方。嗯，那么我们认为不匹配的if必须在Else分支中，
+
+101
+00:09:30,460 --> 00:09:36,560
+it cannot be in the then branch. The then branch must be a matched if. And
+它不能在THEN分支中。THEN分支必须是匹配的IF。和
+
+102
+00:09:36,560 --> 00:09:41,350
+why is that? Well, think about it. If this was an unmatched if, if this was an unmatched
+为什么会这样呢？嗯，想想看。如果这是一个无与伦比的如果，如果这是一个无与伦比的
+
+103
+00:09:41,350 --> 00:09:46,000
+if, that means that there will be some then in here. That had no matching
+如果，那就意味着这里会有一些。没有与之相匹配的
+
+104
+00:09:46,000 --> 00:09:52,150
+else. And then this else here would be closer to that then, than it is to this end
+其他的。然后，这里的其他地方就会比这一端更接近那里
+
+105
+00:09:52,150 --> 00:09:57,339
+then. And so, we would have to match that one according to our definition. Okay.
+然后。因此，根据我们的定义，我们必须匹配那个。好吧。
+
+106
+00:09:57,339 --> 00:10:02,320
+So, that situation is not possible. So, the only possibility for an unmatched
+所以，这种情况是不可能的。所以，对于一个无与伦比的人来说，唯一的可能性是
+
+107
+00:10:02,320 --> 00:10:09,320
+if is that, that it's itself and if and else is that, that the any if, then, else's
+如果是这样，那就是它本身，如果和否则是那样，那就是任何如果，那么，其他人的
+
+108
+00:10:10,600 --> 00:10:15,440
+under their branch have to be matched and the unmatched if and else has
+在它们的分支下必须匹配，而不匹配的IF和ELSE
+
+109
+00:10:15,440 --> 00:10:22,440
+to be in the else branch. So reconsidering the expression we had before, we can see that
+在Else分部工作。所以重新考虑我们之前的表述，我们可以看到
+
+110
+00:10:23,560 --> 00:10:28,860
+this else is supposed to match this then. And so the association should be like
+其他的应该和这个相配。所以这个协会应该是这样的
+
+111
+00:10:28,860 --> 00:10:34,990
+this, and, and therefore, this Parse tree on the right is not the one that we want
+因此，右侧的这棵解析树不是我们想要的树
+
+112
+00:10:34,990 --> 00:10:40,610
+and the grammar we gave on the previous slide will parse the expression according
+我们在上一张幻灯片中给出的语法将根据
+
+113
+00:10:40,610 --> 00:10:42,310
+to this Parse tree on the left.
+到左边的这棵解析树。
+

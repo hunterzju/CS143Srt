@@ -1,0 +1,330 @@
+0
+00:00:03,740 --> 00:00:07,090
+In this video, we're gonna continue our discussion of bottom-up parsing with the
+在本视频中，我们将继续讨论自下而上的解析
+
+1
+00:00:07,090 --> 00:00:14,090
+main strategy used by all bottom-up parsers, so-called shift-reduce parsing.
+所有自下而上解析器使用的主要策略，即所谓的Shift-Reduce解析。
+
+2
+00:00:15,549 --> 00:00:19,300
+Here is a quick review of the most important thing that we learned last time,
+下面是我们上次学到的最重要的东西的快速回顾，
+
+3
+00:00:19,300 --> 00:00:24,380
+that a bottom up parser traces a right most innervations in reverse. Now this
+自下而上的解析器反向追踪最右侧的神经。现在这个
+
+4
+00:00:24,380 --> 00:00:29,849
+particular fact has an important consequence. So let's think about a state
+特定的事实具有重要的后果。那么让我们来考虑一下一个州
+
+5
+00:00:29,849 --> 00:00:35,460
+of a shift reduced parse where we have string alpha, beta and omega, and let's
+我们有字符串alpha、beta和omega，让我们
+
+6
+00:00:35,460 --> 00:00:40,750
+assume the next reduction is going to be the replaced beta by X. Okay, so remember
+假设下一次减少的是X替换的测试版。好的，所以请记住
+
+7
+00:00:40,750 --> 00:00:47,320
+we're running productions backwards. Then I claim that Omega has to be a string of
+我们在倒排制作。然后我断言欧米茄必须是一串
+
+8
+00:00:47,320 --> 00:00:51,410
+terminals. And why is that? Well if you think about it, if this is a rightmost
+终端。为什么会这样呢？如果你仔细想想，如果这是最正确的
+
+9
+00:00:51,410 --> 00:00:56,120
+innervations in reverse, then when X is replaced when we take this if we look at
+相反的神经，那么当X被替换时，如果我们看一下
+
+10
+00:00:56,120 --> 00:00:59,670
+the forward step is the, the backward step. So remember the parser is running
+前进的一步就是后退的一步。所以请记住解析器正在运行
+
+11
+00:00:59,670 --> 00:01:04,280
+this way replacing data by X. But if we think about the rightmost innervations in
+这种方式将数据替换为X。但是如果我们考虑一下中最右边的神经
+
+12
+00:01:04,280 --> 00:01:08,729
+the other direction then X has to be the rightmost non-terminal, which means there
+那么X的另一个方向必须是最右边的非终结点，这意味着在那里
+
+13
+00:01:08,729 --> 00:01:15,729
+are no non-terminals to the right of X and so all the Character, all the tokens,
+在X的右侧没有非终结符，所以所有字符、所有令牌
+
+14
+00:01:15,859 --> 00:01:21,700
+whatever it is in this string have to be terminal symbols. Now it turns out that
+这个字符串中的任何内容都必须是终端符号。现在事实证明，
+
+15
+00:01:21,700 --> 00:01:26,999
+those terminal symbols to the right of the right most non-terminal are exactly the
+最右侧的非终端右侧的那些终端符号恰好是
+
+16
+00:01:26,999 --> 00:01:32,689
+unexamined input in bottom of parsley implementations. That is if I have alpha
+欧芹实现底部的未经检查的输入。如果我有阿尔法的话
+
+17
+00:01:32,689 --> 00:01:39,689
+X, omega and I'm, and X is my right most to non-terminal then this is the input
+X，omega和我，X是我最右边的非终端，这是输入
+
+18
+00:01:40,359 --> 00:01:45,409
+that we haven't read yet. This is unexamined Input And it's gonna be useful
+我们还没有读过。这是未经检查的输入，它会很有用
+
+19
+00:01:45,409 --> 00:01:50,810
+to mark, where we are, in the parse, where our, where our input focus is. And we're
+来标记我们在语法分析中所处的位置，以及我们的输入焦点所在的位置。而且我们正在
+
+20
+00:01:50,810 --> 00:01:54,270
+gonna do that by using a vertical bar. So we're gonna just place, drop a vertical
+我要用竖条来做到这一点。所以我们要把垂直的
+
+21
+00:01:54,270 --> 00:01:59,649
+bar. Between the place where we read everything to the left, and we've actually
+酒吧。在我们阅读左边所有东西的地方和我们实际上
+
+22
+00:01:59,649 --> 00:02:03,130
+been working on this. So this stuff to the left here can be terminals and
+一直在做这件事。左边的东西可以是终端，
+
+23
+00:02:03,130 --> 00:02:06,670
+non-terminals and we, the parts that we've seen all of that stuff. And the stuff to
+非终端机和我们，我们看过所有这些东西的部分。以及要做的事情
+
+24
+00:02:06,670 --> 00:02:10,550
+the right is after the parts hasn't seen. Now we don't know what's out there,
+右边是零件还没见过的地方。现在我们不知道外面有什么，
+
+25
+00:02:10,550 --> 00:02:14,080
+although we do know its all terminal symbols. An d the vertical bar is just
+虽然我们知道它都是终端符号。竖线正好是
+
+26
+00:02:14,080 --> 00:02:21,080
+gonna mark the dividing line between the two sub-strings. To implement bottom up
+将在两个子弦之间标出分界线。要实施自底向上，请执行以下操作
+
+27
+00:02:21,110 --> 00:02:26,110
+parsing, it turns out we only needs two kinds of actions. Shift moves and reduce
+解析后发现，我们只需要两种操作。移位、移动和减少
+
+28
+00:02:26,110 --> 00:02:29,860
+moves. And we've already talked somewhat about reduce moves, and so we have to
+动起来。我们已经在一定程度上讨论了减少移动的问题，所以我们必须
+
+29
+00:02:29,860 --> 00:02:36,310
+introduce shift moves. So let's do that now. So a shift move, reads one token of
+引入换班动作。那我们现在就开始吧。因此，换班移动时，会显示一个令牌
+
+30
+00:02:36,310 --> 00:02:40,280
+input. And we can explain that or represent that by moving the vertical bar
+输入。我们可以解释这一点，或者通过移动竖线来表示这一点
+
+31
+00:02:40,280 --> 00:02:44,790
+one token to the right. So if our input focus is here, and we want to read one
+右边有一枚代币。因此，如果我们的输入焦点在这里，并且我们想要读取一个
+
+32
+00:02:44,790 --> 00:02:48,730
+more token of input, then we just move the vertical bar over. And this signifies that
+更多的输入标记，然后我们只需将竖线移到上面即可。这意味着
+
+33
+00:02:48,730 --> 00:02:54,010
+now the parser knows about that next, terminal symbol. And now we can start
+现在解析器知道了下一个终端符号。现在我们可以开始
+
+34
+00:02:54,010 --> 00:02:57,340
+working on it. It can do things. We can match against it for the purposes of
+我正在努力。它可以做一些事情。我们可以与之相匹配的目的是
+
+35
+00:02:57,340 --> 00:03:01,900
+performing reductions. Again the stuff out here to the right of the vertical bar the
+执行减量。再说一遍，这里竖条右边的东西
+
+36
+00:03:01,900 --> 00:03:08,900
+parser hasn't seen yet. And then a reduce move is to apply an inverse production at
+解析器还没有看到。然后，Reduce移动是在以下位置应用逆积
+
+37
+00:03:08,970 --> 00:03:15,970
+the right end of the left string. So if in production a goes to xy and we have x and
+左弦的右端。所以如果在生产中a转到xy，我们有x和
+
+38
+00:03:16,110 --> 00:03:20,840
+y here immediately to the left of the vertical bar. So this is our focus point,
+这里就在垂直条的左边。所以这就是我们关注的焦点，
+
+39
+00:03:20,840 --> 00:03:25,250
+okay, and x and y the right hand side of the reduction is right there. Then we can
+好的，x和y，减去的右手边就在那里。然后我们就可以
+
+40
+00:03:25,250 --> 00:03:29,710
+do a reduction, we can replace that right hand side by the left hand side, and this
+做一个缩减，我们可以把右手边换成左手边，这就是
+
+41
+00:03:29,710 --> 00:03:36,710
+is a reduce move. Here is the example from the last video, and this is exactly the
+是一种减少行动。下面是上一个视频中的示例，这正是
+
+42
+00:03:37,470 --> 00:03:42,730
+example just showing the reduced moves, now with the vertical bar also shown. So
+示例中只显示了减少的动作，现在还显示了竖线。所以
+
+43
+00:03:42,730 --> 00:03:48,120
+this shows where the input focus was, at the point where each of the reductions was
+这显示了输入焦点所在的位置，也就是每个减量所在的点
+
+44
+00:03:48,120 --> 00:03:51,980
+performed. And what's missing, of course, now we know, is the sequence of shift
+已执行。当然，现在我们知道，缺少的是移位的顺序
+
+45
+00:03:51,980 --> 00:03:57,010
+moves. So here is the sequence of shift moves and reduce moves that, take the
+动起来。下面是Shift移动和Reduce移动的顺序，
+
+46
+00:03:57,010 --> 00:04:04,000
+initial input string, to the start symbol. So let's walk through this in more detail.
+初始输入字符串，设置为开始符号。因此，让我们更详细地介绍一下这一点。
+
+47
+00:04:04,000 --> 00:04:08,470
+So we're going to go step by step. And we're going to show each shift and each
+所以我们要一步一步来。我们将展示每个班次和每个班次
+
+48
+00:04:08,470 --> 00:04:14,740
+reduce move. And now in addition to our input string down here we also have a
+减少移动。现在，除了这里的输入字符串之外，我们还有一个
+
+49
+00:04:14,740 --> 00:04:19,289
+pointer showing where the where in the input we are. So initially we haven't seen
+指示我们在输入中的位置的指针。所以一开始我们还没有看到
+
+50
+00:04:19,289 --> 00:04:24,139
+any of the input, and our input pointer is to the left of the entire str ing. So the
+任何输入，我们的输入指针位于整个字符串的左侧。因此，
+
+51
+00:04:24,139 --> 00:04:29,969
+first move is to do a shift. And then we do another shift, and then we do another
+第一步是换班。然后我们再做一次轮班，然后我们再做一次
+
+52
+00:04:29,969 --> 00:04:35,569
+shift. And now just look at the example from before if you look back at that, at
+换档。现在看一下前面的例子，如果你回头看的话，
+
+53
+00:04:35,569 --> 00:04:38,979
+that example, you know, the next thing we need to do is to reduce. So remember we're
+这个例子，你知道，我们需要做的下一件事是减少。所以请记住我们是
+
+54
+00:04:38,979 --> 00:04:43,759
+only allowed to reduce to the left of the arrows. So, we can only reduce over on
+只允许减少到箭头的左边。所以，我们只能减价了。
+
+55
+00:04:43,759 --> 00:04:48,370
+this side of the arrow. So, we always have to read enough of the input before we can
+箭头的这边。因此，我们总是必须先阅读足够的输入内容，然后才能
+
+56
+00:04:48,370 --> 00:04:55,370
+perform a reduced move. And then we perform another reduce move, okay? And
+执行减少的移动。然后我们再做一次减速动作，好吗？和
+
+57
+00:04:55,770 --> 00:04:59,599
+then it turns out the next thing to do is two shift moves and we haven't explained
+那么接下来要做的就是两个轮班动作，我们还没有解释
+
+58
+00:04:59,599 --> 00:05:02,979
+yet how we know whether to shift or reduce we're going to get there. I'm just showing
+然而，我们如何知道是转移还是减少，我们就会到达那里。我只是展示一下
+
+59
+00:05:02,979 --> 00:05:07,999
+that there exists a sequence of shift and reduce moves that succeed in parsing this
+存在一系列的Shift和Reduce移动，它们成功地解析了这个
+
+60
+00:05:07,999 --> 00:05:14,430
+example. Now we've shifted the entire input onto this sorry we've, we've. We
+举个例子。现在我们把所有的投入都转移到这个抱歉上了，我们。我们
+
+61
+00:05:14,430 --> 00:05:18,830
+shifted over the entire input, so there's no more input to read. And now all we can
+移动了整个输入，因此没有更多的输入可读。现在我们能做的就是
+
+62
+00:05:18,830 --> 00:05:23,110
+do is reduce moves. But fortunately, there is a sequence of reduce moves from this
+要做的就是减少动作。但幸运的是，从这一点开始，还有一系列的缩减举措
+
+63
+00:05:23,110 --> 00:05:29,599
+point, that we can we can perform. So, here we reduce int, and then we reduce T
+这一点，我们可以，我们可以表演。所以，在这里我们减少INT，然后我们减少T
+
+64
+00:05:29,599 --> 00:05:36,599
+plus T. Oh, forgot, we first reduce T to E, and then we reduce T plus E back to the
+加T。哦，忘了，我们先把T减成E，然后再把T加E减回
+
+65
+00:05:36,710 --> 00:05:37,569
+start symbol.
+开始符号。
+

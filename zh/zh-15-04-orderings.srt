@@ -1,0 +1,405 @@
+0
+00:00:03,080 --> 00:00:06,200
+In the last several videos, we've been talking about doing a kind of abstract
+在最后几个视频中，我们一直在谈论做一种抽象
+
+1
+00:00:06,200 --> 00:00:11,570
+computation. Computing with elements like Bottom the Constants and Top. And, in this
+计算。使用诸如Bottom、常量和Top等元素进行计算。而且，在这件事上，
+
+2
+00:00:11,570 --> 00:00:14,950
+video, we're going to start to generalize those ideas a little bit. And the first
+视频中，我们将开始对这些想法进行一点推广。也是第一个
+
+3
+00:00:14,950 --> 00:00:18,490
+thing we're going to talk about, the first step towards that generalization, is to
+我们将要讨论的事情，通向这个概括的第一步，是
+
+4
+00:00:18,490 --> 00:00:24,510
+talk about orderings of those values. First, I'd like to introduce a technical
+谈谈这些值的排序。首先，我想介绍一项技术
+
+5
+00:00:24,510 --> 00:00:28,660
+term. These values that we compute within program analysis, things like Bottom, the
+学期。我们在程序分析中计算的这些值，比如Bottom、
+
+6
+00:00:28,660 --> 00:00:34,590
+Constants and Top, these are called Abstract Values. And that's just to
+常量和顶部，这些称为抽象值。这只是为了
+
+7
+00:00:34,590 --> 00:00:37,940
+distinguish them from the Concrete Values, so the Concrete Values are the actual
+将它们与具体的值区分开来，因此具体的值就是实际的
+
+8
+00:00:37,940 --> 00:00:43,180
+run-time values that a program computes with. Things like actual objects, and
+程序用来计算的运行时值。像实物一样的东西，还有
+
+9
+00:00:43,180 --> 00:00:48,549
+numbers and things like that. And the Abstract Values here the program analysis
+数字之类的东西。以及这里的程序分析的抽象值
+
+10
+00:00:48,549 --> 00:00:54,350
+uses are in general, more abstract. Some particular Abstract Values can stand for a
+用途一般都比较抽象。某些特定的抽象值可以表示
+
+11
+00:00:54,350 --> 00:01:00,100
+set of possible Concrete Values. And in a particular set of Abstract Values we're
+一组可能的具体值。在一组特定的抽象值中，我们
+
+12
+00:01:00,100 --> 00:01:04,330
+using for concept propagation, there's only one very Abstract Value and that's
+用于概念传播，只有一个非常抽象的值，那就是
+
+13
+00:01:04,330 --> 00:01:09,290
+the Top and it stands for any possible run time value. So it stands for the entire
+Top，它代表任何可能的运行时值。所以它代表了整个
+
+14
+00:01:09,290 --> 00:01:14,040
+set of run time values. Anyway, it turns out that there is a way to simplify the
+一组运行时值。无论如何，事实证明，有一种方法可以简化
+
+15
+00:01:14,040 --> 00:01:18,410
+presentation of, of the analysis that we have been discussing by ordering the
+我们一直在讨论的分析的演示文稿，方法是订购
+
+16
+00:01:18,410 --> 00:01:22,940
+Abstract Values. So we're going to say is that Bottom is less than all the constants
+抽象值。所以我们要说的是底部小于所有常量
+
+17
+00:01:22,940 --> 00:01:29,060
+and that, and all the Constants are less than Top. And so if we draw a picture with
+然后，所有的常数都小于Top。所以如果我们画一幅画
+
+18
+00:01:29,060 --> 00:01:32,760
+the lower values drawn towards at the bottom picture and the higher values drawn
+在底图中绘制的值越小，绘制的值越高
+
+19
+00:01:32,760 --> 00:01:39,300
+at the top. And, and edges between values where there's a relationship, we get this
+在顶端。并且，在有关系的值之间的边缘，我们得到这个
+
+20
+00:01:39,300 --> 00:01:43,710
+diagram here. So you have bottom down here, underneath all the other values,
+图在这里。所以你在这里有底部，在所有其他值的下面，
+
+21
+00:01:43,710 --> 00:01:46,920
+Bottom is less than every Constant. Okay. So notice that all the constants are here
+底部小于每个常数。好吧。请注意，所有常量都在这里
+
+22
+00:01:46,920 --> 00:01:50,610
+on the middle level, alright? And also notice that the constants are not
+在中层，好吗？还要注意，常量不是
+
+23
+00:01:50,610 --> 00:01:55,400
+comparable to each other, alright? So this ordering is different than the numeric
+互相比较，好吗？因此，此顺序不同于数字
+
+24
+00:01:55,400 --> 00:02:00,200
+ordering. So zero is not less than one for example. Zero and one are inco mparable,
+点菜。例如，0不小于1。0和1是不可比拟的，
+
+25
+00:02:00,200 --> 00:02:03,630
+as are every other pair of Constants. So you have, you know, Bottom at the Bottom.
+其他每对常量也是如此。所以你有，你知道，在底部。
+
+26
+00:02:03,630 --> 00:02:07,120
+You have all the Constants in the middle and they're incomparable, And then, bigger
+你把所有的常数都放在中间，它们是无与伦比的，然后更大
+
+27
+00:02:07,120 --> 00:02:14,120
+than everything else is Top. Now with the ordering defined, there's a useful
+比其他一切都要好。现在定义了顺序后，有一个有用的
+
+28
+00:02:14,440 --> 00:02:19,180
+operation we can define on collections of elements and that is the Least Upper
+我们可以在元素集合上定义的运算，那就是最小上限
+
+29
+00:02:19,180 --> 00:02:26,180
+Bound, or LUB, alright? And, and this means is taking the smallest element that
+捆绑，还是卢布，好吗？这就是说，取最小的元素，
+
+30
+00:02:26,870 --> 00:02:31,200
+is bigger than everything in the Least Upper Bound. So, for example, if I have
+比最小上界中的一切都要大。所以，举个例子，如果我有
+
+31
+00:02:31,200 --> 00:02:37,620
+the Least Upper Bound of Bottom and one, that is equal to one, okay? If I had the
+下限和1的最小上界等于1，好吗？如果我有
+
+32
+00:02:37,620 --> 00:02:44,620
+Least Upper Bound of Top and Bottom, that is equal to Top. And perhaps more
+顶部和底部的最小上限，即等于顶部。也许还有更多
+
+33
+00:02:45,950 --> 00:02:51,959
+interesting one, the Least Upper Bound of one and two, so two incomparable Constants
+有趣的一个，1和2的最小上界，所以两个不可比较的常数
+
+34
+00:02:51,959 --> 00:02:55,209
+here. And remember, the meaning of the Least Upper Bound, it's the smallest
+这里。记住，最小上限的意思是，它是最小的
+
+35
+00:02:55,209 --> 00:03:00,069
+element in the ordering that's bigger than everything over which we're taking the
+元素，该元素比我们要处理的所有内容都要大。
+
+36
+00:03:00,069 --> 00:03:03,640
+Least Upper Bound. So we just have two things here in our Least Upper Bound. But
+最小上界。所以我们这里只有两样东西在我们的最小上界。但
+
+37
+00:03:03,640 --> 00:03:07,870
+the Least Upper Bound of one and two, the smallest thing that's bigger than both of
+1和2的最小上界，比两者都大的最小的东西
+
+38
+00:03:07,870 --> 00:03:13,520
+them, or greater than or equal I should say, both of them is Top, okay? And so,
+他们，或者大于或者等于，我应该说，他们两个都是最好的，好吗？因此，
+
+39
+00:03:13,520 --> 00:03:17,319
+the Least Upper Bound then, if you think about it, if you draw, draw our picture
+最小上界那么，如果你想一想，如果你画，画我们的画
+
+40
+00:03:17,319 --> 00:03:23,989
+again. So we had Bottom and we had Top, and if you pick out some points here,
+再来一次。所以我们有底部，我们有顶部，如果你在这里挑出一些点，
+
+41
+00:03:23,989 --> 00:03:26,680
+let's say we want to take the Least Upper Bound of Bottom and two, you're just
+比方说我们要取最小上界的底数和2，你只是
+
+42
+00:03:26,680 --> 00:03:30,660
+picking the smallest thing that's bigger than both. Well, that's going to be two
+选择比两者都大的最小的东西。嗯，那将是两个
+
+43
+00:03:30,660 --> 00:03:34,709
+itself, similarly two on Top, you will get Top. And then if have anything that's
+本身，同样两个在上面，你会得到第一。如果有什么是
+
+44
+00:03:34,709 --> 00:03:37,430
+incomparable, then you have to pick something that's bigger than both of them
+无与伦比的，那你就得选比这两个都大的
+
+45
+00:03:37,430 --> 00:03:41,860
+and in this case that will always end up being Top for this very simple ordering,
+在这种情况下，对于这个非常简单的排序，它最终将始终是最高的，
+
+46
+00:03:41,860 --> 00:03:47,090
+alright? Then given this idea of the Least Upper Bound, it turns out that rules one
+好吗？然后给出这个最小上界的想法，结果是规则之一
+
+47
+00:03:47,090 --> 00:03:52,349
+through four, all they're doing is computing the Least Upper Bound. So the in
+到了4点，他们所做的就是计算最小上界。所以在这里
+
+48
+00:03:52,349 --> 00:03:58,489
+of a statement is just equal to the Least Upper Bound of the out of all the
+语句的最小上界恰好等于所有
+
+49
+00:03:58,489 --> 00:04:02,459
+predecessors. Alright, and that's all that rules one through four we're saying. And
+前辈。好的，这就是我们所说的第一条到第四条规则。和
+
+50
+00:04:02,459 --> 00:04:05,959
+if you remember what we had there, we had, you know, we had a bunch of predecessors
+如果你记得我们在那里有什么，我们有，你知道，我们有一堆前辈
+
+51
+00:04:05,959 --> 00:04:10,180
+and then there's some kind of statement s, and all we're doing is whatever the
+然后是某种声明s，我们所做的就是
+
+52
+00:04:10,180 --> 00:04:16,750
+information is on these predecessors, we're just taking the Least Upper Bound
+信息是关于这些前身的，我们只是取了最小的上界
+
+53
+00:04:16,750 --> 00:04:23,750
+over it, all right? And that is the information on entry to, to s. The
+越过它，好吗？这是关于进入s，到s的信息。
+
+54
+00:04:24,960 --> 00:04:29,490
+ordering on the Abstract Values also helps to clarify another important aspect of our
+对抽象值进行排序还有助于阐明我们的
+
+55
+00:04:29,490 --> 00:04:34,419
+analysis algorithm which is why it terminates. So remember the algorithm's
+分析算法，这就是它终止的原因。所以请记住算法的
+
+56
+00:04:34,419 --> 00:04:40,669
+termination condition is to repeat to repeatedly apply the rules until nothing
+终止条件是重复应用规则，直到什么都没有
+
+57
+00:04:40,669 --> 00:04:44,110
+changes, until there are no more inconsistencies in the control flow graph
+更改，直到控制流图中不再有不一致为止。
+
+58
+00:04:44,110 --> 00:04:48,259
+and there's no information left to update. Well, just because we say we're going to
+而且也没有什么信息可以更新了。嗯，不能因为我们说我们要
+
+59
+00:04:48,259 --> 00:04:52,259
+repeat until nothing changes, that doesn't guarantee that eventually nothing changes.
+重复这一过程，直到什么都没有改变，这并不能保证最终什么都没有改变。
+
+60
+00:04:52,259 --> 00:04:56,099
+It could be that, that goes on forever, that we always introduce new
+这可能是因为，这将永远持续下去，我们总是引入新的
+
+61
+00:04:56,099 --> 00:05:01,129
+inconsistencies with every update and we never actually get to the point where all
+每一次更新都不一致，我们实际上从未达到这样的地步
+
+62
+00:05:01,129 --> 00:05:06,189
+the information is consistent. So, the ordering actually shows why that can't
+这些信息是一致的。所以，排序实际上说明了为什么它不能
+
+63
+00:05:06,189 --> 00:05:09,779
+happen and the algorithm is guaranteed to terminate. So remember that in every
+并且保证算法终止。所以请记住，在每一个
+
+64
+00:05:09,779 --> 00:05:13,819
+program point except the entry point, the values start as Bottom. So, they start at
+程序点除入口点外，值从底部开始。所以，他们的起步价是
+
+65
+00:05:13,819 --> 00:05:19,419
+the lowest place in the ordering. And then if you look carefully at the rules, it's
+排序最低的位置。如果你仔细看规则，就会发现
+
+66
+00:05:19,419 --> 00:05:24,379
+easy to see that the rules can only make the values increase at a program point. So
+很容易看出，规则只能使值在程序点增加。所以
+
+67
+00:05:24,379 --> 00:05:30,229
+Bottom can be promoted, can be changed at a given program point up to some Constant
+底部可以提升，可以在给定的程序点改变到某个常量
+
+68
+00:05:30,229 --> 00:05:36,659
+and, and, and another update could raise that Constant to Top but of course, once
+并且，并且，另一次更新可以将该常量提高到Top，但当然，一次
+
+69
+00:05:36,659 --> 00:05:40,719
+we get the Top, there's no greater element. And if the rules can only make
+我们得到了顶峰，没有比这更好的元素了。如果规则只能让
+
+70
+00:05:40,719 --> 00:05:45,669
+the elements increase, then eventually we have to run out of elements that could be
+元素增加，那么最终我们必须耗尽可能是
+
+71
+00:05:45,669 --> 00:05:52,339
+increased, okay? So what that says is that each piece of information we're computing,
+增加了，好吗？这就是说，我们正在计算的每一条信息，
+
+72
+00:05:52,339 --> 00:05:56,979
+for every statement, for every variable, and for either in or out, it can change at
+对于每个语句、每个变量以及In或Out，它都可以在
+
+73
+00:05:56,979 --> 00:06:00,629
+most twice, okay? So it can go from a Bottom to a Constant, and from Constant to
+最多两次，好吗？所以它可以从底部到常数，从常数到
+
+74
+00:06:00,629 --> 00:06:06,939
+a Top but after that, it will never be updated again. And what this means is that
+A顶部，但在那之后，它就再也不会更新了。这意味着
+
+75
+00:06:06,939 --> 00:06:11,419
+the constant propagation algorithm that we've described is actually linear in
+我们描述的常量传播算法实际上是线性的
+
+76
+00:06:11,419 --> 00:06:16,629
+program size. So the number of steps is gonna be bounded by the number of c values
+程序大小。所以步数将由c值的个数来限定
+
+77
+00:06:16,629 --> 00:06:20,309
+that we're trying to compute times two, cuz each one of those could change two
+我们要计算的是2倍，因为每一次都可以改变2次
+
+78
+00:06:20,309 --> 00:06:25,569
+times. And since there's one value for the entry and exit over the in and out of
+泰晤士报。由于入口和出口与进出之间只有一个值
+
+79
+00:06:25,569 --> 00:06:30,240
+every statement, the total number of steps that the algorithm can possibly take is
+每条语句中，算法可能采取的步骤总数为
+
+80
+00:06:30,240 --> 00:06:32,339
+the number of program statements times four.
+程序语句的数量乘以4。
+

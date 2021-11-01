@@ -1,0 +1,440 @@
+0
+00:00:03,399 --> 00:00:06,740
+In the last video we talked about the difference between static and dynamic
+在上一个视频中，我们谈到了静电和Dynamic之间的区别
+
+1
+00:00:06,740 --> 00:00:10,820
+typing, and how one trend in static typing is towards increasingly expressive type
+打字，以及静电打字的一个趋势是如何朝着表现力越来越强的类型发展
+
+2
+00:00:10,820 --> 00:00:14,309
+systems. In this lecture we're gonna talk about self type, which will give you a
+系统。在这节课中，我们将讨论自我类型，这将给你一个
+
+3
+00:00:14,309 --> 00:00:21,309
+taste or what those more expressive type systems can look like. To begin with,
+品味或那些更具表现力的文字系统看起来会是什么样子。首先，
+
+4
+00:00:21,949 --> 00:00:25,400
+let's motivate the problem that self types solves, by looking at a simple class
+让我们通过查看一个简单的类来激发Self类型解决的问题
+
+5
+00:00:25,400 --> 00:00:30,089
+definition, so here we have class counts, and it has a single field I, which is an
+定义，所以这里我们有类计数，它只有一个字段i，这是一个
+
+6
+00:00:30,089 --> 00:00:34,950
+integer initialized to zero, and it has one method increment. And essentially, the
+整数初始化为零，并且它有一个方法增量。从本质上讲，
+
+7
+00:00:34,950 --> 00:00:39,800
+class count just increments a counter. So you, initially when you allocate a new
+类计数只是递增计数器。所以你，最初当你分配一个新的
+
+8
+00:00:39,800 --> 00:00:43,650
+count object, the counter is zero, and then every time you call ink, the
+对象，计数器为零，则每次调用手写输入时，
+
+9
+00:00:43,650 --> 00:00:49,370
+counter's value is increased by one. And notice that this can be thought of as a
+计数器的值加一。请注意，这可以被认为是
+
+10
+00:00:49,370 --> 00:00:53,650
+base class that provides counter functionality, so whenever I wanted a
+提供计数器功能的基类，因此每当我想要一个
+
+11
+00:00:53,650 --> 00:00:59,170
+counter for some specific purpose, I get to find a new sub-class and that, of
+为了某个特定的目的，我可以找到一个新的子类，
+
+12
+00:00:59,170 --> 00:01:02,540
+count, and that sub-class would automatically inherit the inc-method,
+计数器，子类将自动继承Inc-Method，
+
+13
+00:01:02,540 --> 00:01:06,619
+thereby allowing me to have counter without having to re-implement the code.
+从而允许我在不必重新实现代码的情况下具有计数器。
+
+14
+00:01:06,619 --> 00:01:10,750
+In this case the code is very, very small, but in general you can imagine having a
+在本例中，代码非常非常小，但通常您可以想象拥有一个
+
+15
+00:01:10,750 --> 00:01:15,420
+class that implements something tricky, or requiring a lot of code, and it's useful
+实现一些棘手的东西或需要大量代码的类，它很有用
+
+16
+00:01:15,420 --> 00:01:21,520
+to be able to reuse that in sub-classes. Now consider a sub class account that we
+以便能够在子类中重用它。现在考虑一个子类帐户，我们
+
+17
+00:01:21,520 --> 00:01:27,650
+might want to define called stock. Say we're implementing a warehouse accounting,
+可能需要定义一下所谓的股票。假设我们正在实施仓库会计，
+
+18
+00:01:27,650 --> 00:01:30,590
+program and we want to keep track of the number of items that are in stock of
+程序，并且我们希望跟踪库存项目的数量
+
+19
+00:01:30,590 --> 00:01:35,590
+certain different kinds. So we define a new class stock that inherits from count,
+某些不同的种类。因此我们定义了一个新类Stock，它继承自Count，
+
+20
+00:01:35,590 --> 00:01:41,310
+and now we'll have a new field in here to make this, Object that's classed different
+现在，我们在这里将有一个新字段来使其分类为不同的对象
+
+21
+00:01:41,310 --> 00:01:45,890
+from its parent will just have a name that, corresponds to the name of the, the
+将只有一个名称，该名称对应于
+
+22
+00:01:45,890 --> 00:01:51,240
+item that's in stock. And now, down here, we can actually use this. We can decla-,
+有库存的物品。现在，在这里，我们实际上可以用这个。我们可以取消-，
+
+23
+00:01:51,240 --> 00:01:57,440
+allocate a new stock object, we create a new object. We increment it To indicate
+分配一个新的股票对象，我们就创建一个新的对象。我们递增它以表示
+
+24
+00:01:57,440 --> 00:02:01,340
+that we have one thing in stock And then we assign it to some variable that we've
+我们有一个库存，然后我们把它赋给某个变量
+
+25
+00:02:01,340 --> 00:02:07,690
+declared of typed stock And then later on we can use this A object as we like. Now,
+声明了类型化的股票，然后我们可以随意使用这个A对象。现在,
+
+26
+00:02:07,690 --> 00:02:13,159
+the problem is that this code actually will not type-check. There is a type error
+问题是这段代码实际上不会进行类型检查。存在类型错误
+
+27
+00:02:13,159 --> 00:02:19,279
+in this code. And why is that? Well, let's think about it for a minute. So, what is
+在此代码中。为什么会这样呢？嗯，让我们考虑一下。那么，什么是
+
+28
+00:02:19,279 --> 00:02:25,549
+the signature of inc? So inc, remember, was declared to return things of type
+是Inc.的签名吗？因此，请记住，Inc.被声明为返回类型为
+
+29
+00:02:25,549 --> 00:02:32,549
+count. Right, and when the inc method is inherited by the stock class this
+伯爵。对，当STOCK类继承Inc方法时，
+
+30
+00:02:33,749 --> 00:02:37,989
+signature doesn't change, it still returns things of type count. So here we have a
+签名不变，它仍然返回COUNT类型的内容。所以我们这里有一个
+
+31
+00:02:37,989 --> 00:02:43,730
+new stock object we call the increment method But the type of this whole thing is
+New Stock对象，我们调用Increment方法，但整个对象的类型是
+
+32
+00:02:43,730 --> 00:02:49,669
+a count and then we try to assign that to a stock, but that doesn't work because
+然后我们尝试将其赋给一只股票，但这不起作用，因为
+
+33
+00:02:49,669 --> 00:02:56,669
+count. Is not a subtype of stock, a variable of type stock can't hold a value
+伯爵。不是STOCK的子类型，类型为STOCK的变量不能保存值
+
+34
+00:02:57,669 --> 00:03:03,840
+of type count and so the type system will report an error right here at the
+，因此类型系统将在此处的
+
+35
+00:03:03,840 --> 00:03:07,739
+assignment statement. And you can see that this is actually a serious problem,
+赋值语句。你可以看到这实际上是一个严重的问题，
+
+36
+00:03:07,739 --> 00:03:12,629
+because it has made the inheritance of the increment method pretty useless. I can
+因为它使增量方法的继承变得非常无用。我可以的
+
+37
+00:03:12,629 --> 00:03:19,159
+define new sub-classes of stock, but I can never use the increment method on them, at
+定义新的股票子类，但我永远不能对它们使用增量方法，在
+
+38
+00:03:19,159 --> 00:03:24,519
+least not without getting back something of the parent type. And so it's not as,
+至少在没有拿回一些父类的东西的情况下是这样的。所以这不像，
+
+39
+00:03:24,519 --> 00:03:30,900
+the inheritance of the incremental method is not as useful as one might have hoped.
+增量方法的继承并不像人们希望的那样有用。
+
+40
+00:03:30,900 --> 00:03:37,609
+So just to review, new stock, the, the incremented new stock, will have dynamic
+所以我再回顾一下，新股，这个，增量的新股，会有动态的
+
+41
+00:03:37,609 --> 00:03:41,359
+type stock. That'll actually be a stock object that is returned, okay. So don't
+键入STOCK。这实际上是一个返回的股票对象，好的。所以不要
+
+42
+00:03:41,359 --> 00:03:46,469
+get confused here. This is the dynamic type I'm talking about. So when we,
+在这里搞糊涂吧。这就是我所说的动态类型。所以当我们，
+
+43
+00:03:46,469 --> 00:03:50,659
+allocate the new stock object, and then we call the increment method, remember the
+分配新的股票对象，然后我们调用增量方法，记住
+
+44
+00:03:50,659 --> 00:03:54,939
+increment method returns self so the increment method was implemented something
+Increment方法返回self，因此Increment方法实现了一些
+
+45
+00:03:54,939 --> 00:04:01,939
+like this. Leave out the types but it was I gets I + one and it returned the self
+像这样。去掉类型，但它是我得到了I+1，它返回了自我
+
+46
+00:04:02,269 --> 00:04:06,129
+object alright, so it's definitely returning whatever object is passed in
+对象，所以它绝对会返回传入的任何对象
+
+47
+00:04:06,129 --> 00:04:10,109
+here at the dispatch point so it's returning something of dynamic type stock.
+这里是分派点，所以它返回一些动态类型的股票。
+
+48
+00:04:10,109 --> 00:04:14,739
+And, so this program will actually run if we didn't have type-checking. If we
+所以，如果我们没有进行类型检查，这个程序实际上会运行。如果我们
+
+49
+00:04:14,739 --> 00:04:18,739
+actually run this and it would work just fine. This would produce a dynamic stock
+实际运行这个程序，它会工作得很好。这将产生一个充满活力的股票
+
+50
+00:04:18,738 --> 00:04:23,650
+object and would store it into the stock variable. But it's not well typed because
+对象，并将其存储到STOCK变量中。但它的打字不是很好，因为
+
+51
+00:04:23,650 --> 00:04:28,960
+the ty pe checker loses track of the fact that this is a stock object. All it knows
+类型检查器会忘记这是库存对象这一事实。它所知道的一切
+
+52
+00:04:28,960 --> 00:04:34,120
+is that increment is declared to have return type count, and, which is certainly
+增量被声明为具有返回类型COUNT，这肯定是
+
+53
+00:04:34,120 --> 00:04:39,680
+correct because every stock object is also a count object, it's just not useful in
+正确，因为每个股票对象也是一个计数对象，只是在
+
+54
+00:04:39,680 --> 00:04:45,419
+the context of this piece of code. And so the type checker loses information. Which
+这段代码的上下文。因此类型检查器会丢失信息。哪一个
+
+55
+00:04:45,419 --> 00:04:52,419
+make it not very pleasant to try to put the increment method in the count class to
+尝试将Count类中的增量方法放到
+
+56
+00:04:52,490 --> 00:04:59,490
+begin with. So to solve this problem, we're going to look at extending the type
+首先。为了解决这个问题，我们将考虑扩展类型
+
+57
+00:04:59,889 --> 00:05:06,039
+system. The insight is going to be that the increment method returns self. In this
+系统。我们的洞察力将是，增量方法返回Self。在这里面
+
+58
+00:05:06,039 --> 00:05:10,150
+case, the increment method actually returns the self object, and therefore the
+情况下，增量方法实际上返回Self对象，因此
+
+59
+00:05:10,150 --> 00:05:16,090
+return value is going to have the same type as self. Whatever self happens to be,
+返回值将与self具有相同的类型。不管自己是什么样子，
+
+60
+00:05:16,090 --> 00:05:19,720
+which could be count or it could be any sub-type of count. So the self object only
+其可以是计数，也可以是计数的任何子类型。所以只有Self对象
+
+61
+00:05:19,720 --> 00:05:25,310
+has to be dynamically something that holds a value that's a sub-type of the declared
+必须是动态保存一个值的东西，该值是声明的
+
+62
+00:05:25,310 --> 00:05:30,860
+type of the self parameter, and so it could be any one of the sub-types in this
+类型，因此它可以是此参数中的任意子类型
+
+63
+00:05:30,860 --> 00:05:36,560
+case of the count class. And to do this we're actually gonna have to introduce a
+伯爵类的案例。要做到这一点，我们实际上必须引入一个
+
+64
+00:05:36,560 --> 00:05:41,860
+new key word called self type, that is gonna be used as the return of the type of
+名为self type的新关键字，它将用作
+
+65
+00:05:41,860 --> 00:05:45,770
+the return value of such functions. And we're gonna have to modify our typing
+此类函数的返回值。我们将不得不修改我们的打字方式
+
+66
+00:05:45,770 --> 00:05:52,750
+rules to handle this new kind of type. So the idea behind self type is it's going to
+处理这种新类型的规则。所以自我类型背后的想法是它将会
+
+67
+00:05:52,750 --> 00:05:58,009
+allow the type to change, when inc is inherited, or allow us to reason about how
+允许在继承Inc.时更改类型，或者允许我们对如何更改类型进行推理
+
+68
+00:05:58,009 --> 00:06:03,490
+the actual return type dynamically of increment method changes when the
+时，增量方法的实际返回类型会动态更改
+
+69
+00:06:03,490 --> 00:06:06,789
+increment method is inherited. So we change the declaration of inc to read as
+Increment方法是继承的。因此，我们将Inc的声明更改为
+
+70
+00:06:06,789 --> 00:06:10,960
+follows. We've declared the return type now to be self type, meaning the return
+下面是。我们现在已经将返回类型声明为self类型，这意味着返回
+
+71
+00:06:10,960 --> 00:06:16,699
+value Of the increment method has whatever type. Is the type of the original self
+增量方法的值可以是任何类型。是原始自我的类型
+
+72
+00:06:16,699 --> 00:06:21,659
+parameter? And when we do that now we can see. That it's possible. We don't, we
+参数？当我们这样做的时候，我们现在可以看到。这是可能的。我们没有，我们
+
+73
+00:06:21,659 --> 00:06:24,409
+haven't said how we do it, but you should be able to see that it intuitively makes
+我没有说我们是怎么做的，但你应该能直观地看到
+
+74
+00:06:24,409 --> 00:06:27,900
+sense that we could prove facts of the following forms. So when the self
+感觉我们可以证明以下形式的事实。所以当自我
+
+75
+00:06:27,900 --> 00:06:32,460
+parameter has the type count, remember that the thing we dispatch to, the thing
+参数具有类型COUNT，请记住我们调度到的对象
+
+76
+00:06:32,460 --> 00:06:37,280
+we call inc on, is the self para meter. So when we dispatch to account object, we get
+我们调用Inc on，是自我参数。因此，当我们调度到Account对象时，我们会得到
+
+77
+00:06:37,280 --> 00:06:41,280
+something back of type count. And we call, when we, when we dispatch on a stock
+后面的文字很重要。当我们，当我们派发库存的时候，我们会打电话
+
+78
+00:06:41,280 --> 00:06:45,590
+object, when we call increment on a stock object, well, what's the type of self? The
+对象，当我们在股票对象上调用增量时，那么，自我的类型是什么呢？这个
+
+79
+00:06:45,590 --> 00:06:50,280
+type is stock, and we get back something of type stock. And now the program that we
+类型是STOCK，我们得到的是STOCK类型的东西。现在我们的节目是
+
+80
+00:06:50,280 --> 00:06:55,599
+had before with this one change is well typed and would be accepted by the Cool
+以前有过这样的更改，类型很好，会被Cool接受
+
+81
+00:06:55,599 --> 00:07:02,599
+type system. Now it's very important to remember that self type is not a dynamic
+键入system。现在非常重要的是要记住，自我类型不是动态的
+
+82
+00:07:02,639 --> 00:07:08,189
+type it is very much a static type and part of the static type system. It's also
+类型它很大程度上是一个静电类型，是静电类型系统的一部分。它也是
+
+83
+00:07:08,189 --> 00:07:13,710
+important to realize that self type is not a class name. So unlike all the other
+重要的是要认识到，self类型不是类名。所以不像所有其他的
+
+84
+00:07:13,710 --> 00:07:18,379
+static types in cool, it is not a name of a class, it's its own special thing and
+静电打字很酷，它不是一个类名，它是它自己特别的东西
+
+85
+00:07:18,379 --> 00:07:23,870
+we'll say more about exactly what it is in future videos, but the purpose of self
+我们将在未来的视频中更多地讲述它到底是什么，但自我的目的
+
+86
+00:07:23,870 --> 00:07:27,759
+type as we've seen is to enable to type checker to accept more correct programs
+我们所看到的类型是启用类型检查器来接受更多正确的程序
+
+87
+00:07:27,759 --> 00:07:32,150
+and effectively. What self type does is to increase the expressive power of the type system.
+而且非常有效。自我类型所做的就是增加类型系统的表现力。
+

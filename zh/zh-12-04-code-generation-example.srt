@@ -1,0 +1,635 @@
+0
+00:00:03,959 --> 00:00:10,959
+In this video we're going to generate code for a small example program. The program
+在这段视频中，我们将为一个小示例程序生成代码。该计划
+
+1
+00:00:11,080 --> 00:00:15,610
+we'll take a look at takes a positive imaginary X and sums all the numbers from
+我们将看一下，取一个正的虚数X，然后将所有数字相加
+
+2
+00:00:15,610 --> 00:00:22,610
+O up to X. So if X is O then the result is O. Otherwise it is X plus the sum of all
+直到X，所以如果X是O，那么结果是O，否则就是X加上所有的和。
+
+3
+00:00:23,640 --> 00:00:29,259
+the numbers up to X minus one. So this isn't a interesting program but it does
+数字一直到X减1。这不是一个有趣的程序，但它确实很有趣
+
+4
+00:00:29,259 --> 00:00:35,870
+illustration all of the features that we discuss in the previous couple of videos.
+说明我们在前面几个视频中讨论的所有功能。
+
+5
+00:00:35,870 --> 00:00:41,199
+So let's dive right in and talk about how we're going to generate code for sum two.
+那么让我们直接开始，讨论一下如何生成求和2的代码。
+
+6
+00:00:41,199 --> 00:00:46,780
+So we begin by giving it a label for the entry point to the function, so that'll be
+所以我们首先给它一个函数入口点的标签，所以这将是
+
+7
+00:00:46,780 --> 00:00:53,780
+the sum two entries. Alright and now we have to generate code for the caller's
+总和为两个分录。好的，现在我们必须为调用者的
+
+8
+00:00:54,690 --> 00:00:59,629
+side, call, callee side excuse me, of the calling sequence. So what was that? So the
+呼叫顺序的一侧，呼叫方，被呼叫方打扰一下。那是怎么回事？因此，
+
+9
+00:00:59,629 --> 00:01:04,720
+first thing we have to do is we have to set up the frame pointer, which would just
+我们要做的第一件事是设置帧指针，这将只是
+
+10
+00:01:04,720 --> 00:01:09,110
+be the value of the stack pointer. So that's the frame pointer for this
+是堆栈指针的值。这就是这个的帧指针
+
+11
+00:01:09,110 --> 00:01:16,110
+activation, and. Then we're going to have to store the return address at the current
+激活，以及。那么我们将不得不将返回地址存储在当前
+
+12
+00:01:17,390 --> 00:01:21,450
+value of the stack pointer. And then we're going to move the stack pointer
+堆栈指针的值。然后我们要移动堆栈指针
+
+13
+00:01:21,450 --> 00:01:26,659
+into the - Whenever we store something on the stack we have to move the stack
+放入-每当我们在堆栈上存储一些东西时，我们就必须移动堆栈
+
+14
+00:01:26,659 --> 00:01:32,299
+pointer to the next unused location.  Alright. Okay And so now we have to
+指向下一个未使用位置的指针。好的。好的，所以现在我们必须
+
+15
+00:01:32,299 --> 00:01:37,759
+generate code, for this if then else All right? And the very first thing if you go
+为这个生成代码，如果这样，那么其他都可以吗？如果你去的第一件事
+
+16
+00:01:37,759 --> 00:01:42,490
+back and look at the code for if then else is to generate code for the first sub
+返回并查看If Then Else将为第一个SUB生成代码的代码
+
+17
+00:01:42,490 --> 00:01:46,399
+expression of the predicate. So we're going to generate code for X, and that's
+谓词的表达式。所以我们要为X生成代码，这就是
+
+18
+00:01:46,399 --> 00:01:51,630
+really easy And we're generating code for a variable, just looks up the variable in
+非常简单，我们正在为一个变量生成代码，只需在
+
+19
+00:01:51,630 --> 00:01:57,700
+the current position of the frame. Sorry, at the correct offset from the frame
+框架的当前位置。对不起，在距相框的正确偏移处
+
+20
+00:01:57,700 --> 00:02:04,700
+pointer, alright? Alright so once we do that now we are generating code for the
+指针，好吗？好的，一旦我们这样做了，现在我们就为
+
+21
+00:02:05,020 --> 00:02:07,880
+predicate And how do we do that? Well we generate code for this first sub
+谓词，我们该怎么做呢？我们为第一个SUB生成代码
+
+22
+00:02:07,880 --> 00:02:12,760
+expression, and now we have to save that sub expression somewhere Because we are
+表达式，现在我们必须将该子表达式保存在某个位置，因为我们
+
+23
+00:02:12,760 --> 00:02:16,130
+going to generate code for another sub expression. So the equality there is a
+将为另一个子表达式生成代码。所以这里的平等是一个
+
+24
+00:02:16,130 --> 00:02:21,160
+binary operator, so we have to save the value we just computed somewhere on the
+二元运算符，所以我们必须将刚刚计算的值保存在
+
+25
+00:02:21,160 --> 00:02:28,160
+stack Alright? So we'll do that, so we'll st ore the value of a zero on the stack.
+史塔克好吗？所以我们会这么做，所以我们会把零的值存储在堆栈上。
+
+26
+00:02:30,520 --> 00:02:37,520
+And that will involve, as always, moving the side pointer. Okay and now we generate
+这将一如既往地涉及到移动侧边指针。好的，现在我们生成
+
+27
+00:02:41,930 --> 00:02:47,680
+code for the second sub-expression of the predicate. All right, that's also easy.
+谓词的第二个子表达式的代码。好的，这也很容易。
+
+28
+00:02:47,680 --> 00:02:52,980
+That's just load the immediate of the immediate value into the accumulator,
+这只是将立即值的立即数加载到累加器中，
+
+29
+00:02:52,980 --> 00:02:59,090
+alright. And now I'm going to load the value that we said, the first or we move
+好的。现在我要加载我们说过的值，要么第一个，要么我们移动
+
+30
+00:02:59,090 --> 00:03:03,420
+the predicate back into a temporary register and actually do the comparison.
+将谓词放回临时寄存器中，并实际执行比较。
+
+31
+00:03:03,420 --> 00:03:09,340
+So this is more code, as actually part of the conditional, alright, so we do a load
+这是更多的代码，实际上是条件的一部分，好的，所以我们加载
+
+32
+00:03:09,340 --> 00:03:16,340
+word Entity one Of the value that we saved before. Okay and now we need to pop the
+Word实体是我们之前保存的值之一。好的，现在我们需要弹出
+
+33
+00:03:27,840 --> 00:03:34,840
+stack okay. We'll do that here because we're done with that value. Alright, and
+堆叠好了。我们在这里这样做是因为我们已经完成了那个值。好的，还有
+
+34
+00:03:41,420 --> 00:03:48,420
+now we're going to do the branch. So now we test whether. The two sub-expressions
+现在我们要做的是分支。所以现在我们测试一下。这两个子表达式
+
+35
+00:03:48,640 --> 00:03:53,090
+of the predicate are equal or not, and if they are, then we jump to the true branch.
+的谓词是否相等，如果它们相等，那么我们就跳到真正的分支。
+
+36
+00:03:53,090 --> 00:03:56,620
+And here I'm going to give the true branch a unique label, because this might be part
+在这里，我要给真正的分支一个独特的标签，因为这可能是
+
+37
+00:03:56,620 --> 00:04:00,260
+of a larger program where there are many if-then-else's, and so I'm going to append
+一个更大的程序，其中有许多if-Then-Else，所以我要追加
+
+38
+00:04:00,260 --> 00:04:04,460
+some identifying number on the end. Instead of writing out true branch, I'll
+尾部有一些识别码。我不会写出真正的分支，而是
+
+39
+00:04:04,460 --> 00:04:10,350
+call this true one Alright? Okay, and then if we fall through, then we're on the
+就当这是真的好吗？好的，如果我们失败了，那我们就在
+
+40
+00:04:10,350 --> 00:04:15,180
+false branch, we'll call that false one And now we're generating code for the
+False分支，我们将该分支称为false分支，现在我们正在为
+
+41
+00:04:15,180 --> 00:04:20,329
+false branch, which is this summation here Alright? And how are we going to do that?
+假分支，这里的求和是哪一个？我们要怎么做呢？
+
+42
+00:04:20,329 --> 00:04:22,710
+Well this, whole thing is a plus expression, which means we have the
+嗯，这个，整个事情是一个加号表达式，这意味着我们有
+
+43
+00:04:22,710 --> 00:04:28,520
+generic code first. For the first sub-expression which is just X. Alright?
+首先是泛型代码。对于第一个子表达式，也就是X，好吗？
+
+44
+00:04:28,520 --> 00:04:35,469
+So what do we do? Well we load. To generate code for x we look up x at its
+那我们该怎么做呢？好的，我们装船。为了生成x的代码，我们在x的
+
+45
+00:04:35,469 --> 00:04:40,340
+current offset. And that is the appropriate offset in the frame, using the
+当前偏移量。这是帧中的适当偏移量，使用
+
+46
+00:04:40,340 --> 00:04:43,500
+frame pointer. Okay? It is the only argument, and so it's at four from the
+帧指针。好吧?这是唯一的论点，所以现在是四点。
+
+47
+00:04:43,500 --> 00:04:48,620
+frame pointer. I'm sorry the only argument to the procedure, and so that's stored at
+帧指针。很抱歉，这个过程的唯一参数，所以它存储在
+
+48
+00:04:48,620 --> 00:04:53,250
+the first position for arguments, which is always four from the frame pointer in our
+参数的第一个位置，它始终是从
+
+49
+00:04:53,250 --> 00:04:57,659
+scheme. All right, and now that we've loaded it we have to save it because it is
+计划。好的，现在我们已经加载了它，我们必须保存它，因为它是
+
+50
+00:04:57,659 --> 00:05:04,659
+part of a binary operation so we're going to save that value on the stack. Kay. And
+二进制运算的一部分，所以我们要将该值保存在堆栈上。凯。和
+
+51
+00:05:07,689 --> 00:05:14,689
+now we will adjust the stack pointer. Okay. And what are we going to do next? Well,
+现在我们将调整堆栈指针。好吧。那我们下一步要做什么呢？井,
+
+52
+00:05:22,830 --> 00:05:27,999
+now we've, we've, we computed this sub-expression, this X. We can't do the
+现在我们已经，我们已经，我们计算了这个子表达式，这个X。我们不能
+
+53
+00:05:27,999 --> 00:05:31,889
+plus yet until we compute the second sub-expression which is the function call
+加上，直到我们计算第二个子表达式，即函数调用
+
+54
+00:05:31,889 --> 00:05:35,379
+Alright? So now we have the generate code for the function call and I'm going to
+好吗？现在我们有了函数调用的生成代码，我将
+
+55
+00:05:35,379 --> 00:05:39,819
+move up here to the other side of the screen here to, to show the rest of the
+从这里移到屏幕的另一边，在这里，展示
+
+56
+00:05:39,819 --> 00:05:46,819
+code. Okay And the first thing we do, to generate code, for the function call Is to
+密码。好的，我们要做的第一件事是为函数调用生成代码
+
+57
+00:05:47,770 --> 00:05:52,099
+start setting up our activation record Alright? This is even setting up the new
+开始设置我们的激活记录，好吗？这甚至是在设置新的
+
+58
+00:05:52,099 --> 00:05:56,650
+activation record for the function, call that we're about to make Alright? So what
+函数的激活记录，我们将要进行的调用，好吗？那又怎样
+
+59
+00:05:56,650 --> 00:06:02,229
+do we do there? We store The frame pointer. 'Kay, use this to our old frame
+我们在那里做吗？我们存储帧指针。好的，把这个用在我们的旧相框上
+
+60
+00:06:02,229 --> 00:06:09,229
+pointer. Add the stack on the stack. [sound] Alright, and now, we have to
+指针。将堆栈添加到堆栈上。[声音]好的，现在，我们必须
+
+61
+00:06:17,139 --> 00:06:21,620
+compute the argument All right? We have to compute the x-1. So that code gets
+计算一下这个论点，对吗？我们必须计算x-1。所以代码会得到
+
+62
+00:06:21,620 --> 00:06:26,740
+inserted here in the template for our function call. So, what's going to happen
+在此处插入到我们的函数调用的模板中。那么，接下来会发生什么呢？
+
+63
+00:06:26,740 --> 00:06:29,529
+there? Well, we're completing subtraction, so the template for subtraction is to
+那里?嗯，我们正在完成减法，所以减法的模板是
+
+64
+00:06:29,529 --> 00:06:32,879
+first generate code for the first sub-expression, then generate code for the
+首先为第一个子表达式生成代码，然后为
+
+65
+00:06:32,879 --> 00:06:36,849
+second sube-xpression, and then subtract them. All right, so let's do that. So,
+第二个Sube-Xpression，然后减去它们。好的，那我们就这么做吧。所以,
+
+66
+00:06:36,849 --> 00:06:43,849
+first we generate code for x again. Okay, and now, since it's the first argument of
+首先，我们再次为x生成代码。好的，现在，既然这是
+
+67
+00:06:48,319 --> 00:06:55,319
+a binary operation, we're going to save it on stack. Alright now we generate code for
+一个二元运算，我们要把它保存在堆栈上。好的，现在我们为
+
+68
+00:07:04,039 --> 00:07:10,520
+the second argument of the subtraction. Okay, and now we perform the subtractions
+减法的第二个参数。好的，现在我们来做减法
+
+69
+00:07:10,520 --> 00:07:17,520
+so we have to load the first argument back into a temporary register. Have to
+所以我们必须将第一个参数加载回临时寄存器。不得不
+
+70
+00:07:19,779 --> 00:07:26,779
+actually do the subtraction. Excuse me here. Alright, and then we can pop the
+实际上是做减法。打扰一下。好的，然后我们就可以把
+
+71
+00:07:34,099 --> 00:07:41,099
+temporary value off the stack. Okay, now we have actually done subtraction. Let me
+堆栈外的临时值。好的，现在我们真的做了减法。让我
+
+72
+00:07:44,689 --> 00:07:51,689
+see that. There is everything, from about here to down there is computing x minus y.
+看到了吗。所有的东西，从这里到下面，都是计算x减去y。
+
+73
+00:07:52,900 --> 00:07:58,569
+Okay... So this is computing x And this was computing one And then this whole
+好的..。这是计算x，这是计算1，然后是整个
+
+74
+00:07:58,569 --> 00:08:04,020
+thing is computing the subtraction Alright? So now we compute the argument.
+事情就是计算减法，好吗？所以现在我们来计算这个论点。
+
+75
+00:08:04,020 --> 00:08:09,719
+What are we going to do? Well we save it on the stack. So now we save the result on
+我们该怎么办呢？我们把它保存在堆栈上。所以现在我们将结果保存在
+
+76
+00:08:09,719 --> 00:08:14,809
+the stack. We're saving it into the new activat ion record that we're building
+堆栈。我们要把它保存到我们正在建立的新的激活记录中
+
+77
+00:08:14,809 --> 00:08:21,809
+Alright? And then we have to advance this, or move the stack pointers as always And
+好吗？然后我们必须推进这一步，或者像往常一样移动堆栈指针
+
+78
+00:08:26,289 --> 00:08:28,580
+now we're ready, we have to do the function calls And now we do the jump in
+现在我们准备好了，我们必须进行函数调用，现在我们跳到
+
+79
+00:08:28,580 --> 00:08:35,580
+the link to the entry point of sum two Okay? And now when this returns, what it's
+连接到2和的入口点的链接，好吗？现在当它回来的时候，它是什么
+
+80
+00:08:38,080 --> 00:08:42,330
+going to return with, it's going to return what the result of computing the sum to in
+返回的是，它将返回计算和的结果是
+
+81
+00:08:42,330 --> 00:08:46,640
+the accumulator, all right? And so then, we're ready to perform the addition And
+蓄电池，好吗？然后，我们准备好执行加法和
+
+82
+00:08:46,640 --> 00:08:50,900
+now we've computed the second argument to the addition and how do we do that? Well,
+现在我们已经计算了加法的第二个参数，我们该怎么做呢？井,
+
+83
+00:08:50,900 --> 00:08:53,960
+look back at the template for addition the next thing what happens is we reload the
+回过头来看一下用于添加的模板，接下来会发生的事情是我们重新加载
+
+84
+00:08:53,960 --> 00:09:00,960
+temporary value that we saved on the stack. Alright and now we got actually
+我们保存在堆栈上的临时值。好的，现在我们实际上得到了
+
+85
+00:09:03,960 --> 00:09:10,960
+perform the edition. Okay? And then we could pop the temporary value of the stack
+执行编辑。好吧?然后我们可以弹出堆栈的临时值
+
+86
+00:09:17,490 --> 00:09:24,490
+Alright And that actually ends the, the else branch, the false branch of the
+好的，这实际上结束了，Else分支，False分支
+
+87
+00:09:30,560 --> 00:09:35,930
+entire if and else And there's now a branch around the rest of the if and else
+整个IF和ELSE，现在IF和ELSE的睡觉周围有一个分支
+
+88
+00:09:35,930 --> 00:09:42,930
+code And we'll call that label if and one And now comes the code for the true
+代码，我们将调用该标签If和One，现在是TRUE的代码
+
+89
+00:09:44,880 --> 00:09:51,880
+branch. And what we are going to put there, well, it's not very complicated
+布兰奇。我们要放在那里的东西，嗯，并不是很复杂
+
+90
+00:09:54,150 --> 00:09:59,340
+because all we're doing true branch is loading or generating codes for zero which
+因为我们真正要做的就是为零加载或生成代码，
+
+91
+00:09:59,340 --> 00:10:06,200
+is a single load immediate, load immediate Alright And that's the entire true branch
+是单个立即加载，立即加载好的，那就是整个真分支
+
+92
+00:10:06,200 --> 00:10:11,940
+and so now we're at um there should not be a colon there excuse me, and in fact I can
+所以现在我们在，嗯，不应该有冒号，打扰一下，事实上我可以
+
+93
+00:10:11,940 --> 00:10:18,930
+just erase that a little bit Alright And now we're at and actually I see it notice
+只要把它抹去一点，好的，现在我们到了，实际上我看到它注意到了
+
+94
+00:10:18,930 --> 00:10:25,090
+in the wrong place so let's fix that so this is a branch at the end of the false
+在错误的位置，让我们修正一下，这是False结尾处的一个分支
+
+95
+00:10:25,090 --> 00:10:29,950
+branch, at the end of the else, part of the if and we're going to, to branch
+分支，在ELSE的末尾，IF的一部分，我们要，分支
+
+96
+00:10:29,950 --> 00:10:35,260
+around per quote for the two branch which is only one instruction. And so the very
+在两个分支的每个报价附近，这只是一条指令。所以非常重要的是
+
+97
+00:10:35,260 --> 00:10:42,030
+next instruction is the label end if. So now what's left to do, we've generated code for the whole if then else so
+下一条指令是标签End If。现在剩下要做的是，我们已经为整个If Then Else So生成了代码
+
+98
+00:10:42,030 --> 00:10:47,720
+now it goes here is the rest of the template for the function definition so
+这里是函数定义模板的睡觉，所以
+
+99
+00:10:47,720 --> 00:10:52,440
+now we have to generate the code returns back to the caller and how do we do well
+现在我们必须生成返回给调用者的代码返回，我们该如何做好呢
+
+100
+00:10:52,440 --> 00:10:59,440
+we have to load the return address The on the stack, okay? And now we pop the stacks
+我们得把回邮地址加载到堆栈上，好吗？现在我们把堆栈打开
+
+101
+00:11:02,660 --> 00:11:05,920
+so we pop the entire activation record off the stack and now because of the
+所以我们将整个激活记录从堆栈中弹出，现在因为
+
+102
+00:11:05,920 --> 00:11:09,240
+activation reco rd well remember, there's always two words. One for the return
+激活记录我们要记住，总是有两个词。一张返程票。
+
+103
+00:11:09,240 --> 00:11:12,820
+address and one for the frame pointer and then a number of words equals to the
+地址和一个用于帧指针的字，然后字的数量等于
+
+104
+00:11:12,820 --> 00:11:16,580
+number of arguments where there's only one argument here, so we have three words, so
+这里只有一个参数的参数数量，所以我们有三个单词，所以
+
+105
+00:11:16,580 --> 00:11:23,120
+it's twelve bytes. So we increment the stack pointer by twelve, all right? And
+它是十二个字节。所以我们将堆栈指针递增12，好吗？和
+
+106
+00:11:23,120 --> 00:11:30,120
+then we load the old frame pointer, we store the frame pointer. Okay, and then we
+然后我们加载旧的帧指针，我们存储帧指针。好的，然后我们
+
+107
+00:11:34,760 --> 00:11:41,090
+return. So, one more instruction, we'll do a jump register to the return address And
+回来吧。因此，再执行一条指令，我们将对返回地址执行跳转寄存器
+
+108
+00:11:41,090 --> 00:11:47,790
+that is the entire code for this simple functions sum2 And there's a couple of
+这就是这个简单函数sum2的全部代码，其中有几个
+
+109
+00:11:47,790 --> 00:11:53,150
+things to point out. So, first of all the, the code is constructed as a bunch of
+需要指出的事情。所以，首先，代码被构造为一串
+
+110
+00:11:53,150 --> 00:11:56,770
+templates pasted together and I try to point out as we go along how that
+模板粘贴在一起，我试着在我们进行的过程中指出
+
+111
+00:11:56,770 --> 00:12:03,010
+works But we do lined up with one linear sequence of code. Alright and if, if
+有效，但我们使用的是一个线性代码序列。好的，如果，如果
+
+112
+00:12:03,010 --> 00:12:06,260
+you're all confused as we work as to go back and look at those templates and look
+当我们工作时，你们都很困惑，因为我们要回去看那些模板，然后再看一看
+
+113
+00:12:06,260 --> 00:12:11,670
+at this example and understand how the code all fits together and how it works.
+在这个示例中，了解所有代码是如何组合在一起的，以及它是如何工作的。
+
+114
+00:12:11,670 --> 00:12:14,460
+And the other thing I would point out is just that this is your extremely
+我要指出的另一件事是，这是你的极端
+
+115
+00:12:14,460 --> 00:12:21,460
+inefficient code so later here where we were generating code to check whether x=0.
+低效的代码，所以后面我们生成代码来检查x是否=0。
+
+116
+00:12:23,240 --> 00:12:30,240
+Notice here that we, we load x so this is a load Of x And then we immediately store
+注意，我们，我们加载x，所以这是x的加载，然后我们立即存储
+
+117
+00:12:30,640 --> 00:12:34,550
+the x again into the stacks, we just loaded it now from the frame then we
+再次将x放入堆栈，我们现在只是将其从帧中加载，然后我们
+
+118
+00:12:34,550 --> 00:12:39,380
+immediately store it back in the memory and then we and load the immediate value
+立即将其存储回内存中，然后我们并加载立即值
+
+119
+00:12:39,380 --> 00:12:44,320
+then we reload the value of x here. So, you know, moving the value of x we you
+然后我们在这里重新加载x的值。所以，你知道，移动x的值
+
+120
+00:12:44,320 --> 00:12:48,800
+know, all around. So we load it, we store it, we load it again and this was a lot of
+你知道，到处都是。所以我们加载它，我们存储它，我们再次加载它，这是很多
+
+121
+00:12:48,800 --> 00:12:53,940
+wasted motion here and that's a result of this very simple cogeneration strategy
+这里浪费了运动，这是这个非常简单的热电联产策略的结果
+
+122
+00:12:53,940 --> 00:12:58,370
+where we want to be able to compose code together. We will be able to compose these
+我们希望能够一起编写代码。我们将能够创作出这些
+
+123
+00:12:58,370 --> 00:13:02,730
+templates in a way that it will work properly. This code does not have to be
+模板，以使其能够正常工作。此代码不必是
+
+124
+00:13:02,730 --> 00:13:06,970
+this inefficient in a lot of the techniques of what we discussed in
+这在我们在中讨论的许多技术中都是低效的
+
+125
+00:13:06,970 --> 00:13:10,920
+sub-sequential lectures we talked about in a smarter code generation techniques and
+我们在更智能的代码生成技术和
+
+126
+00:13:10,920 --> 00:13:14,630
+also optimizations like even improve the code further.
+此外，像这样的优化甚至进一步改进了代码。
+

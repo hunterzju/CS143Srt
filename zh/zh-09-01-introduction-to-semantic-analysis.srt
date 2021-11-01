@@ -1,0 +1,235 @@
+0
+00:00:04,430 --> 00:00:07,879
+Welcome back. In this video, we're going to give a very brief introduction, an
+欢迎回来。在这段视频中，我们将做一个非常简短的介绍，
+
+1
+00:00:07,879 --> 00:00:14,879
+overview, of what we're going to be talking about in semantic analysis. Let's
+概述，我们将在语义分析中讨论的内容。我们走吧
+
+2
+00:00:15,469 --> 00:00:19,869
+take a moment to review where we are in our discussion with compilers. So we
+花点时间回顾一下我们与编译器的讨论进展如何。所以我们
+
+3
+00:00:19,869 --> 00:00:23,720
+talked about lexical analysis, and from the point of view of enforcing the
+谈到了词法分析，并从执行
+
+4
+00:00:23,720 --> 00:00:28,550
+language definition the main job that lexical analyses does is detect input
+语言定义词法分析的主要工作是检测输入
+
+5
+00:00:28,550 --> 00:00:35,550
+[inaudible] preemptive symbols that aren't part of our language. The next step is
+[听不见]先发制人的符号不是我们语言的一部分。下一步是
+
+6
+00:00:36,480 --> 00:00:40,510
+parsing. We finished talking about that too. And, again, from the point of view of
+正在解析。我们也谈完了那件事。再说一遍，从
+
+7
+00:00:40,510 --> 00:00:43,649
+trying to determine whether a program is well-formed or not, or whether it's a
+尝试确定程序是否格式良好，或者它是否是
+
+8
+00:00:43,649 --> 00:00:48,280
+valid program, the job of parsing is to detect all the sentences in the language
+有效的程序，分析的工作是检测语言中的所有句子
+
+9
+00:00:48,280 --> 00:00:53,920
+that are ill-formed, or that don't have a parse string. And finally What we're going
+格式错误，或者没有解析字符串。最后我们要做的是
+
+10
+00:00:53,920 --> 00:00:58,469
+to talk about now, what's going to occupy us for a while is semantic analysis. And
+现在我们要谈的是语义分析。和
+
+11
+00:00:58,469 --> 00:01:02,780
+this is the last of what are called the front end phases. So if you think of
+这是所谓的前端阶段中的最后一个阶段。所以如果你想到
+
+12
+00:01:02,780 --> 00:01:07,360
+lexical analysis, parsing, and semantic analysis as filters that progressively
+作为过滤器的词法分析、解析和语义分析
+
+13
+00:01:07,360 --> 00:01:13,450
+reject more and more input strings until finally you're left after all three phases
+拒绝越来越多的输入字符串，直到最后在所有三个阶段结束后才离开
+
+14
+00:01:13,450 --> 00:01:18,460
+have run with only valid programs to compile, well semantic analysis is the
+已经运行过的只有有效的程序要编译，很好的语义分析是
+
+15
+00:01:18,460 --> 00:01:23,650
+last line of defense. It's the last one in that pipeline and its job is to catch all
+最后一道防线。它是管道中的最后一个，它的工作是捕获所有
+
+16
+00:01:23,650 --> 00:01:30,430
+potential remaining errors in a program. Now you might ask yourself, why do we even
+程序中潜在的剩余错误。现在你可能会问自己，为什么我们甚至
+
+17
+00:01:30,430 --> 00:01:34,520
+need a separate semantic analysis phase? And the answer to that's very simple,
+需要单独的语义分析阶段吗？这个问题的答案很简单，
+
+18
+00:01:34,520 --> 00:01:37,860
+There are, there are some features of programming languages, some kinds of
+有，有一些编程语言的一些特点，有一些
+
+19
+00:01:37,860 --> 00:01:42,630
+mistakes you can make that parsings simply can't catch. Parsing we'll use in context
+你可以犯的错误是你根本无法捕捉到的。我们将在上下文中使用的解析
+
+20
+00:01:42,630 --> 00:01:47,070
+free grammars is not expressive enough to describe everything that we're interested
+自由语法不足以描述我们感兴趣的一切
+
+21
+00:01:47,070 --> 00:01:51,310
+in, in a language definition. So, some of these language constructs are not context
+在语言定义中。因此，这些语言结构中的一些不是上下文
+
+22
+00:01:51,310 --> 00:01:54,950
+free. And the situation here is very, very similar to what it was when we switched
+免费的。这里的情况与我们切换时非常非常相似
+
+23
+00:01:54,950 --> 00:01:58,680
+from lexical analysis to parsing. Just like not everything could be done with a
+从词法分析到句法分析。就像不是所有事情都可以用
+
+24
+00:01:58,680 --> 00:02:03,420
+finite [inaudible]. And we wanted to have something more. Our context free grammar
+有限的[听不见的]我们想要更多的东西。我们的上下文无关文法
+
+25
+00:02:03,420 --> 00:02:08,299
+to describe additional features of our programming languages [inaudible] Grammars
+描述我们的编程语言[听不见的]语法的附加功能
+
+26
+00:02:08,299 --> 00:02:11,409
+by themselves are also not enough, and there some additional features beyond
+仅靠它们本身也是不够的，除此之外还有一些额外的功能
+
+27
+00:02:11,409 --> 00:02:18,409
+those that can't be easily expressed using context free constructs. So what does
+那些不能使用上下文无关构造轻松表达的内容。那么，什么是
+
+28
+00:02:18,469 --> 00:02:22,959
+semantic analysis actually do? In a case of cool C, it does checks of many
+语义分析真的能做到吗？在酷C的情况下，它会检查很多
+
+29
+00:02:22,959 --> 00:02:26,709
+different kinds, and that's pretty typical. So here's a list of six classes
+不同的种类，这是相当典型的。所以这里有六个班级的清单
+
+30
+00:02:26,709 --> 00:02:30,559
+of checks that are done by Cool C, and let's just run through them quickly. First
+由Cool C完成的检查，让我们快速浏览一下。第一
+
+31
+00:02:30,559 --> 00:02:33,489
+we want to check that all identifiers are declared, and we also have to check that
+我们希望检查所有标识符是否都已声明，并且我们还必须检查
+
+32
+00:02:33,489 --> 00:02:38,290
+any scope restrictions on those identifiers are observed. Cool C compiler
+将遵守对这些标识符的任何范围限制。Cool C编译器
+
+33
+00:02:38,290 --> 00:02:42,760
+has to do type checking, and this is actually a major function of the semantic
+必须进行类型检查，这实际上是语义的一个主要功能
+
+34
+00:02:42,760 --> 00:02:47,489
+analyzer in Cool. There are a number of restrictions that come from the object
+分析器处于冷却状态。有许多来自对象的限制
+
+35
+00:02:47,489 --> 00:02:51,449
+oriented nature of Cool. We have to check that the inheritance relationships between
+面向酷的本质。我们必须检查它们之间的继承关系
+
+36
+00:02:51,449 --> 00:02:56,319
+classes make sense. We don't want classes to be redefined; we only want one class
+课程是有意义的。我们不希望重新定义类；我们只需要一个类
+
+37
+00:02:56,319 --> 00:03:01,109
+definition per class. Similarly methods should only be defined once within a
+每个类的定义。类似地，方法在
+
+38
+00:03:01,109 --> 00:03:05,279
+class. Cool has a number of reserved identifiers and we have to be careful that
+班级。Cool有许多保留的标识符，我们必须小心
+
+39
+00:03:05,279 --> 00:03:09,209
+those aren't misused. And this is pretty typical; lots of languages have some
+这些没有被误用。这是相当典型的；很多语言都有一些
+
+40
+00:03:09,209 --> 00:03:13,120
+reserved identifiers with special rules that have to be followed for those
+保留标识符，具有必须遵循的特殊规则
+
+41
+00:03:13,120 --> 00:03:17,159
+identifiers. And, actually this list is not even complete. There are a number of
+标识符。而且，实际上这份名单甚至还不完整。这里有很多
+
+42
+00:03:17,159 --> 00:03:22,230
+other restrictions. And we'll be talking about all of those in future videos. The
+其他限制。我们将在未来的视频中讨论所有这些问题。这个
+
+43
+00:03:22,230 --> 00:03:26,150
+main message here is that its medic analyzer needs to do quite a few different
+这里的主要信息是它的医疗分析器需要做很多不同的事情
+
+44
+00:03:26,150 --> 00:03:30,979
+kinds of checks. These checks will vary with the language. The kinds of checks
+各种支票。这些检查将随语言的不同而不同。支票的种类
+
+45
+00:03:30,979 --> 00:03:36,290
+that cool C does are pretty typical of statically typed checked object oriented
+这种很酷的C语言是非常典型的面向静态类型的检查对象
+
+46
+00:03:36,290 --> 00:03:40,180
+languages. But other families of languages will have different kinds of checks.
+语言。但是其他语系会有不同种类的检查。
+

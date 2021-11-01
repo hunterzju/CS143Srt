@@ -1,0 +1,385 @@
+0
+00:00:03,949 --> 00:00:07,839
+In this video, we're going to talk about our first parsing algorithm, recursive
+在本视频中，我们将讨论我们的第一个解析算法-递归
+
+1
+00:00:07,839 --> 00:00:14,839
+descent parsing. So Recursive Descent is what is called a top-down parsing
+下降解析。因此递归下降就是所谓的自上而下的解析
+
+2
+00:00:16,090 --> 00:00:21,220
+algorithm and you might suspect that there are also bottom-up algorithms and they are
+算法，您可能会怀疑还有自下而上的算法，它们是
+
+3
+00:00:21,220 --> 00:00:25,540
+indeed such things but we will be talking about them later but in a top-down parsing
+确实有这样的事情，但我们稍后将在自上而下的解析中讨论它们
+
+4
+00:00:25,540 --> 00:00:29,500
+algorithm, the parse tree is constructed from the top so starting with the root
+算法中，解析树是从顶部构建的，因此从根开始
+
+5
+00:00:29,500 --> 00:00:35,879
+node and from left to right. And so the terminals then will be seen in the order
+节点，并从左到右。这样就可以在顺序中看到终端
+
+6
+00:00:35,879 --> 00:00:40,520
+that they appear in the token string. So for example, if I have this token string
+它们出现在令牌字符串中。例如，如果我有这个令牌字符串
+
+7
+00:00:40,520 --> 00:00:45,410
+here, this is a hypothetical parse tree that I could construct and the numbers
+这里，这是一个假设的解析树，我可以构建它和数字
+
+8
+00:00:45,410 --> 00:00:50,530
+here correspond to the order in which the nodes of this parse tree are constructed.
+这里对应于构造该解析树的节点的顺序。
+
+9
+00:00:50,530 --> 00:00:54,760
+So we have to begin at the roots, that's the first thing that happens and then if
+所以我们必须从根开始，这是发生的第一件事，然后如果
+
+10
+00:00:54,760 --> 00:00:59,489
+T2 is a. Belongs here in the parse tree. That would be next thing that happened but
+T2是一个。属于解析树中的这里。那将是下一件发生的事情，但是
+
+11
+00:00:59,489 --> 00:01:04,720
+then if we have a nonterminal of the next position, that will be number three and
+那么如果我们有一个下一个位置的非终结点，那就是第三个，
+
+12
+00:01:04,720 --> 00:01:08,619
+then if it has children, well the left most one should be going left to right
+那么如果它有孩子，那么最左边的应该是从左到右
+
+13
+00:01:08,619 --> 00:01:12,780
+will be the fourth thing to be generated. And then let's say the two children of
+将是第四个要产生的东西。然后让我们假设这两个孩子
+
+14
+00:01:12,780 --> 00:01:16,920
+number four are both terminals that would be the next two terminals in the input and
+第四个是两个端子，它们将是输入中的下两个端子，并且
+
+15
+00:01:16,920 --> 00:01:21,030
+so on. The next thing that'll happen is the second child of number three and then
+等等。接下来会发生的事情是三号的第二个孩子，然后
+
+16
+00:01:21,030 --> 00:01:27,630
+the last two terminals appearing in left to right order. So let's consider this
+最后两个端子按从左到右的顺序显示。所以让我们考虑一下这个
+
+17
+00:01:27,630 --> 00:01:34,039
+grammar for integer expressions and let's look at a particular input, a very simple
+整数表达式的语法，让我们看一下特定的输入，一个非常简单的
+
+18
+00:01:34,039 --> 00:01:39,700
+one, just open paren five, close paren. And now, what we're going to do is we're
+一，打开帕伦五号，合上帕伦。现在，我们要做的是
+
+19
+00:01:39,700 --> 00:01:42,999
+going to parse this using a recursive descent strategy. I'm not gonna actually
+我们将使用递归下降策略对其进行解析。我不会真的
+
+20
+00:01:42,999 --> 00:01:47,340
+show you any pseudocode or anything like that. I'm just going to walk through how
+给你看任何伪代码或类似的东西。我只想详细介绍一下
+
+21
+00:01:47,340 --> 00:01:52,189
+this, how this input string would be parsed. But using this grammar and the
+这就是该输入字符串的解析方式。但是使用这个语法和
+
+22
+00:01:52,189 --> 00:01:57,749
+Recursive Descent Algorithm and the basic idea is that we begin with a nonterminal,
+递归下降算法，其基本思想是我们从一个非终结点开始，
+
+23
+00:01:57,749 --> 00:02:02,999
+we begin with the root node and we always try the rules for nonterminal in order. So
+我们从根节点开始，并且总是按顺序尝试非终结点的规则。所以
+
+24
+00:02:02,999 --> 00:02:08,110
+we will begin by starting with e goes to t and if that doesn't work, we'll try e goes
+我们将从e转到t开始，如果不起作用，我们将尝试e转
+
+25
+00:02:08,110 --> 00:02:12,560
+to t + e. So, this is gonna be a top down algorithm beginning at the root. We're
+到t+e。所以，这将是一个从根开始的自上而下的算法。我们是
+
+26
+00:02:12,560 --> 00:02:17,569
+gonna work from left to right, we try the productions in order and when the
+从左到右工作，我们按顺序尝试制作，当
+
+27
+00:02:17,569 --> 00:02:22,860
+productions fail, we may have to do some back tracking in order to try alternative
+生产失败了，我们可能不得不回溯一下，以便尝试替代方案。
+
+28
+00:02:22,860 --> 00:02:26,730
+productions. There are three parts. There's the grammar that we're using.
+制作。包括三个部分。这就是我们正在使用的语法。
+
+29
+00:02:26,730 --> 00:02:30,970
+There is the parse tree that we're building and initially that's just the
+这是我们正在构建的解析树，最初这只是
+
+30
+00:02:30,970 --> 00:02:35,430
+root of the parse tree 3e and finally there's the input that we're processing
+解析树3e的根，最后是我们正在处理的输入
+
+31
+00:02:35,430 --> 00:02:38,790
+and we'll indicate our position in the input, how much of the input we have read
+我们会指出我们在输入中的位置，我们已经阅读了多少输入
+
+32
+00:02:38,790 --> 00:02:44,290
+by this big fat red arrow and it always points to the next terminal symbol to be
+在这个又大又粗的红色箭头旁边，它总是指向下一个端子符号
+
+33
+00:02:44,290 --> 00:02:48,409
+read, The next token to be read. So in this case, we're starting with an open
+READ，要读取的下一个令牌。所以在这种情况下，我们从一个公开的
+
+34
+00:02:48,409 --> 00:02:54,019
+paren. Okay? And also in the grammar, you can see the highlighting here the brighter
+帕伦。好吧?此外，在语法中，您可以看到这里的突出显示越亮
+
+35
+00:02:54,019 --> 00:02:58,569
+red color indicates which production we're going to try. So, we're going to begin to
+红色表示我们要尝试哪种产品。所以，我们要开始
+
+36
+00:02:58,569 --> 00:03:03,489
+build our Parse Tree by trying production e goes to t, and what does that mean?
+通过尝试乘积e到t来构建我们的解析树，这意味着什么呢？
+
+37
+00:03:03,489 --> 00:03:08,420
+Well, that means we make t the child of e and then we continue trying to build the
+这意味着我们将t设为e的子级，然后继续尝试构建
+
+38
+00:03:08,420 --> 00:03:13,560
+Parse Tree. Well, so remember we're going left to right and top-down so now, t is an
+解析树。记住我们从左到右，自上而下，所以现在，这是一个
+
+39
+00:03:13,560 --> 00:03:18,129
+unexpanded nonterminal, is the only unexpanded nonterminal so we have to work
+未扩展的非终端，是唯一未扩展的非终端，所以我们必须工作
+
+40
+00:03:18,129 --> 00:03:22,239
+on it. And what are we going to do, well we're going to try a production for t and
+这就去办。我们要做什么呢，我们要试一试t和t的生产
+
+41
+00:03:22,239 --> 00:03:26,859
+since we haven't tried any yet, we'll just try the first one, t goes to it. So the
+既然我们还没有试过，我们就试第一个吧，那就试试吧。因此，
+
+42
+00:03:26,859 --> 00:03:32,040
+next step is to make nth a child with t and that's what our parse tree looks like.
+下一步是使第n个孩子带有t，这就是我们的解析树的样子。
+
+43
+00:03:32,040 --> 00:03:36,269
+And now, we actually have something that we can check. We can check whether we're
+现在，我们实际上有了可以检查的东西。我们可以检查我们是不是
+
+44
+00:03:36,269 --> 00:03:42,329
+making progress. So observe that as long as we're generating nonterminals, we don't
+正在取得进展。所以请注意，只要我们生成非终结符，我们就不会
+
+45
+00:03:42,329 --> 00:03:47,890
+really know whether we're on the right track or not. We have no way to check
+真正知道我们是否在正确的轨道上。我们没有办法检查
+
+46
+00:03:47,890 --> 00:03:51,810
+whether the nonterminals that we're generating are gonna produce the, the
+不管我们正在生成的非终结符是否会产生
+
+47
+00:03:51,810 --> 00:03:56,549
+input string. But once we generate a terminal symbol, then we can compare that
+输入字符串。但是一旦我们生成了终端符号，我们就可以比较
+
+48
+00:03:56,549 --> 00:04:01,549
+with the next input token to see if they're the same and in this case,
+使用下一个输入令牌来查看它们是否相同，在这种情况下，
+
+49
+00:04:01,549 --> 00:04:05,849
+unfortunately they're not. So, the nth that we generated here doesn't match the
+不幸的是，他们不是。所以，我们在这里生成的第n个与
+
+50
+00:04:05,849 --> 00:04:11,209
+open paren in the input and so clearly this parse, th is parsing strategy or
+在输入中打开Paren，可以清楚地看到这个解析，这是解析策略或
+
+51
+00:04:11,209 --> 00:04:15,139
+this. Parse Tree that we're building isn't going to work out. So, what we're going to
+这。我们正在构建的解析树是不会成功的。所以，我们要做的是
+
+52
+00:04:15,139 --> 00:04:19,709
+have to do is we're gonna have to back track. That means, we're gonna undo one or
+我们要做的就是我们得走回头路。也就是说，我们要撤销一个或者
+
+53
+00:04:19,709 --> 00:04:23,700
+more of our decisions. We're gonna go back to our last decision point and see if
+更多我们的决定。我们要回到最后一个决定点，看看是否
+
+54
+00:04:23,700 --> 00:04:27,470
+there's another alternative to try. So what's the last decision we made, well we
+还有另一种选择可以尝试。那么我们最后做的决定是什么呢，嗯，我们
+
+55
+00:04:27,470 --> 00:04:32,580
+decide to use t goes to nth, so we can undo that and then we could try the next
+决定使用t转到第n个，这样我们就可以撤销它，然后我们可以尝试下一个
+
+56
+00:04:32,580 --> 00:04:39,580
+production for t. And that happens to be t goes to n t so expand t using that
+t的乘积，这恰好是t到n，所以用它来扩展t
+
+57
+00:04:39,820 --> 00:04:44,450
+production and now once again, we generated a terminal in the left most
+生产，现在又一次，我们在最左边生成了一个终端
+
+58
+00:04:44,450 --> 00:04:49,250
+position and so now we're able to compare that with the input and once again
+位置，所以现在我们可以将其与输入进行比较，然后再一次
+
+59
+00:04:49,250 --> 00:04:54,880
+unfortunately, the nth token does not match the open paren so we have to back
+不幸的是，第n个令牌与打开的Paren不匹配，所以我们必须返回
+
+60
+00:04:54,880 --> 00:05:01,530
+track again. So we undo that decision. And this takes us back to trying alternatives
+再来一次。所以我们撤销了那个决定。这就把我们带回了尝试替代方案
+
+61
+00:05:01,530 --> 00:05:08,440
+for t. There's one more possibility, and that's the t goes to (e). So we expand t
+对于t，还有一种可能性，那就是t变成了(E)。所以我们扩展了
+
+62
+00:05:08,440 --> 00:05:15,440
+using that production. And now, we can compare the token open paren. With, is
+使用那部作品。现在，我们可以比较令牌OPEN Paren。与，是
+
+63
+00:05:17,070 --> 00:05:21,650
+this open paren? With the open paren in the input and they match. And so, that's
+这个空档的帕伦？在输入中有打开的Paren，它们是匹配的。所以，这就是
+
+64
+00:05:21,650 --> 00:05:27,620
+good. That means that we're, we might be on the right track. And since they match,
+好的。这意味着我们可能走上了正确的道路。既然它们是匹配的，
+
+65
+00:05:27,620 --> 00:05:32,810
+anything that we do in the future is going to have to match the different input and
+我们将来做的任何事情都必须与不同的输入相匹配
+
+66
+00:05:32,810 --> 00:05:38,400
+so we'll advance the input pointer. So now, where we're gonna work on next? Well,
+因此，我们将使输入指针前进。那么现在，我们下一步要做什么呢？井,
+
+67
+00:05:38,400 --> 00:05:42,910
+we have to expand this non-terminal e and we're gonna do the same thing we did
+我们必须扩展这个非终端e，并且我们要做我们曾经做过的同样的事情
+
+68
+00:05:42,910 --> 00:05:49,910
+before. We're just gonna start with the first production. So we have e goes to t
+在此之前。我们就从第一部作品开始。所以我们有我们要去的地方
+
+69
+00:05:49,910 --> 00:05:53,620
+and then we have to work on t, so we're gonna pick the first production for t and
+然后我们要制作t，所以我们要为t和t挑选第一部作品
+
+70
+00:05:53,620 --> 00:05:59,560
+we have t goes to int. So now, we can compare. Is int matching int in the input?
+我们必须去国际机场。所以现在，我们可以比较一下。int是否与输入中的int匹配？
+
+71
+00:05:59,560 --> 00:06:04,840
+And if it does and so we advance the input pointer again, And now we're here and
+如果它这样做了，那么我们再次前进输入指针，现在我们在这里
+
+72
+00:06:04,840 --> 00:06:09,620
+what's left, well we progressed to this point. We're looking at that open paren
+剩下的，我们已经进行到这一步了。我们在看那个空旷的帕伦
+
+73
+00:06:09,620 --> 00:06:15,270
+and that also matches. So that matches the input and now we've matched everything in
+这也符合。所以这与输入相匹配，现在我们已经匹配了
+
+74
+00:06:15,270 --> 00:06:20,440
+the parse tree and our input pointer is at the end of the string and so this is
+解析树和我们的输入指针在字符串的末尾，所以这是
+
+75
+00:06:20,440 --> 00:06:27,440
+actually a successful parse of the input, of the input string. And so that means th
+实际上是对输入字符串的成功解析。所以这意味着
+
+76
+00:06:28,320 --> 00:06:32,020
+at we accept and the parser terminates successfully.
+在我们接受时，解析器成功终止。
+

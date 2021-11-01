@@ -1,0 +1,450 @@
+0
+00:00:03,310 --> 00:00:07,580
+Welcome to this course on compilers. My name is Alex Aiken. I'm a professor here
+欢迎参加这门关于编译器的课程。我叫亚历克斯·艾肯。我是这里的教授
+
+1
+00:00:07,580 --> 00:00:11,539
+at Stanford University. And we're going to be talking about the implementation of
+在斯坦福大学。我们要讨论的是如何实施
+
+2
+00:00:11,539 --> 00:00:18,539
+programming languages. >> There are two major approaches to implementing
+编程语言。>>主要有两种实现方式
+
+3
+00:00:19,619 --> 00:00:24,599
+programming languages, compilers, and interpreters. Now, this class is mostly
+编程语言、编译器和解释器。现在，这门课主要是
+
+4
+00:00:24,599 --> 00:00:30,210
+about compilers. But, I do want to say a few words about interpreters here in the
+关于编译器。但是，我确实想在这里说几句关于口译员的事情。
+
+5
+00:00:30,210 --> 00:00:36,250
+first lecture. So, what does an interpreter do? Well, I'm gonna draw a
+第一堂课。那么，口译员是做什么的呢？好的，我要画一个
+
+6
+00:00:36,250 --> 00:00:41,240
+picture here, this box is the interpreter, and it takes, let me label it with a big
+这张照片，这个盒子是口译员，它需要，让我给它贴上一个大的标签
+
+7
+00:00:41,240 --> 00:00:48,240
+I, it takes as input, your program. That you wrote, And, whatever data that you
+我，它把你的程序作为输入。那是你写的，而且，不管你写了什么数据
+
+8
+00:00:49,920 --> 00:00:56,920
+want to run the program on. And it produces the output directly. Meaning that
+我想运行这个程序。它直接产生输出。意思是说
+
+9
+00:00:56,920 --> 00:01:01,580
+it doesn't do any processing of the program before it executes it on the
+在上执行程序之前，它不会对程序进行任何处理。
+
+10
+00:01:01,580 --> 00:01:06,470
+input, So you just write the program, and you invoke the interpreter on the data,
+输入，所以您只需编写程序，然后对数据调用解释器，
+
+11
+00:01:06,470 --> 00:01:11,380
+and the program immediately begins running. And so, we can say that the
+程序立即开始运行。所以我们可以说，
+
+12
+00:01:11,380 --> 00:01:17,740
+interpreter is, is online, meaning it the work that it does is all part of running
+解释器是，是在线的，这意味着它所做的工作都是运行的一部分
+
+13
+00:01:17,740 --> 00:01:23,950
+your program. Now a compiler is structured differently. So, we can draw a picture
+你的节目。现在编译器的结构不同了。所以，我们可以画一幅画
+
+14
+00:01:23,950 --> 00:01:30,799
+here. Which we'll label with a big C, for the compiler, And the compiler takes as
+这里。对于编译器，我们将用一个大C来标记它，编译器会将其作为
+
+15
+00:01:30,799 --> 00:01:37,799
+input just your program. And then it produces an executable. And this
+只输入您的程序即可。然后它产生一个可执行文件。还有这个
+
+16
+00:01:40,619 --> 00:01:45,409
+executable is another program, might be assembly language, it might be bytecode.
+可执行文件是另一个程序，可能是汇编语言，也可能是字节码。
+
+17
+00:01:45,409 --> 00:01:50,069
+It could be in any number of different implementation languages. But now this can
+它可以是任意数量的不同实现语言。但现在这个可以
+
+18
+00:01:50,069 --> 00:01:57,069
+be run separately on your data. And that will produce the output. Okay? And so in
+对您的数据单独运行。这将产生输出。好吧?所以在
+
+19
+00:02:03,369 --> 00:02:10,369
+this structure the compiler is offline, Meaning that we pre-process the program
+编译器的此结构处于脱机状态，这意味着我们要对程序进行预处理
+
+20
+00:02:12,159 --> 00:02:16,680
+first. The compiler is essentially a pre-processing step that produces the
+第一。编译器本质上是一个预处理步骤，它生成
+
+21
+00:02:16,680 --> 00:02:21,319
+executable, and then we can run that same executable on many, many different inputs,
+可执行文件，然后我们可以在许多不同输入上运行相同的可执行文件，
+
+22
+00:02:21,319 --> 00:02:26,540
+on many different data sets without having to recompile or do any other processing of
+在许多不同的数据集上，而不必重新编译或执行任何其他处理
+
+23
+00:02:26,540 --> 00:02:31,590
+the program. I think it's helpful to give a little bit of history about how
+这个项目。我认为讲一点历史是很有帮助的
+
+24
+00:02:31,590 --> 00:02:35,860
+compilers and interpreters were first developed. So the story begins in the
+编译器和解释器最先被开发出来。所以故事开始于
+
+25
+00:02:35,860 --> 00:02:41,530
+1950s and in particular with a machine called the 704 built by IBM. Thi s was
+20世纪50年代，特别是IBM制造的名为704的机器。这是他的
+
+26
+00:02:41,530 --> 00:02:45,030
+their first commercially successful machine, although there had been some
+他们的第一台商业上成功的机器，尽管已经有了一些
+
+27
+00:02:45,030 --> 00:02:49,849
+earlier machines that they had tried out. But anyway the interesting thing about the
+他们试用过的早期机器。但不管怎样，有趣的是
+
+28
+00:02:49,849 --> 00:02:54,489
+704 well, once customers started buying it and using it, is that they found that the
+嗯，一旦顾客开始购买并使用它，他们就会发现
+
+29
+00:02:54,489 --> 00:03:00,439
+software costs exceeded the hardware costs. And not just by a little bit, but
+软件成本超过了硬件成本。而且不只是一点点，而是
+
+30
+00:03:00,439 --> 00:03:06,079
+by a lot And, This is important because these, the hardware in these, those days
+很多，这一点很重要，因为这些，这些，那些日子里的硬件
+
+31
+00:03:06,079 --> 00:03:12,340
+was extremely expensive. And even then when hardware cost the most in absolute
+是非常昂贵的。即使在硬件绝对成本最高的情况下
+
+32
+00:03:12,340 --> 00:03:16,909
+and relative terms, more than they would ever cost again, already the software was
+相对而言，比以往任何时候的成本都要高，软件已经
+
+33
+00:03:16,909 --> 00:03:23,200
+the dominant expense in, in making good use out of computers. And this led a
+把计算机用好的主要费用。这导致了一场
+
+34
+00:03:23,200 --> 00:03:28,599
+number of people to think about how they could do a better job of writing software.
+有很多人需要思考如何才能更好地编写软件。
+
+35
+00:03:28,599 --> 00:03:35,599
+How they could make programming more productive. Where the earliest efforts to
+他们如何让编程变得更有效率。在那里最早的努力是
+
+36
+00:03:36,069 --> 00:03:41,189
+improve the productivity of programming was called speed coding, developed in 1953
+提高编程生产率被称为速度编码，开发于1953年
+
+37
+00:03:41,189 --> 00:03:48,189
+by John Backus. Now, speed coding is what we call today, an early example of an
+约翰·巴克斯写的。现在，速度编码就是我们今天所说的，这是一个早期的例子
+
+38
+00:03:48,299 --> 00:03:53,090
+interpreter. And like all interpreters, it had some advantages and disadvantages. The
+口译员。和所有的口译员一样，它也有一些优点和缺点。这个
+
+39
+00:03:53,090 --> 00:03:57,680
+primary advantage was that it was much faster, to develop the programs. So the,
+主要的优点是，开发程序的速度要快得多。所以这个，
+
+40
+00:03:57,680 --> 00:04:01,569
+in that sense, the programmer was much more productive, But among its
+从这个意义上说，程序员的工作效率要高得多，但在它的
+
+41
+00:04:01,569 --> 00:04:07,310
+disadvantages, code written, speed code programs were ten to twenty times slower.
+缺点是，编写的代码、速度编码程序要慢十到二十倍。
+
+42
+00:04:07,310 --> 00:04:11,909
+Then handwritten programs and that's also true of interpreted programs today. So if
+然后是手写程序，今天的解释型程序也是如此。所以如果
+
+43
+00:04:11,909 --> 00:04:14,890
+you have an implementation that uses an interpreter, they're going to be much
+您有一个使用解释器的实现，它们将会很多
+
+44
+00:04:14,890 --> 00:04:21,139
+slower than either a compiler or writing code by hand. And also, the speed code
+比编译器或手工编写代码都慢。还有，速度密码
+
+45
+00:04:21,139 --> 00:04:26,970
+interpreter took up, 300 bytes of memory. And that doesn't seem like very much. In
+口译员占用了300字节的内存。这看起来不是很多。在……里面
+
+46
+00:04:26,970 --> 00:04:32,259
+fact, 300 bytes, today, would seem like an incredibly tiny, program. But in those
+事实上，300字节今天看起来似乎是一个令人难以置信的微小程序。但是在那些
+
+47
+00:04:32,259 --> 00:04:37,199
+days, you have to keep in mind, that this was 30 Percent Of the memory on the
+天，你必须记住，这是30%的内存
+
+48
+00:04:37,199 --> 00:04:42,080
+machine. So this was 30 percent of the entire memory of the 704. And so the
+机器。所以这是704全部内存的30%。因此，
+
+49
+00:04:42,080 --> 00:04:47,470
+amount of space that the interpreter took up was itself a concern. Now speed coding
+口译员占用的空间本身就是一个令人担忧的问题。现在进行快速编码
+
+50
+00:04:47,470 --> 00:04:51,800
+did not become popular, but John Backus thought it was promising and it gave him
+没有变得流行起来，但约翰·巴克斯认为它很有前途，这给了他
+
+51
+00:04:51,800 --> 00:04:56,150
+the idea for another project. The most important applications in those days were
+另一个项目的想法。当时最重要的应用是
+
+52
+00:04:56,150 --> 00:05:01,000
+scientific computations, and programmers thought in terms of writing down formulas
+科学计算，程序员从写下公式的角度思考
+
+53
+00:05:01,000 --> 00:05:06,960
+in a form that the machine could execute. John thought that the problem with speed
+以机器可以执行的形式。约翰认为速度的问题
+
+54
+00:05:06,960 --> 00:05:11,650
+coding was that the formulas were in fact interpreted and he thought if first the
+编码是公式实际上是被解释的，他认为如果第一个
+
+55
+00:05:11,650 --> 00:05:18,190
+formulas were translated in to a form that the machine could execute directly. That
+公式被翻译成机器可以直接执行的形式。那
+
+56
+00:05:18,190 --> 00:05:23,949
+the code would be faster, And while still allowing the programmer to write the, the,
+代码会更快，同时仍然允许程序员编写
+
+57
+00:05:23,949 --> 00:05:30,949
+the programs at a high level, and thus was the Formula Translation Project or FORTRAN
+高水平的程序，因此被称为公式翻译项目或FORTRAN
+
+58
+00:05:31,370 --> 00:05:38,370
+Project born. Now FORTRAN ran from 1954 To 1957, And interestingly, they thought it
+诞生计划。FORTRAN从1954年运行到1957年，有趣的是，他们认为
+
+59
+00:05:40,280 --> 00:05:44,780
+would only take them one year to build the compiler but it would end up taking three.
+他们只需要一年的时间就可以构建编译器，但最终将需要三年的时间。
+
+60
+00:05:44,780 --> 00:05:49,300
+So just like today, they weren't very good at predicting how long software projects
+所以就像今天一样，他们不太擅长预测软件项目有多长时间
+
+61
+00:05:49,300 --> 00:05:56,190
+would take. But it was a very successful project. By 1958, over 50 percent of all
+会花上很长时间。但这是一个非常成功的项目。到1958年，超过50%的
+
+62
+00:05:56,190 --> 00:06:03,190
+code was written in FORTRAN. So 50 percent of programs were in FORTRAN, And, that is
+代码是用FORTRAN编写的。所以50%的程序是用FORTRAN编写的，也就是说
+
+63
+00:06:04,080 --> 00:06:08,940
+very rapid adoption of a new technology. We would be happy with that kind of
+非常迅速地采用了一项新技术。我们会很高兴有这样的一种
+
+64
+00:06:08,940 --> 00:06:12,990
+success today, and of course at that time they were ecstatic, And everybody thought
+今天成功了，当然当时他们欣喜若狂，每个人都认为
+
+65
+00:06:12,990 --> 00:06:16,430
+that FORTRAN both raised the level of abstraction, improved programmer
+FORTRAN既提高了抽象水平，又改进了程序员
+
+66
+00:06:16,430 --> 00:06:23,430
+productivity, and allowed everyone to make much better use of these machines. So
+提高了生产效率，让每个人都能更好地使用这些机器。所以
+
+67
+00:06:24,129 --> 00:06:29,490
+FORTRAN one was the first successful high level language and it had a huge impact on
+Fortran one是第一种成功的高级语言，它对
+
+68
+00:06:29,490 --> 00:06:33,770
+computer science. In particular, it led to an enormous body of theoretical work. And
+计算机科学。特别是，它导致了大量的理论工作。和
+
+69
+00:06:33,770 --> 00:06:37,419
+one of the interesting things about programming languages, actually, is the
+实际上，编程语言的有趣之处之一是
+
+70
+00:06:37,419 --> 00:06:43,520
+combination of theory. And practice because it's not really possible in
+理论的结合。并练习，因为这是不可能的
+
+71
+00:06:43,520 --> 00:06:49,000
+programming languages to do a good job without having both a, a very good grasp
+编程语言要做好，既要有，又要有，掌握得很好
+
+72
+00:06:49,000 --> 00:06:52,699
+of fairly deep theory and also good engineering skills. So there's a lot of
+具有相当深厚的理论知识和良好的工程技能。所以有很多
+
+73
+00:06:52,699 --> 00:06:56,639
+very good systems building material in programming languages and typically it
+非常好的用编程语言构建系统的材料，通常它
+
+74
+00:06:56,639 --> 00:07:00,990
+involves a very subtle and fruitful interaction with theory. And so, and this
+涉及到与理论非常微妙和富有成效的互动。所以，还有这个
+
+75
+00:07:00,990 --> 00:07:04,550
+is one of the things, I think, that's most attractive about the area's the subject of
+是这个地区最吸引人的地方之一，我认为
+
+76
+00:07:04,550 --> 00:07:09,830
+studying computer science. And the impact of FORTRAN was not just on computer
+学习计算机科学。而且FORTRAN的影响不仅仅是在计算机上
+
+77
+00:07:09,830 --> 00:07:15,259
+science research, of course, but also on the development of, practical compilers.
+科学研究，当然，也是关于开发，实用的编译程序。
+
+78
+00:07:15,259 --> 00:07:20,699
+And, in fact, its influence was so profound, that today, auto compilers still
+事实上，它的影响是如此深远，以至于今天，自动编译器仍然
+
+79
+00:07:20,699 --> 00:07:27,669
+preserve the outlines of FORTRAN one. So what was the structure of FORTRAN one?
+保留FORTRAN One的轮廓。那么FORTRAN One的结构是什么呢？
+
+80
+00:07:27,669 --> 00:07:32,470
+Well it consists five phases lexical analysis and parsing, which together take
+它包括五个阶段的词法分析和解析，这五个阶段加在一起
+
+81
+00:07:32,470 --> 00:07:38,300
+care of the syntactic aspects of the language, semantic analysis, which, of
+关注语言的句法方面，语义分析，其中，
+
+82
+00:07:38,300 --> 00:07:43,300
+course, takes care of more semantic aspects, things like types and scope
+当然，它考虑了更多的语义方面，比如类型和范围
+
+83
+00:07:43,300 --> 00:07:50,300
+rules. Optimization, Which is a collection of transformations on the program to
+这是规矩。优化，它是程序上的转换的集合，以
+
+84
+00:07:50,800 --> 00:07:55,939
+either make it run faster or use less memory. And finally code generation which
+要么让它运行得更快，要么使用更少的内存。最后是代码生成，该代码生成
+
+85
+00:07:55,939 --> 00:08:00,970
+actually does the translation to another generation. And depending on our goals,
+实际上是翻译给另一代人。根据我们的目标，
+
+86
+00:08:00,970 --> 00:08:06,229
+that translation might be to machine codes. It might be to a bite code for a
+这个翻译可能是机器代码。它可能是一个比特代码，用于
+
+87
+00:08:06,229 --> 00:08:12,069
+virtual machine. It might be to another high level programming language. Well
+虚拟机。它可能是另一种高级编程语言。井
+
+88
+00:08:12,069 --> 00:08:16,139
+that's it for this lecture, and next time we'll pick up here and talk about these
+这节课就讲到这里，下一次我们将在这里继续讨论这些
+
+89
+00:08:16,139 --> 00:08:17,999
+five phases in more detail.
+五个更详细的阶段。
+

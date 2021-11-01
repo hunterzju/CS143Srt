@@ -1,0 +1,675 @@
+0
+00:00:03,530 --> 00:00:07,350
+In this video we're going to talk about simple tables an important data structure
+在本视频中，我们将讨论简单的表，这是一种重要的数据结构
+
+1
+00:00:07,350 --> 00:00:14,350
+in many filers before we talk about what a simple table is I want to talk about a
+在许多文件管理器中，在我们讨论什么是简单的表之前，我想先谈谈
+
+2
+00:00:16,209 --> 00:00:21,090
+generic algorithm that we're going to be seeing instances of over and over again
+通用算法，我们将一遍又一遍地看到它的实例
+
+3
+00:00:21,090 --> 00:00:25,090
+for the rest of the course. So, a lot of semantic analysis and in fact, a lot of
+关于这门课程的睡觉。所以，进行了大量的语义分析，事实上，很多
+
+4
+00:00:25,090 --> 00:00:29,710
+code generation can be expressed as a recursive descent of an abstract syntax
+代码生成可以表示为抽象语法的递归下降
+
+5
+00:00:29,710 --> 00:00:36,019
+tree. And the basic idea is that in each step we do the following three things:
+树。其基本思路是，在每一步中，我们做以下三件事：
+
+6
+00:00:36,019 --> 00:00:40,269
+we're always processing a particular node in the tree, so if I draw a picture of the
+我们总是在处理树中的特定节点，所以如果我画一张
+
+7
+00:00:40,269 --> 00:00:47,239
+abstract syntax tree it might have a node and some sub-trees hanging off of it. And
+抽象语法树它可能有一个节点和一些挂在其上的子树。和
+
+8
+00:00:47,239 --> 00:00:52,359
+we may do some processing of the node before we do anything else. We arrive at
+在执行任何其他操作之前，我们可能会对节点进行一些处理。我们到达的地点是
+
+9
+00:00:52,359 --> 00:00:55,550
+the node say from the parents, we come to here for the parent, we do some processing
+节点从父节点说，我们来这里是为了父节点，我们做一些处理
+
+10
+00:00:55,550 --> 00:00:59,300
+in the node and I'm just indicating that by coloring it blue to indicate that we
+我只是通过把它涂成蓝色来表示我们
+
+11
+00:00:59,300 --> 00:01:05,950
+did something here. And then we go off and we process the children. Okay. And after
+在这里做了些什么。然后我们出发处理孩子们。好吧。在此之后
+
+12
+00:01:05,950 --> 00:01:11,790
+we process the children, after we come back to the node, we do something else. We
+我们处理子节点，在我们回到节点之后，我们做一些其他的事情。我们
+
+13
+00:01:11,790 --> 00:01:16,240
+may do some post processing of the node, and then we return. And of course, at the
+可能会对节点进行一些后期处理，然后我们返回。当然，在
+
+14
+00:01:16,240 --> 00:01:19,619
+same time, when we've gone off and processed the children, then we're
+同时，当我们处理完孩子们之后，我们就
+
+15
+00:01:19,619 --> 00:01:23,579
+processing all their nodes in the same pre imposed fashion, so they're getting the
+以相同的预先设置的方式处理它们的所有节点，因此它们将获得
+
+16
+00:01:23,579 --> 00:01:28,380
+same treatment, with some stuff being done before each node is touched, and some
+相同的处理方式，在接触每个节点之前先做一些事情，然后再做一些事情
+
+17
+00:01:28,380 --> 00:01:34,070
+stuff being done after all their children have been processed. Okay. And. There are
+在他们所有的孩子都被处理完之后才做的事情。好吧。和。确实有
+
+18
+00:01:34,070 --> 00:01:39,310
+many, many examples of this kind of an algorithm. This is called a recursive
+这种算法的例子很多，很多。这称为递归
+
+19
+00:01:39,310 --> 00:01:44,219
+descent traversal of a tree. There are some instances in which we'll only process
+树的下降遍历。在某些情况下，我们只会处理
+
+20
+00:01:44,219 --> 00:01:47,810
+each note before we process the children. Some where we only process each note after
+在我们处理孩子们之前，每张纸条。在某些情况下，我们只在之后处理每一张纸条
+
+21
+00:01:47,810 --> 00:01:52,130
+we process all the children. Some where we do both as illustrated here in this little
+我们处理所有的孩子。有些地方我们既做了又做了，就像这里这个小插图中所说明的那样
+
+22
+00:01:52,130 --> 00:01:57,689
+diagram And returning to the main topic of this particular video. When we're
+图表，并返回到此特定视频的主要主题。当我们在
+
+23
+00:01:57,689 --> 00:02:01,229
+performing semantic analysis on a portion of the abstract syntax tree, we're going
+对抽象语法树的一部分执行语义分析，我们将
+
+24
+00:02:01,229 --> 00:02:06,859
+to know, need to know which identifiers are defined. Which identifiers are in
+要了解这一点，需要知道定义了哪些标识符。哪些标识符位于
+
+25
+00:02:06,859 --> 00:02:10,590
+scope? An exam ple of this kind of recursive descent strategy is how we can
+范围呢？这种递归下降策略的一个例子是我们如何
+
+26
+00:02:10,590 --> 00:02:15,860
+process let bindings to track the set of variables that are in the scope. So we
+进程让绑定跟踪作用域中的变量集。所以我们
+
+27
+00:02:15,860 --> 00:02:21,290
+have our let node in the fx syntax tree and in one sub tree we have the
+将我们的let节点放在FX语法树中，在一个子树中有
+
+28
+00:02:21,290 --> 00:02:28,290
+initialization, and in the other sub tree we have e, the body of the let, and then
+初始化，在另一个子树中有e，即字母的主体，然后
+
+29
+00:02:29,599 --> 00:02:33,010
+this is a let for some particular variable, and let's just write that
+这是某个特定变量的字母，我们就这样写吧
+
+30
+00:02:33,010 --> 00:02:40,010
+variable inside the parent node here. And so, when we begin processing of this O,
+在这里的父节点内的变量。所以，当我们开始处理这个O时，
+
+31
+00:02:40,440 --> 00:02:43,950
+just imagine that we're coming from above. So we're doing this. We're processing the
+想象一下我们是从上面来的。所以我们要这么做。我们正在处理
+
+32
+00:02:43,950 --> 00:02:50,129
+abstract syntax tree recursively. And so we reach this point from some parent and.
+递归抽象语法树。所以我们从一些家长那里得到了这一点。
+
+33
+00:02:50,129 --> 00:02:54,470
+There's going to be a set of symbols that are currently in scope. That, that's some
+将会有一组当前在范围内的符号。那，那是一些
+
+34
+00:02:54,470 --> 00:02:58,580
+data structure that lives off to the side, And in fact, that's going to be our symbol
+数据结构位于一边，事实上，这将是我们的标志
+
+35
+00:02:58,580 --> 00:03:03,450
+table And what is going to happen here? Well, the first we're going to have to do
+桌子上会发生什么，这里会发生什么？嗯，首先我们要做的是
+
+36
+00:03:03,450 --> 00:03:07,750
+is we're going to have to process, the initializer. We're going to need to know
+我们将不得不处理初始值设定项。我们需要知道
+
+37
+00:03:07,750 --> 00:03:11,360
+whether that's, what, whatever function we're doing on this, like type checking or
+无论这是什么，不管我们在这上面做什么功能，比如类型检查或
+
+38
+00:03:11,360 --> 00:03:16,000
+whatever. We might get on and process that first And we'll pass the symbol table in.
+管他呢。我们可能会先开始处理，然后再传入符号表。
+
+39
+00:03:16,000 --> 00:03:22,330
+Okay. And then we're going to process the body of the let But when we do that we're
+好吧。然后我们要处理LET的主体，但是当我们这样做的时候，我们
+
+40
+00:03:22,330 --> 00:03:26,790
+going to pass in a set of symbols that are in scope. But now also X is now going to
+将传入作用域中的一组符号。但是现在X现在也要
+
+41
+00:03:26,790 --> 00:03:32,510
+be in scope. So X is going to be added before we process E to the set of symbols.
+在范围内。所以在我们将E添加到符号集中之前，将会添加X。
+
+42
+00:03:32,510 --> 00:03:36,250
+And then when we return from some expression E it's going to be removed. So,
+然后当我们从某个表达式E返回时，它将被移除。所以,
+
+43
+00:03:36,250 --> 00:03:42,400
+it'll restore the symbol table to its previous state. So that after we leave
+它会将符号表恢复到以前的状态。所以在我们离开之后
+
+44
+00:03:42,400 --> 00:03:46,829
+this sub tree of the abstract syntax tree, we only have the same set of symbols to
+这棵抽象语法树的子树，我们只有一组相同的符号
+
+45
+00:03:46,829 --> 00:03:53,099
+find that we had before we entered it, So in the terminology of the three part
+发现我们在进入它之前，所以在三个部分的术语中
+
+46
+00:03:53,099 --> 00:03:58,049
+algorithm For recursive descent that we had on the first slide. What are we doing
+递归下降的算法，我们在第一张幻灯片上有过。我们在做什么？
+
+47
+00:03:58,049 --> 00:04:02,430
+here? Well, before we process E we are going to add the definition of X to our
+这里?在我们处理E之前，我们要把X的定义加到我们的
+
+48
+00:04:02,430 --> 00:04:06,340
+list of current definitions. Already any other definition of X that might have been
+当前定义列表。已经有任何其他对X的定义可能是
+
+49
+00:04:06,340 --> 00:04:10,299
+visible outside of that expression. Then we are going to recurse we going to
+在该表达式之外可见。然后我们将递归，我们将
+
+50
+00:04:10,299 --> 00:04:14,959
+process all. Of the abstract syntax tree no des in the body of the [inaudible],
+全部处理。在[听不见]的主体中没有抽象语法树的情况下，
+
+51
+00:04:14,959 --> 00:04:18,760
+inside of E, and after we finish processing E, we are gonna remove the
+在E内部，在我们完成处理E之后，我们将删除
+
+52
+00:04:18,760 --> 00:04:23,530
+definition of X and restore whatever old definition of X we had. And a symbol table
+X的定义，并恢复我们对X的任何旧定义。和符号表
+
+53
+00:04:23,530 --> 00:04:28,030
+is just a data structure that accomplishes these things. It tracks the current
+只是一个完成这些任务的数据结构。它会追踪海流
+
+54
+00:04:28,030 --> 00:04:33,910
+bindings of identifiers at each point in the abstract syntax tree. For a very
+抽象语法树中每个点的标识符绑定。对于一个非常
+
+55
+00:04:33,910 --> 00:04:37,580
+simple, simple table, we could just use a stack, and it would have just say the
+简单，简单的表，我们可以只使用堆栈，它只会显示
+
+56
+00:04:37,580 --> 00:04:43,139
+following three operations, we could add a symbol. To the symbol table and that will
+在三个操作之后，我们可以添加一个符号。添加到符号表中，这将
+
+57
+00:04:43,139 --> 00:04:47,639
+just push the symbol, push the variable onto the stack and whatever other
+只需将符号推入，将变量推入堆栈或其他任何操作即可
+
+58
+00:04:47,639 --> 00:04:52,289
+information we want, like its type. We'll have a find symbol operation that will
+我们想要的信息，比如它的类型。我们将有一个查找符号操作，它将
+
+59
+00:04:52,289 --> 00:04:57,770
+look up the current definition for a symbol. And that can be done by simply
+查找符号的当前定义。要做到这一点，只需简单地
+
+60
+00:04:57,770 --> 00:05:02,240
+searching the, the stack. Starting from the top for the first occurrence of the
+搜索堆栈。事件的第一个匹配项从顶部开始。
+
+61
+00:05:02,240 --> 00:05:07,449
+variable name, And this will automatically take care of the hiding of all
+变量名，这将自动负责隐藏所有
+
+62
+00:05:07,449 --> 00:05:14,180
+definitions. So, for example, If we have a stack, let's say has X, Y and Z on it and
+定义。例如，如果我们有一个堆栈，假设上面有X、Y和Z，
+
+63
+00:05:14,180 --> 00:05:20,389
+then we come into a scope that introduces a new Y. Y on top and now if we search the
+然后我们进入一个在顶部引入新的Y.Y的范围，现在如果我们搜索
+
+64
+00:05:20,389 --> 00:05:26,430
+stack we find this y first effectively hiding the old definition of y and then.
+堆栈，我们发现这个y首先有效地隐藏了y的旧定义，然后。
+
+65
+00:05:26,430 --> 00:05:30,199
+When we leave a scope we can remove a symbol simple popping a stack. We'll just
+当我们离开一个作用域时，我们可以移除一个符号，简单地弹出一个堆栈。我们只要
+
+66
+00:05:30,199 --> 00:05:34,430
+pop the current variable off of this stack. That will get rid of the most
+将当前变量从此堆栈中弹出。这将消除大多数
+
+67
+00:05:34,430 --> 00:05:40,440
+recent definition. And, and leave the stack, leave the set of definitions in the
+最近的定义。然后离开堆栈，将这组定义保留在
+
+68
+00:05:40,440 --> 00:05:44,860
+same state it was before we entered the node at all. So, this example, if we left
+与我们进入节点之前的状态相同。所以，这个例子，如果我们离开
+
+69
+00:05:44,860 --> 00:05:48,940
+the scope where the Y is defined and that was popped off the stack, So that was
+定义Y并从堆栈中弹出的作用域，因此
+
+70
+00:05:48,940 --> 00:05:52,810
+gone. Now, when we search for Y we'll find the outer definition. The one that was
+不见了。现在，当我们搜索Y时，我们会找到外部定义。就是那个
+
+71
+00:05:52,810 --> 00:05:59,360
+defined outside of that inner scope, So this simple symbol table works well for
+定义在该内部作用域之外，因此这个简单的符号表可以很好地用于
+
+72
+00:05:59,360 --> 00:06:02,940
+let, because the symbols rate at one at a time, and because declarations are
+让我们来看一下，因为符号一次只有一个的速率，而且声明是
+
+73
+00:06:02,940 --> 00:06:08,240
+perfectly nested. And in fact, the fact that declarations were perfectly nested is
+完美的嵌套。事实上，声明被完美嵌套的事实是
+
+74
+00:06:08,240 --> 00:06:15,240
+really the whole reason that we can use a stack/ So, take a look at this little
+我们可以使用堆栈的全部原因/所以，请看这一小部分
+
+75
+00:06:15,400 --> 00:06:19,490
+example, let's say we have three nested lets, and here I'm not showing the
+例如，假设我们有三个嵌套的let，这里我不显示
+
+76
+00:06:19,490 --> 00:06:25,919
+initializers in the less sub trees, and they, they don't matter, for what I want
+初始值设定项在较少的子树中，它们，它们无关紧要，因为我想要的是
+
+77
+00:06:25,919 --> 00:06:32,060
+to illustrate. So if you think about it as we walk from the root here down to the
+来说明一下。所以当我们从这里的根部往下走的时候，如果你想一想
+
+78
+00:06:32,060 --> 00:06:37,259
+inner bindings, we're pushing things on the stack, we'll push things on the stack
+内部绑定，我们将把东西推到堆栈上，我们会把东西推到堆栈上
+
+79
+00:06:37,259 --> 00:06:41,590
+in the order X, Y, and then Z. And then as we leave, after we've processed this sub
+按X，Y，然后Z的顺序。然后在我们离开的时候，在我们处理完这个SUB之后
+
+80
+00:06:41,590 --> 00:06:46,360
+tree, and we're leaving it, walking back out, we're going to encounter these left
+这棵树，我们离开它，走回去，我们会遇到这些左边的
+
+81
+00:06:46,360 --> 00:06:51,860
+scopes in exactly the reverse order. And popping them off the stack is exactly the
+作用域的顺序正好相反。将它们从堆栈中弹出正是
+
+82
+00:06:51,860 --> 00:06:57,270
+order in which we want to remove them, and that's why a stack works well. So
+我们想要删除它们的顺序，这就是堆栈工作良好的原因。所以
+
+83
+00:06:57,270 --> 00:07:04,270
+Structure works fine for lets, but for some other constructs it's not quite as
+结构对于let来说工作得很好，但是对于其他一些结构就不太一样了。
+
+84
+00:07:04,349 --> 00:07:11,349
+good as it could be so for example consider the following piece of code.
+尽管它可能是好的，例如，请考虑以下代码段。
+
+85
+00:07:11,650 --> 00:07:15,669
+Illegal piece of code I should add. Let's say we're declaring a method, and it has
+我应该添加的非法代码片段。假设我们正在声明一个方法，它具有
+
+86
+00:07:15,669 --> 00:07:20,800
+two arguments named X. Now, that's not legal but in order to detect that it's not
+两个名为X的参数。现在，这是不合法的，但为了检测它是不合法的
+
+87
+00:07:20,800 --> 00:07:25,020
+legal you. Why is it not legal? It's not legal cause they're both defined in the
+合法的你。为什么这是不合法的？这是不合法的，因为它们都在
+
+88
+00:07:25,020 --> 00:07:30,220
+same scope. So, Functions, or methods, have the property that they introduce
+同样的范围。因此，函数或方法具有它们引入的属性
+
+89
+00:07:30,220 --> 00:07:35,470
+multiple names at once into the same scope. And it's not quite so easy, to use
+将多个名称同时放入同一作用域。而且它并不是那么容易使用的，
+
+90
+00:07:35,470 --> 00:07:40,650
+a stack, where we only add one thing at a time, or one name at a time, to model
+一个堆栈，在该堆栈中，我们一次只向模型添加一项内容，或者一次添加一个名称
+
+91
+00:07:40,650 --> 00:07:45,389
+simultaneous definition in a scope. So this problem is easily solved with just a
+作用域中的同时定义。所以这个问题很容易解决，只需
+
+92
+00:07:45,389 --> 00:07:50,319
+slightly fancier simple table. Here is the revised interface now with five methods
+稍微花哨一点的简易桌。下面是修改后的界面，现在有五种方法
+
+93
+00:07:50,319 --> 00:07:55,909
+instead of three. The biggest change is that now we have explicit enter and exit
+而不是三个。最大的变化是现在我们有了明确的进入和退出
+
+94
+00:07:55,909 --> 00:08:00,099
+scope functions, and so these functions start in the nested scope and exit the
+作用域函数，因此这些函数在嵌套作用域中开始并退出
+
+95
+00:08:00,099 --> 00:08:04,330
+current scope. And the way you think about this is that our new structure is a stack
+当前作用域。你可以这样想，我们的新结构是一个堆栈
+
+96
+00:08:04,330 --> 00:08:09,990
+of scopes, so [inaudible] is the entire scope and the inner scope. Is, are all the
+作用域，所以[听不见]是整个作用域和内部作用域。就是，都是
+
+97
+00:08:09,990 --> 00:08:15,270
+variables that are defined at the same level, within that single scope. So just
+在同一级别、在该单个作用域内定义的变量。所以只要
+
+98
+00:08:15,270 --> 00:08:19,150
+like before, we have a find symbol operation that will look up a variable
+与前面一样，我们有一个查找符号操作，它将查找变量
+
+99
+00:08:19,150 --> 00:08:22,680
+name, and it will return the current definition, or null if there is no
+名称，它将返回当前定义，如果没有定义，则返回NULL
+
+100
+00:08:22,680 --> 00:08:28,110
+definition in any scope that's currently available. We'll have an add symbol
+当前可用的任何范围内的定义。我们会有一个加号
+
+101
+00:08:28,110 --> 00:08:32,950
+Operation that adds a new symbol to the table, and adds it in the curren t scope,
+将新符号添加到表中并将其添加到Current t作用域的操作，
+
+102
+00:08:32,950 --> 00:08:38,110
+so whatever, scope is at the top of our scope stack. And then one more new
+所以不管怎样，作用域位于我们作用域堆栈的顶部。然后又多了一个新的
+
+103
+00:08:38,110 --> 00:08:43,260
+operation, check scope. Will return true if X is already defined in the current
+操作，检查范围。如果X已在当前
+
+104
+00:08:43,260 --> 00:08:48,700
+scope, So this, just to be clear what this does, this returns true if X is defined in
+作用域，所以这，只是为了弄清楚它的作用，如果在X中定义了X，它将返回TRUE
+
+105
+00:08:48,700 --> 00:08:54,270
+exactly the top scope. It doesn't return true unless, X is defined in the scope at
+正好是最上面的范围。除非在以下位置的作用域中定义了X，否则它不会返回TRUE
+
+106
+00:08:54,270 --> 00:08:57,750
+the very, very top of the stack. And this allows you to check for double
+堆栈的最顶端。这使您可以检查重复的
+
+107
+00:08:57,750 --> 00:09:03,440
+definitions, So, for example, in the, code that I had before on the previous slide,
+定义，例如，在我之前在上一张幻灯片上的代码中，
+
+108
+00:09:03,440 --> 00:09:10,440
+if we had two declarations of X. How would we check this? Well, we would add X to the
+如果我们有两个X的声明，我们该如何检查呢？嗯，我们会把X加到
+
+109
+00:09:10,590 --> 00:09:14,770
+symbol table, in the current scope. And then we would ask, well, is X already
+符号表，位于当前范围内。然后我们会问，嗯，X已经
+
+110
+00:09:14,770 --> 00:09:18,730
+defined in this scope for the second one? And this interface would be return true,
+是否在此范围内为第二个定义？且该接口将返回TRUE，
+
+111
+00:09:18,730 --> 00:09:23,540
+and we would know to raise an error saying that X, had been multiply defined.
+我们就会知道抛出一个错误，说X已经被多重定义了。
+
+112
+00:09:23,540 --> 00:09:28,980
+Finally, let me just add that this is the simple table interface or something very
+最后，让我补充一下，这是一个简单的表接口或一些非常
+
+113
+00:09:28,980 --> 00:09:32,880
+close to this is the simple table interface that is supplied with the cool
+与此接近的是随Cool一起提供的简单表格界面
+
+114
+00:09:32,880 --> 00:09:36,290
+project. And there's already implementation of this interface provided
+项目。并且已经提供了此接口的实现
+
+115
+00:09:36,290 --> 00:09:41,600
+if you don't want to write your own. So let's wrap up this video by talking a
+如果你不想自己写的话。那么让我们来结束这段视频，我们先来谈谈
+
+116
+00:09:41,600 --> 00:09:45,640
+little bit about class names, which behave quite differently from the variables
+关于类名，它的行为与变量有很大的不同
+
+117
+00:09:45,640 --> 00:09:49,830
+introduced in let bindings and in function parameters. In particular class names can
+在let绑定和函数参数中引入。具体地说，类名称可以
+
+118
+00:09:49,830 --> 00:09:55,960
+be used before they are defined, as we discussed a few videos ago. And what that
+在定义它们之前使用它们，正如我们在前面几个视频中讨论的那样。那又是什么呢？
+
+119
+00:09:55,960 --> 00:10:00,670
+means is that we can't check class names, in a single pass. We can't just walk over
+这意味着我们不能一次检查类名。我们不能就这么走过去
+
+120
+00:10:00,670 --> 00:10:05,600
+the program once. And check that every class that is used is defined because we
+程序只有一次。并检查是否定义了使用的每个类，因为我们
+
+121
+00:10:05,600 --> 00:10:09,120
+don't know that we've seen all the definitions of the classes until we reach
+在我们到达之前，我不知道我们已经看到了类的所有定义
+
+122
+00:10:09,120 --> 00:10:13,280
+the very end of the program. And so there is a solution to this we have to make two
+节目的最后。所以这个问题有一个解决方案，我们必须做两个
+
+123
+00:10:13,280 --> 00:10:18,860
+passes over the program. In the first pass we gather all the class definitions, we go
+跳过这个节目。在第一个过程中，我们收集了所有的类定义，然后
+
+124
+00:10:18,860 --> 00:10:22,710
+through and we find every place where a class is defined, record all of those
+通过，我们找到定义类的每个地方，记录所有这些
+
+125
+00:10:22,710 --> 00:10:25,730
+names. And in the second pass we go through and look at the bodies of the
+名字。在第二个过程中，我们穿过并观察
+
+126
+00:10:25,730 --> 00:10:30,590
+classes and make sure they only use classes that were defined. And the lesson
+类，并确保它们只使用定义的类。而这一课
+
+127
+00:10:30,590 --> 00:10:34,130
+here, this is actually not complicated to implement I think it's quite clear. Should
+在这里，这实际上实现起来并不复杂，我想这是相当清楚的。应该
+
+128
+00:10:34,130 --> 00:10:38,660
+be quite clear how this will work. But the message here is that semantic analysis is
+要非常清楚这将如何工作。但这里要传达的信息是，语义分析
+
+129
+00:10:38,660 --> 00:10:43,110
+going to require multiple passes, and probably more than two. And, in fact, you
+需要多次通行证，而且可能不止两次。而且，事实上，你
+
+130
+00:10:43,110 --> 00:10:47,390
+should not be afraid when structuring your compiler to add lots and lots of simple
+在构造编译器以添加大量简单的
+
+131
+00:10:47,390 --> 00:10:53,410
+passes if that makes your life easier, so it's better to break something up into
+如果这能让你的生活更轻松的话就算了，所以最好把一些东西分成
+
+132
+00:10:53,410 --> 00:10:56,920
+three or four simple passes rather than to have one very, very complicated pass where
+三个或四个简单的传球，而不是一个非常，非常复杂的传球，
+
+133
+00:10:56,920 --> 00:11:00,990
+all the code is entangled. I think you'll find it much easier to debug your
+所有的代码都是纠缠在一起的。我想您会发现调试您的
+
+134
+00:11:00,990 --> 00:11:04,540
+compilers if you're willing to make multiple passes over the input.
+编译器，如果您愿意对输入进行多次传递的话。
+

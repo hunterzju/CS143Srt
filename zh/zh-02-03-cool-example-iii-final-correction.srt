@@ -1,0 +1,870 @@
+0
+00:00:04,580 --> 00:00:08,530
+Hello again. In this video we're gonna wrap up our overview of cool with one more
+又见面了。在这个视频中，我们将用另外一个来结束我们对酷的概述
+
+1
+00:00:08,530 --> 00:00:15,530
+example of writing a cool program. For our final example, let's look at a program
+写一个很酷的程序的例子。对于我们的最后一个示例，让我们看一个程序
+
+2
+00:00:20,060 --> 00:00:26,630
+that actually manipulates some interesting data structure. So we'll begin here by
+这实际上操作了一些有趣的数据结构。所以我们从这里开始
+
+3
+00:00:26,630 --> 00:00:33,630
+opening up a file. And let's call our program list dot CL this time. And as
+打开一个文件。让我们这次将我们的程序列表命名为.CL。以及AS
+
+4
+00:00:33,710 --> 00:00:40,710
+usual, I will begin by writing our main routine, and our main method. And once
+通常，我会从写我们的主要例程开始，我们的主要方法。只有一次
+
+5
+00:00:44,470 --> 00:00:51,470
+again let's, let's make this inherit from I/O so we can do the I/O routines here.
+再一次，让我们让它继承I/O，这样我们就可以在这里执行I/O例程。
+
+6
+00:00:54,979 --> 00:01:00,409
+And let's just begin with something very simple, as always. Let's just have
+让我们从一些非常简单的事情开始，一如既往。我们只要有
+
+7
+00:01:00,409 --> 00:01:04,199
+something that prints out 'quot;Hello World'quot; but in a little bit of an unusual way.
+打印出“你好，世界”的东西，但打印的方式有点不同寻常。
+
+8
+00:01:04,199 --> 00:01:10,120
+Let's, we're going to end up writing a list, a list abstraction. And let's first
+让我们最后写一个列表，一个列表抽象。让我们首先
+
+9
+00:01:10,120 --> 00:01:13,940
+build a list by hand, or at least build the elements of a list by hand, and then
+手动构建列表，或者至少手动构建列表的元素，然后
+
+10
+00:01:13,940 --> 00:01:20,250
+we'll actually build the list abstraction and put them in a list. So, let's have
+我们将实际构建列表抽象并将其放入列表中。所以，让我们
+
+11
+00:01:20,250 --> 00:01:27,250
+some strings. So we will have our string hello, and this will also illustrate how
+一些弦。因此，我们将拥有字符串hello，这也将说明如何
+
+12
+00:01:29,140 --> 00:01:32,910
+you do multiple LET bindings simultaneously. I shouldn't say
+您可以同时执行多个let绑定。我不应该说
+
+13
+00:01:32,910 --> 00:01:38,240
+simultaneously. How you do multiple LET bindings in one LET expression. So you do
+同时。如何在一个let表达式中实现多个let绑定。所以你就这么做了
+
+14
+00:01:38,240 --> 00:01:43,300
+them by just listing them, and notice that this uses commas as a separator rather
+只列出它们，注意这使用逗号作为分隔符，而不是
+
+15
+00:01:43,300 --> 00:01:50,300
+than semicolons as a terminator. So this left binding is going to define three
+而不是用分号作为终结符。所以这个左边的绑定将定义三个
+
+16
+00:01:52,240 --> 00:01:59,240
+names. Hello, world, and new line, all of which are strings. And then We're going to
+名字。大家好，WORLD和NEW LINE，它们都是字符串。然后我们要去
+
+17
+00:02:10,360 --> 00:02:14,230
+now print these out on the screen, so we are going to want to be able to do out
+现在将这些打印到屏幕上，所以我们希望能够将它们打印出来
+
+18
+00:02:14,230 --> 00:02:19,950
+string, and since main inherits from self, we can do that without an object there,
+字符串，由于main继承自self，因此我们可以在没有对象的情况下完成该操作，
+
+19
+00:02:19,950 --> 00:02:25,870
+because it just, again, dispatches to the self object. And we want to concatenate
+因为它只是，再一次，分派给Self对象。我们想要串联起来
+
+20
+00:02:25,870 --> 00:02:31,360
+these strings together in the right order. So we'll do hello dot, and since hello is
+这些字符串以正确的顺序连接在一起。所以我们要做hello dot，既然hello是
+
+21
+00:02:31,360 --> 00:02:36,260
+a string, it can be concatenated to world, and world is a string, so it can be
+一个字符串，它可以连接到world，而world是一个字符串，所以它可以
+
+22
+00:02:36,260 --> 00:02:43,110
+concatenated to newline And that should do the job. And just like probably one more
+连接到换行符，这应该可以完成任务。就像可能再多一个
+
+23
+00:02:43,110 --> 00:02:48,450
+thing about this lead this, these lead bindings here. This notice if it, the
+关于这个引线，这些引线绑定在这里。这张通知如果是这样的话，
+
+24
+00:02:48,450 --> 00:02:52,110
+comma is, the comma is the separator here, meaning it doesn't come after the last one
+逗号是，逗号是这里的分隔符，意思是它不在最后一个之后
+
+25
+00:02:52,110 --> 00:02:56,900
+on the list. So it just separates that into the list, so it's not a terminator.
+在名单上。所以它只是把它分隔到列表中，所以它不是终结符。
+
+26
+00:02:56,900 --> 00:03:03,900
+And now we can close up our main procedure. Close up our class definition.
+现在我们可以结束我们的主要程序了。关闭我们的类定义。
+
+27
+00:03:04,660 --> 00:03:11,660
+Save it and now see if it compiles. Oh amazing! First try. And we run it, and it
+保存它，现在看看它是否可以编译。哦，太棒了！先试一试。我们运行它，它
+
+28
+00:03:16,260 --> 00:03:22,680
+prints hello world, as expected. So now, let's, instead of introducing the three
+不出所料，打印hello world。所以现在，让我们不介绍这三位
+
+29
+00:03:22,680 --> 00:03:25,709
+strings separately, and then concatenating them together, let's write an abstraction
+字符串分开，然后将它们连接在一起，让我们编写一个抽象
+
+30
+00:03:25,709 --> 00:03:30,180
+where we can build a list of strings. And then that abstraction will have a function
+在那里我们可以建立一个字符串列表。那么这个抽象就会有一个功能
+
+31
+00:03:30,180 --> 00:03:37,170
+within it to do the, to do the concatenation. Alright, so we'll have a
+在它里面做，做连接。好的，那么我们将有一个
+
+32
+00:03:37,170 --> 00:03:44,060
+class called list. And, every list needs to, I think, to have two components. So
+类名为List。而且，我认为每个清单都需要有两个组成部分。所以
+
+33
+00:03:44,060 --> 00:03:48,300
+first, it's gonna have the item that's in the list, and that'll be a string. And
+首先，它将包含列表中的项目，这将是一个字符串。和
+
+34
+00:03:48,300 --> 00:03:52,430
+then when you have a pointer to the next, to the, to the tail of the list, to the
+然后，当您有指向下一个、指向列表尾部、指向
+
+35
+00:03:52,430 --> 00:03:58,890
+rest of the list. And so I have a next, field that, points or is another list, is
+睡觉榜上有名。所以我有一个下一个字段，它指向或者是另一个列表，是
+
+36
+00:03:58,890 --> 00:04:04,209
+another list of strings. Now we need a couple of methods in order to, in order to
+另一个字符串列表。现在我们需要几种方法，以便
+
+37
+00:04:04,209 --> 00:04:09,459
+use this list. We'll need to be able to initialize a list in some way. So the
+使用此列表。我们需要能够以某种方式初始化列表。因此，
+
+38
+00:04:09,459 --> 00:04:14,170
+initialization function will take an item and, the rest of the list, the next part
+初始化函数将获取一项，并将列表的睡觉作为下一部分
+
+39
+00:04:14,170 --> 00:04:21,170
+of the list. And, what is it going to do? Well it's gonna need to set the fields of
+在名单上。那么，它要做什么呢？嗯，它需要设置
+
+40
+00:04:21,509 --> 00:04:24,889
+the object, And so this one has to be done as a series of assignment statements. So
+对象，所以这个必须作为一系列赋值语句来完成。所以
+
+41
+00:04:24,889 --> 00:04:31,210
+we'll need a statement block and we will set the item to be the I argument. We'll
+我们需要挡路声明，并将该项设置为i参数。我们会
+
+42
+00:04:31,210 --> 00:04:38,210
+set the next, attribute to be the N argument. And now, we actually want, this
+将下一个属性设置为N参数。而现在，我们实际上想要的是，这个
+
+43
+00:04:40,349 --> 00:04:45,309
+initialized object here, this, this method here, to return the object itself. So
+这里初始化的对象，这里的this，this方法，返回对象本身。所以
+
+44
+00:04:45,309 --> 00:04:49,759
+that, and that'll be convenient for chained together calls to [inaudible]. So
+这样，就可以方便地将呼叫链接到[听不见]。所以
+
+45
+00:04:49,759 --> 00:04:55,110
+we'll have it return self. It'll return the self object. And that's the end of out
+我们会把它送回赛尔夫的。它将返回Self对象。这就是出局的终点
+
+46
+00:04:55,110 --> 00:05:02,110
+statement block. And then that is the end of our method. And, I made a mistake up
+挡路声明。然后我们的方法就到此为止了。而且，我犯了个错误
+
+47
+00:05:02,139 --> 00:05:06,639
+here. We've gotta declare the return type of a knit. And what it's going to return
+这里。我们必须声明针织的退货类型。以及它会带来什么回报
+
+48
+00:05:06,639 --> 00:05:11,259
+of course, it returns a, a object of type list. I'll need to put a list declaration
+当然，它返回一个，一个List类型的对象。我需要写一份清单声明
+
+49
+00:05:11,259 --> 00:05:16,889
+there. Alright, so that takes care of, of a knit . And now we can use this to build,
+那里。好的，这就解决了，针织的问题。现在我们可以用它来建造
+
+50
+00:05:16,889 --> 00:05:23,889
+build a list down here. So what should we do? Let's actually have a new variable
+在这下面列一张单子。那我们该怎么办呢？让我们实际拥有一个新的变量
+
+51
+00:05:24,460 --> 00:05:31,460
+called list. That we'll introduce here in this lead, this series of lead bindings.
+呼叫列表。我们将在这里介绍这一系列的引线绑定。
+
+52
+00:05:32,229 --> 00:05:35,710
+And let's just build a list out of these three objects. So we'll say, we'll have a
+让我们从这三个对象中创建一个列表。所以我们会说，我们会有一个
+
+53
+00:05:35,710 --> 00:05:42,710
+new list, and then we'll initialize to contain the string hello. And. What should
+新列表，然后我们将初始化以包含字符串hello。和。应该做些什么
+
+54
+00:05:45,080 --> 00:05:50,629
+the, rest of the list be? Well that should be another list, which is initialized to
+那么，榜单上的睡觉是什么呢？那应该是另一个列表，它被初始化为
+
+55
+00:05:50,629 --> 00:05:57,629
+have the string the world. And what should be inside of that list file, is another
+拥有这根弦的世界。该列表文件中应该包含的内容是另一个
+
+56
+00:06:00,020 --> 00:06:05,759
+new list object, which we'll initialize to have new line. And now what do we put
+New List对象，我们将对其进行初始化，使其具有新行。现在我们该怎么做呢
+
+57
+00:06:05,759 --> 00:06:08,210
+here, actually there's a little bit of problem here isn't there? We need to put a
+这里，实际上这里有一点问题，不是吗？我们需要把一个
+
+58
+00:06:08,210 --> 00:06:13,719
+list object here. But we don't want to allocate a, a new list object, we want
+在此列出对象。但是我们不想分配一个新的列表对象，我们想
+
+59
+00:06:13,719 --> 00:06:18,849
+that to be really the equivalent of a, of a null pointer. And there's no name for
+这实际上等同于，空指针的。而且也没有名字
+
+60
+00:06:18,849 --> 00:06:23,089
+that in Cool actually, you can't write down the name of a null pointer. It's
+实际上，在Cool中，你不能写下空指针的名称。它是
+
+61
+00:06:23,089 --> 00:06:29,059
+called void in Cool. There's no, there's no, no special symbol for that. So we'll
+被称为“凉爽中的空虚”。没有，没有，没有特殊的符号。所以我们会
+
+62
+00:06:29,059 --> 00:06:35,330
+have to create a variable that is just not initialized. And that will be, as well,
+必须创建一个未初始化的变量。这也将是，同样的，
+
+63
+00:06:35,330 --> 00:06:40,879
+uninitialized variable of type list will, in fact be void. It'll be a null pointer.
+List类型的未初始化变量实际上将为void。它将是空指针。
+
+64
+00:06:40,879 --> 00:06:46,699
+So let's call that nil. And it'll be a typed list, and no initializer. And so nil
+那我们就称它为零吧。它将是一个类型化的列表，没有初始值设定项。所以是零
+
+65
+00:06:46,699 --> 00:06:50,149
+there will point to nothing or the, the void point. And then we can use nil to
+什么都不会指向，或者是空白点。然后我们可以使用nil来
+
+66
+00:06:50,149 --> 00:06:55,259
+terminate our list here. And then we have to close off all the params for all the
+我们的名单到此为止。然后我们必须关闭所有的参数
+
+67
+00:06:55,259 --> 00:07:01,949
+nesting here. And I think that's it. And so that will be our list. Okay, so we have
+在这里筑巢。我想就是这样了。这将是我们的清单。好的，所以我们有
+
+68
+00:07:01,949 --> 00:07:08,689
+a list of three strings. And now what we want to do with that is to print it out.
+包含三个字符串的列表。现在我们要做的就是把它打印出来。
+
+69
+00:07:08,689 --> 00:07:12,219
+And so what we would like to do is to have a list fall off the list, and then a
+因此，我们想要做的是从列表中删除一个列表，然后一个
+
+70
+00:07:12,219 --> 00:07:19,219
+function that's gonna flatten that list and we'll just print it. So that is the
+函数，该函数将扁平该列表，我们将直接打印它。所以这就是
+
+71
+00:07:19,719 --> 00:07:26,719
+what the, what the main program should do. And now. You have to write the flatten
+主程序应该做什么。现在呢。你得写出平面图
+
+72
+00:07:27,520 --> 00:07:34,149
+function. So flatten takes no arguments. And it's going to return a string. It's
+功能。所以Flatten不需要任何参数。它将返回一个字符串。它是
+
+73
+00:07:34,149 --> 00:07:40,639
+going to return a single string. And flatten is a pretty simple function. U h,
+将返回单个字符串。而展平是一个相当简单的功能。嗯，
+
+74
+00:07:40,639 --> 00:07:46,490
+what do we have to do. Well. There's really two cases. One is if we're at the
+我们要做什么。井。实际上有两个案子。一是如果我们在
+
+75
+00:07:46,490 --> 00:07:49,309
+end of the string, and the other is if we're not yet at the end of the string. So
+字符串的末尾，另一个是如果我们还没有到达字符串的末尾。所以
+
+76
+00:07:49,309 --> 00:07:52,839
+let's, test for that. So how do we know if we're at the end of the string? Well, if
+我们来测试一下。那么我们怎么知道我们是不是走到了最后呢？嗯，如果
+
+77
+00:07:52,839 --> 00:07:57,259
+the next pointer is, is void, then there is no, nothing more in the string. And
+下一个指针是，是空的，那么字符串中就没有了。和
+
+78
+00:07:57,259 --> 00:08:02,229
+there actually is a special test for that in Cool. It's called the isvoid, function,
+事实上，在Cool中有一个特别的测试来测试这一点。它被称为isvoid，函数，
+
+79
+00:08:02,229 --> 00:08:09,059
+and it's written like this. So if isvoid, of next, okay? So [inaudible] next field.
+它是这样写的。所以如果是无效的，下一个，好吗？所以[听不见]下一场。
+
+80
+00:08:09,059 --> 00:08:16,059
+So if the next field is void, then what are we going to return? Keeps. Well then
+那么如果下一个字段是空的，那么我们要返回什么呢？一直保持着。那好吧，那么
+
+81
+00:08:16,569 --> 00:08:21,949
+the result here is just, the item, whatever the item was in this last element
+这里的结果就是项目，不管最后一个元素中的项目是什么
+
+82
+00:08:21,949 --> 00:08:28,949
+of the list. And otherwise What we want to do, Well, otherwise, we want to take the
+在名单上。另外，我们想要做的是，嗯，否则，我们想要
+
+83
+00:08:31,909 --> 00:08:38,909
+item and we want to concatenate onto it, the result of flattening the rest of the
+项目，我们想要连接到它上，这是将睡觉展平的结果
+
+84
+00:08:39,490 --> 00:08:46,490
+list. And that is our flattened method. So let's see if that works. So let's compile
+列表。这就是我们的扁平化方法。所以让我们看看这是否奏效。所以让我们编译一下
+
+85
+00:08:54,500 --> 00:09:01,500
+this. And we got a couple of syntax errors here. So let's go back and see what's
+这。我们这里有几个语法错误。所以让我们回去看看有什么
+
+86
+00:09:01,950 --> 00:09:08,950
+going on. So we have a syntax error here, at the end of the, the flatten method. And
+还在继续。因此，在Flat方法的末尾，我们有一个语法错误。和
+
+87
+00:09:13,460 --> 00:09:18,170
+we see that we left out the [inaudible] to close a conditional. So a conditional has
+我们看到我们省略了[听不见的]来结束一个条件句。所以条件条件有
+
+88
+00:09:18,170 --> 00:09:23,980
+to be ended with, with [inaudible]. Alright, and let's see if that's working
+以，以[听不见]结束。好的，让我们看看这是不是起作用了
+
+89
+00:09:23,980 --> 00:09:30,980
+now. And we still have a syntax error, at line 29. And the mistake here is that we
+现在。在第29行，我们仍然有一个语法错误。这里的错误是我们
+
+90
+00:09:34,870 --> 00:09:41,360
+forgot to declare the type of this variable, which is a list. And then it
+忘了声明这个变量的类型，它是一个列表。然后它
+
+91
+00:09:41,360 --> 00:09:46,150
+gets initialized to this to this big expression that we wrote out. Lemme just
+被初始化为我们写出的这个大表达式。让我只是
+
+92
+00:09:46,150 --> 00:09:50,200
+do the indentation a little more nicely here. And notice, something actually is
+这里的缩进做得再漂亮一点。注意，有些东西实际上是
+
+93
+00:09:50,200 --> 00:09:54,280
+worth mentioning here that this definition here, this definition of the variable
+值得一提的是，这里的这个定义，这个变量的定义
+
+94
+00:09:54,280 --> 00:10:01,280
+list. Depends on the definition of the previous variables in the let. So, each of
+列表。取决于let中前面变量的定义。所以，每个人
+
+95
+00:10:01,330 --> 00:10:06,910
+so when a let binding is made the name of the variable that's bound is actually
+因此，当创建let绑定时，绑定的变量的名称实际上是
+
+96
+00:10:06,910 --> 00:10:12,810
+available in subsequent let expressions. So in this case this variable list makes
+在后续LET表达式中可用。所以在这种情况下，这个变量列表使得
+
+97
+00:10:12,810 --> 00:10:18,360
+use of all of hello, world, and newline, Which we're defining earlier in the same
+使用所有hello、world和newline，我们在前面的
+
+98
+00:10:18,360 --> 00:10:25,360
+lead constr uct. Let's save this, and come over here and compile it. And we see we
+引线结构。让我们保存这个，然后到这里来编译它。我们看到我们
+
+99
+00:10:27,870 --> 00:10:34,030
+got another bug in the code. So, we come up here. We see we I've made a mistake
+在代码中又发现了一个错误。所以，我们来到这里。我们看到了我们我弄错了
+
+100
+00:10:34,030 --> 00:10:38,390
+here. I've used functional notation here calling flattened of next and what I
+这里。我在这里使用了函数表示法，调用了Next和我
+
+101
+00:10:38,390 --> 00:10:43,670
+actually wanted to do was to dispatch to next on the method flattened. So, that
+其实想做的就是调度到下一步的方法上压平。所以，那就是
+
+102
+00:10:43,670 --> 00:10:49,570
+should be written like that. All right, Probably getting close now. Let's see if
+应该是这样写的。好了，可能快到了。让我们看看如果
+
+103
+00:10:49,570 --> 00:10:56,570
+it works yet. Well it compiles and now let's see if it runs. And indeed it does,
+现在还行得通。好的，它编译了，现在让我们看看它是否运行。确实是这样，
+
+104
+00:11:01,510 --> 00:11:06,070
+Prints out, hello world, Just as we expected. Now let's go back to our program
+打印出来，你好，世界，正如我们所期待的。现在让我们回到我们的节目
+
+105
+00:11:06,070 --> 00:11:11,650
+and let's generalize this list abstraction in one way. Let's say that we can have an
+让我们以一种方式概括这个列表抽象。比方说，我们可以有一个
+
+106
+00:11:11,650 --> 00:11:17,680
+arbitrary list of objects, not just strings. And that will require us to
+任意对象列表，而不仅仅是字符串。这将需要我们
+
+107
+00:11:17,680 --> 00:11:22,430
+change a few things so it can be initialized now with an object. And now
+更改一些内容，以便现在可以使用对象对其进行初始化。而现在
+
+108
+00:11:22,430 --> 00:11:27,060
+when it comes time to flatten this list we want to reduce a string. We want to
+当需要展平这个列表时，我们想要减少一个字符串。我们想要
+
+109
+00:11:27,060 --> 00:11:33,760
+present produce a print representation. But not everything in the, in the list, is
+演示文稿制作了一幅印刷图画。但并不是列表中的所有东西都是
+
+110
+00:11:33,760 --> 00:11:38,870
+necessarily a string. And we need a way to traverse the list and do different things,
+必须是字符串。我们需要一种方法来遍历列表并做不同的事情，
+
+111
+00:11:38,870 --> 00:11:41,370
+for different kinds of things that might be in the list for different types of
+可能在不同类型的列表中的不同类型的东西
+
+112
+00:11:41,370 --> 00:11:46,420
+things that might be in the list. And so there's a constructing cool for the type
+清单上可能有的东西。因此，对于这类人来说，有一种构造上的酷炫
+
+113
+00:11:46,420 --> 00:11:53,420
+of, and, of an object, at run time and this is called, the case construct. So,
+在运行时，对象的和，这称为案例构造。所以,
+
+114
+00:11:53,700 --> 00:11:59,240
+let me first introduce a let expression here, we'll let the string that we're
+让我首先在这里介绍一个let表达式，我们将让我们正在使用的字符串
+
+115
+00:11:59,240 --> 00:12:05,910
+gonna construct, Which is of type string. And that's going to be initialized to
+要构造的，它是字符串类型的。它将被初始化为
+
+116
+00:12:05,910 --> 00:12:11,200
+something, and now, it's going to be a case. And what do we put a case on? Well,
+一些事情，现在，这将是一个案子。我们要办什么案子呢？井,
+
+117
+00:12:11,200 --> 00:12:14,820
+it's going to depend on the kind of thing the item is. So the item in the list could
+这将取决于物品的种类。因此列表中的项目可以
+
+118
+00:12:14,820 --> 00:12:19,010
+be, it could be different kinds of types and we want to do a different operation
+可以是不同的类型，我们想做不同的操作
+
+119
+00:12:19,010 --> 00:12:25,980
+depending on what item actually is. So the case item and then the key word is of, and
+这取决于物品实际是什么。所以案例项和关键字是of，和
+
+120
+00:12:25,980 --> 00:12:32,790
+now we have different branches of the case expression for different kinds of things,
+现在，对于不同种类的事物，我们有不同的case表达式分支，
+
+121
+00:12:32,790 --> 00:12:37,920
+that could be in the list. So let's say that if it's an [inaudible]. Okay, so what
+可能在名单里。所以我们假设如果它是[听不见的]。好吧，那又怎么样
+
+122
+00:12:37,920 --> 00:12:43,530
+this does, is this says that if the item is an INT, then we're going to rename it
+这就是说，如果项目是整型的，那么我们将重命名它
+
+123
+00:12:43,530 --> 00:12:48,130
+to I, we're going to bind I to that integer and then we can do something with
+对于i，我们将把i绑定到这个整数，然后我们可以用
+
+124
+00:12:48,130 --> 00:12:55,130
+I. And what would we want to do with I? Well, we'd probably want to convert it to
+我。我们要怎么处理我呢？嗯，我们可能想把它转换成
+
+125
+00:12:55,180 --> 00:13:02,180
+a string. So we'll do I to A 'quot;I'quot; And what if in fact. That item happened to be of
+一根绳子。因此，我们将对A‘quot；I’quot；如果事实上怎么办。
+
+126
+00:13:06,640 --> 00:13:09,830
+type string. The items in the list have to be of type string. Well, then we can just
+键入string。列表中的项必须是字符串类型。嗯，那我们就可以
+
+127
+00:13:09,830 --> 00:13:16,130
+use the item itself, as the string representation. And we can do this for
+使用项本身作为字符串表示形式。我们可以这样做
+
+128
+00:13:16,130 --> 00:13:18,650
+other kinds of types. If we had other kinds of types in our system, we could
+其他类型的。如果我们的系统中有其他类型，我们可以
+
+129
+00:13:18,650 --> 00:13:23,610
+continue to list out other, cases here, and how to convert them into a string
+继续在这里列出其他案例，以及如何将它们转换为字符串
+
+130
+00:13:23,610 --> 00:13:26,970
+representation. But let's just have a default case here. We'll say if it's any
+代理。但我们这里只有一个默认情况。如果有的话，我们会说的
+
+131
+00:13:26,970 --> 00:13:30,900
+other kind of type, which would, which would be covered by having, a branch
+另一种类型，它会，这将被有一个分支所覆盖
+
+132
+00:13:30,900 --> 00:13:35,480
+saying that if it's, of, type object, we'll call it O, then we should just
+如果它是Object类型，我们就称它为O，那么我们应该
+
+133
+00:13:35,480 --> 00:13:42,480
+abort. And so we should just call the abort function and quit. And that's our
+中止任务。所以我们应该只调用Abort函数然后退出。这就是我们的
+
+134
+00:13:44,260 --> 00:13:50,100
+case. It needs to be terminated with a closing keyword called esag, Again the
+箱子。它需要以名为esag的结束关键字结束，同样也是
+
+135
+00:13:50,100 --> 00:13:57,100
+reverse of, of case. And now we can use that [inaudible] we constructed in our
+反之，反之亦然。现在我们可以使用我们在我们的
+
+136
+00:13:59,070 --> 00:14:05,810
+little function here. So if, if the next field is void then we're just gonna return
+这里有个小功能。所以，如果下一个字段是空的，那么我们只需要返回
+
+137
+00:14:05,810 --> 00:14:12,320
+the string. Otherwise we're gonna return this string incatenated with the
+那根绳子。否则我们就会把这个被切碎的字符串
+
+138
+00:14:12,320 --> 00:14:16,980
+flattening out of the rest of the list. Kay. Now there's a couple of things we
+在睡觉排行榜上被拉平。凯。现在我们有几件事
+
+139
+00:14:16,980 --> 00:14:22,250
+have to fix up. We used the I to A method here, which means that list needs to
+我得把它修好。我们在这里使用了i to A方法，这意味着列表需要
+
+140
+00:14:22,250 --> 00:14:29,250
+inherit. From the, conversion class A to I. And there's another issue here, I see.
+继承。从A类到I类的转换，还有另一个问题，我明白了。
+
+141
+00:14:34,760 --> 00:14:41,760
+And that's right here. So, if you notice The, the. The case statement needs to
+就在这里。所以，如果你注意到这个，那个。Case语句需要
+
+142
+00:14:43,150 --> 00:14:48,060
+produce a string. Okay, and it turns out that abort dose not return a string, abort
+拿出一根绳子。好的，结果是Abort没有返回字符串，Abort
+
+143
+00:14:48,060 --> 00:14:52,180
+actually terminates the program, but it's type is that it returns an object. And so
+实际上终止了程序，但是它的类型是它返回一个对象。因此，
+
+144
+00:14:52,180 --> 00:14:57,570
+here we have to convince the type checker, to convince, to accept this, piece of
+在这里，我们必须说服类型检查器，说服，接受这一点
+
+145
+00:14:57,570 --> 00:15:01,610
+code, and we need to get this branch here to type as a string. So what we can do,
+代码，我们需要让这个分支以字符串的形式输入。所以我们能做的是，
+
+146
+00:15:01,610 --> 00:15:06,470
+and this is ugly, but it's the way to do it, is we put it in a block, in a
+这很难看，但这就是我们要做的，我们把它放在挡路里，放在
+
+147
+00:15:06,470 --> 00:15:11,810
+statement block. We call abort first, and a gain, that will just terminate the
+挡路声明。我们首先调用Abort，然后调用Gain，这将终止
+
+148
+00:15:11,810 --> 00:15:15,230
+program. And now we can put any string expression we want after that, and that'll
+程序。现在我们可以在那后面加上任何我们想要的字符串表达式，这将
+
+149
+00:15:15,230 --> 00:15:19,560
+be the, that'll give a type string to the entire block. So we can just put the empty
+这将为整个挡路提供一个类型字符串。所以我们可以把空的
+
+150
+00:15:19,560 --> 00:15:22,710
+string here, for example, and that has to be terminated with a semicolon, since this
+例如，这里的字符串必须以分号结束，因为这
+
+151
+00:15:22,710 --> 00:15:27,690
+isn't a block. And we can close, that, with a curly brace. Okay? So this is just
+不是挡路。我们可以用花括号来结束它。好吧?所以这只是
+
+152
+00:15:27,690 --> 00:15:32,250
+something we have to do, to make the type checker happy. And that may be everything
+我们必须做的事情，让类型检查器高兴。这可能就是一切
+
+153
+00:15:32,250 --> 00:15:39,250
+we needed to do. So let's try compiling this. And we have to include the diversion
+我们需要做的是。那么让我们试着编译一下这个。我们还得把转移视线
+
+154
+00:15:41,950 --> 00:15:48,950
+library. And we have one syntax error. So far. And that's because we forgot to put
+图书馆。我们有一个语法错误。到目前为止。那是因为我们忘了把
+
+155
+00:15:52,190 --> 00:15:59,190
+the, semicolon terminator on, on each of our, each of the, each of the, variables
+上的，分号终止符，在我们的，每个，每个，变量上的，分号终止符
+
+156
+00:15:59,620 --> 00:16:06,620
+that we were introducing in the let. Okay, got to save that. Let's try this again.
+这是我们在LET中介绍的。好了，还是省着点吧。让我们再试一次。
+
+157
+00:16:08,290 --> 00:16:14,110
+And, oops, I didn't actually manage to fix the syntax error. And that's because I put
+而且，哎呀，我实际上没有设法修复语法错误。那是因为我把
+
+158
+00:16:14,110 --> 00:16:19,540
+the semicolon in the wrong place. Actually, I, I forgot. Variables that are
+分号放错地方了。实际上，我，我忘了。变量是
+
+159
+00:16:19,540 --> 00:16:26,540
+bond in a lent are separated by, by commas. But, the branches of the case have
+大斋节中的债券用逗号隔开。但是，案件的分支机构已经
+
+160
+00:16:27,870 --> 00:16:32,710
+to be terminated by semicolons. So, what I said before was incorrect about using
+以分号结束。所以我之前说的关于使用的话是不正确的。
+
+161
+00:16:32,710 --> 00:16:39,060
+semicolons to terminate lent bindings. It's just in case branches where we need
+用于终止借出绑定的分号。只是为了以防万一我们需要的分支机构
+
+162
+00:16:39,060 --> 00:16:42,890
+it, In this example. Alright, anyway coming back to this let's see if it
+它，在这个例子中。好的，不管怎样，回到这个话题上来，让我们看看
+
+163
+00:16:42,890 --> 00:16:49,690
+compiles. And it does. And now let's run it, And it works. Now of course we haven't
+编译。事实的确如此。现在让我们运行它，它起作用了。现在我们当然没有
+
+164
+00:16:49,690 --> 00:16:56,440
+actually exploited the ability to have different types of objects in the list. So
+实际上利用了在列表中拥有不同类型对象的能力。所以
+
+165
+00:16:56,440 --> 00:17:03,440
+let's, let's do that. Let's add an integer in here. Type ints and let's, give it a
+让我们，让我们这样做。让我们在这里加上一个整数。键入int，让我们给它一个
+
+166
+00:17:07,880 --> 00:17:14,880
+number 42. And we can insert it in here. And now we can pass any object, to a knit
+42号。我们可以把它插到这里。现在我们可以把任何物体传给针织品
+
+167
+00:17:25,019 --> 00:17:32,019
+in the first position. So we'll just put in 42 right there. And when we compile and
+在第一个位置。所以我们就在那里放42个就行了。当我们编译和
+
+168
+00:17:34,360 --> 00:17:41,360
+run this it just print hello world 42. If we, if everything goes as expected, And it
+运行这个，只需打印hello world 42。如果我们，如果一切都按预期进行，它
+
+169
+00:17:42,850 --> 00:17:46,700
+does, And that concludes our little tour of [inaudible]. There are a few features
+是的，我们的[听不见]之旅到此为止。有几个功能
+
+170
+00:17:46,700 --> 00:17:51,789
+that we haven't shown in these examples, but you can look in the examples
+我们没有在这些示例中展示，但是您可以在示例中查看
+
+171
+00:17:51,789 --> 00:17:57,330
+directory, for lots more programs - many more pro grams that will show you all the
+目录，获取更多的程序-更多的程序将向您显示所有
+
+172
+00:17:57,330 --> 00:18:01,519
+different ins and outs and details of the other language features as well as the
+其他语言功能的不同进出和详细信息以及
+
+173
+00:18:01,519 --> 00:18:02,440
+ones we've covered here.
+我们已经在这里报道过了。
+

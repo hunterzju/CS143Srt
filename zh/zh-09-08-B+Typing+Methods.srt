@@ -1,0 +1,165 @@
+0
+00:00:01,670 --> 00:00:05,379
+The method environment has to be added to all of the other type rules in our
+方法环境必须添加到我们的
+
+1
+00:00:05,379 --> 00:00:09,970
+system. This is really easy to do, because only the dispatch rules actually care
+系统。这真的很容易做到，因为只有分派规则才真正关心
+
+2
+00:00:09,970 --> 00:00:14,099
+about what the methods are. All the rest of the rules just pass the method environment
+关于方法是什么。所有的睡觉规则都只是通过方法环境
+
+3
+00:00:14,099 --> 00:00:17,820
+along. So what do I mean by that? Well, here's our rule for add, with
+一起去吧。我这么说是什么意思？嗯，这是我们的加法规则，
+
+4
+00:00:17,820 --> 00:00:21,260
+just the object environment. So now what were going to do, is we're going to add a
+只有对象环境。所以现在我们要做的是，我们要添加一个
+
+5
+00:00:21,260 --> 00:00:24,760
+method environment. And the sub-expressions will be just type checked.
+方法环境。子表达式将只进行类型检查。
+
+6
+00:00:24,760 --> 00:00:31,279
+In exactly the same method environment as the entire expression and all the other rules
+在与整个表达式和所有其他规则完全相同的方法环境中
+
+7
+00:00:31,279 --> 00:00:34,839
+simply pass down the method environment from the root towards the leaves
+简单地将方法环境从根传递到叶
+
+8
+00:00:34,839 --> 00:00:41,239
+without changing it just as in this rule. Now it turns out that for some cases
+而不像这条规则那样改变它。现在事实证明，在某些情况下，
+
+9
+00:00:41,239 --> 00:00:45,679
+involving self-type, we actually need one more thing in our environment. And so, the
+涉及到自我类型，我们实际上在我们的环境中还需要一样东西。因此，
+
+10
+00:00:45,679 --> 00:00:50,159
+actual full environment for Cool type checking consists of three things. First of
+Cool类型检查的实际完整环境由三部分组成。第一个
+
+11
+00:00:50,159 --> 00:00:54,559
+all, there's the mapping O, that gives types to object IDs. There's this mapping
+All，有一个映射O，它为对象ID提供类型。有一张地图
+
+12
+00:00:54,559 --> 00:00:58,389
+M, that gives types to methods. And finally, we just need to know the name of
+m，它为方法提供类型。最后，我们只需要知道
+
+13
+00:00:58,389 --> 00:01:02,959
+the current class. So, whatever class the expression we're type checking actually sits
+当前类。因此，我们正在进行类型检查的表达式实际位于哪个类
+
+14
+00:01:02,959 --> 00:01:09,030
+in. So the full form of a sentence in the Cool type checking [inaudible] looks like
+在……里面。因此，Cool类型检查[听不见]中句子的完整形式如下所示
+
+15
+00:01:09,030 --> 00:01:12,850
+this And is read as follows, under the assumption that the object identifiers
+在假设对象标识符
+
+16
+00:01:12,850 --> 00:01:17,399
+have the types given by O. That the methods have the signatures given by M And
+具有由O给出的类型。这些方法具有由M和M给出的签名。
+
+17
+00:01:17,399 --> 00:01:24,240
+that the expression sits in the class C. Then we can prove that the expression E has
+表达式属于类C，那么我们可以证明表达式E具有
+
+18
+00:01:24,240 --> 00:01:30,020
+the type T. And here's an example, the ad example, the, the rule for addition again,
+类型T，这里有一个例子，广告例子，再加一次的规则，
+
+19
+00:01:30,020 --> 00:01:35,469
+written out with the full environment. So the rules that I've given
+写下了完整的环境。所以我给出的规则
+
+20
+00:01:35,469 --> 00:01:39,329
+you for type checking here are cool specific and some other languages have very
+您在这里进行类型检查是很酷的，其他一些语言有非常
+
+21
+00:01:39,329 --> 00:01:43,090
+different rules. But there are some general themes in type checking. First of
+不同的规则。但是在类型检查中有一些一般性的主题。第一个
+
+22
+00:01:43,090 --> 00:01:47,189
+all, type rules are defined on the structure of expressions. So they're typically
+所有类型规则都是在表达式的结构上定义的。所以他们通常是
+
+23
+00:01:47,189 --> 00:01:51,590
+done in this inductive fashion, where the types of an expres-, the type of
+以这种归纳的方式来完成，其中表达的类型-，表达的类型
+
+24
+00:01:51,590 --> 00:01:57,109
+an expression depends on the types of its sub expressions. And also the types of variables
+表达式取决于其子表达式的类型。以及变量的类型
+
+25
+00:01:57,109 --> 00:02:01,039
+and more generally any free names in an expression, things like method
+更广泛地说，表达式中的任何自由名称，如方法
+
+26
+00:02:01,039 --> 00:02:05,520
+names, they're going to be modeled by an environment, so we're going to have some mapping
+名称，它们将由环境建模，所以我们将有一些映射
+
+27
+00:02:05,520 --> 00:02:10,259
+sitting around that's going to tell us any kind of fr-. A Russian what assumptions
+坐在那里会告诉我们任何类型的fr-。一个俄国人有什么假设
+
+28
+00:02:10,258 --> 00:02:15,849
+the type rules should make about the types of those names And one thing
+类型规则应该对这些名称的类型做出规定，而且还有一件事
+
+29
+00:02:15,849 --> 00:02:18,909
+you've probably noticed by now but it's worth saying explicitly is that type
+您现在可能已经注意到了，但是值得明确说明的是这种类型
+
+30
+00:02:18,909 --> 00:02:24,340
+rules are really very compact. The notation is not complicated but there's actually
+规则真的很紧凑。符号并不复杂，但实际上
+
+31
+00:02:24,340 --> 00:02:27,730
+a lot of information in these rules. I mean you have to take some time to
+这些规则中包含了很多信息。我的意思是你得花点时间
+
+32
+00:02:27,730 --> 00:02:30,760
+sit and read them carefully to really understand what they are saying.
+坐下来仔细阅读，才能真正理解他们在说什么。
+

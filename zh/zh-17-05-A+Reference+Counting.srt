@@ -1,0 +1,540 @@
+0
+00:00:03,870 --> 00:00:07,680
+In this video we're going to conclude our discussion of automatic memory management
+在本视频中，我们将结束对自动内存管理的讨论
+
+1
+00:00:07,680 --> 00:00:12,130
+with the third and last technique we're going to talk about for garbage collection
+关于第三种也是最后一种技术，我们将讨论垃圾收集
+
+2
+00:00:12,130 --> 00:00:19,009
+called Reference Counting. So the basic idea behind reference counting is that
+称为引用计数。所以引用计数背后的基本思想是
+
+3
+00:00:19,009 --> 00:00:22,360
+rather than waiting for memory to be completely exhausted, we're going to try
+与其等待内存完全耗尽，我们将尝试
+
+4
+00:00:22,360 --> 00:00:25,640
+to collect an object as soon as soon as there are no more pointers to it. So as
+一旦没有更多指向对象的指针，就立即收集该对象。因此，作为
+
+5
+00:00:25,640 --> 00:00:29,939
+soon as we discard the last pointer to an object and it becomes unreachable, we will
+一旦我们丢弃指向对象的最后一个指针，并且它变得不可达，我们将
+
+6
+00:00:29,939 --> 00:00:34,890
+try to collect it at that point in time. And how can we do this? Well, as the name
+试着在那个时间点收集它。我们怎么才能做到这一点呢？嗯，就像我的名字一样
+
+7
+00:00:34,890 --> 00:00:39,440
+suggests we're going to count the number of references to each object. So in each
+说明我们要计算每个对象的引用次数。所以在每一种情况下
+
+8
+00:00:39,440 --> 00:00:43,719
+object we are going to store the number of pointers to that object. So if I have an
+我们要存储指向该对象的指针数。所以如果我有一个
+
+9
+00:00:43,719 --> 00:00:50,719
+object in memory, and it has say, three pointers to it from other objects then
+对象在内存中，它有三个指针从其他对象指向它，那么
+
+10
+00:00:51,269 --> 00:00:56,870
+somewhere in this object is going to be a dedicated field that contains the number
+此对象中的某个位置将是包含数字的专用字段
+
+11
+00:00:56,870 --> 00:01:01,850
+three. And if this number ever drops to zero, if we discard these pointers and
+三。如果这个数字降到零，如果我们丢弃这些指针
+
+12
+00:01:01,850 --> 00:01:07,000
+this number becomes a zero, then we know that nobody is pointing to this object,
+这个数字变成了零，那么我们就知道没有人指向这个物体，
+
+13
+00:01:07,000 --> 00:01:12,890
+and it can be free. And what this means is that every assignment has to manipulate
+而且它可以是免费的。这意味着每一项任务都必须操纵
+
+14
+00:01:12,890 --> 00:01:16,550
+the reference count in order to maintain an accurate count of the number of
+引用计数，以便保持对
+
+15
+00:01:16,550 --> 00:01:22,590
+pointers pointing to an object. So allocating a new object, returns an object
+指向对象的指针。因此分配一个新对象，会返回一个对象
+
+16
+00:01:22,590 --> 00:01:27,240
+with a reference count of one. So when a object is created by new it will already
+引用计数为1。因此，当使用new创建对象时，它将已经
+
+17
+00:01:27,240 --> 00:01:31,810
+have a reference count of one. The pointer that is returned is the only reference to
+引用计数为1。返回的指针是对
+
+18
+00:01:31,810 --> 00:01:36,150
+the object. And so we're gonna write the reference count of an object x is rc of x.
+对象。所以我们要写，物体x的引用计数是x的rc。
+
+19
+00:01:36,150 --> 00:01:42,710
+And now when we have an assignment x gets assigned y we're going to have to update
+现在，当我们有任务x被分配y时，我们将不得不更新
+
+20
+00:01:42,710 --> 00:01:47,330
+the reference counts of both the object that x points to and the object that y
+x所指向的对象和y所指向的对象的引用计数
+
+21
+00:01:47,330 --> 00:01:52,700
+points to before the assignment. So, what happens here? So, if y points to p, so
+指向赋值之前的。那么，这里发生了什么？所以，如果y指向p，那么
+
+22
+00:01:52,700 --> 00:01:56,830
+let's draw our objects here, so y is a local variable and it points to some
+让我们在这里绘制我们的对象，所以y是一个局部变量，它指向一些
+
+23
+00:01:56,830 --> 00:02:03,830
+object p in memory, and x is also a local variable and it points to some object, o.
+内存中的对象p，x也是一个局部变量，它指向某个对象o。
+
+24
+00:02:03,940 --> 00:02:10,940
+Okay? So now x is getting the value of y and so that's going to move this po inter
+好吧?现在x得到了y的值，这将使这个po intert
+
+25
+00:02:11,640 --> 00:02:15,680
+from where pointer before, pointing to the same thing as y. So what's going to
+从前面的位置指针，指向与y相同的东西。
+
+26
+00:02:15,680 --> 00:02:20,590
+happen, while p's reference count is going to go up by one, and o's reference count
+发生，而p的引用计数将加1，而o的引用计数将加1
+
+27
+00:02:20,590 --> 00:02:24,579
+is going to go down by one. And since we decremented o's reference counts, as we
+会下降一分。由于我们减少了o的引用计数，因为我们
+
+28
+00:02:24,579 --> 00:02:29,870
+dropped this pointer to the object o, we need to do a check to see if the reference
+将此指针放到对象o中，我们需要进行检查以查看引用
+
+29
+00:02:29,870 --> 00:02:32,900
+count has become zero. And if the reference count has dropped to zero, then
+计数已变为零。如果引用计数已降至零，则
+
+30
+00:02:32,900 --> 00:02:37,969
+we can free the memory for o. And then in addition to updating the reference counts
+我们可以为o释放内存，然后除了更新引用计数
+
+31
+00:02:37,969 --> 00:02:43,139
+and checking whether the reference count of o became zero, we actually need to do
+检查o的引用计数是否为零，我们实际上需要做的是
+
+32
+00:02:43,139 --> 00:02:47,359
+the assignment itself, alright? So every assignment, I want to stress that, every
+任务本身，好吗？所以每一次作业，我想强调的是，每一次
+
+33
+00:02:47,359 --> 00:02:53,670
+single assignment in the program it's now translated into these four operations that
+程序中的单个赋值，它现在被转换成这四个操作，
+
+34
+00:02:53,670 --> 00:02:59,749
+need to be done to maintain the reference counts. There are tradeoffs in reference
+需要执行此操作以维护引用计数。在引用中有权衡之处
+
+35
+00:02:59,749 --> 00:03:03,689
+counting. It has advantages and disadvantages. One of the big advantages
+开始计时了。它有优点也有缺点。最大的优势之一就是
+
+36
+00:03:03,689 --> 00:03:08,719
+is that it collects garbage incrementally without large pauses in the execution. So
+是它以增量方式收集垃圾，而不会在执行过程中出现较大的暂停。所以
+
+37
+00:03:08,719 --> 00:03:13,719
+for, for kind, for applications where large pauses would be problematic, say
+例如，对于长时间停顿会有问题的应用程序
+
+38
+00:03:13,719 --> 00:03:17,469
+real time applications or interactive applications, reference counting can
+实时应用或交互式应用，引用计数可以
+
+39
+00:03:17,469 --> 00:03:22,340
+really help because it minimizes the length of the longest possible pause.
+真的很有帮助，因为它将尽可能长的停顿时间降到最低。
+
+40
+00:03:22,340 --> 00:03:26,450
+Okay, so your program will never go to sleep. And just appear to stop running for
+好的，所以你的程序永远不会睡着。看起来就像是不再奔跑了
+
+41
+00:03:26,450 --> 00:03:30,260
+some period of time because it's off collecting garbage. It always collects the
+有一段时间了，因为它开始收集垃圾了。它总是收集
+
+42
+00:03:30,260 --> 00:03:35,739
+garbage in small incremental amounts, and so that you never see a long pause.
+垃圾的增量很小，因此您永远不会看到长时间的停顿。
+
+43
+00:03:35,739 --> 00:03:38,319
+Reference counting, or at least a basic implementation of reference counting is
+引用计数，或者至少引用计数的一个基本实现是
+
+44
+00:03:38,319 --> 00:03:43,989
+also quite easy to implement. It's very straight forward to go through and modify
+实现起来也相当容易。它非常直截了当地通过和修改
+
+45
+00:03:43,989 --> 00:03:48,230
+the code to add reference counts. So you can easily imagine a code generator that
+添加引用计数的代码。所以你可以很容易地想象一个代码生成器
+
+46
+00:03:48,230 --> 00:03:53,389
+would simply generate different code for, for the assignment operation than it
+只需为赋值操作生成与它不同的代码
+
+47
+00:03:53,389 --> 00:03:57,079
+normally did if you were adding reference counting to an implementation. So really
+如果要向实现添加引用计数，通常会这样做。所以真的
+
+48
+00:03:57,079 --> 00:04:00,599
+the, the changes that are needed for a simple implementation of reference
+引用的简单实现所需的更改
+
+49
+00:04:00,599 --> 00:04:05,719
+counting to a compiler are not that pervasive. Now there are some
+对编译器进行计数并不是那么普遍。现在有一些
+
+50
+00:04:05,719 --> 00:04:11,109
+disadvantages , to reference counting. One, is that manipulating the reference
+缺点，以供参考计数。其一，就是操纵参照物
+
+51
+00:04:11,109 --> 00:04:16,269
+counts at each assignment is really quite slow. So, if you remember what happens, we
+每次作业的点数都很慢。所以，如果你还记得发生了什么，我们
+
+52
+00:04:16,269 --> 00:04:19,879
+have a couple of updates to reference counts, so we have to update, you know,
+有几个引用计数的更新，所以我们必须更新，你知道，
+
+53
+00:04:19,879 --> 00:04:24,810
+the reference count of two objects. To do an assignment. This is, this is the code
+两个对象的引用计数。去做一项任务。这是，这是代码
+
+54
+00:04:24,810 --> 00:04:29,460
+to do an assignment and then we have an if statement. And then we actually, do the
+来做一个作业，然后我们有一个if语句。然后我们实际上做的是
+
+55
+00:04:29,460 --> 00:04:32,729
+assignment itself. So there's two reference count updates that's has to see
+任务本身。因此有两个引用计数更新需要查看
+
+56
+00:04:32,729 --> 00:04:35,620
+if our reference count became zero and then we actually do the assignment. So the
+如果我们的引用计数为零，那么我们实际上就完成了任务。因此，
+
+57
+00:04:35,620 --> 00:04:40,990
+overhead here is substantial. You're taking every single assignment, in the
+这里的开销很大。你接受了每一项任务，在
+
+58
+00:04:40,990 --> 00:04:45,419
+program and blowing up its cost by at least four or five times. And that will
+计划，并使其成本至少增加四五倍。而那将会
+
+59
+00:04:45,419 --> 00:04:50,250
+have a very noticeable impact on the performance of many programs. Now it is
+对许多程序的性能有非常明显的影响。现在是了
+
+60
+00:04:50,250 --> 00:04:56,810
+possible to optimize reference counting. So for example, if we had two updates to
+可以优化引用计数。例如，如果我们有两次更新
+
+61
+00:04:56,810 --> 00:05:01,449
+the same object, say within a basic block or even within a control flow graph, a
+相同对象，比如在基本挡路内，甚至在控制流图内，
+
+62
+00:05:01,449 --> 00:05:06,310
+compiler, a smart optimizing compiler, could frequently combine those reference
+编译器是一种智能优化编译器，可以频繁地将这些引用组合在一起
+
+63
+00:05:06,310 --> 00:05:10,129
+count operations together. So instead of updating the reference count to the object
+一起计算操作数。因此，不是更新对象的引用计数
+
+64
+00:05:10,129 --> 00:05:14,909
+two times, it can just update it one time. And, similarly if there were even more
+两次，它只能更新一次。同样，如果有更多
+
+65
+00:05:14,909 --> 00:05:20,460
+reference count updates, potentially all of those could be coalesced within some
+引用计数更新，可能所有这些都可以合并到一些
+
+66
+00:05:20,460 --> 00:05:26,060
+region of the program. The problem with that, is that is becomes very tricky to
+程序的区域。这样做的问题是，这变得非常棘手
+
+67
+00:05:26,060 --> 00:05:32,520
+get that right. So a, a simple implementation of reference counting is
+做好这件事。因此，引用计数的一个简单实现是
+
+68
+00:05:32,520 --> 00:05:39,289
+quite slow. But easy to get right. A very sophisticated implementation of reference
+相当慢。但是很容易做对。引用的一个非常复杂的实现
+
+69
+00:05:39,289 --> 00:05:42,620
+counting or highly optimized implementation of reference counting, is
+计数或引用计数的高度优化实现，是
+
+70
+00:05:42,620 --> 00:05:47,090
+somewhat faster. Still has a noticeable performance impact if you're reference
+稍微快一点。仍然对性能有明显的影响，如果您引用
+
+71
+00:05:47,090 --> 00:05:51,419
+counting all objects but it is substantially faster. However, it's quite
+对所有物体进行计数，但速度要快得多。然而，它是相当的
+
+72
+00:05:51,419 --> 00:05:58,169
+tricky to get it correct. The other problem with reference counting is that it
+要把它弄对是很棘手的。引用计数的另一个问题是它
+
+73
+00:05:58,169 --> 00:06:03,550
+cannot directly collect circular structures. So to see this let's draw, a
+不能直接收集环形结构。为了看到这一点，让我们画一个
+
+74
+00:06:03,550 --> 00:06:08,500
+little heap with a circular structure. And so let's say we have a local variable x
+具有圆形结构的小堆。假设我们有一个局部变量x
+
+75
+00:06:08,500 --> 00:06:15,500
+and it points to some object in t he heap. And that object has a pointer to another
+它指向堆中的某个对象。并且该对象具有指向另一个对象的指针
+
+76
+00:06:16,250 --> 00:06:21,919
+object, alright? And that object, that second object then has a pointer back to
+反对，好吗？然后，第二个对象会有一个指针返回到
+
+77
+00:06:21,919 --> 00:06:27,220
+the first object. Okay so here x is pointing to say a circularly length list
+第一个对象。好的，这里x指向的是一个循环长度列表
+
+78
+00:06:27,220 --> 00:06:30,729
+of length two, alright? And if we add in the reference counts here, what would
+第二段，好吗？如果我们在这里加上引用计数，会有什么
+
+79
+00:06:30,729 --> 00:06:35,740
+those look like? Well, this object down here the second object here actually one
+那些看起来像什么？这里的这个物体这里的第二个物体实际上是
+
+80
+00:06:35,740 --> 00:06:39,720
+reference to it so its reference count will be one. And this first object has two
+引用它，因此它的引用计数将为1。第一个对象有两个
+
+81
+00:06:39,720 --> 00:06:43,919
+pointers to it, one from x and one from the other object and so its reference
+指向它的指针，一个来自x，一个来自另一个对象，因此它的引用
+
+82
+00:06:43,919 --> 00:06:49,919
+count is two. Okay, so here is our little heap and we can see that there is no
+数到二。好的，这是我们的小堆，我们可以看到没有
+
+83
+00:06:49,919 --> 00:06:56,099
+garbage here because all the objects are reachable from a, a local variable or
+此处为垃圾，因为所有对象都可以从、局部变量或
+
+84
+00:06:56,099 --> 00:07:00,650
+variable of the program. Now if we were to assign a new value to x, lets say that we
+程序的变量。现在，如果我们给x赋一个新值，假设我们
+
+85
+00:07:00,650 --> 00:07:07,240
+have the assignment x gets null. Alright, so this pointer goes away. But what's
+使赋值x为空。好的，那么这个指针就消失了。但是什么是
+
+86
+00:07:07,240 --> 00:07:11,960
+going to happen? Well when we do that assignment, we're going to change the
+会发生吗？当我们完成这项任务时，我们要改变
+
+87
+00:07:11,960 --> 00:07:17,289
+reference count here of this object, it's now gonna be one. And if we look at this
+这个对象的引用计数，现在它将是1。如果我们看看这个
+
+88
+00:07:17,289 --> 00:07:22,830
+heap we now see that these objects, these two objects are unreachable. Okay, so
+堆，我们现在看到这些对象，这两个对象是不可达的。好的，那么
+
+89
+00:07:22,830 --> 00:07:29,819
+these are unreachable. But notice that the reference counts are not zero, so we can't
+这些是遥不可及的。但是请注意，引用计数不是零，所以我们不能
+
+90
+00:07:29,819 --> 00:07:33,259
+collect them. The garbage collector or the reference counting implementation, will
+把它们收起来。垃圾收集器或引用计数实现将
+
+91
+00:07:33,259 --> 00:07:37,009
+check the reference counts and see oh, these are one and so we can't delete them.
+检查引用计数，发现哦，这些是1，所以我们不能删除它们。
+
+92
+00:07:37,009 --> 00:07:42,500
+And then, what it can't see is that the only references to these objects are from
+然后，它看不到的是对这些对象的唯一引用来自
+
+93
+00:07:42,500 --> 00:07:48,729
+other, unreachable objects. So, the bottom line is that reference counting can't
+其他无法到达的对象。所以，底线是引用计数不能
+
+94
+00:07:48,729 --> 00:07:53,939
+collect circular structures and there is only really two ways to deal with that.
+收集圆形结构，实际上只有两种方法来处理。
+
+95
+00:07:53,939 --> 00:08:00,530
+One is if the programmer remembers whenever a circular structure is going to
+其一是程序员是否记得循环结构何时要
+
+96
+00:08:00,530 --> 00:08:05,479
+become unreadable, to somehow break the circularity. So for example, before we
+变得不可读，以某种方式打破循环。举个例子，在我们
+
+97
+00:08:05,479 --> 00:08:09,919
+clobbered the pointer to x here, we remembered to go in and say set, you know,
+把指针指向这里的x，我们记得进去说SET，你知道，
+
+98
+00:08:09,919 --> 00:08:15,969
+this pointer here to null. If we nulled out one of the pointers in this cycle, so
+这里的指针指向NULL。如果我们清除了这个循环中的一个指针，那么
+
+99
+00:08:15,969 --> 00:08:19,419
+that there was no longer a cycle, then the reference counting would work correctly
+如果不再有循环，则引用计数将正常工作
+
+100
+00:08:19,419 --> 00:08:23,039
+because then the reference count of this object would go to zero when, when this
+因为这样，这个对象的引用计数就会变成零，当这个
+
+101
+00:08:23,039 --> 00:08:27,659
+pointer was dropped from x and that would cause the reference count of this object
+指针已从x中删除，这将导致此对象的引用计数
+
+102
+00:08:27,659 --> 00:08:33,680
+also to go to zero after this object was deleted, okay? The other possibility is to
+也要在这个对象被删除后归零，好吗？另一种可能性是
+
+103
+00:08:33,679 --> 00:08:39,669
+back reference counting by some other garbage collection technique that can
+通过某些其他垃圾收集技术进行反向引用计数，这些垃圾收集技术可以
+
+104
+00:08:39,669 --> 00:08:44,700
+collect cycles. And so, in some reference counting systems for example most of the
+收集周期。因此，在一些引用计数系统中，例如大多数
+
+105
+00:08:44,700 --> 00:08:49,060
+garbage collection is done by reference counting but every now and again, once in
+垃圾收集是通过引用计数来完成的，但是每隔一段时间，在
+
+106
+00:08:49,060 --> 00:08:52,910
+a very, very while, you might want to mark and sweep collector to go through and
+在很长一段时间内，您可能需要标记和清扫收集器
+
+107
+00:08:52,910 --> 00:08:56,139
+clean out any circular but unreachable data structures.
+清除所有循环但无法访问的数据结构。
+

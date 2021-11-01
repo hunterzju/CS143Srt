@@ -1,0 +1,115 @@
+0
+00:00:00,810 --> 00:00:04,060
+To summarize, type checking proves facts with a form, E has type
+综上所述，类型检查用表格证明事实，E有类型
+
+1
+00:00:04,059 --> 00:00:08,880
+T And notice that this proof is on the structure of the abstract syntax tree.
+t，注意这个证明是关于抽象语法树的结构的。
+
+2
+00:00:08,880 --> 00:00:15,140
+So, for the expression one+2, we prove something about one+2, but by first proving
+所以，对于表达式1+2，我们证明了关于1+2的一些东西，但是首先证明
+
+3
+00:00:15,140 --> 00:00:18,660
+something about each of the sub-expressions. So we prove that the sub-expressions
+关于每个子表达式的一些信息。所以我们证明了子表达式
+
+4
+00:00:18,660 --> 00:00:22,369
+had type int. And then we managed to prove that the whole thing had
+具有类型int。然后我们设法证明了整件事
+
+5
+00:00:22,369 --> 00:00:29,369
+type int. And so the proof has the same shape as the abstract syntax tree. You can
+键入int。因此证明具有与抽象语法树相同的形状。你可以的
+
+6
+00:00:29,369 --> 00:00:34,110
+look at this proof as a tree. Now the root of the tree in the case of the proof is at
+把这个证明看作是一棵树。现在，在证明的情况下，树的根是在
+
+7
+00:00:34,110 --> 00:00:37,580
+the bottom, we usually draw the abstract syntax tree with the root at the top, so this
+在底部，我们通常绘制抽象语法树，根在顶部，所以这个
+
+8
+00:00:37,580 --> 00:00:41,980
+tree looks like this, whereas we often draw the abstract syntax tree in the
+树看起来像这样，而我们通常在
+
+9
+00:00:41,980 --> 00:00:45,670
+other way around. But, the important thing here is that the proof has the shape of the
+反过来说。但是，这里重要的是证明的形状是
+
+10
+00:00:45,670 --> 00:00:50,260
+abstract syntax tree and there's one type rule that's used for each abstract syntax
+抽象语法树，每个抽象语法都有一个类型规则
+
+11
+00:00:50,260 --> 00:00:54,210
+tree node. So there's a very direct correspondence between the structure of the
+树节点。所以在这些结构之间有一个非常直接的对应关系
+
+12
+00:00:54,210 --> 00:00:59,160
+proof and the shape of the abstract syntax tree. And in general the type rule
+证明和抽象语法树的形状。一般情况下，类型规则
+
+13
+00:00:59,160 --> 00:01:03,600
+used for a particular node of the abstract syntax string, the hypothesis, are going to
+用于抽象语法字符串的特定节点，假设将
+
+14
+00:01:03,600 --> 00:01:08,070
+be the proofs of the type of E's sub-expressions. So, whatever sub-expressions
+是E的子式类型的证明。所以，不管是什么子表达式
+
+15
+00:01:08,070 --> 00:01:12,320
+make up E we're going to need types for them first. And the conclusion
+补上E，我们首先需要他们的类型。而结论是
+
+16
+00:01:12,320 --> 00:01:16,159
+at, at that particular node will be the type of the entire expression
+在，在该特定节点处将是整个表达式的类型
+
+17
+00:01:16,159 --> 00:01:20,999
+E. And this way you can that types are computed in a bottom up pass over the abstract
+即，通过这种方式，您可以在抽象上以自下而上的方式计算类型
+
+18
+00:01:20,999 --> 00:01:24,020
+syntax string. That is I assign first types to the leads. Like here I know
+语法字符串。也就是说，我将第一种类型分配给引线。就像这里，我知道
+
+19
+00:01:24,020 --> 00:01:29,710
+that one has type int and two has type int and then. The types flow towards the root.
+一个有int类型，两个有int类型，然后。类型流向根。
+
+20
+00:01:29,710 --> 00:01:33,700
+I'm able to compute then the next level abstract of syntax tree and so on And then
+我可以计算语法树的下一级抽象，依此类推
+
+21
+00:01:33,700 --> 00:01:38,509
+once I computed the types of all the sub expression of a knob. Then I can compute the
+一旦我计算了旋钮的所有子表达式的类型。然后我就可以计算
+
+22
+00:01:38,509 --> 00:01:40,290
+type at that knob.
+按那个旋钮打字。
+

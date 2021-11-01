@@ -1,0 +1,235 @@
+0
+00:00:01,589 --> 00:00:05,279
+So, just as was the case with mark-and-sweep, when we scan an object, we
+因此，就像标记和扫掠一样，当我们扫描对象时，我们
+
+1
+00:00:05,279 --> 00:00:09,340
+have to know how big it is and we also need to know where the pointers and the
+必须知道它有多大，我们还需要知道指针和
+
+2
+00:00:09,340 --> 00:00:13,840
+object are. So, if we think about this for a minute, let's say we're scanning this
+对象是。所以，如果我们想一分钟，比方说我们正在扫描这个
+
+3
+00:00:13,840 --> 00:00:17,560
+object, so this is our scan pointer and we want now to process all the pointers in
+对象，因此这是我们的扫描指针，我们现在要处理
+
+4
+00:00:17,560 --> 00:00:20,670
+it, well, we have to know where the pointers are. So, there's a pointer here
+它，嗯，我们必须知道指针在哪里。所以，这里有一个指针
+
+5
+00:00:20,670 --> 00:00:23,820
+and there's a pointer here and we'll be able to find those pointers and we don't
+这里有一个指针，我们可以找到这些指针，但是我们不能
+
+6
+00:00:23,820 --> 00:00:28,250
+want to confuse them with other fields of the object that might look like pointers.
+我希望将它们与对象的其他字段混淆，这些字段可能看起来像指针。
+
+7
+00:00:28,250 --> 00:00:32,359
+So, in a bit pattern for an integer could look an awful lot like a pointer. Now,
+因此，在位模式中，整数可能看起来非常像指针。现在,
+
+8
+00:00:32,359 --> 00:00:36,300
+this is not a big problem because the compiler, of course, in terms of, a lot of
+这不是一个大问题，因为编译器，当然，在很多方面
+
+9
+00:00:36,300 --> 00:00:40,140
+the objects in the heap and it can stor e that information somewhere communicated to
+堆中的对象，它可以将该信息存储在与之通信的某个位置
+
+10
+00:00:40,140 --> 00:00:44,100
+the garbage collector so that it will be able to find the pointers. So, you can
+垃圾收集器，以便它能够找到指针。所以，你可以
+
+11
+00:00:44,100 --> 00:00:49,730
+imagine easily a little bit of information stored with the program indicating for
+可以很容易地想象一下与程序一起存储的一点信息，该程序指示
+
+12
+00:00:49,730 --> 00:00:55,899
+each type where the pointers are. And similarly once we've scanned this object,
+指针所在的每种类型。同样，一旦我们扫描了这个物体，
+
+13
+00:00:55,899 --> 00:00:59,850
+we need to be able to advance our scan pointer just past the object so that we
+我们需要能够使扫描指针刚好经过对象，以便我们
+
+14
+00:00:59,850 --> 00:01:03,410
+can find the beginning of the next object and that's why we need to know the size,
+可以找到下一个物体的开头，这就是为什么我们需要知道它的大小，
+
+15
+00:01:03,410 --> 00:01:07,709
+okay. So, we need to know that size so that the scan pointer can be moved past
+好吧。因此，我们需要知道该大小，以便可以将扫描指针移过
+
+16
+00:01:07,709 --> 00:01:12,359
+the object and we can find the beginning of the next object. Another issue is that
+然后我们就可以找到下一个对象的开头。另一个问题是，
+
+17
+00:01:12,359 --> 00:01:15,389
+whenever we do a garbage collection, I haven't mentioned this up to this point
+每当我们进行垃圾收集时，到目前为止我还没有提到过这一点
+
+18
+00:01:15,389 --> 00:01:20,630
+but it should be clear, we also have to scan and copy objects pointed to by the
+但是应该清楚的是，我们还必须扫描和复制
+
+19
+00:01:20,630 --> 00:01:25,209
+stack. And we also have to update pointers in the stack. And this can actually turn
+堆栈。我们还必须更新堆栈中的指针。而这实际上可以变成
+
+20
+00:01:25,209 --> 00:01:30,599
+out to be kind of an expensive operation with stop-and-copy because, you know, you
+停印是一种昂贵的操作，因为，你知道，你
+
+21
+00:01:30,599 --> 00:01:35,499
+still have to walk the entire stack each time you do a collection in order to make
+仍然必须遍历整个堆栈，以便在每次收集时
+
+22
+00:01:35,499 --> 00:01:42,090
+sure that you've copied all the objects pointed to by the stack. To conclude
+确保您已经复制了堆栈指向的所有对象。最后，我要总结一下
+
+23
+00:01:42,090 --> 00:01:46,779
+stop-and-copy, I think it's fair to say, is generally believed to be the fastest
+我认为，公平地说，停机复制通常被认为是最快的
+
+24
+00:01:46,779 --> 00:01:50,679
+garbage collection technique. Certainly, I believe that variations on stop-and- copy
+垃圾收集技术。当然，我相信停印和复印的变体
+
+25
+00:01:50,679 --> 00:01:56,189
+are the most efficient approaches known to automatic memory management. Allocation is
+是已知的自动内存管理最有效的方法。分配是
+
+26
+00:01:56,189 --> 00:02:00,499
+very cheap, alright. So, cuz all you have to do is increment the e-pointer. So,
+很便宜，好吧。所以，因为你所要做的就是递增电子指针。所以,
+
+27
+00:02:00,499 --> 00:02:05,049
+you're just moving a, a, single pointer forward to allocate space. There's no
+你只是向前移动一个，一个，一个指针来分配空间。没有
+
+28
+00:02:05,049 --> 00:02:10,810
+complicated free list future verse or decisions to make about where to put the
+复杂的自由列表未来的诗句或决定放在哪里
+
+29
+00:02:10,810 --> 00:02:13,159
+object, you know, you're just going to allocate it directly at the allocation
+对象，您知道，您只需在分配时直接分配它
+
+30
+00:02:13,159 --> 00:02:18,040
+pointer. So, you know, this, this part of memory management is, is very inexpensive.
+指针。所以你知道这-这部分内存管理是非常便宜的。
+
+31
+00:02:18,040 --> 00:02:22,019
+And at the same time, collection is also relatively cheap. And, and interestingly
+同时，收藏也相对便宜。而且，有趣的是
+
+32
+00:02:22,019 --> 00:02:27,689
+it's especially cheap if there is a lot of garbage because, because of making a copy
+如果有很多垃圾的话就特别便宜了，因为因为复印
+
+33
+00:02:27,689 --> 00:02:32,969
+of the reachable objects stop-and-copy only touches the reac hable object, It is
+在可访问对象中，停止并复制仅涉及可访问对象，它是
+
+34
+00:02:32,969 --> 00:02:39,969
+not, in particular, does not touch the garbage. So, if you think about that for a
+不，特别是不碰垃圾。所以，如果你考虑一下这一点
+
+35
+00:02:41,500 --> 00:02:46,680
+minute, that means that the garbage collection is in stop-and-copy is order
+分钟，这意味着垃圾收集是按停止复制的顺序进行的
+
+36
+00:02:46,680 --> 00:02:52,859
+the size of the live objects. So, whatever the sub-graph is that you're copying,
+活动对象的大小。所以，不管你复制的是什么子图，
+
+37
+00:02:52,859 --> 00:02:59,780
+that's the cost of a garbage collection and that's in contrast to mark-and-sweep
+这是垃圾收集的成本，这与标记和清除形成对比
+
+38
+00:02:59,780 --> 00:03:05,030
+were the cost is proportional to all the memory that you're using cuz you have the
+成本与您正在使用的所有内存成正比，因为您拥有
+
+39
+00:03:05,030 --> 00:03:08,329
+sweep phase where you have to go through and touch every single object whether it's
+扫描阶段，您必须通过并触摸每个单独的对象，无论是
+
+40
+00:03:08,329 --> 00:03:13,890
+live or garbage, okay. And so, if you have a relatively lot of garbage and a
+活着还是垃圾，好的。因此，如果你有相对较多的垃圾和
+
+41
+00:03:13,890 --> 00:03:17,340
+relatively small set of live objects, stop-and-copy is actually much, much
+相对较小的一组活动对象，停止和复制实际上是非常多的
+
+42
+00:03:17,340 --> 00:03:22,640
+faster than mark-and-sweep. Now, of course the down side of stop-and-copy is that it
+比标记和清扫更快。现在，停止复制的缺点当然是它
+
+43
+00:03:22,640 --> 00:03:28,400
+moves the objects in some languages, in particular C and C++, can't allow you to
+在某些语言中移动对象，特别是C和C++，不允许您
+
+44
+00:03:28,400 --> 00:03:33,689
+move objects because the address that which an object lives is actually visible
+移动对象，因为对象所在的地址实际上是可见的
+
+45
+00:03:33,689 --> 00:03:38,079
+exposed in the program and is part of the semantics of the object. And so there, you
+在程序中公开，是对象语义的一部分。所以在那里，你
+
+46
+00:03:38,079 --> 00:03:41,090
+really have to use mark-and-sweep because you're not allowed to move anything.
+真的必须使用标记和清扫，因为你不允许移动任何东西。
+

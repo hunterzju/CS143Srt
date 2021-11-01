@@ -1,0 +1,770 @@
+0
+00:00:04,049 --> 00:00:06,870
+In the last several videos, we have discussed code generation for a various
+在上几个视频中，我们讨论了各种
+
+1
+00:00:06,870 --> 00:00:11,099
+simple programming language. In this video, we are going to take a look at code
+简单的编程语言。在这段视频中，我们将看一看代码
+
+2
+00:00:11,099 --> 00:00:17,849
+generation for more advanced feature objects. Fortunately, this dated code
+生成更高级的功能对象。幸运的是，这个标有日期的代码
+
+3
+00:00:17,849 --> 00:00:22,289
+generation strategy for objects is really just an extension of what we've already
+对象的生成策略实际上只是我们已有的策略的扩展
+
+4
+00:00:22,289 --> 00:00:25,179
+learned. So, everything that you learn before we're going to be using and then
+学到了东西。所以，你在我们使用之前学到的所有东西，然后
+
+5
+00:00:25,179 --> 00:00:29,919
+there's going to be some additional things that we do specifically for objects And,
+我们会特别为物体做一些额外的事情，
+
+6
+00:00:29,919 --> 00:00:34,810
+the important thing to know about objects is slogan that you hear. When people
+关于物品，需要了解的重要一点是你听到的口号。当人们
+
+7
+00:00:34,810 --> 00:00:41,230
+talked about object oriented programming is this one. So if b is a subclass of a
+所说的面向对象编程就是这个。所以如果b是a的子类
+
+8
+00:00:41,230 --> 00:00:46,840
+then an object of class b can be used wherever an object of class a as expected.
+则类B的对象可以如预期的那样在任何类A的对象处使用。
+
+9
+00:00:46,840 --> 00:00:51,359
+So there's a substitutability property. If I have a piece of code that can work on
+所以有一个替代性的性质。如果我有一段可以工作的代码
+
+10
+00:00:51,359 --> 00:00:58,359
+a's then it could also work on b's and any other subclass of a. What this means for
+那么它也可以对b和a的任何其他子类起作用。
+
+11
+00:00:58,719 --> 00:01:04,390
+the, for the case of code generation is that the code that we generate for class
+代码生成的情况是，我们为类生成的代码
+
+12
+00:01:04,390 --> 00:01:10,570
+a. So, the code that we produced for method in class a, has to work unmodified
+a.因此，我们为a类中的方法生成的代码必须原封不动地工作
+
+13
+00:01:10,570 --> 00:01:16,850
+for an object to class b And to see this, keep in mind that when we compile a, when
+对于类b的对象并看到这一点，请记住，当我们编译a时，
+
+14
+00:01:16,850 --> 00:01:23,140
+we compile class a, I, we may not even know all the subclasses of a. So, those
+我们编译a类，我，我们甚至可能不知道a的所有子类。所以，那些
+
+15
+00:01:23,140 --> 00:01:26,460
+maybe not even have been defined yet. So, in the future some programs may come
+也许甚至还没有被定义。所以未来可能会有一些节目
+
+16
+00:01:26,460 --> 00:01:33,460
+along. To find a subclass of a then our compiled version of a will have to work
+一起去吧。要找到的子类，那么我们编译后的Will版本必须正常工作
+
+17
+00:01:35,140 --> 00:01:42,140
+with that new subclass. So, there really only two questions that we have to answer
+有了这个新的子类。所以，我们实际上只需要回答两个问题
+
+18
+00:01:42,230 --> 00:01:47,550
+to give a complete description of how to generate code for objects. The first one
+给出如何为对象生成代码的完整说明。第一个
+
+19
+00:01:47,550 --> 00:01:52,630
+is how our object represented in memory. So, we need to decide a layout and
+是我们的对象在内存中的表示方式。所以，我们需要决定一个布局，
+
+20
+00:01:52,630 --> 00:01:56,990
+representation for objects And the second one is how is dynamic dispatch implemented
+对象的表示形式，第二个问题是如何实现动态调度
+
+21
+00:01:56,990 --> 00:02:01,490
+so that's the characteristic feature of using objects just so we can dispatch in
+这就是使用对象的特征，这样我们就可以在
+
+22
+00:02:01,490 --> 00:02:08,490
+the method of an object and we need an implementation of that. So, to be
+对象的方法，我们需要它的实现。所以，要成为
+
+23
+00:02:08,729 --> 00:02:13,890
+concrete, we're going to use this little example throughout this video and I'll
+混凝土，我们将在整个视频中使用这个小示例，我将
+
+24
+00:02:13,890 --> 00:02:17,830
+just take a moment here to, to point out some features of it. So, we have three
+只要花一点时间在这里，指出它的一些特点。所以，我们有三个
+
+25
+00:02:17,830 --> 00:02:24,830
+classes, classes am b, and c And notice that a, is a base class and b and c both
+类，类是b和c，请注意a是基类，b和c都是基类。
+
+26
+00:02:26,090 --> 00:02:33,090
+inherit from a, And all three classes define some attributes, some fields and
+继承自，并且所有三个类都定义了一些属性、一些字段和
+
+27
+00:02:33,870 --> 00:02:39,490
+also some methods. Now, a couple of important features here is that notice
+还有一些方法。现在，这里有几个重要的特点是，通知
+
+28
+00:02:39,490 --> 00:02:44,450
+that because b inherits from a, and c inherits from a, they all, they both
+因为b继承了a，c继承了a，所以他们都，他们都
+
+29
+00:02:44,450 --> 00:02:50,910
+inherit, both of those classes inherit the attributes a, and d from class a. So these
+继承，这两个类都从类a继承属性a和d。
+
+30
+00:02:50,910 --> 00:02:57,910
+two attributes that are defined in class a are available in class b and in class c So
+类a中定义的两个属性在类b和类c中可用，因此
+
+31
+00:02:58,790 --> 00:03:05,790
+even though there's no mention Of a, and d in the definition say of class b. The
+即使在定义中没有提到a和d，也没有提到b类。
+
+32
+00:03:06,069 --> 00:03:11,930
+methods in class b can still refer to those attributes. They are part of the
+类b中的方法仍然可以引用这些属性。它们是
+
+33
+00:03:11,930 --> 00:03:17,819
+attributes of class b. They are just copied over or inherited from a. Another
+类b的属性。它们只是复制或继承自a。另一个
+
+34
+00:03:17,819 --> 00:03:22,180
+feature of this example that I like to point out is that all of the methods refer
+这个例子的特点是，我想指出的是，所有的方法都引用了
+
+35
+00:03:22,180 --> 00:03:27,720
+to the attribute a so actually referred into this method and this one referred
+到此方法中实际引用的属性a，以及此方法引用的属性a
+
+36
+00:03:27,720 --> 00:03:34,720
+twice in this method and also in this method. And the significance of this is
+在此方法中两次，在此方法中也是如此。这件事的意义在于
+
+37
+00:03:34,790 --> 00:03:40,750
+just what we discussed a couple of slides ago. For all of these methods to work
+这就是我们在几张幻灯片前讨论过的。要使所有这些方法都起作用
+
+38
+00:03:40,750 --> 00:03:46,740
+attribute a, is going to have to live in some place and some place where all of
+属性a将不得不居住在某个地方，在这个地方所有的
+
+39
+00:03:46,740 --> 00:03:53,490
+them can find it they generate a code run. Some particular less considered the method
+他们可以找到它，然后生成一个代码运行。一些特别不太考虑的方法
+
+40
+00:03:53,490 --> 00:04:00,490
+f. So the method f exists in all three classes. All three classes when it runs,
+因此，方法f在所有三个类中都存在。当它运行时，所有这三个类，
+
+41
+00:04:01,680 --> 00:04:07,660
+it will refer to attribute a, and even though the objects would be different. In
+它将引用属性a，即使对象可能不同。在……里面
+
+42
+00:04:07,660 --> 00:04:11,880
+one case it might be running on an object and in another case on a c object. It
+在一种情况下，它可能在对象上运行，而在另一种情况下，它可能在C对象上运行。它
+
+43
+00:04:11,880 --> 00:04:15,630
+would need to be able to find the attribute a, and so therefore the
+需要能够找到属性a，因此
+
+44
+00:04:15,630 --> 00:04:22,159
+attribute a, has to be in the same place in each object And so, how do we
+属性a必须位于每个对象的相同位置，那么，我们如何
+
+45
+00:04:22,159 --> 00:04:25,509
+accomplish that? Well, the first principle is the objects are laid out to in
+做到这一点吗？嗯，第一个原则是把物体放在
+
+46
+00:04:25,509 --> 00:04:32,509
+contiguous memory. So, an object is just a block of memory. Okay with no gaps and all
+连续记忆。因此，一个对象只是一个内存的挡路。好的，没有缝隙
+
+47
+00:04:33,629 --> 00:04:39,029
+the data for the object is stored in the words of that lock of memory. And each
+对象的数据存储在该内存锁的字中。而且每个人
+
+48
+00:04:39,029 --> 00:04:44,009
+attribute is stored at a fixed off set in the objects. So for example, there may be
+属性存储在对象中的固定偏移量集中。例如，可能会有
+
+49
+00:04:44,009 --> 00:04:51,009
+a place in this object for attribute a On this case it's at in the middle of the
+属性a在此对象中的位置，在本例中它位于
+
+50
+00:04:51,460 --> 00:04:57,180
+object is in the, in the fourth position And, no matter what kind of object it is,
+物体在，在第四个位置，不管是什么类型的物体，
+
+51
+00:04:57,180 --> 00:05:03,259
+whether it's an a. B or c objects and are example as with a we always live with that
+无论是a、b还是c对象，都是示例，就像a一样，我们总是生活在这样的环境中
+
+52
+00:05:03,259 --> 00:05:08,979
+position so that any piece of code that refers to a, any method that refers a can
+位置，以便引用的任何一段代码、引用的任何方法都可以
+
+53
+00:05:08,979 --> 00:05:15,860
+find can find the a attribute. Now the other thing that's important to understand
+Find可以找到a属性。现在，另一件重要的事情是要理解
+
+54
+00:05:15,860 --> 00:05:19,969
+and this is you know slight digression from what we're talking about but it's a
+你知道，这与我们所说的略有偏离，但这是一个
+
+55
+00:05:19,969 --> 00:05:26,330
+key aspect of code generation for object is that when a method is invoked, the
+对象的代码生成的关键方面是，当调用方法时，
+
+56
+00:05:26,330 --> 00:05:33,050
+object itself is the self parameter. So the self parameter is the entire object so
+对象本身就是self参数。所以self参数是整个对象，所以
+
+57
+00:05:33,050 --> 00:05:39,219
+self. When a function is involved, it will refer to the entire object so you think
+赛尔夫。当涉及到函数时，它将引用整个对象，因此您认为
+
+58
+00:05:39,219 --> 00:05:43,150
+itself is going to be appointed to the entire object. Remember that self is like
+本身将被指定给整个对象。记住，自我就像是
+
+59
+00:05:43,150 --> 00:05:50,150
+that this variable or this name in Java. And then the fields we refer to particular
+这个变量或者Java中的这个名字。然后我们引用的字段是特定的
+
+60
+00:05:51,240 --> 00:05:54,830
+or the attributes of the object will refer to particular position within the objects.
+或者对象的属性将引用对象内的特定位置。
+
+61
+00:05:54,830 --> 00:06:01,550
+So, for example, the attributes, we decided to leave it there. So here is the
+因此，例如，属性，我们决定将其保留在那里。所以这里是
+
+62
+00:06:01,550 --> 00:06:07,419
+particular object layout used in Kuhl. So the first three words of a Kuhl object
+Kuhl中使用的特定对象布局。因此，Kuhl宾语的前三个词
+
+63
+00:06:07,419 --> 00:06:13,759
+contain header information and every Kuhl object always has these three entries. The
+包含头信息，并且每个Kuhl对象总是有这三个条目。这个
+
+64
+00:06:13,759 --> 00:06:18,729
+first position is a class tag and also at zero then the next word it also four is
+第一个位置是类标签，也是零，那么下一个词也是四
+
+65
+00:06:18,729 --> 00:06:23,580
+the size of the object and then something called the dispatch pointer and then all
+对象的大小，然后是称为分派指针的东西，然后是所有
+
+66
+00:06:23,580 --> 00:06:30,580
+of the attributes. Now the class tag is an integer which just identifies the class of
+属性的属性。现在，类标记是一个整数，它只标识
+
+67
+00:06:31,779 --> 00:06:36,979
+the object. So the compiler will number all of the classes. So in our example we
+对象。因此，编译器将对所有类进行编号。因此，在我们的示例中，我们
+
+68
+00:06:36,979 --> 00:06:41,150
+have three classes a, b, and c and the compiler for example might assign them the
+有三个类a、b和c，例如，编译器可能会为它们分配
+
+69
+00:06:41,150 --> 00:06:46,869
+numbers one, two, and three. It doesn't matter what these numbers are As long as
+一号、二号和三号。这些数字是什么并不重要，只要
+
+70
+00:06:46,869 --> 00:06:50,960
+they are different from each other. So, it doesn't have these numbers consecutively
+他们彼此不同。所以它没有连续的这些数字
+
+71
+00:06:50,960 --> 00:06:55,529
+or anything like that The important thing is of the class tag is a unique identifier
+或者任何类似的东西，重要的是类标签是唯一的标识符
+
+72
+00:06:55,529 --> 00:07:00,229
+for a class, each class has its own unique bit pattern that tells you what kind of
+对于类，每个类都有自己唯一的位模式，它告诉您哪种类型的
+
+73
+00:07:00,229 --> 00:07:06,529
+class the object is And the other fields here the object size is also an integer
+类，此处的其他字段对象大小也是整数
+
+74
+00:07:06,529 --> 00:07:11,339
+which is just a size of the object in words and the dispatch pointer. Is a
+它只是以字和调度指针表示的对象的大小。是一种
+
+75
+00:07:11,339 --> 00:07:16,680
+pointer to a table of methods so the methods are stored off to the side and the
+指向方法表的指针，以便将方法存储在旁边，而
+
+76
+00:07:16,680 --> 00:07:21,439
+dispatch pointer is a pointer to that table and we'll talk about this more later
+分派指针是指向该表指针，我们稍后将详细讨论这一点
+
+77
+00:07:21,439 --> 00:07:26,369
+and then all the attributes are laid out in the sub-sequence slots in some order
+然后将所有属性按一定顺序排列在子序列槽中
+
+78
+00:07:26,369 --> 00:07:30,360
+that's determined by the compiler so the compiler will fix and order for the
+这是由编译器确定的，因此编译器将为
+
+79
+00:07:30,360 --> 00:07:34,309
+attributes in the class and then all the objects of that class will have the
+属性，则该类的所有对象都将具有
+
+80
+00:07:34,309 --> 00:07:39,259
+attributes of that class in the same order. And again all of this is laid out
+该类的属性的顺序相同。再一次，所有这些都被安排好了
+
+81
+00:07:39,259 --> 00:07:46,259
+in the continuous chunk of memory. Now, I'm ready to talk about how inheritance
+在连续的内存块中。现在，我准备好谈谈遗产是如何
+
+82
+00:07:46,539 --> 00:07:52,300
+works. So, the basic ideas like given a layout for class a, a layout for a
+很管用。所以，基本的想法就像给出一个a类的布局，一个
+
+83
+00:07:52,300 --> 00:07:58,460
+subclass b, so this is a subclass of a can be defined by extending the layout of a.
+子类b，所以这是a的子类，可以通过扩展a的布局来定义。
+
+84
+00:07:58,460 --> 00:08:05,460
+So, we don't need to move any of the attribute of a, we can just add more
+因此，我们不需要移动a的任何属性，只需添加更多
+
+85
+00:08:05,629 --> 00:08:10,879
+fields onto the end of a's layout. And so, that's going to leave the layout of a
+字段放到a的布局末尾。因此，这将留下一个布局
+
+86
+00:08:10,879 --> 00:08:17,110
+unchanged which is a great property because this is how the position of an
+不变，这是一个很好的属性，因为这是
+
+87
+00:08:17,110 --> 00:08:21,069
+attribute in the a object will always be the same for all the subclasses. So
+对象中的属性对于所有子类将始终相同。所以
+
+88
+00:08:21,069 --> 00:08:26,819
+essentially, we will never, once we decide where an attribute lives in a class it
+从本质上说，一旦我们决定了属性在类中的位置，我们就永远不会
+
+89
+00:08:26,819 --> 00:08:30,949
+will never change for any of the subclasses of that object. So b is just
+将永远不会更改该对象的任何子类。所以b就是
+
+90
+00:08:30,949 --> 00:08:36,519
+going to be an extension of the layout of a. So, let's take a look at our example
+将是a的布局的扩展。那么，让我们看一下我们的示例
+
+91
+00:08:36,519 --> 00:08:43,039
+here and see how that, that works. Let me just write down here a little bit about
+这里，看看这是怎么回事，那是怎么回事。让我在这里写一点关于
+
+92
+00:08:43,039 --> 00:08:46,440
+these classes because we don't have the example on the screen. So we have a class
+这些类，因为我们没有屏幕上的示例。所以我们有一节课
+
+93
+00:08:46,440 --> 00:08:52,709
+a, and class a, had two attributes, a, and d, okay? And it doesn't matter what their
+a和a类有两个属性，a和d，好吗？不管他们做什么都无关紧要
+
+94
+00:08:52,709 --> 00:08:57,029
+types are or what the methods were here. We're just looking at the class names and
+类型是或这里的方法是什么。我们只是在查看类名和
+
+95
+00:08:57,029 --> 00:09:02,050
+the names of the attributes that are defined in the class. And then we have b.
+类中定义的属性的名称。然后我们就有了b。
+
+96
+00:09:02,050 --> 00:09:09,050
+Which inherits from a and b added a attribute b and then we had c which also
+它继承自a和b，添加了一个属性b，然后我们有了c，它也
+
+97
+00:09:10,399 --> 00:09:17,399
+inherits from a but has no relationship to b. And class c define an attribute little
+继承自a，但与b没有关系，并且类c定义了一个很少的属性
+
+98
+00:09:19,480 --> 00:09:26,480
+c. Alright. So, that's the structure of our example is relevant to the layout of
+好的。因此，这就是我们示例的结构与布局相关
+
+99
+00:09:28,199 --> 00:09:34,990
+the objects. Okay. So Let's talk about the layout of class a. So, in position zero at
+这些物体。好吧。那么让我们来讨论一下a类的布局。所以，在位置0的位置
+
+100
+00:09:34,990 --> 00:09:39,050
+all sub zero, there'll be a tag for a that will be some small integer at the compiler
+全部为零，则在编译器中将有一个a的标记，该标记将是某个小整数
+
+101
+00:09:39,050 --> 00:09:44,160
+picks. There'll be a size of a, we'll come back to that in just a se cond. There will
+选择。会有一个a的大小，我们一会儿再来讨论这个问题。会有的
+
+102
+00:09:44,160 --> 00:09:48,579
+be a dispatch pointer again, which we're going to talk about later. And then come
+再次成为分派指针，我们稍后将讨论这一点。然后就来了
+
+103
+00:09:48,579 --> 00:09:53,810
+the attributes of a, and it just laid out the compiler, the way it's done in the,
+的属性，它只是布置了编译器，就像它在中所做的那样，
+
+104
+00:09:53,810 --> 00:09:58,089
+the Kuhl c implementations is that they are laid out in the order in which they
+Kuhl c++实现的特点是，它们是按照它们的顺序布局的。
+
+105
+00:09:58,089 --> 00:10:03,360
+appear textually in the class. So, in this case, first the attribute a, And then the
+以文本形式出现在类中。因此，在本例中，首先是属性a，然后是
+
+106
+00:10:03,360 --> 00:10:10,050
+attribute d all sets twelve and sixteen And now since the object, there are two
+属性d全部设置为12和16，现在由于对象，有两个
+
+107
+00:10:10,050 --> 00:10:14,310
+attributes and three header words that means the size of the object is five words
+属性和三个标题字，这意味着对象的大小是五个字
+
+108
+00:10:14,310 --> 00:10:21,310
+and so it's a five that goes in the size field for a objects. Now, let's take a
+所以它是一个5，在物体的大小字段中。现在，让我们来看一看
+
+109
+00:10:21,959 --> 00:10:27,959
+look at b. Okay? So b is going to have a different tag, b objects will have a
+看看b，好吗？所以b将有一个不同的标记，b对象将有a
+
+110
+00:10:27,959 --> 00:10:32,930
+different tag so they to distinguish them from a objects. There's going to be extra
+不同的标签，以便将它们与一个对象区分开来。会有额外的费用
+
+111
+00:10:32,930 --> 00:10:37,019
+fields so the size will be one bigger But now the layout preserves the layout of a.
+字段，因此大小将增大一个，但现在布局保留。
+
+112
+00:10:37,019 --> 00:10:41,990
+So the attributes of a appears in the same position. So you can think of there being
+所以a的属性出现在相同的位置。所以你可以想象有没有
+
+113
+00:10:41,990 --> 00:10:48,990
+an a object Actually embedded inside of the b object. If I were to strip off the
+A对象实际上嵌入在B对象内部。如果我剥去
+
+114
+00:10:49,930 --> 00:10:56,930
+end here that were just you know cover up this last bit here b I would say that this
+在这里结束，只是，你知道，把最后一点盖在这里，b，我会说，这是
+
+115
+00:10:57,250 --> 00:11:02,370
+object here has the same size and the same attributes as an a object so any piece of
+这里的对象与a对象具有相同的大小和相同的属性，因此任何
+
+116
+00:11:02,370 --> 00:11:08,500
+code that could work on an a object will also make sense running on a b object. Now
+可以在a对象上运行的代码在b对象上运行也是有意义的。现在
+
+117
+00:11:08,500 --> 00:11:12,740
+Of course, the tag is different because it actually is a subclass and you know, and
+当然，标记是不同的，因为它实际上是一个子类，而且
+
+118
+00:11:12,740 --> 00:11:15,709
+there is an extra field so the, the size is different but the point is that any
+有一个额外的字段，所以大小是不同的，但重点是
+
+119
+00:11:15,709 --> 00:11:21,680
+code that it refer is just to the fields here will still work just fine. So any a
+它引用的只是这里的字段的代码仍然可以很好地工作。所以任何一个
+
+120
+00:11:21,680 --> 00:11:26,540
+method that was compiled that refer to the methods of an a object will still find
+引用对象的方法的已编译方法仍将找到
+
+121
+00:11:26,540 --> 00:11:31,259
+those attributes in the same place at the b object and afterwards, there is also one
+这些属性位于b对象的同一位置，之后还有一个
+
+122
+00:11:31,259 --> 00:11:37,629
+more field here. Which is the new attribute b It just gets laid out after
+这里有更多的场地。这是新的属性b，它只是在以下位置布局
+
+123
+00:11:37,629 --> 00:11:41,639
+all of a's fields. So after all of a's fields come all of b's fields in the same
+所有a的字段。因此，在所有a的字段之后，所有b的字段都在同一个字段中
+
+124
+00:11:41,639 --> 00:11:45,959
+order which they appear textually in the class because there's just only one,
+它们在类中以文本形式出现的顺序，因为只有一个，
+
+125
+00:11:45,959 --> 00:11:49,819
+there's just one new field there. And now looking with class c or the story with
+那里只有一块新的田地。现在来看c类，或者讲故事
+
+126
+00:11:49,819 --> 00:11:54,680
+class c is very similar so c has its own distinct tag and also has one more
+类c非常相似，因此c有它自己的不同标记，并且还有另外一个标记。
+
+127
+00:11:54,680 --> 00:11:59,930
+attribute than a so it has size six. And now again the a attributes were on the
+属性，所以它的大小是6。现在，a属性再次出现在
+
+128
+00:11:59,930 --> 00:12:05,339
+same position and now the c attribute just comes after the a attribute. And so notice
+同样的位置，现在c属性紧跟在a属性之后。所以请注意
+
+129
+00:12:05,339 --> 00:12:11,259
+here that a methods again will work just fine on c objects because the attributes
+在这里，a方法同样可以在c对象上很好地工作，因为属性
+
+130
+00:12:11,259 --> 00:12:15,649
+are on the same places and so the methods will find the attributes where they expect
+位于相同的位置，因此这些方法将在它们期望的位置找到属性
+
+131
+00:12:15,649 --> 00:12:22,649
+to. You cannot however call a method of class b on an object to class c. Okay
+致。但是，您不能将对象上的类b的方法调用到类c。
+
+132
+00:12:23,509 --> 00:12:28,779
+because they have different attributes in the third position. We may have completely
+因为它们在第三个位置有不同的属性。我们可能已经完全
+
+133
+00:12:28,779 --> 00:12:33,329
+different types. It may not make sense to invoke a b method on c object but that's
+不同的类型。在c对象上调用最佳方法可能没有意义，但这是
+
+134
+00:12:33,329 --> 00:12:37,790
+just fine because if we look at our inheritance hierarchy over here we'll see that b and
+很好，因为如果我们看一下这里的继承层次结构，我们会看到b和
+
+135
+00:12:37,790 --> 00:12:42,480
+c are actually unrelated. They are both subclasses of a but they have no
+c实际上是无关的。它们都是a的子类，但是它们没有
+
+136
+00:12:42,480 --> 00:12:47,100
+relationship to each other. B is not a subclass of c and c is not a subclass of b
+彼此之间的关系。B不是c的子类，c也不是b的子类
+
+137
+00:12:47,100 --> 00:12:52,800
+and so anything beyond their shared ancestry with a can be completely
+因此，任何超越他们共同祖先的东西都可以完全
+
+138
+00:12:52,800 --> 00:12:59,620
+different in the layout. So, more generally, if we have a chain of
+在布局上有所不同。所以，更广泛地说，如果我们有一系列
+
+139
+00:12:59,620 --> 00:13:05,110
+inheritance relationship, so let's say, we have a base class a1 and a1 inherits some
+继承关系，所以假设我们有一个基类A1，A1继承了一些
+
+140
+00:13:05,110 --> 00:13:12,110
+a1 and a3 inherits some a2 and so on with some class a and inheriting at the bottom
+a1和a3继承一些a2，依此类推，具有一些a类，并在底部继承。
+
+141
+00:13:12,949 --> 00:13:18,100
+of this of this chain after some long sequence of, of other intermediate. Some
+在一些长的，其他中间体的序列之后，这条链的这一部分。一些
+
+142
+00:13:18,100 --> 00:13:23,000
+classes, you know, what is the layout of all these classes going to look like.
+课程，你知道，所有这些课程的布局是什么样子的。
+
+143
+00:13:23,000 --> 00:13:26,750
+Well, there's going to be a header. Okay, the three word header and that will be
+嗯，会有一个头球。好的，三个字的标题就是
+
+144
+00:13:26,750 --> 00:13:32,240
+followed by a1's attributes. And then followed by a2's attributes followed by
+后跟A1的属性。然后是a2的属性，然后是
+
+145
+00:13:32,240 --> 00:13:39,240
+a3's attributes and so on all the way down to an's attributes down here. Okay. And if
+A3的属性，以此类推，一直到这里的An的属性。好吧。如果
+
+146
+00:13:40,699 --> 00:13:46,839
+you look again so what we talked about before each prefix. Of this header is
+你再看一遍，我们在每个前缀之前都谈到了什么。此标头的
+
+147
+00:13:46,839 --> 00:13:52,740
+essentially a valid object a valid one of these objects. If I look at the first set
+本质上是一个有效的对象，这些对象中的一个有效的。如果我看第一盘
+
+148
+00:13:52,740 --> 00:13:56,420
+of attributes, everything up to the end of a1 and attributes, that forms a valid
+属性，直到A1和属性末尾的所有内容，这构成了一个有效的
+
+149
+00:13:56,420 --> 00:13:59,860
+layout for one object is I stop with the a2 attributes. I have a, I have a, I have
+一个对象的布局是我停止a2属性。我有，我有，我有
+
+150
+00:13:59,860 --> 00:14:04,139
+a valid layout for a2 object going all the way from the header down to you know,
+2对象的有效布局从标题一直到您知道的，
+
+151
+00:14:04,139 --> 00:14:10,959
+including the a1 and a2 objects. And then a3 includes all a1, a2 and a3's attributes
+包括a1和a2对象。然后a3包括a1、a2和a3的所有属性
+
+152
+00:14:10,959 --> 00:14:17,959
+and so on. Okay? So, each prefix Of, of this object, Of this a and object has a
+诸若此类。好吧?所以，这个对象的每个前缀，这个a和对象的每个前缀都有一个
+
+153
+00:14:21,170 --> 00:14:25,009
+correct layout for some for some super class of A n.
+An的一些超类的正确布局。
+

@@ -1,0 +1,385 @@
+0
+00:00:05,150 --> 00:00:09,340
+In this video we're going to talk about how one takes the type checking rules and
+在这段视频中，我们将讨论如何采用类型检查规则和
+
+1
+00:00:09,340 --> 00:00:16,340
+translates them into an implementation. The high level overview of cool type
+将它们转换为实现。酷型高级概述
+
+2
+00:00:17,100 --> 00:00:21,080
+checking is that it can be implemented in a single traversal over the abstract
+检查是否可以在抽象的单次遍历中实现
+
+3
+00:00:21,080 --> 00:00:26,359
+syntax tree. And there's actually two phases here. There's the top down phase,
+语法树。这里实际上有两个阶段。有一个自上而下的阶段，
+
+4
+00:00:26,359 --> 00:00:30,800
+in which the type environment is passed down the tree. And there's a bottom up
+其中类型环境沿树向下传递。有一个自下而上的
+
+5
+00:00:30,800 --> 00:00:36,370
+phase in which the types are passed back up. So we start at the root of the tree
+类型向上传递的阶段。所以我们从树根开始
+
+6
+00:00:36,370 --> 00:00:39,790
+with an initial type environment, this type of environment is passed down
+对于初始类型环境，此类型的环境会被传递
+
+7
+00:00:39,790 --> 00:00:43,300
+recursively through the various nodes of the abstract syntax tree until we hit the
+递归地遍历抽象语法树的各个节点，直到我们遇到
+
+8
+00:00:43,300 --> 00:00:47,800
+leaves. And starting at the leaves we use the environment to compute the types of
+树叶。从树叶开始，我们使用环境来计算
+
+9
+00:00:47,800 --> 00:00:54,800
+each sub-expression working our way back up the tree to the root. Let's start our
+每个子表达式都沿着树向上追溯到根。让我们开始我们的
+
+10
+00:00:55,550 --> 00:00:58,710
+discussion of the implementation of cool type checking with one of the simpler
+用一种更简单的方法实现凉爽类型检查的探讨
+
+11
+00:00:58,710 --> 00:01:02,920
+rules in the type system, the rule for addition. And let's just briefly review
+类型系统中的规则，用于加法的规则。让我们简单回顾一下
+
+12
+00:01:02,920 --> 00:01:09,830
+what this rule says. It says that the type check E one plus E two, we first have to
+这条规则是怎么说的。上面说型式检查是E一加E二，我们首先要
+
+13
+00:01:09,830 --> 00:01:15,810
+type check E one, and then we have to type check the sub expression E two. And both
+键入check E one，然后我们必须键入Check子表达式E2。而且两者都有
+
+14
+00:01:15,810 --> 00:01:21,620
+of those sub expressions have to have type end. And if they do then we can conclude
+子表达式的类型必须为End。如果他们这么做了，那么我们就可以得出结论
+
+15
+00:01:21,620 --> 00:01:26,850
+that the overall expression, the sum of the two sub expressions, also has type A.
+整体表达式，也就是两个子表达式的和，也是A型的。
+
+16
+00:01:26,850 --> 00:01:30,560
+And furthermore, this type checking is carried out in some environment. In this
+此外，还在一些环境中进行了这种类型的检查。在这里面
+
+17
+00:01:30,560 --> 00:01:34,640
+case, the environment is the same for the entire expression and both sub
+大小写时，整个表达式和两个子表达式的环境是相同的
+
+18
+00:01:34,640 --> 00:01:39,550
+expressions. Just, just to remind you, there's always an object environment for
+表情。只是，只是提醒你，总有一个对象环境
+
+19
+00:01:39,550 --> 00:01:44,390
+the object names and scope, a method environment for the methods of the various
+对象的名称和作用域、各种方法的方法环境
+
+20
+00:01:44,390 --> 00:01:49,909
+classes and we always need to know the current class. Now how will we implement
+类，我们总是需要知道当前的类。现在我们将如何实现
+
+21
+00:01:49,909 --> 00:01:55,090
+this? Well we will have a recursive function called type check It takes two
+这?我们将有一个名为type check的递归函数，它需要两个
+
+22
+00:01:55,090 --> 00:01:59,110
+arguments, it takes an [inaudible] environment and this will be a record, I'm
+争论，这需要一个[听不见]的环境，这将是一个记录，我
+
+23
+00:01:59,110 --> 00:02:03,220
+not specifying exactly how this record is declared but it is essentially going to be
+没有具体说明此记录是如何声明的，但它本质上将是
+
+24
+00:02:03,220 --> 00:02:08,920
+three parts m, o, and c. And it also takes an expression, and so here we are just
+由m，o和c三部分组成，它也需要一个表达式，所以我们在这里
+
+25
+00:02:08,919 --> 00:02:13,819
+doing the case here where the expression is E1 + E2. And what should the code look
+在这里做表达式是E1+E2的情况。代码应该是什么样子？
+
+26
+00:02:13,819 --> 00:02:19,459
+like? Well, we can pretty much just read the rule and translate directly into code,
+喜欢?嗯，我们几乎可以直接阅读规则并将其转换成代码，
+
+27
+00:02:19,459 --> 00:02:23,260
+and this is one of the nice things about the notation for type systems, is that it
+这是类型系统表示法的优点之一，就是它
+
+28
+00:02:23,260 --> 00:02:29,730
+really tells you very, very clearly how to write the implementation from the
+确实非常、非常清楚地告诉您如何从
+
+29
+00:02:29,730 --> 00:02:34,760
+description. So what's the first thing we have to do? Well we have to type-check the
+描述。那么我们要做的第一件事是什么呢？嗯，我们得打字检查一下
+
+30
+00:02:34,760 --> 00:02:39,870
+sub expression E1. And we can see from the rule that the environment in which E1 is
+子表达式E1。我们可以从规则中看到E1所处的环境
+
+31
+00:02:39,870 --> 00:02:44,819
+type checked is exactly the same as the environment of E1 plus E2. So we just pass
+勾选的类型与E1加E2的环境完全相同。所以我们就这么过去了
+
+32
+00:02:44,819 --> 00:02:49,609
+whatever our original environment argument was for E1 plus E2. We pass an, an
+不管我们最初的环境论点是E1加E2。我们经过一个，一个
+
+33
+00:02:49,609 --> 00:02:54,279
+argument on, to a recursive call of the type check, to type check the sub
+参数，传递给类型check的递归调用，以键入check sub
+
+34
+00:02:54,279 --> 00:03:00,060
+expression E1. And that type-checking will run and it will return some type T1, and
+表达式E1。类型检查将运行，它将返回某个类型t1，并且
+
+35
+00:03:00,060 --> 00:03:04,529
+we don't know that T1 is an integer at this point. We're gonna have to check
+在这一点上，我们不知道t1是一个整数。我们得检查一下
+
+36
+00:03:04,529 --> 00:03:11,529
+that, so we just remember what the type of E1 is. And, furthermore we type check E2,
+所以我们只要记住E1的类型就行了。此外，我们还键入check E2，
+
+37
+00:03:12,540 --> 00:03:17,189
+okay? And that also happens in the same environment, we can see that here in the
+好吧?而这也发生在相同的环境中，我们可以在这里看到
+
+38
+00:03:17,189 --> 00:03:24,189
+rule. And again we'll get back some type for E2, so type T2. And then we confirm
+规则。再一次，我们会得到E2的一些类型，所以输入T2。然后我们确认
+
+39
+00:03:25,529 --> 00:03:32,529
+that both T1 and T2 are type integer. And we could have done a, the track that T1
+T1和T2都是整型。我们可以做一个T1的轨道
+
+40
+00:03:32,849 --> 00:03:39,040
+is, is int a, right away, right after we had the type check T1 that would be a fine
+is，is int a，就在我们进行类型检查t1之后，这将是一个罚款
+
+41
+00:03:39,040 --> 00:03:44,449
+thing to do. Here just to save space on the slide I have to clip the checks for T1
+要做的事。这里只是为了节省幻灯片上的空间，我必须剪裁T1的支票
+
+42
+00:03:44,449 --> 00:03:51,449
+and T2 a, on one line. And if that check succeeds. If it doesn't succeed,
+和t2a，在一条线上。如果检查成功的话。如果不成功，
+
+43
+00:03:51,540 --> 00:03:55,859
+presumably there should be some code in here, to, print out an error message But
+大概这里应该有一些代码，用来打印出一条错误消息，但是
+
+44
+00:03:55,859 --> 00:04:01,269
+if that, if both T1 and T2 are in fact integers, than the type of the whole
+如果这样，如果t1和t2实际上都是整数，那么整体的类型
+
+45
+00:04:01,269 --> 00:04:05,459
+expression is also an integer. So that's what's returned by this call, by the
+表达式也是整数。这就是这个调用返回的内容，由
+
+46
+00:04:05,459 --> 00:04:11,249
+outermost call here, to the type check function. So now let's take a look at a
+这里最外层的调用是对类型检查函数的调用。那么现在让我们来看一看
+
+47
+00:04:11,249 --> 00:04:15,409
+somewhat more complex type checking rule and its implementation. Here's the rule
+稍微复杂一些的类型检查规则及其实现。规则是这样的
+
+48
+00:04:15,409 --> 00:04:21,519
+for a net with initialization. So we're declaring a variable x, of type t. And
+对于具有初始化的网络。所以我们声明了一个变量x，类型为t。
+
+49
+00:04:21,519 --> 00:04:26,300
+that's going to be visible in the expression E1. But before we execute E1,
+这将在表达式E1中可见。但在我们执行E1之前，
+
+50
+00:04:26,300 --> 00:04:31,169
+we're going to initialize X to the value of E0. And then after we've evaluated the
+我们要将X初始化为E0的值。然后在我们评估完
+
+51
+00:04:31,169 --> 00:04:37,389
+entire let expression, we expect to get back something of type T1 And now, for all
+整个let表达式，我们希望返回t1类型的内容，现在，
+
+52
+00:04:37,389 --> 00:04:41,960
+of that to work out. A few things have to be satisfied and those are listed as
+来解决这个问题。有几件事必须得到满足，下面列出了
+
+53
+00:04:41,960 --> 00:04:48,960
+premises here of the rule. First of all E0 has to have some type T0 which is a
+规则的前提在这里。首先，E0必须有某种类型T0，它是
+
+54
+00:04:49,330 --> 00:04:54,580
+subtype of T. And that's to guarantee that this initialization is correct, that X can
+子类型，这是为了保证这个初始化是正确的，X可以
+
+55
+00:04:54,580 --> 00:05:01,580
+actually hold something of E0's type. And, for the entire expression to have type T1,
+实际上持有的是E0类型的东西。并且，对于要具有类型T1的整个表达式，
+
+56
+00:05:01,770 --> 00:05:07,300
+well then E1 has to have type T1. But that type checking is carried out in an
+那么E1必须有T1类型。但是该类型检查是在
+
+57
+00:05:07,300 --> 00:05:12,199
+environment that's extended with the declaration for X. So we, so we also know
+使用X的声明来扩展的环境。所以我们，所以我们也知道
+
+58
+00:05:12,199 --> 00:05:19,199
+within E1, that X has type T. So now let's write the type-checking case for this. So
+在E1中，X具有类型T。所以现在让我们为它编写类型检查用例。所以
+
+59
+00:05:20,550 --> 00:05:24,509
+the function type check is again is gonna take an environment as argument, and now
+函数类型检查将再次将环境作为参数，现在
+
+60
+00:05:24,509 --> 00:05:31,509
+we're doing a case for a led with initialization. So, just reading of the,
+我们在做一个带有初始化功能的LED的案子。所以，只要读一读，
+
+61
+00:05:32,180 --> 00:05:35,960
+the rules and what the conditions are that we have to check, we can see that one of
+我们要检查的规则和条件是什么，我们可以看到其中一个
+
+62
+00:05:35,960 --> 00:05:39,569
+the first things we have to do, or one of the things we have to do, is to check that
+我们要做的第一件事，或者说我们必须做的其中一件事，就是检查
+
+63
+00:05:39,569 --> 00:05:44,909
+E zero has some type T zero. So we just have a recursive call to type check here.
+E0有某种类型的T0。所以我们在这里只有一个对类型check的递归调用。
+
+64
+00:05:44,909 --> 00:05:47,870
+This is carried out in the same environment as the overall expression. So
+这是在与整体表达式相同的环境中执行的。所以
+
+65
+00:05:47,870 --> 00:05:51,539
+we just pass the environment on to the recursive call And now we're just type
+我们只是将环境传递给递归调用，现在我们只需键入
+
+66
+00:05:51,539 --> 00:05:58,539
+checking E zero and we record its type T zero. So the second premise is implemented
+检查E0，我们记录它的类型T0。所以第二个前提就实现了
+
+67
+00:05:59,740 --> 00:06:06,569
+like this. Now we're type checking E1 and we expect it to have some type T1, but now
+像这样。现在我们正在检查e1的类型，我们希望它有某种类型t1，但是现在
+
+68
+00:06:06,569 --> 00:06:09,590
+the environment is different, so we're taking the original environment, the
+环境是不同的，所以我们把原来的环境，
+
+69
+00:06:09,590 --> 00:06:15,430
+overall environment of the expression and we're adding, a declaration that X has
+表达式的整体环境，我们正在添加X具有的声明
+
+70
+00:06:15,430 --> 00:06:19,009
+type T to that environment. So we're extending the environment, with an
+在该环境中键入T。所以我们正在扩展环境，通过一个
+
+71
+00:06:19,009 --> 00:06:25,400
+additional variable declaration. Okay? And so we do that type checking call, and we
+其他变量声明。好吧?所以我们做了类型检查调用，我们
+
+72
+00:06:25,400 --> 00:06:31,629
+get back a type T1. Now, we have to check that T0 is a sub-type of T. So that's a,
+找回T1类型。现在，我们必须检查T0是否是T的一个子类型，所以这是a，
+
+73
+00:06:31,629 --> 00:06:37,259
+that's a call to some function that implements the sub-typing relationship,
+这是对实现子类型关系的某些函数的调用，
+
+74
+00:06:37,259 --> 00:06:43,479
+and if, if that passes, if that check passes, well then we're done. And we can
+如果，如果通过了，如果检查通过了，那么我们就完了。我们可以
+
+75
+00:06:43,479 --> 00:06:47,169
+return the type T1. And there's a little mistake here on the slide, there shouldn't
+返回类型t1。幻灯片上有个小错误，不应该有
+
+76
+00:06:47,169 --> 00:06:53,740
+be a semicolon there. S o we just return T1 as the type of the entire expression.
+在那里要用分号。所以我们只返回t1作为整个表达式的类型。
+

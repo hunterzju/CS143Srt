@@ -1,0 +1,395 @@
+0
+00:00:04,089 --> 00:00:07,809
+This is the first of the series of videos on programming language semantics and in
+这是关于编程语言语义的系列视频的第一部分，在
+
+1
+00:00:07,809 --> 00:00:12,100
+particular on the semantics of cool, Before we dive into technical details
+在我们深入到技术细节之前，请先详细了解Cool的语义
+
+2
+00:00:12,100 --> 00:00:16,059
+though I want to spend a few minutes talking about what programming language
+虽然我想花几分钟谈谈什么编程语言
+
+3
+00:00:16,059 --> 00:00:23,059
+semantics are and why we need them. The problem we have to address is that we need
+语义学是我们需要它们的原因。我们必须解决的问题是我们需要
+
+4
+00:00:24,340 --> 00:00:30,680
+some way to say what behavior we expect when we run a Kuhl program. So, for every
+某种方式可以说，当我们运行Kuhl程序时，我们期望什么行为。所以，对于每一个
+
+5
+00:00:30,680 --> 00:00:35,510
+kind of Kuhl expression, for everyone we have to say what happens when it's
+一种库尔式的表达，对于每个人，我们必须说当它发生时会发生什么
+
+6
+00:00:35,510 --> 00:00:40,260
+evaluated and we can regard this as the meaning of the expression. Somehow, give
+我们可以把这看作是表达式的意思。不管怎样，给出
+
+7
+00:00:40,260 --> 00:00:44,730
+rules to specify what a particular, what kind of computation of a particular
+规则来指定特定的是什么、特定的是什么类型的计算
+
+8
+00:00:44,730 --> 00:00:51,730
+expression does. And I think it's useful to look back and see how we dealt with
+表达式可以。我认为回顾过去，看看我们是如何处理
+
+9
+00:00:51,920 --> 00:00:58,399
+this with similar problems in defining other parts of cool, okay the earlier
+这在定义酷的其他部分时也有类似的问题，好的，前面的
+
+10
+00:00:58,399 --> 00:01:05,149
+things that we looked at in this course. So for example For Lexical Analysis we
+我们在这门课上看到的东西。例如，对于词法分析，我们
+
+11
+00:01:05,149 --> 00:01:10,639
+defined a family of family of tokens using regular expressions And for the, the
+使用正则表达式定义了一系列令牌族，对于
+
+12
+00:01:10,639 --> 00:01:16,149
+syntax of the language we used Context Free Grammars to specify the, the
+语言的语法我们使用上下文无关文法来指定，
+
+13
+00:01:16,149 --> 00:01:22,099
+structure of the, how words could be strong together to form valid sentences in
+的结构，单词如何结合在一起才能形成有效的句子
+
+14
+00:01:22,099 --> 00:01:29,099
+Kuhl And then for the semantic analysis we gave formal typing rules And now we're to
+Kuhl，然后为了语义分析，我们给出了形式化的类型规则，现在我们要
+
+15
+00:01:31,659 --> 00:01:34,719
+the point that we have to talk about how the programs actually running so we have
+这一点是我们必须讨论程序是如何实际运行的，所以我们有
+
+16
+00:01:34,719 --> 00:01:40,299
+to give some evaluation rules and these are going to guide how we do code
+给出一些评估规则，这些规则将指导我们如何编写代码
+
+17
+00:01:40,299 --> 00:01:44,159
+generation of optimization or you going to determine what the program should do and
+生成优化，或者您要确定程序应该做什么，以及
+
+18
+00:01:44,159 --> 00:01:48,329
+what kind of transformations we can do on programs to make them run faster or use a
+我们可以对程序执行哪些类型的转换以使它们运行得更快，或者使用
+
+19
+00:01:48,329 --> 00:01:54,340
+space or what other, what any other kind of optimization that we would like to
+空间或其他什么，我们想要什么其他类型的优化
+
+20
+00:01:54,340 --> 00:01:59,340
+perform. So far we've been specifying the evaluation rules somewhat indirectly.
+表演。到目前为止，我们在某种程度上间接地指定了评估规则。
+
+21
+00:01:59,340 --> 00:02:04,359
+We've been doing it by giving a complete compilation strategy down to stack machine
+我们一直在通过向堆栈机器提供完整的编译策略来做到这一点
+
+22
+00:02:04,359 --> 00:02:08,910
+code and then we've been talking about the evaluation rules for the stack machine or
+代码，然后我们一直在讨论堆叠机的求值规则，或者
+
+23
+00:02:08,910 --> 00:02:14,730
+actually translation the stack machine into assembly code And that is certainly a
+实际上将堆栈机器翻译成汇编代码，这肯定是一个
+
+24
+00:02:14,730 --> 00:02:19,040
+complete description. You can take the generated assembly code and get it right
+完整的描述。您可以获取生成的汇编代码并使其正确
+
+25
+00:02:19,040 --> 00:02:24,209
+out of the machine, and see what the program do es and that would be a, a
+走出机器，看看程序做了什么，那将是一个，一个
+
+26
+00:02:24,209 --> 00:02:30,400
+legitimate description of the behavior of the program And the question then is, you
+程序行为的合法描述，那么问题是，您
+
+27
+00:02:30,400 --> 00:02:34,349
+know, why isn't that good enough. Why isn't just having a code generator for the
+知道吗，为什么这还不够好。为什么不只有一个代码生成器用于
+
+28
+00:02:34,349 --> 00:02:39,599
+language. Why is that already a good enough transcription of what how the code
+语言。为什么已经足够好的抄写了什么代码呢
+
+29
+00:02:39,599 --> 00:02:45,719
+is supposed to be executed And The answer to that is maybe a little hard to
+应该被处决，这个问题的答案可能有点难
+
+30
+00:02:45,719 --> 00:02:51,480
+appreciate without having a written a few compilers But in a nutshell, people have
+无需编写几个编译器即可欣赏，但简而言之，人们已经
+
+31
+00:02:51,480 --> 00:02:56,689
+learned through hard experience that assembly language descriptions of language
+从艰苦的经历中学到汇编语言对语言的描述
+
+32
+00:02:56,689 --> 00:03:02,450
+implementations, language implementations, have a lot of irrelevant detail. There's a
+实现，语言实现，有很多不相关的细节。有一个
+
+33
+00:03:02,450 --> 00:03:07,420
+lot of things that you have to say when you get such a complete executable
+当您获得如此完整的可执行文件时，您必须要说的事情有很多
+
+34
+00:03:07,420 --> 00:03:13,859
+description that was not necessary to say about how the program executes. So for
+不需要说明程序如何执行的描述。所以对于
+
+35
+00:03:13,859 --> 00:03:19,510
+example the fact that we use a stack machine, that's not intrinsic to the
+例如，我们使用堆栈机器，这不是
+
+36
+00:03:19,510 --> 00:03:23,329
+implementation of any particular programming language. There are other
+任何特定编程语言的实现。还有其他的
+
+37
+00:03:23,329 --> 00:03:26,689
+co-generation strategies that we could have used so you know you don't have to do
+我们本可以使用的热电联产策略，所以你知道你不必
+
+38
+00:03:26,689 --> 00:03:30,359
+the stack machine to implement the language which way the stack grows.
+堆栈机器实现堆栈成长的语言。
+
+39
+00:03:30,359 --> 00:03:34,170
+Whether it grows towards high addresses or low addresses you could implement it
+无论它朝向高地址还是低地址增长，您都可以实现它
+
+40
+00:03:34,170 --> 00:03:38,870
+either way. How it, it, yeah, exact representation of integers in a particular
+不管是哪种方式。它，它，是的，如何精确地表示一个特定的整数
+
+41
+00:03:38,870 --> 00:03:44,530
+instructions actually used to execute or to implement certain language constructs.
+实际用于执行或实现某些语言构造的指令。
+
+42
+00:03:44,530 --> 00:03:50,780
+All of these things are, are a, are one way or, or one particular way to implement
+所有这些都是，是一种，是一种方式，或者是一种特定的方式来实现
+
+43
+00:03:50,780 --> 00:03:56,279
+the language but we don't want them to, to be taken as the only way that the language
+语言，但我们不希望它们，被认为是语言的唯一途径
+
+44
+00:03:56,279 --> 00:04:01,480
+could be implemented. So, what we really want than it has a complete description
+可以实施。所以，我们真正想要的比它有一个完整的描述
+
+45
+00:04:01,480 --> 00:04:06,670
+but one that is not overly restrictive One that will allow a variety of different
+但是它不会有太多的限制，它将允许各种不同的
+
+46
+00:04:06,670 --> 00:04:13,670
+implementations. And when people have not done this when people have not tried to
+实施。当人们没有做到这一点的时候，当人们还没有试着这样做的时候
+
+47
+00:04:13,700 --> 00:04:18,060
+find some relatively high level way of describing the behavior of languages,
+找到一些相对较高层次的方式来描述语言的行为，
+
+48
+00:04:18,060 --> 00:04:23,650
+they've been inevitably gotten into the situation where they a, where people would
+他们不可避免地陷入了这样的境地，在那里，人们会
+
+49
+00:04:23,650 --> 00:04:28,440
+just have to go and run the program on a reference implementation or to decide what
+只需在参考实现上运行该程序，或者决定
+
+50
+00:04:28,440 --> 00:04:34,919
+it does. And so this is not a very satisfying a situation because of the
+确实如此。所以这不是一个非常令人满意的情况，因为
+
+51
+00:04:34,919 --> 00:04:39,310
+reference implementation is not completely correct itself. It will have bugs and
+引用实现本身并不完全正确。它会有窃听器和
+
+52
+00:04:39,310 --> 00:04:42,830
+there will be artifacts of the particular way it was implemented that you didn't
+将会有您没有实现的特定方式的工件
+
+53
+00:04:42,830 --> 00:04:47,080
+mean to be part of a language but because there was no better definition wind up
+意思是成为一种语言的一部分，但因为没有更好的定义
+
+54
+00:04:47,080 --> 00:04:53,419
+becoming fixed and have sort of accidents of the way the language was implemented
+变得固定，并且在实现语言的方式上有某种偶然性
+
+55
+00:04:53,419 --> 00:05:00,419
+the first time. So there are many ways to actually specify semantics that would be
+第一次。因此，有许多方法可以实际指定语义，即
+
+56
+00:05:00,759 --> 00:05:05,860
+suitable for our task and it turns out that these are all equally powerful but
+适合我们的任务，事实证明，它们都同样强大，但是
+
+57
+00:05:05,860 --> 00:05:11,120
+some of them are more suited to various tasks than others so the one that we're
+他们中的一些人比另一些人更适合各种任务，所以我们现在
+
+58
+00:05:11,120 --> 00:05:15,400
+going to be using is called operational semantics. So operational semantics
+将要使用的被称为操作语义学。所以操作语义学
+
+59
+00:05:15,400 --> 00:05:19,810
+describes program evaluation via execution roles on an abstract machine we just gave
+描述通过我们刚才给出的抽象机器上的执行角色进行的程序评估
+
+60
+00:05:19,810 --> 00:05:24,639
+a bunch of rules that say you know from particular expression how it should be
+一堆规则，说你从特定的表达中知道它应该是什么样子
+
+61
+00:05:24,639 --> 00:05:30,069
+executed. You can think of this as a very, very high level kind of co-generation And
+被处决了。你可以认为这是一种非常、非常高水平的热电联产
+
+62
+00:05:30,069 --> 00:05:33,150
+this is most useful for specifying implementations and it is what we're going
+这对于指定实现是最有用的，这也是我们要做的
+
+63
+00:05:33,150 --> 00:05:40,150
+to use to describe the semantics of Kuhl. I want to mention two other ways of. Of
+用来描述库尔的语义。我想提一下另外两种方法。的
+
+64
+00:05:41,900 --> 00:05:46,819
+specifying programming language semantics because they're, they're important and you
+指定编程语言语义，因为它们非常重要，而您
+
+65
+00:05:46,819 --> 00:05:51,389
+may come across them at some point outside of this class. One is the notational
+可能会在这堂课之外的某个时间遇到他们。一种是记号式的
+
+66
+00:05:51,389 --> 00:05:56,819
+semantics and here the programs meaning is actually given as a mathematical function.
+语义学，这里的程序含义实际上是以数学函数的形式给出的。
+
+67
+00:05:56,819 --> 00:06:03,819
+So the program text is mapped to a function that goes from input and outputs
+因此，程序文本被映射到从输入到输出的函数
+
+68
+00:06:03,970 --> 00:06:08,750
+and this, this is, this function is an actual function that exist in the
+而这个，就是这个函数是一个实际的函数，它存在于
+
+69
+00:06:08,750 --> 00:06:15,750
+mathematical sense And this is a very elegant approach but it uses complexities
+数学感，这是一种非常优雅的方法，但它使用了复杂性
+
+70
+00:06:16,379 --> 00:06:19,580
+into finding an appropriate class of functions and we don't really need to
+找到合适的函数类，我们真的不需要
+
+71
+00:06:19,580 --> 00:06:26,580
+consider for the purposes of just describing an implementation. And another
+仅出于描述实现的目的而考虑。和另一个
+
+72
+00:06:27,039 --> 00:06:32,430
+important approach is axiom semantics and here program behaviors described in some
+重要的方法是公理语义，这里的程序行为描述在一些
+
+73
+00:06:32,430 --> 00:06:37,849
+kind of logic And the basic kinds of statements that you write in this language
+一种逻辑和你用这种语言写的基本语句
+
+74
+00:06:37,849 --> 00:06:42,159
+or in this, in this in the axiomatic semantics is that if execution begins in a
+或者在这种情况下，在公理语义中的这种情况下，如果执行开始于
+
+75
+00:06:42,159 --> 00:06:48,800
+state satisfying x, then it ends in the state satisfying y where x and y are
+满足x的状态，则它以满足y的状态结束，其中x和y是
+
+76
+00:06:48,800 --> 00:06:54,669
+formulas in some logic And this is a very common foundation for syst ems that
+一些逻辑中的公式，这是系统EMS的一个非常常见的基础，
+
+77
+00:06:54,669 --> 00:06:58,939
+analyze programs automatically that tries to prove facts about programs either to
+自动分析程序，该程序尝试证明有关程序的事实
+
+78
+00:06:58,939 --> 00:07:03,160
+prove they're correct or to discover bugs in programs.
+证明它们是正确的，或者发现程序中的错误。
+

@@ -1,0 +1,1145 @@
+0
+00:00:04,400 --> 00:00:07,520
+In the next couple of videos, we're going to be looking at the details of the Cool
+在接下来的几个视频中，我们将看到Cool的详细信息
+
+1
+00:00:07,520 --> 00:00:11,330
+operational semantics going over the semantics of each individual kind of
+操作语义学复习每一种个体类型的语义
+
+2
+00:00:11,330 --> 00:00:14,830
+expression. We'll start with easy ones and work our way up to the more complicated
+表达式。我们将从简单的问题开始，逐步发展到更复杂的问题
+
+3
+00:00:14,830 --> 00:00:21,830
+ones. So the easiest rules are the rules for the constants in Cool. So the value
+一个。所以最简单的规则是Cool中常量的规则。所以它的价值
+
+4
+00:00:24,929 --> 00:00:30,089
+true, the expression true I should say, evaluates to a Boolean with the value true
+TRUE，我应该说表达式TRUE的计算结果是一个值为TRUE的布尔值
+
+5
+00:00:30,089 --> 00:00:34,690
+And it doesn't modify the store so the store is unchanged because it doesn't do
+它不会修改存储，因此存储不会改变，因为它不会
+
+6
+00:00:34,690 --> 00:00:40,550
+any updates obviously And there's a corresponding rule for false And integers
+任何明显的更新，对于False和整数都有相应的规则
+
+7
+00:00:40,550 --> 00:00:47,550
+are very, very similar so if a integer expression, integer literal i will
+非常非常相似，所以如果一个整数表达式，整数文字I将
+
+8
+00:00:48,420 --> 00:00:54,780
+evaluate to, and integer object with the value i and again the store is not
+求值为，并且整型对象的值为i，并且存储也不是
+
+9
+00:00:54,780 --> 00:01:01,780
+modified by such evaluation. And finally, strings if a, if s is a string literal of
+被这样的评价所修正的。最后，字符串，如果a，如果s是的字符串文字
+
+10
+00:01:03,180 --> 00:01:08,790
+length n, then it will be evaluated by the string object of which the properties n
+长度n，则它将由其属性为n的字符串对象求值
+
+11
+00:01:08,790 --> 00:01:15,790
+and the string constant s. The evaluation of identifiers is very straightforward,
+和字符串常量s。标识符的计算非常简单，
+
+12
+00:01:17,110 --> 00:01:21,820
+given that we have both in environment in the store. So to evaluate an identifier
+考虑到我们在商店的环境方面都有。因此，要计算标识符
+
+13
+00:01:21,820 --> 00:01:28,290
+and this would be a variable lane y x or y or for What do we do? Well first we look
+这将是一个可变的通道y，x或y，或者我们该怎么做呢？好的，我们先来看看
+
+14
+00:01:28,290 --> 00:01:34,120
+up in the environment where that identifier is stored so now we give us
+在存储该标识符的环境中，所以现在我们给我们
+
+15
+00:01:34,120 --> 00:01:40,890
+back a memory location l. So by in this case And then we look up in the store what
+返回内存位置l。在这种情况下，然后我们在商店中查找
+
+16
+00:01:40,890 --> 00:01:45,600
+the value is at that memory locations, So, we use the same memory location here as an
+该值位于内存位置，因此，我们在这里使用与
+
+17
+00:01:45,600 --> 00:01:50,740
+argument to the store to get back the value that, that, that variable currently
+参数传递到存储区，以获取当前，那个，那个变量的值
+
+18
+00:01:50,740 --> 00:01:54,540
+has And notice I just have a reference, this is a read of memories so this is
+注意到我只有一个参考，这是对记忆的读取，所以这是
+
+19
+00:01:54,540 --> 00:01:59,100
+loading, I think it was loading the value of the variable. This does not affect the
+加载，我想它是在加载变量的值。这不会影响
+
+20
+00:01:59,100 --> 00:02:02,880
+store so the store is the same before and after. This is just looking at the value
+商店，所以商店前后是一样的。这只是看看它的价值
+
+21
+00:02:02,880 --> 00:02:09,880
+of the variable not updating the variable. The expression self just evaluates to the
+不更新变量的变量的。表达式self仅计算为
+
+22
+00:02:10,000 --> 00:02:14,370
+self object. So, this is a place where we just make use of the fact that the self
+自我客体。所以，在这个地方，我们只是利用了这样一个事实，即自我
+
+23
+00:02:14,370 --> 00:02:18,900
+object is part of the environment so let's just copy them over here as the result of
+对象是环境的一部分，因此让我们将它们复制到这里，因为
+
+24
+00:02:18,900 --> 00:02:25,900
+expression and that was again that the store is unaffected by evaluation of self.
+也就是说，商店不受自我评价的影响。
+
+25
+00:02:27,719 --> 00:02:31,379
+Now let's see of a more slightly more complicated evaluation is evaluated, in
+现在让我们看一下更复杂的评估，在
+
+26
+00:02:31,379 --> 00:02:35,799
+particular the assignment expression. So an assignment consists of two parts, an
+特别是赋值表达式。因此，一个作业由两个部分组成，一个
+
+27
+00:02:35,799 --> 00:02:41,810
+identifier that is being updated and an expression that is going to give us the
+正在更新的标识符和将为我们提供
+
+28
+00:02:41,810 --> 00:02:46,939
+new value. So for example, just to remind you we might have something like x gets
+新的价值。举个例子，提醒你们一下，我们可能会有类似于x得到的东西
+
+29
+00:02:46,939 --> 00:02:52,730
+one + one so one + one here would be the expression e and x would be the identifier
+1+1，所以这里的1+1是表达式e，x是标识符
+
+30
+00:02:52,730 --> 00:02:58,079
+All right? And so in order to evaluate the assignment, the first thing we have to do
+好的?所以为了评估作业，我们要做的第一件事
+
+31
+00:02:58,079 --> 00:03:02,279
+is we have to know what value we're going to be writing into the identifier. So what
+我们必须知道要写入标识符的值是什么。那又怎样
+
+32
+00:03:02,279 --> 00:03:06,120
+is the, what is the update we're going to perform? So the first thing to do is to
+我们要执行的更新是什么？所以首先要做的就是
+
+33
+00:03:06,120 --> 00:03:12,159
+evaluate e, okay? And notice here that e is evaluated in the same environment so it
+评估一下e，好吗？请注意，这里的e是在相同的环境中计算的，所以它
+
+34
+00:03:12,159 --> 00:03:17,189
+has the same three components here, and here, all right? So it just says the first
+在这里和这里都有相同的三个组成部分，好吗？所以它只是说第一个
+
+35
+00:03:17,189 --> 00:03:22,450
+thing we do is we run e. Okay. That will give us back a new value. We're going to
+我们要做的就是运行e。好的。这将带给我们一个新的价值。我们要去
+
+36
+00:03:22,450 --> 00:03:28,469
+get back on value b excuse and possibly an updated score so you can arbitrate a piece
+回到价值b的借口上，可能还有一个更新的分数，这样你就可以仲裁一张棋子了。
+
+37
+00:03:28,469 --> 00:03:32,489
+of code. You could yourself have assignment statements in it so the story
+代码。你可以自己在里面写赋值语句，所以这个故事
+
+38
+00:03:32,489 --> 00:03:36,349
+that we get out might be different. Alright, so e produces the value of e and
+我们出去的方式可能会有所不同。好的，所以e产生e的值，
+
+39
+00:03:36,349 --> 00:03:42,379
+an update store s1 And now it's actually due to assignment, what do we do? Well we
+更新存储S1，现在它实际上是由于分配，我们该怎么办？嗯，我们
+
+40
+00:03:42,379 --> 00:03:46,499
+have to know what memory location was supposed to update so we look up the
+必须知道应该更新的内存位置，所以我们查找
+
+41
+00:03:46,499 --> 00:03:52,569
+memory location for id and that would give us some location else of id. And then we
+存储id的位置，这会给我们提供id的其他位置。然后我们
+
+42
+00:03:52,569 --> 00:03:57,859
+modify the store with the new, we modify the store at that point with the new value
+用新的值修改存储，我们就用新值修改该点的存储
+
+43
+00:03:57,859 --> 00:04:04,309
+so we replace the location l, i, d or we update the value of l, i, d to be the
+所以我们替换位置l，i，d，或者将l，i，d的值更新为
+
+44
+00:04:04,309 --> 00:04:10,409
+value of e, the value b and we do that in store s1 which gives us a new store s2.
+e的值，值b，然后我们在存储s1中这样做，这给了我们一个新的存储s2。
+
+45
+00:04:10,409 --> 00:04:15,839
+And I've noticed. That s2 is the store that results from the evaluation of e,
+我注意到了。S2是从E的求值得到的存储，
+
+46
+00:04:15,839 --> 00:04:20,419
+okay? So after we do the assignment, the assignment returns the value b which is of
+好吧?所以在我们进行赋值之后，赋值返回值b，它是
+
+47
+00:04:20,418 --> 00:04:27,419
+course the value of a, of running e. And, it returns the updated store s2. Next,
+当然，运行e.的a的值，并且它返回更新的存储S2。接下来，
+
+48
+00:04:28,289 --> 00:04:33,889
+let's talk about the operational rule for addition. So, to evaluate e1+e2, what we
+我们来谈谈加法的运算规则。所以，要评估e1+e2，我们
+
+49
+00:04:33,889 --> 00:04:39,680
+are going to do? So, first we evaluate e1 And notice that is done in the same
+会做什么呢？因此，首先我们评估E1，并注意在相同的
+
+50
+00:04:39,680 --> 00:04:45,819
+context as the context of the entire e xpression, okay? So the components the
+上下文作为整个表达的上下文，好吗？所以这些组件
+
+51
+00:04:45,819 --> 00:04:51,970
+context here for evaluating one are exactly the same as the components for the
+此处用于评估一个的上下文与
+
+52
+00:04:51,970 --> 00:04:56,400
+overall expression e1 + e2. So when we evaluate e1 it's going to give us a value
+整体表达式e1+e2。所以当我们评估E1时，它会给我们一个值
+
+53
+00:04:56,400 --> 00:05:01,169
+of e1 and it's also going to give us an updated store s1 And then we're going to
+它还将为我们提供更新后的商店S1，然后我们将
+
+54
+00:05:01,169 --> 00:05:07,479
+evaluate e2 and notice here And I think context is different. The soft objects in
+评估e2并注意这里，我认为上下文是不同的。中的软对象
+
+55
+00:05:07,479 --> 00:05:14,479
+the environment are the same; same but now we're running e2 in the new store s1. And
+环境是相同的，但是现在我们在新存储S1中运行e2。和
+
+56
+00:05:14,699 --> 00:05:20,300
+what does its saying is that if e2 has, has assignments or variable references in
+它是怎么说的呢？如果e2中有赋值或变量引用
+
+57
+00:05:20,300 --> 00:05:25,030
+it those assignments and variable references have to be done on the store
+如果这些赋值和变量引用必须在存储上完成
+
+58
+00:05:25,030 --> 00:05:30,449
+that resulted from running e1, okay? So, it's very important that we get that any
+那是用E1造成的，好吗？所以，非常重要的是，我们要得到
+
+59
+00:05:30,449 --> 00:05:35,830
+side effects would happen in running e1 are visible or that are seen by the
+在运行E1过程中将发生的副作用是可见的或由
+
+60
+00:05:35,830 --> 00:05:39,960
+expression e2. So we run e2 in this environment, we're going to get the value
+表达式e2。所以我们在这个环境中运行e2，我们将获得
+
+61
+00:05:39,960 --> 00:05:44,759
+of e2 and the updated store s2 And then the result of the entire expression is
+e2和更新后的存储s2的结果，则整个表达式的结果为
+
+62
+00:05:44,759 --> 00:05:50,960
+going to be b1 + b2 and the results it store will be the store s2. And notice
+将是b1+b2，并且它存储的结果将是存储s2。并请注意
+
+63
+00:05:50,960 --> 00:05:56,550
+here how the stores tell you the order in which you have to evaluate the
+下面是商店如何告诉您您必须按照什么顺序评估
+
+64
+00:05:56,550 --> 00:06:03,099
+expressions. So because e1 is evaluated in the same store as the overall expression
+表情。因此，因为E1在与整体表达式相同的存储中求值
+
+65
+00:06:03,099 --> 00:06:09,689
+that tells you that e1 has to be evaluated first. And then because e2 is evaluated in
+这告诉您必须首先评估E1。然后因为e2的求值是在
+
+66
+00:06:09,689 --> 00:06:15,919
+the store that's produced by e1, that tells you that e1, e2 excuse me, has to be
+由e1生产的商店，它告诉你，e1，e2打扰一下，必须是
+
+67
+00:06:15,919 --> 00:06:22,919
+evaluated after you've evaluated e1 and then the fact that. S2 is the result of
+在你评估了E1之后评估，然后事实是。S2是以下各项的结果
+
+68
+00:06:23,129 --> 00:06:26,889
+the whole thing. It tells you that E2 is also the last thing that you evaluate
+整件事。它告诉您E2也是您评估的最后一件事
+
+69
+00:06:26,889 --> 00:06:33,889
+during the execution of this particular expression. Okay, let's take a look at the
+在执行此特定表达式期间。好，我们再来看一下
+
+70
+00:06:34,419 --> 00:06:39,879
+statement block and just a variety here on the change my colors. How are we going to
+声明挡路和刚刚这里的一个品种就换了我的颜色。我们要怎么做呢？
+
+71
+00:06:39,879 --> 00:06:46,409
+evaluate the, a statement block of statements e1 through en, okay, so, while
+评估一下，语句E1到EN的一个语句挡路，好的，所以，虽然
+
+72
+00:06:46,409 --> 00:06:50,909
+this is semantics, this is that we should run, I mean order beginning of e1 and the
+这是语义，这是我们应该运行的，我的意思是订单开始于E1和
+
+73
+00:06:50,909 --> 00:06:54,979
+results of the entire execution will be the, let's say the value of the entire
+整个执行的结果就是，比方说整个
+
+74
+00:06:54,979 --> 00:06:59,919
+block with the value of the last expression. And this, this rule just says
+最后用挡路的价值表达。而这个，这个规定就是说
+
+75
+00:06:59,919 --> 00:07:05,229
+that. So, first, we evaluate e1 and also it's done on the same store as the overall
+那。因此，首先，我们评估E1，并且它也是在与整体商店相同的商店中完成的
+
+76
+00:07:05,229 --> 00:07:09,639
+expressio n as it tells you it has to come first and that produces a new store s1 and
+表达式n，因为它告诉你它必须首先出现，这会产生一个新的存储s1和
+
+77
+00:07:09,639 --> 00:07:15,819
+the value b1. Okay And then e2 is evaluated in the store s1 and it produces
+值b1。好的，然后e2在存储s1中求值，它产生
+
+78
+00:07:15,819 --> 00:07:21,939
+the store s2 and so on And then expression en is evaluated in the store sn - one and
+存储s2以此类推，然后在存储sn-one中计算表达式en，并且
+
+79
+00:07:21,939 --> 00:07:28,800
+it produces a value of bn and an updated store s (N). Okay? And then the result of
+它产生的值为bn和更新后的存储s(N)。好吧?然后结果是
+
+80
+00:07:28,800 --> 00:07:35,800
+the whole thing is the value of vn and also the updated store s (N) and this
+整件事就是vn的值，还有更新后的商店s(N)和这个
+
+81
+00:07:36,719 --> 00:07:40,569
+tells you, this would really tell you the order which had to evaluate the sub
+告诉你，这会告诉你评估潜艇的顺序
+
+82
+00:07:40,569 --> 00:07:44,949
+expressions. The dependencies here on the store of course you do evaluate e1 and
+表情。当然，这里存储上的依赖项计算的是e1和
+
+83
+00:07:44,949 --> 00:07:48,530
+then e2 and then e3 and so on so you have to do them to net order to get the side
+然后是e2，然后是e3，依此类推，因此您必须将它们设置为净订单才能获得边框
+
+84
+00:07:48,530 --> 00:07:52,590
+effects to get. You know the side effects in the correct order for all of these
+要得到的效果。你知道所有这些药的副作用顺序是正确的
+
+85
+00:07:52,590 --> 00:07:56,060
+expressions And furthermore, it also tells you the only value that you're going to
+表达式，此外，它还告诉您要计算的唯一值
+
+86
+00:07:56,060 --> 00:08:00,669
+keep is the value vn. Notice that none of the other values that are produced here
+Keep是值vn。请注意，此处生成的任何其他值
+
+87
+00:08:00,669 --> 00:08:07,490
+are used for anything. They don't appear anywhere else in the rules. Let's think
+可以用来做任何事情。他们不会出现在规则中的其他任何地方。让我们想一想
+
+88
+00:08:07,490 --> 00:08:13,710
+what we've learned so far and do a small example. So we want to know what happens
+我们到目前为止所学的内容，并做一个小例子。所以我们想知道会发生什么
+
+89
+00:08:13,710 --> 00:08:20,620
+when we evaluate the block. X gets assigns seven + five, that's the first statement
+当我们评价挡路的时候。X GET赋值7+5，这是第一个语句
+
+90
+00:08:20,620 --> 00:08:24,370
+and the second and the last statement in the block, is just the expression four.
+而挡路中的第二句话，也是最后一句话，就是表达式四。
+
+91
+00:08:24,370 --> 00:08:28,340
+And the first thing we have to do is to say what the context did and which we are
+我们要做的第一件事是说出上下文做了什么，我们是什么
+
+92
+00:08:28,340 --> 00:08:32,250
+going to evaluate this and the context consists of three parts. There'll be a
+我们要对此进行评估，上下文由三个部分组成。会有一个
+
+93
+00:08:32,250 --> 00:08:36,720
+self object and in this case it doesn't really matter what's in the self object
+Self对象，在这种情况下，Self对象中的内容实际上并不重要
+
+94
+00:08:36,720 --> 00:08:41,510
+because self is not referred to in the program and so it won't play any role in
+因为程序中没有提到Self，所以它不会在
+
+95
+00:08:41,510 --> 00:08:44,940
+the evaluation. But we, we still need it so there still be, there'll be some self
+评估。但是我们，我们仍然需要它，所以仍然会有，会有一些自我
+
+96
+00:08:44,940 --> 00:08:50,450
+object out there just won't get used and Now, in the new environment which tells us
+外面的物体就是不会被使用，而现在，在新的环境中，这告诉我们
+
+97
+00:08:50,450 --> 00:08:55,260
+the locations where all the free variables in the programs. So, we'll just need a
+程序中所有自由变量的位置。所以，我们只需要一个
+
+98
+00:08:55,260 --> 00:09:01,540
+place for x is going to be stored and so s will be stored in some location l And then
+将存储x的位置，因此s将存储在某个位置l，然后
+
+99
+00:09:01,540 --> 00:09:07,390
+we know our memory content is, where our store is and let's just say that at l we
+我们知道我们的记忆内容是，我们的商店在哪里，我们可以这样说，在l，我们
+
+100
+00:09:07,390 --> 00:09:13,960
+have initially the value zero, okay? So now we can use our rules to run this
+初始值为零，好吗？所以现在我们可以用我们的规则来运行
+
+101
+00:09:13,960 --> 00:09:19,600
+program or to evaluate thi s program. I'm going to make this line here much longer
+计划或评估此计划。我要把这条线排得更长一些
+
+102
+00:09:19,600 --> 00:09:25,660
+And recall that, that evaluation of block consist of the evaluation of the, all the
+请记住，对挡路的评价包括对所有
+
+103
+00:09:25,660 --> 00:09:32,660
+statements within the block. Okay, so the first one is going to be s gets seven+5
+挡路内部的声明。好的，第一个是s得到7+5
+
+104
+00:09:33,230 --> 00:09:37,950
+and that will be evaluated in the same environment as the overall expression. So,
+它将在与整体表达式相同的环境中求值。所以,
+
+105
+00:09:37,950 --> 00:09:44,950
+we have up here. So the same context excuse me and I should say I often slip
+我们在这上面有。所以在同样的背景下，请原谅，我应该说我经常滑倒
+
+106
+00:09:45,770 --> 00:09:50,600
+and I realize and say environment for the entire left hand side of one of these
+我意识到其中一个的整个左手边的环境
+
+107
+00:09:50,600 --> 00:09:57,600
+judgments. I'll try to be consistent. And just use environment for the, for the
+判断。我会努力做到始终如一。只需将环境用于，用于
+
+108
+00:09:59,090 --> 00:10:03,370
+second components of the context often in the literature people call the entire
+语境的第二个组成部分通常在文学中被人们称为整体
+
+109
+00:10:03,370 --> 00:10:05,620
+thing on the left hand side of the environment that's why they make this
+在环境的左手边的东西，这就是为什么他们做这个
+
+110
+00:10:05,620 --> 00:10:10,380
+mistake but you know for this instead of notes I'm trying to be consistent the
+我错了，但是你知道，这个而不是笔记，我试着保持一致
+
+111
+00:10:10,380 --> 00:10:14,430
+entire, all the components on left hand side together are called the context and
+整个，左侧的所有组件一起称为上下文和
+
+112
+00:10:14,430 --> 00:10:18,030
+the environment is just the second component. The mapping from variables to
+环境只是第二个组成部分。变量到变量的映射
+
+113
+00:10:18,030 --> 00:10:25,030
+their locations Anyway coming back to the example, The first statement in the block
+他们的位置反正回过头来举个例子，挡路里的第一句话
+
+114
+00:10:25,950 --> 00:10:31,710
+is s gets seven+5 alright. And then we're going to have the second statement as
+就是S得到7+5好的。然后我们将有第二个声明，即
+
+115
+00:10:31,710 --> 00:10:38,710
+well. And we know that the self object and the environment won't change but we don't
+井。我们知道自我对象和环境不会改变，但我们不会
+
+116
+00:10:39,830 --> 00:10:43,910
+know what the store will be. The store might be different so I'll leave the store
+知道商店会是什么样子。商店可能不一样，所以我要离开商店了
+
+117
+00:10:43,910 --> 00:10:49,320
+empty for now and we'll figure that out later and we're going to be evaluating the
+现在是空的，我们稍后会弄清楚这一点，我们将评估
+
+118
+00:10:49,320 --> 00:10:55,750
+expression four. Okay, so this is the structure of the evaluation now in
+表达式四。好的，这就是现在评估的结构
+
+119
+00:10:55,750 --> 00:11:01,690
+progress. We should look at, at this first statement trying to make some forward
+进步了。我们应该看看，在这第一个声明中，试图做出一些前瞻
+
+120
+00:11:01,690 --> 00:11:07,120
+progress on that one. So, to evaluate the assignment, what do we have to do? Well,
+在这个问题上取得了进展。那么，要评估作业，我们需要做些什么呢？井,
+
+121
+00:11:07,120 --> 00:11:11,370
+the very first thing we have to do is we have to evaluate the right hand side so
+我们要做的第一件事就是评估右手边
+
+122
+00:11:11,370 --> 00:11:18,140
+we're going to have the context for that is going to be the same And the context
+我们将会有相同的背景和背景
+
+123
+00:11:18,140 --> 00:11:22,900
+we've been looking at all on because it's the first thing that's actually going to
+我们一直在看，因为这是第一件真正要做的事情
+
+124
+00:11:22,900 --> 00:11:29,900
+happen is to evaluate Seven + five, okay? And now, I'm leaving a little space down
+就是评估7+5，好吗？现在，我在下面留下一点空间
+
+125
+00:11:31,480 --> 00:11:35,120
+here for the rest of the assignment role which we're not going to fill in just yet.
+这里是睡觉的分配角色，我们现在还不打算填写。
+
+126
+00:11:35,120 --> 00:11:39,480
+Now to evaluate the plus expression we have to evaluate the first express ion and
+现在要计算加号表达式，我们必须计算第一个表达式离子和
+
+127
+00:11:39,480 --> 00:11:46,220
+the second expression, okay? And so, how do we do that? Well, we know, finally, I
+第二个表情，好吗？那么，我们如何做到这一点呢？嗯，我们知道，最后，我
+
+128
+00:11:46,220 --> 00:11:49,620
+think how to do that because we're finally down and we're going to have a single
+想一想怎么做，因为我们终于下来了，我们将有一首单曲
+
+129
+00:11:49,620 --> 00:11:56,620
+integer there and that we already have a rule for, okay and so an integer 
+这里有一个整数，我们已经有了一个规则，好的，所以是一个整数
+
+130
+00:11:59,610 --> 00:12:06,610
+literal evaluates to institute your object, okay And inside that object is
+文本求值来建立您的对象，好的，在该对象内部是
+
+131
+00:12:07,680 --> 00:12:14,680
+just about the value, okay. And the store is unmodified All right? And then
+只是关于价值，好的。而且商店是原封不动的，好吗？然后
+
+132
+00:12:16,280 --> 00:12:23,280
+similarly for the other argument here, Okay. So the five will also evaluate to an
+这里的另一个论点也是如此，好的。因此这五个国家也将评估为
+
+133
+00:12:31,850 --> 00:12:36,980
+integer object with the value of five and the store will be unmodified okay so
+值为5的整数对象，存储将不会被修改，所以
+
+134
+00:12:36,980 --> 00:12:43,980
+that's the two sum expressions of this edition and so now we can fill in the
+这是本版的两个求和表达式，现在我们可以填写
+
+135
+00:12:45,430 --> 00:12:49,050
+results here so to take the contents of the two integers we'll add them. That will
+结果在这里，为了获得两个整数的内容，我们将它们相加。那将会
+
+136
+00:12:49,050 --> 00:12:56,050
+also be integer object so we're going to have the integer object twelve. And the
+也是整数对象，所以我们将有整数对象12。以及
+
+137
+00:12:56,110 --> 00:13:00,570
+store has not been changed, okay? So the, the store that we get out of here happens
+店铺没变，好吗？所以，我们离开这里的商店发生了
+
+138
+00:13:00,570 --> 00:13:04,690
+to be the same as the store that went in just because this expression had no
+与进店的商店一样，就因为这句话没有
+
+139
+00:13:04,690 --> 00:13:10,270
+assignments in it, okay? And now we're ready to do the assignment. Okay. So how
+把任务放进去，好吗？现在我们准备好做作业了。好吧。那么是怎么做到的呢？
+
+140
+00:13:10,270 --> 00:13:14,510
+do we do that? Well, we have to form a new store. Alright, so we're going to have a
+我们要这么做吗？嗯，我们得开一家新店。好的，那么我们将会有一个
+
+141
+00:13:14,510 --> 00:13:21,510
+new store which will the L gets zero with the value of l. Number which way, my
+将L取值为零的新商店。数字朝哪个方向，我的
+
+142
+00:13:27,930 --> 00:13:32,210
+notation went here, I think it's the number comes first and we're going to put
+记号放在这里，我想数字放在第一位，我们要把
+
+143
+00:13:32,210 --> 00:13:38,060
+twelve in the location l and of course, that's store was just equal to the store
+12个在位置l，当然，那家店正好等于那家店
+
+144
+00:13:38,060 --> 00:13:45,060
+where l has the value twelve, okay And so now, what happens down here and we do the
+这里l的值是12，好的，现在，这里发生了什么，我们做
+
+145
+00:13:45,150 --> 00:13:52,150
+assignment and we get out The new value. Okay so, the value of the right hand side
+赋值，然后我们得到新值。好的，那么，右手边的值
+
+146
+00:13:52,260 --> 00:13:58,920
+is twelve and we have a new store where the location l has twelve, all right? So
+是12，我们有一家新店，位置l是12，对吗？所以
+
+147
+00:13:58,920 --> 00:14:02,600
+now we're going to evaluate the second statement in the block and that will be
+现在我们来评估挡路中的第二个陈述，那就是
+
+148
+00:14:02,600 --> 00:14:09,600
+done in the store where l has the location twelve and of course this is just an
+在l的位置是12的商店里做的，当然这只是一个
+
+149
+00:14:09,640 --> 00:14:15,490
+integer And so that will evaluate to the integer constant of four, the integer
+整数，因此将计算为整数常量4，即整数
+
+150
+00:14:15,490 --> 00:14:19,930
+value excuse me, 4or integer object containing, the integer object with the
+值，对不起，4或整数对象包含，整数对象带有
+
+151
+00:14:19,930 --> 00:14:26,930
+value four and our store. And it's just going to fit not quite, all right? And
+价值四和我们的商店。只是不太合身，好吗？和
+
+152
+00:14:28,440 --> 00:14:33,890
+that's then the result of the entire evaluation . So, this block will produce
+这就是整个评估的结果。那么这个挡路呢就会产生
+
+153
+00:14:33,890 --> 00:14:38,940
+the value four, an integer object with the value four and an updated store where
+值4、值为4的整数对象和更新后的存储，其中
+
+154
+00:14:38,940 --> 00:14:45,450
+location l has the value twelve. So, the next expression I would like to take a
+位置l的值为12。所以，下一个表达式我想用一个
+
+155
+00:14:45,450 --> 00:14:52,130
+look at is the if, then, else expression and to evaluate if, then, else what do we
+请看IF，THEN，ELSE表达式，并计算IF，THEN，ELSE我们要做什么
+
+156
+00:14:52,130 --> 00:14:58,630
+do? Actually there should be if, then, else. See of course, so evaluating if,
+做?实际上应该有如果，那么，其他的。当然看到了，所以评估是否，
+
+157
+00:14:58,630 --> 00:15:02,340
+then, else as well. First we have to evaluate the, the predicate and it's done
+那么，其他的也一样。首先我们要评估一下这个谓词，然后就完成了
+
+158
+00:15:02,340 --> 00:15:07,450
+in the same store, the same context as the overall expression and if the result is
+在同一存储区中，返回与整个表达式相同的上下文，并且如果结果为
+
+159
+00:15:07,450 --> 00:15:12,610
+true If the, if the Boolean predicate returns the value true. Then we want to
+如果布尔谓词返回值TRUE，则为TRUE。那么我们想要
+
+160
+00:15:12,610 --> 00:15:16,820
+evaluate just the true branch and not the false branch so that's why you only see
+只评估真分支，而不是假分支，这就是为什么您只能看到
+
+161
+00:15:16,820 --> 00:15:22,170
+here, evaluation of e2 and e3 isn't mentioned anywhere and just know here that
+这里，任何地方都没有提到e2和e3的评估，这里只知道
+
+162
+00:15:22,170 --> 00:15:28,070
+the predicate may have side effects and so e2 is evaluated in whatever store that e1
+谓词可能有副作用，因此在任何存储e1中评估e2
+
+163
+00:15:28,070 --> 00:15:32,120
+produces And then the results of the entire expression is the value of e2.
+生成，然后整个表达式的结果是e2的值。
+
+164
+00:15:32,120 --> 00:15:37,060
+Okay, that's v and also just the final store is produced by running the then
+好的，这就是v，最后的存储也是通过运行
+
+165
+00:15:37,060 --> 00:15:43,780
+branch. And there is a symmetric rule for what happens if the predicate evaluates
+布兰奇。如果谓词求值，则会发生什么情况有一个对称规则
+
+166
+00:15:43,780 --> 00:15:50,620
+the false. In that case, you would evaluate e3 and not e2. Next we'll take a
+虚假的。在这种情况下，您将计算e3而不是e2。接下来我们要做一个
+
+167
+00:15:50,620 --> 00:15:55,160
+look with what happens with while loops and cool. So there are two cases. First if
+看看While循环和酷发生了什么。所以有两个案例。首先，如果
+
+168
+00:15:55,160 --> 00:16:01,260
+the predicate of the while loop evaluates the false, okay. Well, in this case the
+WHILE循环的谓词计算FALSE，好的。嗯，在这种情况下，
+
+169
+00:16:01,260 --> 00:16:05,090
+loop body is not going to execute, alright so the first thing we do is we evaluate
+循环体不会执行，所以我们要做的第一件事就是计算
+
+170
+00:16:05,090 --> 00:16:11,070
+the predicate and that's done in the same context as the evaluation of the overall
+谓词和它是在与整体评估相同的上下文中完成的
+
+171
+00:16:11,070 --> 00:16:14,510
+expression and if the predicate is false then we exit the loop and so the results
+表达式，如果谓词为假，则退出循环，因此结果
+
+172
+00:16:14,510 --> 00:16:19,570
+of the loop is void. The value void and just whatever store resulting from
+是无效的。值无效以及由此产生的任何存储
+
+173
+00:16:19,570 --> 00:16:25,190
+evaluating the predicate. The other possibility is that the predicate
+评估谓词。另一种可能性是谓词
+
+174
+00:16:25,190 --> 00:16:30,710
+evaluates the true. So here we evaluate the predicate again in the same context as
+计算TRUE。因此，在这里，我们在相同的上下文中再次计算谓词，如下所示
+
+175
+00:16:30,710 --> 00:16:35,390
+the overall loop. And if the predicate evaluates the true then we're going to run
+整个循环。如果谓词的计算结果为真，那么我们将运行
+
+176
+00:16:35,390 --> 00:16:39,620
+the loop audio once. Okay. So we'll evaluate the loop audio and also that's
+循环音频一次。好吧。所以我们将评估循环音频，也就是
+
+177
+00:16:39,620 --> 00:16:45,070
+done in this, in whatever store results from evaluating the predicate. Evaluating
+在评估谓词得到的任何存储结果中执行此操作。评估
+
+178
+00:16:45,070 --> 00:16:49,670
+the loop audio is g onna give us a value of v and a new store s2 and then what we
+循环音频将给我们一个值v和一个新存储s2，然后我们
+
+179
+00:16:49,670 --> 00:16:54,580
+need to do is we need to go back around and execute the loop again and how can we
+需要做的是，我们需要返回并再次执行循环，我们如何才能
+
+180
+00:16:54,580 --> 00:17:00,430
+do that? Well, we're really just running the whole loop in the new context. So, the
+这样做吗？嗯，我们实际上只是在新的背景下运行整个循环。所以呢，这个
+
+181
+00:17:00,430 --> 00:17:07,430
+next thing we do is we evaluate the entire loop. Right in the new store So, after I
+接下来我们要做的是评估整个循环。就在新店里，所以，在我
+
+182
+00:17:07,730 --> 00:17:13,020
+execute the loop by, loop body one time, then we go around and just evaluate the
+执行循环，循环主体一次，然后我们遍历并只计算
+
+183
+00:17:13,020 --> 00:17:18,150
+loop again And when this may run for zero or more iterations, alright. And when I
+再次循环，当这可能运行零次或多次迭代时，好的。当我
+
+184
+00:17:18,150 --> 00:17:23,810
+finally terminate, if it terminates, it will produce it will produce a new store
+最后终止，如果它终止，它将产生它将产生一个新的存储
+
+185
+00:17:23,810 --> 00:17:28,670
+s3 evaluated while because always produced the value of a void. And then what we'll
+S3求值时，因为始终生成空值。然后我们要做的是
+
+186
+00:17:28,670 --> 00:17:33,310
+produce for the entire loops, for the entire expression is the value void and
+为整个循环生成，为整个表达式生成的值为void和
+
+187
+00:17:33,310 --> 00:17:40,170
+the update and store s3. The next interesting expression to take a look at
+更新并存储S3。下一个要看的有趣的表达式
+
+188
+00:17:40,170 --> 00:17:46,470
+is the let expression. So recall how, what this looks like so let and cool has a
+是let表达式。所以回想一下，这看起来是什么样子，让和酷有一个
+
+189
+00:17:46,470 --> 00:17:51,430
+variable thing declared and it's type and an initializer which is optional so this
+声明的变量事物及其类型，以及一个可选的初始值设定项，因此此
+
+190
+00:17:51,430 --> 00:17:56,270
+is the value that the identifier will be initialized to and then the expression in
+是标识符将初始化为的值，然后是
+
+191
+00:17:56,270 --> 00:18:00,490
+which that new variable is available. And so how do we evaluate this? Well first,
+新变量是否可用。那么，我们如何评估这一点呢？那么首先呢，
+
+192
+00:18:00,490 --> 00:18:04,590
+we're going to evaluate the initial value of the, of the new variables. So we
+我们要计算新变量的初值。所以我们
+
+193
+00:18:04,590 --> 00:18:10,590
+evaluate e1 and as usual that's done in the initial store it produces possibly
+评估E1，并像往常一样，在它可能产生的初始存储中完成
+
+194
+00:18:10,590 --> 00:18:16,430
+modified store. And now the question is, what are going to, what's going to be the
+修改过的商店。现在的问题是，什么会，什么会是
+
+195
+00:18:16,430 --> 00:18:21,910
+context here for the evaluation of e2 for the body of the latter? And so it seems
+这里的上下文是为后者的身体评估e2吗？看起来就是这样
+
+196
+00:18:21,910 --> 00:18:26,380
+clear that it's going to involve s1 because it has all the updates from e2 but
+很明显，它将涉及S1，因为它有来自e2的所有更新，但是
+
+197
+00:18:26,380 --> 00:18:31,170
+it also has to have this new identifier in it. And so how are we going to do that?
+它还必须在其中包含此新标识符。那么我们要怎么做呢？
+
+198
+00:18:31,170 --> 00:18:38,170
+So, what we want is to have a new environment e but with new binding of ID
+因此，我们想要的是有一个新的环境e，但具有新的ID绑定
+
+199
+00:18:38,830 --> 00:18:43,240
+to refresh location. So, we're introducing a new variable. Remember that the
+若要刷新位置，请执行以下操作。所以，我们引入了一个新的变量。请记住，
+
+200
+00:18:43,240 --> 00:18:47,150
+environment has tracked all the free variables so this is one situation where
+环境已经跟踪了所有自由变量，所以这是一种情况
+
+201
+00:18:47,150 --> 00:18:51,240
+you should going to extend the environment e with the new binding, alright. And that
+您应该使用新的绑定来扩展环境e，好的。那就是
+
+202
+00:18:51,240 --> 00:18:54,810
+location, the location for the new variable has to be a fresh location. We
+位置，则新变量的位置必须是新位置。我们
+
+203
+00:18:54,810 --> 00:18:59,410
+don't want to conflict with any other memory locations we are already using.
+不想与我们已经使用的任何其他内存位置冲突。
+
+204
+00:18:59,410 --> 00:19:04,570
+Okay And so, we're going to allocate a new memory location for the variable And then
+好的，我们将为变量分配一个新的内存位置，然后
+
+205
+00:19:04,570 --> 00:19:09,600
+the store, the new store will also will be like as one as we said we have to include
+商店，新商店也会像我们说的那样，我们必须包括
+
+206
+00:19:09,600 --> 00:19:14,150
+all the, the values for s1 But also, we can have these new location for the
+所有的，S1的值，而且，我们还可以将这些新位置
+
+207
+00:19:14,150 --> 00:19:20,620
+variable and that's going to have the initial value of the variable e1. To
+变量，它会有变量E1的初始值。至
+
+208
+00:19:20,620 --> 00:19:24,780
+express that we need a new location, we're going to introduce a new operation on the
+表示我们需要一个新的地点，我们将在
+
+209
+00:19:24,780 --> 00:19:30,470
+store which gives us a new fresh location. So new lo applied to a store it's just
+它给了我们一个新的新鲜地点。所以新的LO申请了一家商店，只是
+
+210
+00:19:30,470 --> 00:19:36,250
+going to give us some location that isn't being used by the store. So, the store has
+会给我们一些没有被商店使用的位置。所以，这家商店有
+
+211
+00:19:36,250 --> 00:19:41,190
+a domain where it's a mapping from locations to values and we'll just pick
+一个域，其中它是从位置到值的映射，我们只需选择
+
+212
+00:19:41,190 --> 00:19:47,690
+some new location that isn't in the current list of locations within the store
+不在商店内当前位置列表中的某些新位置
+
+213
+00:19:47,690 --> 00:19:51,390
+and that will be the one returned or that will be one, that will be the one returned
+这将是退还的，或者那将是退还的，那将是退还的
+
+214
+00:19:51,390 --> 00:19:55,660
+by new lo. Okay, so new lo if you can think of As modeling the memory allocation
+以新的方式。好的，如果您可以将新loo看作是对内存分配进行建模的话
+
+215
+00:19:55,660 --> 00:20:02,660
+function in the runtime system. So, then, here we can write out the rule. So, this
+函数在运行时系统中运行。那么，我们可以在这里写出规则。那么这个呢，这个
+
+216
+00:20:02,900 --> 00:20:06,610
+is the most complicated rule we seen so far. So, I'll just take a moment to walk
+是我们到目前为止看到的最复杂的规则。所以，我就花点时间走一走
+
+217
+00:20:06,610 --> 00:20:13,610
+through it All right? So, the first thing we do is we evaluate e1, the initializer
+一切顺利吗？因此，我们要做的第一件事是评估初始值设定项E1
+
+218
+00:20:13,770 --> 00:20:18,460
+for the new variable, okay? So just like before, this is done in the same context
+新的变量，好吗？因此，就像以前一样，这是在相同的上下文中完成的
+
+219
+00:20:18,460 --> 00:20:22,240
+as the overall expression and this is going to give us a value for e1 and an
+作为整体表达式，这将为我们提供e1和
+
+220
+00:20:22,240 --> 00:20:25,620
+updated store, all right? Then in the updated store, using the updated store
+更新商店，好吗？然后在更新后的存储中，使用更新后的存储
+
+221
+00:20:25,620 --> 00:20:32,059
+here we find an unused location, l new. Okay And then we're going to create a
+在这里我们找到了一个未使用的位置，l新的。好的，然后我们要创建一个
+
+222
+00:20:32,059 --> 00:20:39,059
+store where that new location has, has the value of e1. So we're going to store the
+存储在新位置所在位置的值为E1。所以我们要存储
+
+223
+00:20:39,850 --> 00:20:44,620
+value of e1 at that new location. We're going to update the store s1 to reflect
+该新位置的E1的值。我们将更新商店S1以反映
+
+224
+00:20:44,620 --> 00:20:49,420
+that and further more we're going to extend our environment with the new
+此外，我们还将使用新的
+
+225
+00:20:49,420 --> 00:20:54,820
+identifier which will be stored at this new location and this is the context then.
+将存储在这个新位置的标识符，这就是上下文。
+
+226
+00:20:54,820 --> 00:20:59,240
+Okay, with this updated environment in store in which we evaluate the body of the
+好的，有了这个更新的环境，我们在其中评估了
+
+227
+00:20:59,240 --> 00:21:04,850
+lab which will produce the value b2 and possible update in store s2 and those are
+Lab将在存储s2中生成值b2和可能的更新，它们是
+
+228
+00:21:04,850 --> 00:21:07,360
+the results of the overall expression.
+整体表达式的结果。
+

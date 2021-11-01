@@ -1,0 +1,75 @@
+0
+00:00:01,250 --> 00:00:05,940
+So to summarize our discussion of Recursive Descent Parsing, it's a simple in general
+因此，总结一下我们对递归下降解析的讨论，一般来说，这是一个简单的
+
+1
+00:00:05,940 --> 00:00:10,980
+parsing strategy. You can parse any Context-Free Grammar using Recursive Descent,
+解析策略。您可以使用递归下降来解析任何上下文无关文法，
+
+2
+00:00:10,980 --> 00:00:14,960
+so it's very general in that respect. It cannot work with Left-Recursive
+所以在这方面是非常普遍的。它不能与左递归一起使用
+
+3
+00:00:14,960 --> 00:00:19,470
+Grammar so you must eliminate The Left Recursion. Now in principle,
+语法，所以你必须去掉左递归。现在原则上讲，
+
+4
+00:00:19,470 --> 00:00:22,789
+this can be automatically. You can have Algorithms that will eliminate the
+这可以是自动的。您可以使用算法来消除
+
+5
+00:00:22,789 --> 00:00:27,760
+Left Recursion. In practice, people eliminate the Left Recursion by hand and the
+左递归。在实践中，人们用手来消除左递归，
+
+6
+00:00:27,760 --> 00:00:31,240
+reason for that is that you need to know what the grammar is that you're using
+原因是您需要知道您正在使用的语法是什么
+
+7
+00:00:31,240 --> 00:00:35,000
+so that you can write the semantic actions. And we haven't talked about semantic
+这样您就可以编写语义动作。我们还没有谈到语义
+
+8
+00:00:35,000 --> 00:00:41,440
+actions yet but we will see them shortly. And because you wanted to know exactly
+目前还没有行动，但我们很快就会看到。因为你想确切地知道
+
+9
+00:00:41,440 --> 00:00:45,329
+what grammar, form of grammar it has, people generally do the elimination of
+它有什么语法，它的语法形式，人们一般都是做消除的
+
+10
+00:00:45,329 --> 00:00:50,399
+left-recursion on their own. But that's not difficult to do. And in fact, recursion
+它们自己的左递归。但这并不难做到。事实上，递归
+
+11
+00:00:50,399 --> 00:00:54,620
+descent is a popular strategy in practice. There are a lot to be more complicated,
+在实践中，下降是一种流行的策略。还有很多事情要更复杂，
+
+12
+00:00:54,620 --> 00:00:58,140
+but actually compilers in fact with complicated grammars use recursive
+但实际上，具有复杂语法的编译器使用递归
+
+13
+00:00:58,140 --> 00:01:02,219
+descent because it is so general. So, for example GCC is front-end
+下降是因为它太笼统了。那么比如说GCC就是前端，
+
+14
+00:01:02,219 --> 00:01:04,350
+is a handwritten Recursive Descent Parser.
+是一个手写的递归下降解析器。
+

@@ -1,0 +1,190 @@
+0
+00:00:04,509 --> 00:00:08,709
+In this video, we're going to use our example automaton for recognizing viable
+在这段视频中，我们将使用示例自动机来识别可行的
+
+1
+00:00:08,709 --> 00:00:15,709
+prefixes, to introduce one more idea, The idea of a valid item. To refresh your
+前缀，来介绍另一个概念，有效项目的概念。要刷新您的
+
+2
+00:00:16,890 --> 00:00:19,890
+memory, here's where we left off last time. This is the complete
+记忆，这就是我们上次讲到的地方。这是全部的
+
+3
+00:00:19,890 --> 00:00:25,199
+nondeterministic automaton for recognizing the viable prefixes of the example grammar
+识别实例文法可行前缀的非确定自动机
+
+4
+00:00:25,199 --> 00:00:30,539
+[sound]. And Using the standard subset of states construction, we can build a
+[声音]。并且使用状态构造的标准子集，我们可以构建
+
+5
+00:00:30,539 --> 00:00:34,890
+deterministic automaton that is equivalent to the non-deterministic automaton. So
+与非确定自动机等价的确定自动机。所以
+
+6
+00:00:34,890 --> 00:00:39,600
+here's the deterministic automaton that recognizes exactly the same language. This
+这是能够识别完全相同语言的确定性自动机。这
+
+7
+00:00:39,600 --> 00:00:44,069
+automa, this deterministic automaton notices the viable prefixes, of our
+Automa，这个确定的自动机注意到我们的
+
+8
+00:00:44,069 --> 00:00:49,719
+example grammar. But now notice that each state is a set of items. So there's a set
+示例语法。但现在请注意，每个州都是一组项目。所以有一套
+
+9
+00:00:49,719 --> 00:00:54,670
+of non-deterministic automaton states, in each of these states. And recall that what
+不确定的自动机状态，在这些状态中的每一个。回想一下，什么
+
+10
+00:00:54,670 --> 00:00:59,749
+that means is that the non-deterministic automaton could be in any one of these
+这意味着非确定性自动机可能在其中的任何一个中
+
+11
+00:00:59,749 --> 00:01:05,650
+states. And in particular, this state here is the start state because it has the item
+各州。具体地说，这里的状态是开始状态，因为它有项
+
+12
+00:01:05,650 --> 00:01:12,650
+S prime goes to dot E. The states of this deterministic automaton are called
+S的质数是点e。这个确定性自动机的状态被称为
+
+13
+00:01:13,600 --> 00:01:18,260
+variously cananugal collections of items or the cananugal collections of LR zero
+项目的各种Cananugal集合或LR Zero的Cananugal集合
+
+14
+00:01:18,260 --> 00:01:22,530
+items. If you look in the dragon book it gives another way of constructing the LR
+物品。如果你看一下龙书，它给出了另一种构建LR的方式
+
+15
+00:01:22,530 --> 00:01:28,050
+zero items than the one that I gave. Mine is somewhat simplified but I think also a
+比我给的那件零件。我的稍微简化了一些，但我认为
+
+16
+00:01:28,050 --> 00:01:33,270
+little easier to understand if you are seeing this for the first time. Now we
+如果你是第一次看到这个，那就更容易理解了。现在我们
+
+17
+00:01:33,270 --> 00:01:40,090
+need another definition. We'll say that a given item is valid for a viable prefix
+需要另一个定义。我们会说给定的项对于可行的前缀是有效的
+
+18
+00:01:40,090 --> 00:01:45,300
+alpha beta. If the following is true, that beginning from the start symbol, this is
+阿尔法·贝塔。如果以下条件为真，即从开始符号开始，则这是
+
+19
+00:01:45,300 --> 00:01:52,159
+our extra start symbol, and by a series of right-most derivation steps, we can get to
+我们额外的开始符号，通过一系列最右边的派生步骤，我们可以得到
+
+20
+00:01:52,159 --> 00:01:58,050
+a configuration, alpha-x-omega, and then in one step, x can go to beta-gamma. And,
+一个构型，α-x-ω，然后在一个步骤中，x可以变成β-γ。和,
+
+21
+00:01:58,050 --> 00:02:05,050
+what this says is after parsing alpha and beta, after seeing. Alpha and beta on the
+这里说的是在解析了alpha和beta之后，在看到。Alpha和Beta在
+
+22
+00:02:05,409 --> 00:02:10,420
+stack, the valid items are the possible tops of the stack of items. That, that we
+堆栈中，有效项是项堆栈的可能顶部。那个，那个我们
+
+23
+00:02:10,419 --> 00:02:14,639
+could, that this item, could be the determination state of the
+会不会，这个项目，会不会是
+
+24
+00:02:14,639 --> 00:02:21,450
+nondeterministic automaton. A simpler way of explaining the same idea is that for a
+非确定性自动机。解释相同概念的一种更简单的方法是，对于
+
+25
+00:02:21,450 --> 00:02:27,650
+given viable prefix alpha the items that are valid in that prefix are exactly the
+在给定可行前缀alpha的情况下，该前缀中有效的项恰好是
+
+26
+00:02:27,650 --> 00:02:31,659
+items that are in the final state of the DFA after it reads that prefix. So these
+读取该前缀后处于DFA最终状态的项目。所以这些都是
+
+27
+00:02:31,659 --> 00:02:38,659
+are the items that describe the state after you've seen the stack alpha. Now, an
+是在您看到堆栈alpha之后描述状态的项。现在，一个
+
+28
+00:02:39,829 --> 00:02:44,920
+item is often valid for many, many prefixes. So, for example, the item T goes
+项通常对多个前缀有效。所以，举个例子，项目T是这样的
+
+29
+00:02:44,920 --> 00:02:51,920
+to open paren .e closed paren is valid for all sequences of open parens. And to see
+要打开Paren，.E闭合Paren对所有左括号序列都有效。并且要看到
+
+30
+00:02:52,099 --> 00:02:56,840
+that, We can just look at our automaton and confirm that if we see an open paren,
+我们只要看看我们的机器人就可以确认，如果我们看到一个张开的帕伦，
+
+31
+00:02:56,840 --> 00:03:00,329
+remember, this is the start state. So if we see an open paren, we take this
+请记住，这是开始状态。所以如果我们看到一个敞开的帕伦，我们拿着这个
+
+32
+00:03:00,329 --> 00:03:04,849
+transition, we wind up in this state here. And then every open paren we see, we just
+过渡的时候，我们就到了这个状态。然后我们看到的每一个开放的帕伦，我们只是
+
+33
+00:03:04,849 --> 00:03:10,310
+go round and round in this state. So if I have a sequence of five open parens as my
+在这种状态下转来转去。所以如果我有一个由五个左括号组成的序列作为我的
+
+34
+00:03:10,310 --> 00:03:16,540
+input, then I'll have transitions one, two, three, four, five, all looping in
+输入，然后我会有一个、二个、三个、四个、五个转换，所有这些都循环进入
+
+35
+00:03:16,540 --> 00:03:22,430
+this state. And notice that this item. Is, in, is one of the items in that state. And
+这种状态。请注意这件物品。是，在，是处于那种状态的物品之一。和
+
+36
+00:03:22,430 --> 00:03:27,109
+that just says that this item is valid for any prefix, or for, excuse me, any
+那就是说这个项目对任何前缀都有效，或者，对不起，对任何
+
+37
+00:03:27,109 --> 00:03:29,030
+sequence of open parens.
+左括号的序列。
+

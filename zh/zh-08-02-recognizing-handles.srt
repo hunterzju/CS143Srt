@@ -1,0 +1,750 @@
+0
+00:00:05,270 --> 00:00:09,309
+Welcome back, in this video we're gonna talk about the key ideas behind techniques
+欢迎回来，在这段视频中，我们将谈论技术背后的关键思想
+
+1
+00:00:09,309 --> 00:00:16,309
+for recognizing handles. There is good news and bad news when it comes to
+用于识别句柄。当涉及到的时候，有好消息和坏消息
+
+2
+00:00:17,900 --> 00:00:23,740
+recognizing handles. The bad news is that there is no known efficient algorithm that
+识别句柄。坏消息是，目前还没有已知的高效算法
+
+3
+00:00:23,740 --> 00:00:28,550
+recognizes handles in general. So for an arbitrary grammar, we don't have a fast
+通常可以识别句柄。所以对于任意的语法，我们没有快速
+
+4
+00:00:28,550 --> 00:00:33,410
+way to find the handles when we're parsing. The good news is that there are
+我们在解析时找到句柄的方法。好消息是，有
+
+5
+00:00:33,410 --> 00:00:37,930
+heuristics for guessing handles, and for some context free grammars, for some
+猜测句柄的启发式方法，以及一些上下文无关语法的启发式方法
+
+6
+00:00:37,930 --> 00:00:42,079
+fairly large classes of context free grammars, these heuristics always identify
+相当大的上下文无关文法类，这些启发式方法总是识别
+
+7
+00:00:42,079 --> 00:00:48,950
+the handles correctly. We can illustrate the situation with a Venn diagram. If we
+手柄正确。我们可以用维恩图来说明情况。如果我们
+
+8
+00:00:48,950 --> 00:00:53,130
+start with a set of all context free grammars, then the unambiguous context
+从一组所有上下文无关文法开始，然后是明确的上下文
+
+9
+00:00:53,130 --> 00:00:57,989
+free grammars are a sub-set of those, and then an even smaller set are called the
+自由文法是这些文法的一个子集，然后还有一个更小的文法集被称为
+
+10
+00:00:57,989 --> 00:01:03,510
+LR(k) grammars. And here, just to remind you, 'l' stands for left to right scan,
+LR(K)文法。这里，提醒一下，‘l’代表从左向右扫描，
+
+11
+00:01:03,510 --> 00:01:08,670
+'r' stands for rightmost variation, and 'k' stands for the number of tokens of
+‘r’代表最右边的变体，‘k’代表的令牌数
+
+12
+00:01:08,670 --> 00:01:15,670
+look ahead. Now the LRK grammars are one of the most general deterministic families
+往前看。目前，LRK文法是最普遍的确定性文法之一
+
+13
+00:01:15,799 --> 00:01:19,659
+of deterministic grammars that we know of. But those aren't the ones that are
+我们所知道的决定论语法。但那些不是
+
+14
+00:01:19,659 --> 00:01:24,159
+actually used in practice. Most of the bottom up tools that are practical, use
+实际上是在实践中使用的。大多数实用的自下而上工具都使用
+
+15
+00:01:24,159 --> 00:01:29,249
+what are called the LALRK grammars, which are a subset of the LRK grammars. And then
+这就是所谓的LALRK文法，它是LRK文法的子集。然后
+
+16
+00:01:29,249 --> 00:01:34,670
+what we're gonna talk mostly about is a simplification of those called the simple
+我们将主要讨论的是那些被称为简单的
+
+17
+00:01:34,670 --> 00:01:39,219
+LR grammars, or the SLRK context free grammars. And these containment
+LR文法，或SLRK上下文无关文法。而这些遏制措施
+
+18
+00:01:39,219 --> 00:01:44,209
+relationships or [inaudible] that is, there are grammars that are [inaudible]. R
+关系或[听不见]也就是说，有一些语法是[听不见的]。R
+
+19
+00:01:44,209 --> 00:01:49,509
+k but not s l r k, for every k, and similarly there are grammars that are l r
+而不是s，l，r，k，对于每个k，类似地，有一些语法是l，r
+
+20
+00:01:49,509 --> 00:01:56,509
+k for every k that are not l a l r k. As we've already said, it's not obvious how
+对于不是l，a，l，r，k的每一个k，正如我们已经说过的，并不是很明显
+
+21
+00:01:58,770 --> 00:02:03,619
+to detect handles. So, what does the parser know? Well, it sees the stack. At
+要检测句柄，请执行以下操作。那么，解析器知道什么呢？嗯，它看到的是堆栈。在…
+
+22
+00:02:03,619 --> 00:02:08,770
+each step it knows the stack that it has already, constructed. And so let's see how
+它的每一步都知道它已经构建的堆栈。所以让我们看看如何
+
+23
+00:02:08,770 --> 00:02:12,630
+much progress we can make just thinking about, what information we can get from
+光是想一想，我们就可以取得很多进步，我们可以从哪些信息中获得
+
+24
+00:02:12,630 --> 00:02:17,280
+the stack. So here's a definition. We're going to say that alpha is a viable
+堆栈。所以这里有一个定义。我们要说阿尔法是一个可行的
+
+25
+00:02:17,280 --> 00:02:24,000
+prefix. If there is some omega, such that alpha bar omega is a configuration, a
+前缀。如果存在一些ω，使得阿尔法条ω是一种配置，则
+
+26
+00:02:24,000 --> 00:02:28,080
+valid configuration of a shift reduce parse. Now keep in mind that the alpha
+Shift Reduce分析的有效配置。现在请记住，阿尔法
+
+27
+00:02:28,080 --> 00:02:35,080
+here. This is the stack. And the omega here is the rest of the input. And what
+这里。这是堆栈。这里的欧米茄是输入的睡觉。还有什么
+
+28
+00:02:36,960 --> 00:02:40,310
+does that means? That means the parser knows this part. The parser knows alpha,
+那是不是意味着？这意味着解析器知道这一部分。解析器知道阿尔法，
+
+29
+00:02:40,310 --> 00:02:44,500
+it doesn't know much of omega. It can do some look-ahead, it can look at a small
+它对欧米茄了解不多。它可以做一些前瞻，它可以看小的
+
+30
+00:02:44,500 --> 00:02:49,840
+prefix of omega, usually just one token, but it certainly doesn't know the whole
+omega的前缀，通常只有一个标记，但它肯定不知道整个
+
+31
+00:02:49,840 --> 00:02:56,840
+thing. So what does a viable prefix mean? Well, a viable prefix is a string that
+一件事。那么，一个可行的前缀是什么意思呢？一个可行的前缀是一个字符串，该字符串
+
+32
+00:02:58,630 --> 00:03:03,890
+does not extend past the right end of the handle. And the reason we call it a viable
+不会超出手柄的右端。我们之所以称它为一种可行的
+
+33
+00:03:03,890 --> 00:03:07,780
+prefix is because it is a prefix of the handle. So as long as the parser has
+前缀是因为它是句柄的前缀。所以只要解析器有
+
+34
+00:03:07,780 --> 00:03:12,850
+viable prefixes on the stack, no parsing error has been detected. And really the
+堆栈上的可行前缀，未检测到分析错误。而且真的是
+
+35
+00:03:12,850 --> 00:03:18,320
+definition is just giving a name to something, it's not anything very deep,
+定义就是给某物起个名字，它不是很深奥的东西，
+
+36
+00:03:18,320 --> 00:03:23,160
+the fact that alpha bar omega is, is viable, that's just saying we haven't
+阿尔法条欧米伽是，是可行的，这只是说我们还没有
+
+37
+00:03:23,160 --> 00:03:28,120
+encountered an error. That this is some state of a shift reduce parse. It hasn't
+遇到错误。这是某种移位归约解析状态。它还没有
+
+38
+00:03:28,120 --> 00:03:32,540
+said yet how we're going to identity it or anything like that; it's just saying that
+还说我们将如何识别它或诸如此类的东西；它只是说
+
+39
+00:03:32,540 --> 00:03:39,540
+these are the valid states of shift reduced parse. Now the definition is
+这些是移位简化解析的有效状态。现在的定义是
+
+40
+00:03:40,090 --> 00:03:45,010
+useful in one way if it bring us to the last important fact, important fact number
+如果它把我们带到最后一个重要的事实，重要的事实数字，在某种程度上是有用的
+
+41
+00:03:45,010 --> 00:03:50,360
+three about bottom up parsing. In this effort, any grammar, the set of viable
+三是关于自下而上的解析。在这种努力下，任何语法、集合都是可行的
+
+42
+00:03:50,360 --> 00:03:55,410
+prefixes is a regular language, and this is really an amazing fact, and one that's
+前缀是一种常规语言，这确实是一个令人惊叹的事实，也是
+
+43
+00:03:55,410 --> 00:04:01,990
+going to take us a little while to demonstrate, but this is the key to bottom
+我们要花点时间来演示，但这是进入谷底的关键
+
+44
+00:04:01,990 --> 00:04:06,330
+up parsing. At least all the bottom up parsing tools are based on this fact, that
+向上解析。至少所有自下而上的解析工具都是基于这一事实的，即
+
+45
+00:04:06,330 --> 00:04:13,330
+the set of viable prefix can be recognized by a finite automaton. So, we're going to
+可行前缀集合可以由有限自动机识别。所以，我们要去
+
+46
+00:04:14,240 --> 00:04:18,810
+show how to compute this automaton that accepts the viable prefixes, but first
+演示如何计算接受可行前缀的自动机，但首先
+
+47
+00:04:18,810 --> 00:04:25,610
+we're going to need a number of additional definitions. The first definition we need
+我们需要一些额外的定义。我们需要的第一个定义是
+
+48
+00:04:25,610 --> 00:04:30,509
+is the idea of an item. Now an item is a production that just has a dot somewhere
+是一件物品的想法。现在，一件物品就是在某处有一个圆点的作品
+
+49
+00:04:30,509 --> 00:04:34,310
+on the right hand side. So here's an example. Let's take the production, T goes
+在右手边。这里有一个例子。让我们拿着这部作品，T走吧
+
+50
+00:04:34,310 --> 00:04:37,719
+to open paren, E closed paren. What we're going to do is we're just gonna put the
+要打开Paren，E关闭Paren。我们要做的就是把
+
+51
+00:04:37,719 --> 00:04:41,990
+dot in eve ry possible position on the right hand side. So we'll have one item
+在右手边每一个可能的位置上都有点。所以我们要一件
+
+52
+00:04:41,990 --> 00:04:46,020
+where the dot is all the way at the left end. We'll have one where the dot is all
+这里的圆点一直在左端。我们会有一个圆点都是的
+
+53
+00:04:46,020 --> 00:04:51,139
+the way at the right end. And then we'll have, items where the dot is between every
+路在右边的尽头。然后我们会有一些项目，这些项目的圆点在
+
+54
+00:04:51,139 --> 00:04:56,370
+pair of consecutive symbols. So in this case, there are four items for the
+一对连续的符号。因此，在本例中，有四项用于
+
+55
+00:04:56,370 --> 00:05:03,370
+production. One special case is, what do we do with epsilon productions? Well, for
+制作。一个特例是，我们如何处理epsilon产品？嗯，因为
+
+56
+00:05:03,409 --> 00:05:06,629
+an epsilon production, there is no, there are no symbols on the right hand side.
+一个epsilon制作，没有，在右手边没有符号。
+
+57
+00:05:06,629 --> 00:05:11,180
+We'll just say there is one item, X goes to dot. And these items, you'll see them
+我们只说有一项，X去圆点。而这些物品，你会看到它们
+
+58
+00:05:11,180 --> 00:05:17,550
+referred to, if you, if you look in help, pages and in the literature, as, the LR
+如果您在帮助、页面和文献中查找，则称为LR
+
+59
+00:05:17,550 --> 00:05:23,669
+zero items. Now we're ready to discuss how we recognize viable prefixes. And the
+零个项目。现在我们准备讨论如何识别可行的前缀。以及
+
+60
+00:05:23,669 --> 00:05:29,419
+problem is that the stack has only bits and pieces of the right hand side of
+问题是堆栈只有右侧的零星部分
+
+61
+00:05:29,419 --> 00:05:33,699
+productions. In general most of the time, we don't have a complete right hand side
+制作。一般来说，在大多数情况下，我们没有一个完整的右手边
+
+62
+00:05:33,699 --> 00:05:37,689
+on top of the stack. Most of the time, we only have a part of the right hand side.
+在堆栈的顶部。大多数时候，我们只有右手边的一部分。
+
+63
+00:05:37,689 --> 00:05:43,900
+And. It turns out that what is on the stack is actually not just random it's,
+和。事实证明，堆栈上的内容实际上不仅仅是随机的，
+
+64
+00:05:43,900 --> 00:05:49,150
+it's it actually has a very special structure. In, in these bits and pieces
+它实际上有一个非常特殊的结构。在，在这些零星的东西里
+
+65
+00:05:49,150 --> 00:05:53,860
+are always prefixes of right hand sides of productions. That is in any successful
+始终是积的右手边的前缀。那就是在任何成功的
+
+66
+00:05:53,860 --> 00:05:59,650
+parse what is on the stack always has to be a prefix of the right hand side of some
+分析堆栈上的内容始终必须是某些
+
+67
+00:05:59,650 --> 00:06:05,389
+production or productions. Let's take a look at an example. Let's consider the
+制作或制作。让我们来看一个例子。让我们考虑一下
+
+68
+00:06:05,389 --> 00:06:09,509
+input open paren, [inaudible] closed paren. And here's one of our favorite
+输入打开Paren、[听不见]关闭Paren。这是我们最喜欢的
+
+69
+00:06:09,509 --> 00:06:16,509
+grammars. Now, this configurations, where I have open paren E, [inaudible], on the
+语法。现在，这个配置，其中我打开了Paren E，[听不见]，在
+
+70
+00:06:16,830 --> 00:06:23,599
+stack. Remember that this is our stack. And we have the close [inaudible] in the
+堆栈。请记住，这是我们的堆栈。我们有闭合[听不见]在
+
+71
+00:06:23,599 --> 00:06:28,319
+input. This is actually a state or a valid state of a shift [inaudible]. And you can
+输入。这实际上是转换的一种状态或有效状态[听不见]。而且你可以
+
+72
+00:06:28,319 --> 00:06:34,370
+see here that, open paren E is a prefix of the production. T goes to open paren E,
+看这里，开放的Paren E是作品的前缀。T去打开Paren E，
+
+73
+00:06:34,370 --> 00:06:39,939
+close paren. And after we shift the remaining close paren onto the stack, then
+合上帕伦。在我们将剩余的Close Paren移到堆栈上之后，然后
+
+74
+00:06:39,939 --> 00:06:44,229
+we'll have the complete right hand side, and it will be ready to reduce. So this is
+我们会有完整的右手边，它会准备好减少。那么这就是
+
+75
+00:06:44,229 --> 00:06:51,129
+where the items come in. The item, T goes to open paren E. Dot, closed paren. This
+这些物品是从哪里进来的。项目T去打开Paren E.Dot，关闭Paren。这
+
+76
+00:06:51,129 --> 00:06:57,089
+describes this state of affairs. I t says that so far, we have seen open paren E of
+描述了这种情况。它说到目前为止，我们已经看到了公开赛的
+
+77
+00:06:57,089 --> 00:07:02,159
+this production. And we're hoping in the future to see the closed paren. So another
+这部作品。我们希望将来能看到关门的帕伦。所以又是另一个
+
+78
+00:07:02,159 --> 00:07:05,979
+way of thinking about it is that this item records the fact that we're working on
+我们可以这样想，这个项目记录了我们正在研究的
+
+79
+00:07:05,979 --> 00:07:09,839
+this production. And then so far we've seen this much. Everything to the left of
+这部作品。到目前为止，我们已经看到了这么多。左边的所有东西
+
+80
+00:07:09,839 --> 00:07:13,900
+the dot is what we've already seen and is what is on the stack and. What is to the
+点是我们已经看到的，也是堆栈上的。这对我们来说有什么意义呢？
+
+81
+00:07:13,900 --> 00:07:18,229
+right of the dot is what we're waiting to see before we could possibly reduce. And
+点的右边是我们在可能减少之前等待看到的。和
+
+82
+00:07:18,229 --> 00:07:21,759
+we may or may not see that, remember, the parser doesn't know the input. In this
+我们可能看到也可能没有看到，记住，解析器不知道输入。在这里面
+
+83
+00:07:21,759 --> 00:07:26,210
+case of course, it's the very next, next symbol and so it can see in the
+当然，它就是下一个，下一个符号，所以它可以在
+
+84
+00:07:26,210 --> 00:07:31,020
+look-ahead, but you know at this point in time the parser doesn't know for sure
+向前看，但是您知道，在这个时间点上，解析器还不能确定
+
+85
+00:07:31,020 --> 00:07:33,740
+what's coming up and, you know, and, and, if this dot were further to the left there
+接下来是什么，你知道的，如果这个点再往左一点
+
+86
+00:07:33,740 --> 00:07:38,210
+might be many, many more symbols that we had to go, before we could perform the
+可能会有更多的符号，在我们可以表演之前，我们必须要去掉更多的符号
+
+87
+00:07:38,210 --> 00:07:42,360
+reduction. So anyway, what's to the left of that records what we've already seen.
+减少。不管怎样，左边的内容记录了我们已经看到的东西。
+
+88
+00:07:42,360 --> 00:07:45,659
+And what is to the right of the dot, says that what we are waiting to see on the
+这个点右边的是，我们在等着看的东西，就是我们正在等着看的东西，也就是我们正在等着看的东西。
+
+89
+00:07:45,659 --> 00:07:52,659
+stack, before we can perform a reduction. And now we could talk about the structure
+堆栈，然后我们才能执行缩减。现在我们可以谈谈它的结构
+
+90
+00:07:52,740 --> 00:07:57,360
+of the stack. So you see it's not just arbitrary collections of symbols. In fact,
+堆栈中的。所以你可以看到，这不仅仅是任意的符号集合。事实上,
+
+91
+00:07:57,360 --> 00:08:02,990
+it has this very particular structure. So the stack is actually a stack of prefixes
+它有一个非常特殊的结构。因此堆栈实际上是一堆前缀
+
+92
+00:08:02,990 --> 00:08:07,439
+of right hand sides. So the stack always has this organization where there's a
+右手边的。所以堆栈总是有这样的组织，其中有一个
+
+93
+00:08:07,439 --> 00:08:12,839
+bunch of prefixes, stacked up, literally stacked up on the stack. And what's going
+一堆前缀，堆叠在一起，字面意思是堆叠在一起。那到底是怎么回事呢？
+
+94
+00:08:12,839 --> 00:08:17,629
+to happen is that the ice prefix, if you were to pick a prefix out of this stack of
+如果你从这个堆栈中选择一个前缀，就会发生冰块前缀
+
+95
+00:08:17,629 --> 00:08:23,469
+prefixes, While that must be the prefix of some production. Okay. The right hand side
+前缀，而这必须是某些产品的前缀。好吧。右手边
+
+96
+00:08:23,469 --> 00:08:28,509
+of sum production And what that means is that, that prefix, that [inaudible] prefix
+它的意思是，前缀，那个[听不见的]前缀
+
+97
+00:08:28,509 --> 00:08:33,770
+on the stack, will eventually reduce to the left hand side of that production. So
+在堆栈上，最终会减少到生产的左手边。所以
+
+98
+00:08:33,770 --> 00:08:40,770
+it will eventually reduce to, XI in this case. And then that XI has to be Part of
+在这种情况下，它最终将简化为XI。那么XI就必须是
+
+99
+00:08:41,140 --> 00:08:46,710
+the missing suffix, of the prefix that is below it on the stack. So if I look at the
+堆栈中位于其下方的前缀的缺少后缀。所以如果我看一下
+
+100
+00:08:46,710 --> 00:08:51,160
+previous prefix the one that's right below, prefix [inaudible] on the stack
+上一个前缀正下方的那个，在堆栈上加[听不见]的前缀
+
+101
+00:08:51,160 --> 00:08:55,470
+Then when I perform this reducti on that XI needs to extend that prefix to be
+然后，当我对该XI执行此缩减时，需要将该前缀扩展为
+
+102
+00:08:55,470 --> 00:09:01,690
+closer to a complete right hand side of that particular reduction. Okay so in
+更接近于那个特定减影的完全右侧。好的，那么进来吧
+
+103
+00:09:01,690 --> 00:09:08,690
+particular there's going to be some production. That is going to; already have
+特别是会有一些生产。将要发生的；已经发生的
+
+104
+00:09:09,300 --> 00:09:13,240
+a portion of its right hand side on the stack. So prefix of I minus one. And X I
+它的右手边的一部分在堆叠上。所以前缀i减1。和X i
+
+105
+00:09:13,240 --> 00:09:18,080
+is going to extend that prefix, and then there's gonna be some more stuff possibly
+会扩展这个前缀，然后可能会有更多的东西
+
+106
+00:09:18,080 --> 00:09:23,790
+that we're waiting to see, even after the X I is put there. And recursively, all the
+我们拭目以待，即使在X i被放在那里之后也是如此。递归地，所有的
+
+107
+00:09:23,790 --> 00:09:30,580
+prefixes above prefix K eventually have to reduce to the missing part of the right
+前缀K以上的前缀最终必须减少到右侧缺失的部分
+
+108
+00:09:30,580 --> 00:09:34,330
+hand side of prefix K, the alpha K that goes on the right hand side. [inaudible]
+前缀K的手边，右手边的字母K。[听不见]
+
+109
+00:09:34,330 --> 00:09:39,250
+This image, you have a stack of prefixes we're always working on the top-most
+这张图片，你有一堆我们一直在处理的前缀，最上面
+
+110
+00:09:39,250 --> 00:09:44,110
+prefix on the stack, so you will be always working here on the right and shifting and
+堆栈上的前缀，因此您将始终在这里向右操作，并移动和
+
+111
+00:09:44,110 --> 00:09:48,240
+reducing, but every time we perform a reduction. That has to extend the prefix
+减少，但每次我们执行减少。它必须扩展前缀
+
+112
+00:09:48,240 --> 00:09:51,160
+immediately below it on the stack. And when these, when a bunch of prefixes have
+就在堆栈上它的正下方。当这些，当一堆前缀有
+
+113
+00:09:51,160 --> 00:09:54,590
+been removed from the stack through reductions, then we, when we get to work
+通过减量从堆栈中移除，然后我们，当我们开始工作的时候
+
+114
+00:09:54,590 --> 00:10:01,590
+on the prefixes that are lower in the stack. So let's illustrate this idea with
+在堆栈中位置较低的前缀上。那么让我们用以下几个例子来说明这个想法
+
+115
+00:10:01,630 --> 00:10:06,500
+an example. So here is another input string, and we're gonna use the same
+举个例子。这是另一个输入字符串，我们将使用相同的
+
+116
+00:10:06,500 --> 00:10:11,070
+grammar. You can, you can rewind if you want to see the grammar again. But let's
+语法。你可以，如果你想再看一遍语法，你可以倒回去。但是让我们
+
+117
+00:10:11,070 --> 00:10:18,070
+consider this state where we have open paren, [inaudible] star on the stack. And
+考虑这样的状态，我们在堆栈上有打开的Paren，[听不见]星。和
+
+118
+00:10:18,150 --> 00:10:25,150
+we have int, close paren remaining in the input, 'kay? And so what items would
+我们有INT，CLOSE Paren保留在输入中，‘好吗？那么什么项目会
+
+119
+00:10:26,000 --> 00:10:29,760
+record, what is the, what is the stack structure here and how do the items record
+记录，什么是，这里的堆栈结构是什么，项目是如何记录的
+
+120
+00:10:29,760 --> 00:10:35,140
+it? Well let's start here at the bottom, let's actually work from the bottom up. So
+它?好的，让我们从底部开始，让我们真正地从下往上做。所以
+
+121
+00:10:35,140 --> 00:10:41,550
+we have in start the top of our stack, so we this is the right hand side that we're
+我们从堆栈的顶部开始，所以我们这是我们的右手边
+
+122
+00:10:41,550 --> 00:10:46,740
+currently working on, and that would be a prefix to this production T goes to int
+目前正在开发中，这将是这个产品的前缀T Go to int
+
+123
+00:10:46,740 --> 00:10:53,740
+star T. Okay? So what this says is that we're looking you know, we, we've seen in
+星T好吗？所以这说明我们正在寻找，你知道，我们，我们已经在
+
+124
+00:10:54,890 --> 00:10:58,050
+stars so far, and we're waiting to see [inaudible]. I'm not showing the items,
+到目前为止星星很多，我们在等着看[听不见]。我不会展示物品的，
+
+125
+00:10:58,050 --> 00:11:03,390
+but I'm just showing the productions that this is eventually going to use. Now, the
+但我只是展示最终会用到的作品。现在，
+
+126
+00:11:03,390 --> 00:11:06,800
+one that's below it here, the, the prefix that's below it o n the stack is right
+它下面的这个，它下面的那个堆栈的前缀是对的
+
+127
+00:11:06,800 --> 00:11:11,300
+here in between the open paren and the int. This one's an interesting case. It's
+在开放的Paren和INT之间。这是个有趣的案子。它是
+
+128
+00:11:11,300 --> 00:11:18,300
+actually epsilon. So there's nothing there now on the stack. But eventually once the
+实际上是埃西隆。所以现在堆栈上什么都没有了。但最终一旦
+
+129
+00:11:18,360 --> 00:11:24,950
+int star has reduced to T. Okay? Then that T is going to reduce to E. And currently,
+INT STAR已降为T，明白吗？那么T就会减少到E，而目前，
+
+130
+00:11:24,950 --> 00:11:28,800
+of course, there's not a T there at all. So we've only seen epsilon. We've seen
+当然，那里根本没有T。所以我们只看到了埃西隆。我们已经看到
+
+131
+00:11:28,800 --> 00:11:35,450
+none of the prefix of this production on the stack. And then for the last
+堆栈上没有此产品的前缀。然后最后一次
+
+132
+00:11:35,450 --> 00:11:40,390
+production, the one deepest in the stack, we're currently, we've currently seen an
+生产，堆栈中最深的一个，我们目前，我们目前已经看到
+
+133
+00:11:40,390 --> 00:11:45,380
+open paren. And, we're w-, and we think we're working on this production. T goes
+打开帕伦。而且，我们.，我们认为我们正在制作这部作品。T走了
+
+134
+00:11:45,380 --> 00:11:52,320
+to open paren, E closed paren, alright? So when this E is produced, that will extend
+打开帕伦，E关闭帕伦，好吗？所以当这个E产生时，它会延伸
+
+135
+00:11:52,320 --> 00:11:58,310
+this right hand side. And now we can record all of this with the stack of
+这是右手边。现在我们可以用堆栈记录所有这些
+
+136
+00:11:58,310 --> 00:12:04,880
+items, T goes to open paren dot E, E goes to dot T, and T goes to N star dot T.
+项目，T用来打开Paren点E，E用来打开T点，T用来打开N星点T。
+
+137
+00:12:04,880 --> 00:12:10,280
+Okay, and we just record what we said on the previous slide, that so far, we see
+好的，我们只录制上一张幻灯片上说的内容，到目前为止，我们看到
+
+138
+00:12:10,280 --> 00:12:14,690
+the open paren of this production. We've seen nothing out of the right hand side of
+这部作品中的开诚布公的帕伦。我们没有看到右手边有任何东西
+
+139
+00:12:14,690 --> 00:12:19,980
+this production, and we've seen N star so far of this production. And just notice
+这部作品，到目前为止我们已经看到了这部作品的N星。你只要注意到
+
+140
+00:12:19,980 --> 00:12:24,840
+how the left hand side of each of these productions is going to eventually become
+这些作品的左手边最终会变成什么样子
+
+141
+00:12:24,840 --> 00:12:30,540
+part of the right hand side of the. Of the right, part of the right hand side of the
+右手边的一部分。右手边的一部分，右手边的一部分
+
+142
+00:12:30,540 --> 00:12:37,130
+production we are working on just below it in the stack. So when we've reduced this
+我们正在进行的生产工作就在堆栈中它的正下方。所以当我们减少了这个
+
+143
+00:12:37,130 --> 00:12:42,040
+instar T to T that will extend this production, when it reaches E that will
+将T增加到T，这将扩展此生产，当达到E时，将
+
+144
+00:12:42,040 --> 00:12:49,040
+extend this production To summarize this video, we can say a little more precisely
+延伸这部作品来总结这段视频，我们可以说得更准确一点
+
+145
+00:12:50,090 --> 00:12:54,360
+how we go about recognizing viable prefixes. The crux of the problem is going
+我们如何识别可行的前缀。问题的症结在于
+
+146
+00:12:54,360 --> 00:12:59,240
+to be to recognize a sequence of partial right had sides of production. Where each
+承认部分权利序列是有生产方面的。其中每个
+
+147
+00:12:59,240 --> 00:13:02,840
+of those partial right hand sides can eventually reduce to part of the missing
+这些部分右手边的部分最终可能会减少到丢失的部分
+
+148
+00:13:02,840 --> 00:13:07,370
+suffix of its predecessor Next time, in the next video we're going to actually
+它的前身的后缀，在下一个视频中，我们将实际
+
+149
+00:13:07,370 --> 00:13:10,810
+give the algorithm for implementing this idea.
+给出了实现这一思想的算法。
+

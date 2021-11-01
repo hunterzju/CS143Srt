@@ -1,0 +1,775 @@
+0
+00:00:04,410 --> 00:00:08,130
+[inaudible] Welcome back. At this video, we're going to talk about how [inaudible]
+[听不见]欢迎回来。在这段视频中，我们将谈论[听不见]
+
+1
+00:00:08,130 --> 00:00:12,350
+expressions are used to construct a full lexical specification on the programming
+表达式用于构建关于编程的完整词法规范
+
+2
+00:00:12,350 --> 00:00:19,350
+language. Before we get started, I want to quickly summarize the notation for regular
+语言。在我们开始之前，我想快速总结一下Regular的符号
+
+3
+00:00:23,320 --> 00:00:27,420
+expressions. One of the shorthand?s we talked about last time is a+ which means a
+表情。我们上次谈到的速记之一是a+，意思是a
+
+4
+00:00:27,420 --> 00:00:34,420
+sequence of at least 1a or the language aa'lt;i>. Sometimes you'll see a vertical bar'lt;/i>
+至少1a的序列或语言AA‘lt；i>。有时您会看到竖条；/i>
+
+5
+00:00:34,960 --> 00:00:41,960
+used instead of unions or a + b. Can also be written a vertical bar b and optional a
+用来代替联合或a+b。也可以写成竖线b和可选的a
+
+6
+00:00:43,750 --> 00:00:48,719
+is abbreviation for the regular expression a + epsilon. And then we have character
+是正则表达式a+epsilon的缩写。然后我们就有了性格
+
+7
+00:00:48,719 --> 00:00:54,510
+ranges which allows us to do a big union, a bunch of characters in order. And then
+范围，这让我们可以做一个大的联合，一堆字符按顺序排列。然后
+
+8
+00:00:54,510 --> 00:01:00,039
+one more that's used, that's, that's actually fairly important but we didn't
+还有一个用到了，就是，那其实是相当重要的，但是我们没有
+
+9
+00:01:00,039 --> 00:01:03,289
+discussed last time is the compliment of the character range. So this expression
+上次讨论的是对人物范围的称赞。所以这个表达式
+
+10
+00:01:03,289 --> 00:01:10,289
+here means any character except the characters a through z. So the last
+这里指的是除字符a到z之外的任何字符。
+
+11
+00:01:12,539 --> 00:01:16,160
+lecture, we talked about a specification for the following predicate. Given a
+讲座中，我们讨论了以下谓词的规范。给出了一个
+
+12
+00:01:16,160 --> 00:01:22,580
+string s, is it in the language as the function l of a regular expression. As we,
+字符串s，在语言中是不是正则表达式的函数l。当我们，
+
+13
+00:01:22,580 --> 00:01:25,759
+we define the language of regular expressions and talked about their
+我们定义了正则表达式的语言，并讨论了它们的
+
+14
+00:01:25,759 --> 00:01:32,759
+semantics in terms of sets of strings. And so for any given regular expression, we
+以字符串集表示的语义。因此，对于任何给定的正则表达式，我们
+
+15
+00:01:33,060 --> 00:01:37,580
+could reason out by hand whether a given string was in that language or not, and
+可以手动推断给定的字符串是否使用该语言，并且
+
+16
+00:01:37,580 --> 00:01:41,560
+this turns out not to be enough for what we wanted to do. So just to review, what
+事实证明，这对我们想要做的事情来说是不够的。所以，让我回顾一下，什么
+
+17
+00:01:41,560 --> 00:01:46,670
+is it we wanted to do when we're given an input, which is a bunch of characters, so
+当我们得到一组字符的输入时，我们想要这样做吗，所以
+
+18
+00:01:46,670 --> 00:01:53,110
+here's a string of characters And it can be much longer than just setting
+这里有一个字符串，它可以比仅仅设置
+
+19
+00:01:53,110 --> 00:01:57,640
+characters and. But we actually wanted to do is to partition the string. We want to
+字符和。但我们实际上想要做的是对字符串进行分区。我们想要
+
+20
+00:01:57,640 --> 00:02:02,360
+drop lines in the strings, divide up into the words of language. Now of course each
+在字符串中放入行，分成语言的单词。当然，现在每个人
+
+21
+00:02:02,360 --> 00:02:08,500
+one of these words are to be The language at some regular expression. But just
+这些单词中的一个将作为某个正则表达式的语言。但只是
+
+22
+00:02:08,500 --> 00:02:12,530
+having a, a, a definition or a yes no answers, not quite the same thing as
+具有一个、一个、一个定义或是否答案的，不完全等同于
+
+23
+00:02:12,530 --> 00:02:18,160
+having a method for partitioning a string into its constituting parts. And so we're
+具有将字符串分割成其构成部分的方法的。所以我们要
+
+24
+00:02:18,160 --> 00:02:23,570
+gonna have to adapt regular expressions, to this problem and, and this requires
+我必须调整正则表达式来解决这个问题，这需要
+
+25
+00:02:23,570 --> 00:02:29,110
+some small extensions and that's what this video is all about. So let's talk about
+一些小的扩展，这就是这个视频的全部内容。所以我们来谈谈
+
+26
+00:02:29,110 --> 00:02:33,850
+how to do this. The first thing we're going to do, when we want to design the
+如何做到这一点。我们要做的第一件事是，当我们想要设计
+
+27
+00:02:33,850 --> 00:02:37,950
+lexical specification of the language is we have to write the regular expression,
+语言的词法规范就是我们要写正则表达式，
+
+28
+00:02:37,950 --> 00:02:41,110
+for the lexing to be to the [inaudible] classes and we, we talked about how to do
+为了让词法兴去上[听不见的]课，我们讨论了如何做到这一点
+
+29
+00:02:41,110 --> 00:02:46,390
+this last time. So, for the numbers we might use digit plus desire as our regular
+这是最后一次。因此，对于数字，我们可以使用数字加愿望作为我们的常量
+
+30
+00:02:46,390 --> 00:02:49,480
+expression and we might have a category of keywords which is just the list of all
+表达式，我们可能有一个关键字类别，它只是所有关键字的列表
+
+31
+00:02:49,480 --> 00:02:54,780
+the, keywords in the language. We would have some category perhaps of identifiers.
+语言中的关键字。我们可能会有某种类别的标识符。
+
+32
+00:02:54,780 --> 00:02:59,470
+There is the, definitely we talked about it last time. Sequences of letters or
+那就是，我们上一次肯定谈到了。字母序列或
+
+33
+00:02:59,470 --> 00:03:04,069
+digits that begin with, with the letter and then we're having a bunch of. Bunch of
+以字母开头的数字，然后我们有一串。一堆
+
+34
+00:03:04,069 --> 00:03:08,810
+punctuations, things like open parens, close parens, etc. So we write down a
+标点符号，如左括号、右括号等。所以我们写下一个
+
+35
+00:03:08,810 --> 00:03:15,350
+whole set of regular expressions. One for each syntactic category in the language
+一整套正则表达式。一个对应于语言中的每个句法类别
+
+36
+00:03:15,350 --> 00:03:21,170
+and that's the starting point for our lexical specification. The second step,
+这就是我们词汇规范的起点。第二步，
+
+37
+00:03:21,170 --> 00:03:24,660
+what we're going to do is we're going to construct a gigantic regular expression
+我们要做的是构建一个巨大的正则表达式
+
+38
+00:03:24,660 --> 00:03:29,380
+which just matches all the lexings for all the tokens and this is just the union, of
+它正好匹配所有令牌的所有词条，这只是
+
+39
+00:03:29,380 --> 00:03:33,880
+all the regular expressions, that we wrote out on the previous slides. So we'll just
+我们在前面的幻灯片中写出的所有正则表达式。所以我们就干脆
+
+40
+00:03:33,880 --> 00:03:37,950
+take the union of all those regular expressions and that forms, the lexical
+以所有这些正则表达式和形式的并集为例，词法
+
+41
+00:03:37,950 --> 00:03:41,680
+specification of the language. And, we'll just write this out, we don't really care
+语言的规范。我们就把这个写下来，我们真的不在乎
+
+42
+00:03:41,680 --> 00:03:46,870
+what these regular expressions are but they're just some, set r1, r2 and so on
+这些正则表达式是什么，但它们只是一些，设置R1、R2等等
+
+43
+00:03:46,870 --> 00:03:53,870
+and the whole thing we're going to call r. And now, here's the heart of how we
+我们将把整个东西命名为r。现在，这是我们如何
+
+44
+00:03:55,900 --> 00:04:01,380
+actually use this bicycle's specification to perform lexical analysis. So, let's
+实际上是用这辆自行车的规格来进行词法分析。那么，让我们
+
+45
+00:04:01,380 --> 00:04:07,900
+consider an input. We input the string x1 up to xn. And now for every prefix of that
+考虑一个输入。我们输入字符串x1到xn。现在，对于它的每个前缀
+
+46
+00:04:07,900 --> 00:04:13,569
+input, okay. We're going to check whether it's in the language of the regular
+输入，好的。我们要检查一下它是不是用普通人的语言写的
+
+47
+00:04:13,569 --> 00:04:15,910
+expression. So we're gonna look at some prefix trying with the first character and
+表达式。所以我们要看一些前缀尝试使用第一个字符
+
+48
+00:04:15,910 --> 00:04:21,810
+we're gonna ask ourselves is it in the language of that big regular expression.
+我们会问自己，它是不是用那个大正则表达式的语言。
+
+49
+00:04:21,810 --> 00:04:26,660
+And if it is, if it is in the language, well then we know in particular that, that
+如果是，如果是在语言中，那么我们特别知道，
+
+50
+00:04:26,660 --> 00:04:30,680
+prefix is in the language of one in the constituen t regular expressions cuz
+前缀是构成正则表达式中的一的语言，因为
+
+51
+00:04:30,680 --> 00:04:37,680
+remember that r =. The sum of all the different talking classes of our language,
+记住r=。我们语言的所有不同谈话课的总和，
+
+52
+00:04:38,520 --> 00:04:45,300
+okay. So we know that this prefix x1 through xi is in the language of sum rj.
+好吧。所以我们知道这个前缀x1到xi是用和Rj的语言表示的。
+
+53
+00:04:45,300 --> 00:04:51,280
+Okay And so that we know that, that's a word. In our language is one of. Is in one
+好的，我们知道了，这是一个词。在我们的语言中是其中之一。是合而为一的
+
+54
+00:04:51,280 --> 00:04:54,120
+of the talking classes that we're interested in, And so what we do is we
+我们感兴趣的谈话课程，所以我们所做的就是
+
+55
+00:04:54,120 --> 00:05:00,210
+simply delete that prefix from the input and then we go back to three and we
+只需从输入中删除前缀，然后我们返回到3，然后我们
+
+56
+00:05:00,210 --> 00:05:05,620
+repeat. And in this way we keep biting off prefixes of the input and we'll do this
+重复一遍。通过这种方式，我们不断地咬掉输入的前缀，然后我们就可以这样做了
+
+57
+00:05:05,620 --> 00:05:12,620
+until the string is empty and then we have [inaudible] analyzed the entire program.
+直到字符串为空，然后我们分析了整个程序(听不见)。
+
+58
+00:05:13,120 --> 00:05:16,780
+Now this algorithm has a couple of ambiguities or a couple of things that are
+现在这个算法有几个模棱两可的地方，或者说有几件事是
+
+59
+00:05:16,780 --> 00:05:21,430
+under specified and those are actually interesting. So let's take a moment and
+在指定的范围内，而这些实际上是很有趣的。所以让我们花点时间
+
+60
+00:05:21,430 --> 00:05:28,220
+talk about those. The first question is how much input is actually used? So, let's
+说说这些吧。第一个问题是实际使用了多少输入？那么，让我们
+
+61
+00:05:28,220 --> 00:05:34,650
+consider the following situation. Let's say that, we have, the x1 to xi, is in the
+请考虑以下情况。比方说，我们有x1到xi，在
+
+62
+00:05:34,650 --> 00:05:40,490
+language of our lexical specification. And let's say there's a different prefix,
+我们的词汇规范的语言。假设有一个不同的前缀，
+
+63
+00:05:40,490 --> 00:05:46,150
+that's also in the language of our lexical specification and of course your I is, is
+这也是我们的词汇规范中的语言，当然你的i is，is
+
+64
+00:05:46,150 --> 00:05:51,990
+not equal to J. What does that look like? Well, it would look like the following
+不等于J。那看起来像什么？嗯，它看起来如下所示
+
+65
+00:05:51,990 --> 00:05:58,990
+kind of situation; we would have our input string. And we have two different prefixes
+一种情况；我们将拥有我们的输入字符串。我们有两个不同的前缀
+
+66
+00:05:59,000 --> 00:06:03,639
+of the input that are both valid talking classes and the question is which one of
+这两个输入都是有效的谈话类，问题是哪一个是
+
+67
+00:06:03,639 --> 00:06:07,669
+these do we want? And, you know just be kind of [inaudible] here to have a
+这些是我们想要的吗？而且，你知道，在这里有一种[听不见]的
+
+68
+00:06:07,669 --> 00:06:14,669
+concrete example, let's consider. What happens when a =,,,, = is at the, is at
+具体的例子，让我们来考虑一下。当a=，=在、在时会发生什么情况
+
+69
+00:06:15,169 --> 00:06:18,430
+the beginning of the input. After we chopped off a bunch of other input and
+输入的开始。在我们切断了一堆其他输入之后
+
+70
+00:06:18,430 --> 00:06:22,949
+perhaps we have this sub-string or this prefix of the input that we're looking at
+也许我们有我们正在查看的输入的这个子字符串或前缀
+
+71
+00:06:22,949 --> 00:06:27,169
+and the question is, you know should this be regarded as a single = which would be
+问题是，你知道，这是否应该被认为是一个单一的=，这将是
+
+72
+00:06:27,169 --> 00:06:32,040
+an assignment operator in most languages or would it be regards to =,,,, = which in
+大多数语言中的赋值运算符，或者是否将其视为=、=，其中
+
+73
+00:06:32,040 --> 00:06:36,830
+some language is a comparison operator? And, and this is an example we've looked
+有些语言是比较运算符吗？这是我们看过的一个例子
+
+74
+00:06:36,830 --> 00:06:40,180
+at before and discussed, and there's actually a well defined answer to this
+并进行了讨论，实际上对此有一个明确的答案
+
+75
+00:06:40,180 --> 00:06:44,970
+question. And, it is, that we should always take the longer one and this has a
+问题来了。它是，我们应该总是花更长的时间，这有一个
+
+76
+00:06:44,970 --> 00:06:51,970
+name that's c alled the maximal munch. So the rule is that when faced with a choice
+名字叫“最大的咀嚼”。所以规则是，当面临选择的时候
+
+77
+00:06:53,490 --> 00:06:58,759
+of two different prefixes of the input, either which would be a valid token, we
+输入的两个不同前缀(这两个前缀都可能是有效的令牌)，我们
+
+78
+00:06:58,759 --> 00:07:02,530
+should always choose the longer one. And, the reason for this is that's just the way
+应该总是选择较长的那个。这样做的原因就是这就是
+
+79
+00:07:02,530 --> 00:07:09,020
+humans themselves read things so when we see =,,,, = we don't see two different
+人类自己读东西，所以当我们看到=，=时，我们看不到两个不同的东西
+
+80
+00:07:09,020 --> 00:07:13,990
+equal operators, we see =,,,, = and if I. Look at, you know that the sentence that I
+相等运算符，我们看到=，如果是I。看，你知道这句话，I
+
+81
+00:07:13,990 --> 00:07:20,840
+wrote up here, you know when we look at HOW, we don't see three letters. We gather
+写在这里，你知道，当我们看的时候，我们看不到三个字母。我们聚集在一起
+
+82
+00:07:20,840 --> 00:07:26,610
+that altogether in one long token. We go as far as we can until we see a separator
+总而言之，这是一个很长的令牌。我们尽我们所能，直到看到分隔符
+
+83
+00:07:26,610 --> 00:07:31,320
+and so because this is the way humans work; we make the tools work the same way
+因为这是人类的工作方式，所以我们让工具以同样的方式工作
+
+84
+00:07:31,320 --> 00:07:38,320
+and this normally or almost always does the right thing. Second question is which
+这通常或几乎总是做正确的事。第二个问题是
+
+85
+00:07:40,180 --> 00:07:45,630
+token should be used if more than one token matches? So what do I mean by that?
+如果有多个令牌匹配，是否应该使用令牌？我这么说是什么意思？
+
+86
+00:07:45,630 --> 00:07:50,590
+Well, again we have our prefix of the input and it's in the language of our
+好的，我们同样有我们的输入前缀，它是用我们的语言编写的
+
+87
+00:07:50,590 --> 00:07:55,470
+lexical specification and just remember that the lexical specification itself
+词汇规范，只需记住词汇规范本身
+
+88
+00:07:55,470 --> 00:08:01,900
+again is made up as the union, a bunch of regular expressions for token classes.
+同样由联合组成，这是一组用于令牌类的正则表达式。
+
+89
+00:08:01,900 --> 00:08:07,610
+Now, since that, since this prefix, is in the language of the lexical, lexical
+现在，既然这个前缀是在词汇的语言中，
+
+90
+00:08:07,610 --> 00:08:11,910
+specification, that means that it again, it must be in the language of some
+规范，也就是说，它一定是用某种语言
+
+91
+00:08:11,910 --> 00:08:18,340
+particular token class, rj. But nothing says that it isn't also in the language of
+特定令牌类，RJ。但没有人说它不也是用
+
+92
+00:08:18,340 --> 00:08:22,479
+a completely different token class. Meaning, at the same string could be
+一个完全不同的令牌类。也就是说，在同一字符串中可能是
+
+93
+00:08:22,479 --> 00:08:26,889
+interpreted as a, as one of two different tokens and the question is if this
+被解释为两个不同令牌中的一个，问题是如果这
+
+94
+00:08:26,889 --> 00:08:33,339
+happens, which one should we pick? So, for example just to make this concrete, Recall
+发生了，我们该选哪一个呢？所以，举个例子，为了让这件事具体化，回想一下
+
+95
+00:08:33,339 --> 00:08:39,269
+that we could have a lexical specification for key words which would be things like
+我们可以对关键字有一个词汇规范，比如
+
+96
+00:08:39,269 --> 00:08:46,269
+if and else, and so on, and also for identifiers. And then the identifier was
+IF和ELSE等等，还有标识符。然后标识符是
+
+97
+00:08:52,110 --> 00:08:59,110
+the letter Followed by a letter or a digit. Repeat it, okay. And if you look at
+字母后跟字母或数字。重复一遍，好吗。如果你看一下
+
+98
+00:09:07,509 --> 00:09:13,610
+these two specifications, you'll see that the string if, IF is both of them. So IF
+这两个规范，您会看到字符串if，if都是它们。所以如果
+
+99
+00:09:13,610 --> 00:09:20,610
+is in the language of keywords, And it's also in the language of the identifiers.
+是关键字的语言，也是标识符的语言。
+
+100
+00:09:24,639 --> 00:09:29,309
+And so should we treat it as a keyword or an identifier. Now the normal rule in most
+因此，我们应该将其视为关键字还是标识符。现在大多数人的正常规则是
+
+101
+00:09:29,309 --> 00:09:33,819
+languages is that if it's a keyword then i t's always a keyword and you know the
+语言是，如果它是一个关键字，那么它总是一个关键字，你知道
+
+102
+00:09:33,819 --> 00:09:39,769
+identifier is actually don't include the keywords. And but actually it's a real
+标识符实际上是不包括关键字的。但实际上这是一个真正的
+
+103
+00:09:39,769 --> 00:09:44,019
+pain to write out the identifiers in such a way that you explicitly exclude the key
+以显式排除键的方式写出标识符是一件很痛苦的事
+
+104
+00:09:44,019 --> 00:09:48,069
+words. This is a much more natural definition I've written here for the
+单词。这是我在这里为
+
+105
+00:09:48,069 --> 00:09:52,360
+identifiers. And so the way this gets resolved is by a priority ordering and
+标识符。所以解决这个问题的方式是通过优先顺序和
+
+106
+00:09:52,360 --> 00:09:59,360
+typically the rule is to choose the one Listed first. Okay. So when there is a
+通常情况下，规则是先选择列出的那个。好吧。所以当有一个
+
+107
+00:10:05,100 --> 00:10:11,239
+choice, when there is more than one token class which the string might be long, the
+选项，当有多个字符串可能很长的令牌类时，
+
+108
+00:10:11,239 --> 00:10:16,220
+one that is listed first is given higher priority. So in our file defining our
+最先列出的优先级较高。所以在我们的文件中定义了我们的
+
+109
+00:10:16,220 --> 00:10:21,129
+lexical specification we would put the key words before the identifiers just as we
+词法规范我们会将关键字放在标识符之前，就像我们
+
+110
+00:10:21,129 --> 00:10:28,129
+have done here. The final question is what to do if no rule matches. What if I have
+在这里都做了些什么。最后一个问题是，如果没有匹配的规则，该怎么办。如果我有呢？
+
+111
+00:10:29,550 --> 00:10:36,550
+the prefix of the input? That is not in the language Of my lexical specification.
+输入的前缀是什么？这不在我的词汇规范中的语言中。
+
+112
+00:10:40,050 --> 00:10:43,769
+Now this can actually arise. Certainly there are lots and lots of strings that
+现在，这实际上可能会出现。当然有很多很多的弦
+
+113
+00:10:43,769 --> 00:10:49,279
+are not gonna be in the language of the lexical specification of most languages.
+不会出现在大多数语言的词汇规范中。
+
+114
+00:10:49,279 --> 00:10:53,550
+And the question is how to handle that situation? So it's very important for
+问题是如何处理这种情况？所以这对我们来说非常重要
+
+115
+00:10:53,550 --> 00:10:57,670
+compilers to do good error handling. They can't simply crash. They need to be able
+编译器做好错误处理。它们不能简单地坠毁。他们需要能够
+
+116
+00:10:57,670 --> 00:11:01,239
+to give the user, the programmer a feedback about where the error is and what
+为了向用户提供关于错误位置和错误内容的反馈
+
+117
+00:11:01,239 --> 00:11:05,170
+kind of error it is so we do need to handle this gracefully. And the best
+这是一种错误，所以我们确实需要优雅地处理这个问题。也是最好的
+
+118
+00:11:05,170 --> 00:11:12,170
+solution for lexical analysis is to not do this so don't let this ever happen. And so
+词法分析的解决方案是不这样做，所以不要让这种情况发生。因此，
+
+119
+00:11:13,759 --> 00:11:20,619
+what we wanted to do instead is to write a category of error strings, So, all of the
+相反，我们想要做的是编写一类错误字符串，因此，所有
+
+120
+00:11:20,619 --> 00:11:27,619
+strings. Not in the lexical specification of the language. So we write out a regular
+弦。不在该语言的词汇规范中。所以我们写了一份定期报告
+
+121
+00:11:34,589 --> 00:11:39,059
+expression. Again this is another regular expression here. For all the possible
+表达式。同样，这也是另一个正则表达式。尽一切可能
+
+122
+00:11:39,059 --> 00:11:43,569
+error strings, all the possible erroneous strings that could occur as you know
+错误字符串，如您所知，所有可能出现的错误字符串
+
+123
+00:11:43,569 --> 00:11:50,569
+invalid lexical input and then we put it last. Put it last in priority. So that it
+无效的词汇输入，然后我们将其放在最后。把它放在最后。这样它就可以
+
+124
+00:11:53,189 --> 00:11:58,749
+will match after everything else matches and, and the reason for putting it last.
+会在其他一切都匹配之后再匹配，以及把它放在最后的原因。
+
+125
+00:11:58,749 --> 00:12:03,850
+Is that, this actually allows us to be a little bit sloppy in, in how we define the
+那就是，这实际上允许我们在如何定义
+
+126
+00:12:03,850 --> 00:12:07,850
+error strings. It can actually overlap, with earlier regular expressi ons. We can
+错误字符串。它实际上可以与早期的常规表达式重叠。我们可以的
+
+127
+00:12:07,850 --> 00:12:11,829
+include things in the error strings that are in fact not errors. But, if we put it
+在错误字符串中包含实际上不是错误的内容。但是，如果我们把它
+
+128
+00:12:11,829 --> 00:12:16,549
+last in priority, then it will only match if no earlier regular expression match and
+优先级最后，则仅当没有更早的正则表达式匹配时，它才会匹配，并且
+
+129
+00:12:16,549 --> 00:12:20,389
+so in fact, they will only catch the error strings. Then the action that we'll take
+因此，实际上，它们只会捕获错误字符串。然后我们将采取的行动
+
+130
+00:12:20,389 --> 00:12:23,459
+when we match the error string will be the prints in the error message and give
+当我们匹配错误字符串时，将在错误消息中打印并给出
+
+131
+00:12:23,459 --> 00:12:30,459
+device a feedback like where it is in the file and such. To wrap up this video,
+设备提供反馈，如它在文件中的位置等等。为了结束这段视频，
+
+132
+00:12:31,639 --> 00:12:35,989
+regular expressions are very nice and concise notation for string patterns but
+正则表达式是字符串模式的非常好和简明的表示法，但是
+
+133
+00:12:35,989 --> 00:12:40,259
+to use them in lexical analysis requires a couple of small extensions. Some
+要在词法分析中使用它们，需要几个小扩展。一些
+
+134
+00:12:40,259 --> 00:12:46,540
+particulars, a couple of ambiguities we have to resolve, we want our matches to be
+细节，我们必须解决的几个模棱两可的问题，我们希望我们的匹配是
+
+135
+00:12:46,540 --> 00:12:53,540
+as long as possible. So we take. As much input at a time as we can and we also want
+越久越好。所以我们就拿走了。一次尽可能多地投入，我们还希望
+
+136
+00:12:55,749 --> 00:13:02,749
+to choose the highest Priority match. So, the regular expressions are given a
+若要选择最高优先级的匹配，请执行以下操作。因此，正则表达式被赋予一个
+
+137
+00:13:05,709 --> 00:13:10,079
+priority. The different token classes have priorities and, when there's tie, when the
+优先权。不同的令牌类具有优先级，并且当存在平局时，
+
+138
+00:13:10,079 --> 00:13:14,980
+same, prefix of the input could match more than one, we pick the one that has the
+相同，输入的前缀可以匹配多个，我们选择具有
+
+139
+00:13:14,980 --> 00:13:19,040
+highest priority. Typically this has done just by listing them in order in a file
+最高优先级。通常，只需在文件中按顺序列出它们就可以做到这一点
+
+140
+00:13:19,040 --> 00:13:23,259
+and the ones listed first have higher priority over the ones listed later. I
+而且排在第一位的优先于排在后面的优先级。我
+
+141
+00:13:23,259 --> 00:13:26,009
+just wanna warn you that when you go to right lexical specifications, when you go
+我只想提醒你，当你进入正确的词汇规范，当你
+
+142
+00:13:26,009 --> 00:13:30,980
+to actually implement, lexor for a language, the interaction of these two
+要真正实现一种语言的词法分析器，这两者的交互
+
+143
+00:13:30,980 --> 00:13:35,209
+rules that we take longest possible matches and we break ties and favor of the
+我们尽可能长时间比赛的规则，我们打破平局，偏爱
+
+144
+00:13:35,209 --> 00:13:41,749
+highest priority rules. That this lead to some tricky situations and it's not always
+最高优先级规则。这会导致一些棘手的情况，而且并不总是
+
+145
+00:13:41,749 --> 00:13:45,739
+obvious that you're getting exactly what you want, You have to think carefully
+显然你得到的正是你想要的，你必须仔细考虑
+
+146
+00:13:45,739 --> 00:13:50,410
+about the Ordering of the rules and it's actually how you write the rules so that
+关于规则的顺序，它实际上是如何写规则的，所以
+
+147
+00:13:50,410 --> 00:13:55,220
+you get the behavior that you desire. And finally to handle errors, we typically
+你会得到你想要的行为。最后，为了处理错误，我们通常
+
+148
+00:13:55,220 --> 00:14:01,100
+write out. Catch all regular expression that soaks up all the possible erroneous
+写出来。捕获吸收所有可能的错误的所有正则表达式
+
+149
+00:14:01,100 --> 00:14:07,299
+strings and give it the lowest priority so that it only triggers if no valid token
+字符串，并为其赋予最低优先级，以便只有在没有有效令牌时才会触发
+
+150
+00:14:07,299 --> 00:14:11,209
+class matches some piece of the input. If I leave, we haven't discussed these yet
+类与输入的某些部分匹配。如果我走了，我们还没有讨论过这些
+
+151
+00:14:11,209 --> 00:14:15,999
+but they are very good algorithm to know for implementing all of these and in fact
+但它们是实现所有这些的非常好的算法，而且实际上
+
+152
+00:14:15,999 --> 00:14:20,319
+we'll be able to do it in only single pass over the input and with very few
+我们只需通过一次输入即可完成此操作，而且使用的资源很少
+
+153
+00:14:20,319 --> 00:14:25,160
+operations per character. Just a few, Just a simple table look up and this would be
+每个字符的操作数。只有几个，只要简单地查一下桌子，这就是
+
+154
+00:14:25,160 --> 00:14:27,170
+the subject of our future videos.
+我们未来视频的主题。
+

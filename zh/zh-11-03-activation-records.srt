@@ -1,0 +1,740 @@
+0
+00:00:03,810 --> 00:00:07,720
+In the previous video, we talked about activation but we never said what
+在上一个视频中，我们谈到了激活，但从未说过
+
+1
+00:00:07,720 --> 00:00:11,680
+information we actually need to keep for an activation. That's the topic of this
+我们实际上需要为激活保存的信息。这就是今天的主题
+
+2
+00:00:11,680 --> 00:00:18,680
+video. An activation record is all the information that's needed to manage the
+录像带。激活记录是管理
+
+3
+00:00:20,359 --> 00:00:27,289
+execution of one procedure activation And often, this is also called a frame that
+执行一个过程激活，这通常也称为帧，该帧
+
+4
+00:00:27,289 --> 00:00:31,740
+means exactly the same thing as activation record. These are just two names for the
+与激活记录的含义完全相同。这只是两个名称
+
+5
+00:00:31,740 --> 00:00:38,740
+same thing. Now one interesting fact about procedure activations is that they have
+一样的事。现在关于程序激活的一个有趣的事实是，他们有
+
+6
+00:00:39,230 --> 00:00:43,500
+more information in them than you might expect. So in particular, when a procedure
+其中包含的信息比你想象的要多。所以特别是当一个程序
+
+7
+00:00:43,500 --> 00:00:48,590
+f calls a procedure g, the activation record for g will actually have
+f调用过程g，则g的激活记录将实际具有
+
+8
+00:00:48,590 --> 00:00:53,670
+information not only about g but very frequently also about the calling function
+不仅是关于g的信息，而且非常频繁地也是关于调用函数的信息
+
+9
+00:00:53,670 --> 00:00:58,080
+f. So typically the activation record for a procedure will contain a mixture of
+f.因此，通常过程的激活记录将包含
+
+10
+00:00:58,080 --> 00:01:05,080
+information both about that procedure and about the procedure that called it. Now,
+有关该过程和调用它的过程的信息。现在,
+
+11
+00:01:06,210 --> 00:01:10,810
+up this point, we haven't said why we need to keep information about activations at
+到目前为止，我们还没有说明为什么需要将有关激活的信息保存在
+
+12
+00:01:10,810 --> 00:01:15,890
+all And the reason is that there is some state associated with this procedure
+这一切的原因是，有一些状态与此过程相关联
+
+13
+00:01:15,890 --> 00:01:19,509
+activation that is needed on order to properly execute the procedure and we have
+正确执行该过程所需的激活，我们有
+
+14
+00:01:19,509 --> 00:01:23,179
+to track that somewhere and that's the activation record is gonna be forced. It's
+去某个地方追踪它，那就是激活记录将被强制。它是
+
+15
+00:01:23,179 --> 00:01:27,929
+gonna be the whole, the information needed to properly execute the procedure. So,
+将是正确执行程序所需的全部信息。所以,
+
+16
+00:01:27,929 --> 00:01:31,310
+let's look at that in a little bit more detail. Let's consider this situation
+让我们更详细地看一下这一点。让我们考虑一下这种情况
+
+17
+00:01:31,310 --> 00:01:37,530
+where a procedure F calls procedure G And what is going to happen so conceptually
+其中过程F调用过程G，概念上会发生什么
+
+18
+00:01:37,530 --> 00:01:43,200
+what happens when f calls g is that f is suspended. F is going to stop Executing
+当f调用g时会发生什么，那就是f被挂起了。F将停止执行
+
+19
+00:01:43,200 --> 00:01:47,929
+while g is running. So g is going to be using the processor and all the resources
+而G正在运行。因此g将使用处理器和所有资源
+
+20
+00:01:47,929 --> 00:01:52,920
+of the machine. But when g completes, we wanna start executing f again, f is going
+这台机器的。但是当g完成时，我们想要再次开始执行，
+
+21
+00:01:52,920 --> 00:01:58,909
+to resume. And so in between, while g is running, we have to save the state of the
+重新开始。因此在这两者之间，当g运行时，我们必须保存
+
+22
+00:01:58,909 --> 00:02:03,990
+procedure activation of f somewhere so that we can resume it properly and that's
+在某个地方激活f的过程，这样我们就可以正确地恢复它，那就是
+
+23
+00:02:03,990 --> 00:02:10,509
+again what the activation record is for, And so g's activation record Is going to
+再次说明激活记录的用途，因此g的激活记录将
+
+24
+00:02:10,508 --> 00:02:15,540
+have to have information in it that will help us to complete the execution of g, so
+必须包含帮助我们完成g的执行的信息，所以
+
+25
+00:02:15,540 --> 00:02:19,900
+there will be some inform ation about g that we just need in order to run g, But
+将会有一些关于g的信息，我们只需要这些信息就可以运行g，但是
+
+26
+00:02:19,900 --> 00:02:24,540
+also, g's activation record is going to have to store whatever we need to be able
+此外，g的激活记录将必须存储我们需要的任何内容
+
+27
+00:02:24,540 --> 00:02:31,540
+to resume the execution of procedure f. So let's work through an example. Here's one
+来继续执行过程f，让我们通过一个例子来完成。这里有一个
+
+28
+00:02:32,140 --> 00:02:38,140
+of the programs that we looked at in the last video, and here is a design for a
+我们在上一个视频中看过的程序，这是一个
+
+29
+00:02:38,140 --> 00:02:43,439
+concrete activation record for the procedure f. So we'll have one position
+程序f的具体激活记录。所以我们有一个位置
+
+30
+00:02:43,439 --> 00:02:48,650
+for the results of f that will hold the return value after we finished execution
+对于f的结果，它将在我们完成执行后保存返回值
+
+31
+00:02:48,650 --> 00:02:53,709
+of f. There will be a position here for the argument to f so is it, so fy takes
+这里会有一个论点的位置，所以它是，所以fy取
+
+32
+00:02:53,709 --> 00:02:59,060
+one parameter so I only need one word here to hold the, the argument to the function.
+一个参数，所以我在这里只需要一个词来保存，函数的自变量。
+
+33
+00:02:59,060 --> 00:03:04,250
+There will be a control link so a pointer to the previous or the caller's activation
+将有一个控制链接，因此指向上一个或调用者激活的指针
+
+34
+00:03:04,250 --> 00:03:10,430
+and we'll also have a slot for the return address so the address in memory or the
+我们还会有一个用于存放返回地址的槽，因此内存中的地址或
+
+35
+00:03:10,430 --> 00:03:16,650
+address of the instruction that we are supposed to jump to after the execution of
+的执行后我们应该跳转到的指令地址。
+
+36
+00:03:16,650 --> 00:03:23,650
+f completes. So now let's just execute this program by hand and work out what the
+F完成。现在让我们手动执行这个程序，并计算出
+
+37
+00:03:24,730 --> 00:03:30,000
+activation records will look like down the stack. So when the front program is first
+激活记录将看起来像堆栈中的下一层。所以当前面的节目第一个
+
+38
+00:03:30,000 --> 00:03:37,000
+invoked, it will call main. There will be an activation record for main And we were
+调用时，它将调用Main。将会有Main的激活记录，而我们
+
+39
+00:03:37,430 --> 00:03:40,659
+not gonna worry about that. We're just gonna focus on that. So there's some stuff
+不会担心这个的。我们只会把重点放在这一点上。所以有一些东西
+
+40
+00:03:40,659 --> 00:03:46,730
+for main but we're not going to do to, to, to talk about that And then main is going
+但是我们不会去，去，去讨论这个，然后Main就会去做，去
+
+41
+00:03:46,730 --> 00:03:51,109
+to call f, all right And so, when main calls f, an activation record will be
+要调用f，好的，所以当main调用f时，激活记录将是
+
+42
+00:03:51,109 --> 00:03:58,109
+pushed onto the stack and we'll have four slots and or four fields for values. And
+推送到堆栈上，我们将有四个槽和/或四个值字段。和
+
+43
+00:04:01,760 --> 00:04:05,480
+what we're going now while the first lines for the result well is just starting to
+我们现在要做的是，而结果的第一行才刚刚开始
+
+44
+00:04:05,480 --> 00:04:09,219
+run if it's just beginning execution so there is nothing to put there at the
+如果它刚刚开始执行，则运行，这样就没有什么可以放在
+
+45
+00:04:09,219 --> 00:04:14,379
+moment. That gets filled in when f returns. The second position will hold the
+稍等片刻。它在f返回时被填充。第二个职位将持有
+
+46
+00:04:14,379 --> 00:04:21,069
+argument to f so that would be the number three. The third slot will hold the
+参数赋给f，所以这就是数字3。第三个插槽将容纳
+
+47
+00:04:21,069 --> 00:04:26,970
+controlling so that's gonna point back. To the activation for main and the fourth
+控制欲所以那会指向后面。去激活Main和Fourth
+
+48
+00:04:26,970 --> 00:04:32,130
+position will hold the return address and this is actually not completely trivial
+位置将保存回邮地址，这实际上并不是完全无关紧要的
+
+49
+00:04:32,130 --> 00:04:36,569
+because f is called in multiple places. So if you look at the program, there's a
+因为f在多个地方被调用。所以如果你看一下这个节目，你会发现
+
+50
+00:04:36,569 --> 00:04:43,569
+called f in main and there's a call to f inside of f itself. And so Depending on
+在main中称为f，在f本身内部有一个对f的调用。所以这取决于
+
+51
+00:04:44,680 --> 00:04:49,220
+where the function is called from after that function completes with one or return
+在该函数以1或返回完成后调用该函数的位置
+
+52
+00:04:49,220 --> 00:04:53,220
+to a different address. In the case of the main, when this called F completes we
+寄到不同的地址。在Main的情况下，当这个调用F完成时，我们
+
+53
+00:04:53,220 --> 00:04:58,580
+wanna return to the. Whatever instructions comes after the called f which is just
+想要回到。任何指令都在被调用的f之后，它只是
+
+54
+00:04:58,580 --> 00:05:02,330
+gonna be something that wraps up the execution program since it's the only exit
+将会是结束执行程序的东西，因为它是唯一的出口
+
+55
+00:05:02,330 --> 00:05:08,979
+point of main inside of f. It's going to be the conclusion of the conditionals. So,
+f内部的主点，它将是条件句的结论。所以,
+
+56
+00:05:08,979 --> 00:05:13,759
+this point double star here is going to be at whatever is left on the conditional
+这里的点双星将在条件条件下剩下的任何位置
+
+57
+00:05:13,759 --> 00:05:17,849
+then the return from F. And so depending on what F is called from, we wanna return
+然后是F的返回值，根据F是从什么地方调用的，我们想要返回
+
+58
+00:05:17,849 --> 00:05:24,849
+to one of two different places, okay? So, in this case F is being called from main
+去两个不同的地方之一，好吗？因此，在本例中，F是从Main调用的
+
+59
+00:05:25,090 --> 00:05:31,720
+and so we'll put the single star address in that position of the activation record,
+因此我们将把单星地址放在激活记录的那个位置，
+
+60
+00:05:31,720 --> 00:05:38,150
+All right? So then f is called the second time, the body of f executes and the
+好的?因此，第二次调用f，执行f的主体，然后
+
+61
+00:05:38,150 --> 00:05:42,900
+argument three is not zero that's way we wined up calling f again but that means
+参数3不是零，这就是我们再次调用f的方式，但这意味着
+
+62
+00:05:42,900 --> 00:05:48,479
+that another activation record will be pushed on to the stack that will also help
+另一个激活记录将被推送到堆栈上，这也会有所帮助
+
+63
+00:05:48,479 --> 00:05:52,340
+for slots as an activation record for f (I probably should label these) so that's an
+对于作为f的激活记录的插槽(我可能应该标记这些记录)，所以这是一个
+
+64
+00:05:52,340 --> 00:05:58,580
+activation of f, so it's also an activation of f. And what goes in this one
+激活f，所以这也是f的激活。
+
+65
+00:05:58,580 --> 00:06:03,729
+well again the result doesn't have anything initially in it. The argument in
+再说一遍，结果一开始没有任何内容。中的论点
+
+66
+00:06:03,729 --> 00:06:09,129
+this case would be two. The controlling in this case will point back to the previous
+这个案子应该是两个。本例中的控件将指向上一个
+
+67
+00:06:09,129 --> 00:06:15,759
+activation of f and the return address in this case will be the point double star.
+在这种情况下，f和返回地址的激活将是点双星。
+
+68
+00:06:15,759 --> 00:06:21,740
+So after two calls to f, this is what the stack will look like with this particular
+因此，在两次调用f之后，这就是堆栈在这个特殊情况下的样子
+
+69
+00:06:21,740 --> 00:06:28,120
+activation record design. So, here is the same picture, just running a bit more
+激活记录设计。所以，这是同样的图片，只是多放了一点
+
+70
+00:06:28,120 --> 00:06:33,039
+neatly, and there's one additional we want point out which is at this stack of
+整齐地，我们还想指出一个额外的问题，那就是在这个堆栈中
+
+71
+00:06:33,039 --> 00:06:39,500
+activation records and let me. Delineate the activation records here Is not as
+激活记录，让我来。此处描述的激活记录不是
+
+72
+00:06:39,500 --> 00:06:44,699
+extract as the kinds of stacks who were probably taught about in a data structures
+提取为可能在数据结构中讲授的堆栈类型
+
+73
+00:06:44,699 --> 00:06:49,930
+class if you've had such a class. So here, there are distinct activation records on
+如果你上过这样的课的话。在这里，有不同的激活记录
+
+74
+00:06:49,930 --> 00:06:52,930
+the stack and we treat them as such, in the Runtime system we'll treat them as
+堆栈，我们就是这样对待它们的，在运行时系统中，我们会把它们当作
+
+75
+00:06:52,930 --> 00:06:58,780
+such But this is also like one gigantic array. All o f this Data is just laid out
+但这也像是一个巨大的阵列。所有这些数据都是刚刚布置好的
+
+76
+00:06:58,780 --> 00:07:05,169
+in contiguous memory. These were all contiguous addresses and one is activation
+在连续的记忆中。这些都是连续的地址，其中一个是激活
+
+77
+00:07:05,169 --> 00:07:09,650
+record here just follows on with the next address merely after the previous
+这里的记录只是紧跟在前一个地址之后的下一个地址
+
+78
+00:07:09,650 --> 00:07:15,419
+activation record. And compiler is, compiler writer will often play tricks to
+激活记录。而编译器就是，编译器编写者经常会耍花招
+
+79
+00:07:15,419 --> 00:07:20,430
+exploit the facts that these activations are adjacent to each other in memory and
+利用这些激活在内存中彼此相邻的事实
+
+80
+00:07:20,430 --> 00:07:27,430
+we'll see one such potential trick in just a moment. To summarize some of the
+稍后我们将看到这样一个潜在的把戏。总结一下一些
+
+81
+00:07:27,780 --> 00:07:33,080
+highlights of these examples so far, I wanna repeat the main is not very
+这些例子的亮点到目前为止，我想重复的主要不是很多
+
+82
+00:07:33,080 --> 00:07:36,629
+interesting. So it has no argument or local variables and if results is never
+有意思的。因此它没有参数或局部变量，并且如果结果从未
+
+83
+00:07:36,629 --> 00:07:40,840
+used And so while it does have an activation record, we're just not focusing
+所以虽然它确实有激活记录，但我们没有把注意力集中在
+
+84
+00:07:40,840 --> 00:07:45,590
+on that and we're not concerning ourselves with what goes in at activation record.
+关于这一点，我们并不关心激活记录中的内容。
+
+85
+00:07:45,590 --> 00:07:52,590
+We're just focusing on the activation record for f. Just be true this clear, the
+我们只关注f的激活记录。请清楚地说，
+
+86
+00:07:52,849 --> 00:07:57,659
+start and double star that I use in the example, these are addresses in memory.
+我在示例中使用的开始和双星，这些都是内存中的地址。
+
+87
+00:07:57,659 --> 00:08:03,300
+These are actual memory addresses and they refer to addresses of code. Those are the
+这些是实际的内存地址，它们指的是代码地址。这些都是
+
+88
+00:08:03,300 --> 00:08:07,879
+addresses of the instructions that come after they call f because that's the place
+调用f之后出现的指令的地址，因为这是
+
+89
+00:08:07,879 --> 00:08:14,030
+where f would return to. And finally, I want to stress that this really is only
+f将返回的位置。最后，我想强调的是，这真的只是
+
+90
+00:08:14,030 --> 00:08:19,240
+one of many possible activation record designs. You can design a different
+许多可能的激活记录设计之一。您可以设计不同的
+
+91
+00:08:19,240 --> 00:08:24,659
+activation record for f that has had different information that would work just
+具有不同信息的f的激活记录
+
+92
+00:08:24,659 --> 00:08:28,509
+fine depending on the structure of the rest of the cogenerator in the runtime
+很好，这取决于运行时协生成器的睡觉的结构
+
+93
+00:08:28,509 --> 00:08:33,919
+system. So, in particular many compilers don't use the controlling because they
+系统。因此，特别是许多编译器不使用控件，因为它们
+
+94
+00:08:33,919 --> 00:08:39,610
+don't need inexpensive link to be able to find the calling or the activation record
+不需要便宜的链接即可找到呼叫或激活记录
+
+95
+00:08:39,610 --> 00:08:45,829
+of the calling procedure and in fact, in your class project, the Khul compiler you
+实际上，在您的类项目中，khul编译器
+
+96
+00:08:45,829 --> 00:08:52,510
+won't be using a control link Most. Activation records won't have the return
+大多数情况下不会使用控制链接。激活记录将不会有退货
+
+97
+00:08:52,510 --> 00:08:56,660
+value on the activation record because it'd be more efficient and convenient to
+值，因为这样会更有效、更方便地
+
+98
+00:08:56,660 --> 00:09:02,720
+return it in the register. All right, this is just one possible design and with and
+把它放回收银机里。好的，这只是一种可能的设计
+
+99
+00:09:02,720 --> 00:09:06,250
+you could just design other activation records that will work just fine. The
+您只需设计其他工作正常的激活记录即可。这个
+
+100
+00:09:06,250 --> 00:09:09,620
+important thing about the activation record is that it just have to have
+关于激活记录的重要一点是，它只需要
+
+101
+00:09:09,620 --> 00:09:16,620
+sufficient information in it to e nable the generated code to properly execute the
+其中有足够的信息使生成的代码能够正确执行
+
+102
+00:09:18,110 --> 00:09:25,110
+procedure that's being called And also to resume execution of the calling procedure.
+过程，并恢复调用过程的执行。
+
+103
+00:09:25,269 --> 00:09:28,790
+So far, we've only looked at the procedure call for this activation record. We
+到目前为止，我们只查看了此激活记录的过程调用。我们
+
+104
+00:09:28,790 --> 00:09:34,490
+haven't talked about what happens when activations return. So let's consider what
+我还没有谈到激活恢复后会发生什么。那么让我们考虑一下
+
+105
+00:09:34,490 --> 00:09:39,360
+happens in our example after the second called f that this one this activation
+在我们的示例中，在名为f的第二个激活之后发生
+
+106
+00:09:39,360 --> 00:09:44,470
+down here returns. So what's going to happen is we're going to make the caller,
+从这里下来就回来了。所以接下来要做的是，我们要给来电者打电话，
+
+107
+00:09:44,470 --> 00:09:49,120
+the current activation so it'll actually become the top of the stack so I'll have this big fat
+当前的激活，所以它实际上会成为堆栈的顶部，所以我会有一个很大的胖子
+
+108
+00:09:49,120 --> 00:09:55,050
+green error here indicated that this is now the current activation this one up
+这里的绿色错误表示这是当前的激活状态
+
+109
+00:09:55,050 --> 00:10:00,430
+here. Okay? So, this is the call, this is the what was the caller and is now going
+这里。好吧?所以，这就是电话，这就是以前的呼叫者，现在
+
+110
+00:10:00,430 --> 00:10:06,130
+to resume executing. And the interesting thing here is to note that, like I said
+恢复执行。有趣的是要注意到，就像我说的
+
+111
+00:10:06,130 --> 00:10:12,560
+before, this isn't as abstract as a stack in a data structures course. So while we
+以前，这不像数据结构课程中的堆栈那样抽象。所以当我们
+
+112
+00:10:12,560 --> 00:10:17,079
+have restored this as the active procedure, this data down here, this, this
+我把这个恢复为活动的程序，这个下面的这个数据，这个，这个
+
+113
+00:10:17,079 --> 00:10:22,910
+activation that was running is still there in memory. And in fact we can go and look
+正在运行的激活仍在内存中。事实上我们可以去看看
+
+114
+00:10:22,910 --> 00:10:27,959
+at it if we want to. And the way I set this example up in fact we need to because
+如果我们想的话。我建立这个例子的方式实际上是我们需要的，因为
+
+115
+00:10:27,959 --> 00:10:34,050
+the results of the procedure that we called is now stored here. In the first
+我们调用的过程的结果现在存储在这里。在第一个
+
+116
+00:10:34,050 --> 00:10:40,910
+word of this activation, All right, So when f begins executing again, is going to
+这个激活的词，好的，所以当f再次开始执行时，
+
+117
+00:10:40,910 --> 00:10:46,810
+have to look up that result in order to know what the result was of the procedure
+我必须查一下结果才能知道这个过程的结果是什么
+
+118
+00:10:46,810 --> 00:10:51,690
+levels called. So the advantage of placing the return value in the first position in
+称为关卡。因此将返回值放在
+
+119
+00:10:51,690 --> 00:10:56,070
+the frame that the call can find it at a fix offset from its own frame. Let's back
+调用可以在其自身帧的固定偏移量处找到它的帧。我们回去吧
+
+120
+00:10:56,070 --> 00:11:03,070
+up and just see that so here when the second call to f has returned and the, the
+在这里，当对f的第二个调用返回时，
+
+121
+00:11:03,680 --> 00:11:10,680
+first call here has resumed executing this call, the code for this call will know
+此处的第一个调用已恢复执行此调用，此调用的代码将知道
+
+122
+00:11:11,149 --> 00:11:15,740
+that the science of this activation record is four. There are four words in this
+这张激活记录的科学值是4。这里面有四个字
+
+123
+00:11:15,740 --> 00:11:20,639
+activation record and so they can find the result to the procedure that it called in
+激活记录，因此他们可以找到它调用的过程的结果
+
+124
+00:11:20,639 --> 00:11:25,690
+the four + one position and five words passed the top of the frame. So in
+四加一的位置和五个字通过了框架的顶部。所以在
+
+125
+00:11:25,690 --> 00:11:29,750
+particular, they'll be able to find this where in memory and even though this has
+具体地说，他们将能够在内存中的什么地方找到它，即使它有
+
+126
+00:11:29,750 --> 00:11:33,450
+been popped out of the stack as I said before, that data is still there at least
+已经从堆栈中弹出，该数据至少还在那里
+
+127
+00:11:33,450 --> 00:11:38,680
+until another procedure is called. And so, if we immediately read the result of the
+直到调用另一个过程。所以，如果我们立即读到
+
+128
+00:11:38,680 --> 00:11:42,050
+function call after we return from the function, we'll be able to pick up that
+函数调用在我们从函数返回之后，我们将能够拾取它
+
+129
+00:11:42,050 --> 00:11:49,050
+result and then use it in the continuation of the execution of the call in procedure.
+结果，然后在过程中继续执行调用时使用它。
+
+130
+00:11:50,389 --> 00:11:53,610
+And once again, I just wanna stress, I know this is a couple of times, but it's
+再说一次，我只想强调一下，我知道这是几次了，但是
+
+131
+00:11:53,610 --> 00:11:57,420
+very important that there's absolutely nothing magic about this organization. We
+非常重要的是，这个组织绝对没有什么神奇之处。我们
+
+132
+00:11:57,420 --> 00:12:01,110
+could rearrange the order of elements in the frame. We could divide the
+可以重新排列框架中元素的顺序。我们可以平分
+
+133
+00:12:01,110 --> 00:12:05,089
+responsibility between the caller and the calling differently And really the only
+呼叫者和呼叫者之间的责任不同，而且实际上是唯一的
+
+134
+00:12:05,089 --> 00:12:09,180
+metric here is that one organization is better than another if it results and
+这里的衡量标准是一个组织比另一个组织更好，如果结果是
+
+135
+00:12:09,180 --> 00:12:15,670
+faster code or in a simpler code generator And I know I also mentioned this before but
+更快的代码或更简单的代码生成器，我知道我之前也提到过这一点，但是
+
+136
+00:12:15,670 --> 00:12:19,110
+it's also an important point in a production compiler we would produce much
+在生产编译器中，这也是一个重要的点，我们会产生很多
+
+137
+00:12:19,110 --> 00:12:23,449
+of the frame contents as possible in registers And in particular, there would
+寄存器中尽可能多的帧内容，尤其是
+
+138
+00:12:23,449 --> 00:12:28,060
+be a effort to pass the method results and the method arguments in registers because
+努力在寄存器中传递方法结果和方法参数，因为
+
+139
+00:12:28,060 --> 00:12:35,060
+those are excess so frequently. Finally to some up our discussion of activations and
+这些都是经常出现的过剩现象。最后，让我们来总结一下我们对激活和
+
+140
+00:12:35,149 --> 00:12:40,279
+activation records, the issue is that the compiler has to determine at compile time,
+激活记录，问题是编译器必须在编译时确定，
+
+141
+00:12:40,279 --> 00:12:44,899
+okay so this happens statically. The layout of the activation record and also
+好的，这是静态发生的。激活记录的布局，还
+
+142
+00:12:44,899 --> 00:12:49,699
+has to generate code that correctly accesses the locations in that activation
+必须生成正确访问该激活中的位置的代码
+
+143
+00:12:49,699 --> 00:12:54,209
+record. And what does this mean, this mean that the activation record layout and the
+录音。这意味着，激活记录布局和
+
+144
+00:12:54,209 --> 00:13:00,050
+code generator have to be designed together. Okay. So, you can't just assign
+代码生成器必须一起设计。好吧。所以，你不能就这么把
+
+145
+00:13:00,050 --> 00:13:02,980
+your code generator and then figure out later what your activation record layout
+您的代码生成器，然后稍后确定您的激活记录布局是什么
+
+146
+00:13:02,980 --> 00:13:07,589
+is gonna be or vice versa, This two things needs to designed together because they
+或者反之亦然，这两个东西需要一起设计，因为它们
+
+147
+00:13:07,589 --> 00:13:09,120
+depend on each other.
+相互依赖。
+

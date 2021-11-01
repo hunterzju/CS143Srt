@@ -1,0 +1,265 @@
+0
+00:00:03,929 --> 00:00:07,240
+In this short video, I'm going to say a few words about a variation on local
+在这段短片中，我要说几句关于LOCAL的一个变种
+
+1
+00:00:07,240 --> 00:00:10,690
+optimization that applies directly to assembly code called Peephole
+直接应用于称为窥视孔的汇编代码的优化
+
+2
+00:00:10,690 --> 00:00:17,690
+Optimization. The basic idea here is that instead of optimizing on intermediate code
+优化。这里的基本思想是，不是对中间代码进行优化
+
+3
+00:00:19,019 --> 00:00:24,039
+we could do our optimizations directly on assembly code And people optimization is
+我们可以直接在汇编代码上进行优化，而人员优化是
+
+4
+00:00:24,039 --> 00:00:29,320
+one such technique. The peephole is, stands for a short sequence of usually
+一种这样的技术。窥视孔是，代表一小段通常
+
+5
+00:00:29,320 --> 00:00:33,570
+continuous instructions. So, the idea is that we have our program. We can see, we
+连续不断的指示。所以，我们的想法是我们有我们的程序。我们可以看到，我们
+
+6
+00:00:33,570 --> 00:00:38,570
+can think of it as a long sequence of instructions and our peephole is some
+我可以把它看作是一个很长的指令序列，我们的窥视孔是一些
+
+7
+00:00:38,570 --> 00:00:43,050
+window onto this program. So, if we have a peephole of size four, we can think of
+打开这个程序的窗口。所以，如果我们有一个大小为4的窥视孔，我们可以想到
+
+8
+00:00:43,050 --> 00:00:47,760
+ourselves as staring through a small hole at the program and all we can see is a
+当我们透过一个小洞盯着节目看的时候，我们所能看到的只是一个
+
+9
+00:00:47,760 --> 00:00:51,390
+short sequence of four instructions and then we can optimize that sequence. So,
+四条指令的短序列，然后我们可以优化该序列。所以,
+
+10
+00:00:51,390 --> 00:00:56,370
+then we can slide the peephole around and optimize different parts of the program
+然后我们可以滑动窥视孔并优化程序的不同部分
+
+11
+00:00:56,370 --> 00:01:00,309
+And the, what the, what the optimizer will do is it will, you know, stare at this
+优化器要做的就是，你知道，它会盯着这个
+
+12
+00:01:00,309 --> 00:01:04,399
+short sequence of instructions and if it knows a better sequence it will replace
+短指令序列，如果它知道更好的序列，它将替换
+
+13
+00:01:04,399 --> 00:01:08,720
+that sequence by the other one and then it will repeat this as I said. You know,
+这个序列加上另一个，然后它会重复这个，就像我说的。你知道,
+
+14
+00:01:08,720 --> 00:01:13,619
+applying other transformations to, to possibly the same or other parts of the
+将其他转换应用于，可能与
+
+15
+00:01:13,619 --> 00:01:19,080
+assembly program. So, people optimizations are generally written as replacement
+汇编程序。因此，人员优化通常被编写为替换
+
+16
+00:01:19,080 --> 00:01:22,630
+rules. So, the we'll have the window of instructions on the left. So, it'll be
+这是规矩。所以，我们会把说明窗口放在左边。所以，这将是
+
+17
+00:01:22,630 --> 00:01:25,920
+some sequence of instructions and we'll know some other sequence of instructions
+一些指令序列，我们就会知道一些其他指令序列
+
+18
+00:01:25,920 --> 00:01:29,799
+that we would prefer on the right. So, if we see this instruction sequence on the
+我们更喜欢坐在右边。所以，如果我们在
+
+19
+00:01:29,799 --> 00:01:35,049
+left, then we'll replace by the one on the right-hand side. So, for example, if I
+左边的，那么我们换成右边的那个。所以，举个例子，如果我
+
+20
+00:01:35,049 --> 00:01:41,880
+have a move from register b to register a and then I move back from register a to
+从寄存器b移到寄存器a，然后我从寄存器a移回
+
+21
+00:01:41,880 --> 00:01:47,000
+register b well, that's the second move is useless, can, can just be deleted as a way
+寄存器b好的，那第二步是没用的，可以，可以只删除一种方式
+
+22
+00:01:47,000 --> 00:01:52,159
+to replace this two instruction sequence by a one instruction, instruction
+将这两条指令序列替换为一条指令、指令
+
+23
+00:01:52,159 --> 00:01:57,930
+sequence. And this will work provided that there's no possible jump target here. So
+序列。如果这里没有可能的跳跃目标，这是可行的。所以
+
+24
+00:01:57,930 --> 00:02:01,979
+if, if there's no possibility that the code would ever jump to this instruction
+如果，如果代码不可能跳到这条指令
+
+25
+00:02:01,979 --> 00:02:08,450
+then that instruction can be removed. Another example, If I add i to the
+则可以删除该指令。另一个示例是，如果我将i添加到
+
+26
+00:02:08,449 --> 00:02:13,370
+register a, and then I subsequently add j to the register a, I can do a constant
+寄存器a，然后我随后将j加到寄存器a，我可以做一个常数。
+
+27
+00:02:13,370 --> 00:02:17,689
+folding optimization here, and combine those two add two additions into one
+这里是折叠优化，然后把这两个加起来加成一个
+
+28
+00:02:17,689 --> 00:02:24,689
+addition where I add the sum of i = j to the register A. So, many but not quite all
+加法，我把i=j的和加到寄存器A上。所以，很多，但不是全部。
+
+29
+00:02:25,370 --> 00:02:29,439
+of the basic block optimizations that we've discussed in the last video, can be
+在我们在上一个视频中讨论的基本挡路优化中，
+
+30
+00:02:29,439 --> 00:02:36,439
+cast also as peephole optimizations. So, for example if we are adding zero to a
+投射也可以作为窥视孔的优化。例如，如果我们要将零加到一个
+
+31
+00:02:37,579 --> 00:02:41,099
+register and we're storing it in another register, well, that can be replaced by a
+寄存器，我们将其存储在另一个寄存器中，该寄存器可以替换为
+
+32
+00:02:41,099 --> 00:02:46,879
+register move. If we're moving a value from the same register to itself so this
+登记搬家。如果我们将一个值从同一个寄存器移到它自身，那么这个
+
+33
+00:02:46,879 --> 00:02:50,230
+is like a self-assignment, well, that instruction can just be deleted, replaced
+就像自赋值一样，那么，指令可以直接删除、替换
+
+34
+00:02:50,230 --> 00:02:55,019
+by the empty sequence of instructions. And together for those two instructions would
+通过空的指令序列。对于这两条指令，加在一起
+
+35
+00:02:55,019 --> 00:03:00,639
+be those two optimizations, excuse me, would be able to eliminate adding zero to
+如果是这两个优化，打扰一下，将能够消除将零加到
+
+36
+00:03:00,639 --> 00:03:07,569
+a register. So, first this would get translated into a move from a to a. And
+收银机。所以，首先，这将被翻译成从a到a的移动。
+
+37
+00:03:07,569 --> 00:03:11,650
+then the move from a to a would get deleted. And as this little example
+那么从a到a的移动将被删除。就像这个小例子
+
+38
+00:03:11,650 --> 00:03:15,309
+illustrates just like with local optimizations, people optimizations have
+说明了与局部优化一样，人员优化具有
+
+39
+00:03:15,309 --> 00:03:22,309
+to be applied repeatedly to get the maximum effect. I hope this simple
+反复使用以获得最大效果。我希望这很简单
+
+40
+00:03:22,620 --> 00:03:27,689
+discussion has illustrated for you that many optimizations can be applied directly
+讨论为您说明了许多优化可以直接应用
+
+41
+00:03:27,689 --> 00:03:32,219
+to assembly code and that there's really nothing magic about optimizing
+汇编代码，优化并没有什么神奇之处
+
+42
+00:03:32,219 --> 00:03:36,189
+intermediate code. So, if you have a program written in any language, source
+中间代码。因此，如果您有一个用任何语言编写的程序，请参阅源代码
+
+43
+00:03:36,189 --> 00:03:40,430
+language, intermediate language, assembly language. It makes sense to talk about
+语言，中间语言，汇编语言。谈论这件事是有意义的
+
+44
+00:03:40,430 --> 00:03:45,269
+doing transformations of programs written in that language to improve the behavior
+对用该语言编写的程序进行转换以改进行为
+
+45
+00:03:45,269 --> 00:03:50,359
+of the program. And it's also a good time here to mention that program optimization
+项目的一部分。这也是一个很好的时机来提到程序优化
+
+46
+00:03:50,359 --> 00:03:56,719
+is really a terrible term. The compilers do not produce optimal code and it's
+真的是个可怕的词。编译器不会产生最佳代码，而且它的
+
+47
+00:03:56,719 --> 00:04:03,719
+purely an accident if a compiler were to somehow generate the best possible code
+如果编译器以某种方式生成尽可能好的代码，这纯粹是一种意外
+
+48
+00:04:03,939 --> 00:04:08,680
+for a given program. Really, what compilers do is they have a bunch of
+对于给定的程序。真的，编译器所做的是他们有一堆
+
+49
+00:04:08,680 --> 00:04:11,939
+transformations that they know will improve the behavior of the program. And
+他们知道将改善程序行为的转换。和
+
+50
+00:04:11,939 --> 00:04:16,269
+they'll just improve it as much as they ca N. So, really what program optimization is
+他们只会尽其所能地改进它。那么，程序优化到底是什么呢？
+
+51
+00:04:16,269 --> 00:04:20,780
+all about is program improvement. We're trying to make the program better but
+所有的一切都是关于程序的改进。我们正在努力使程序更好，但是
+
+52
+00:04:20,779 --> 00:04:26,360
+there's no guarantee that we will reach the best possible code for a given program.
+不能保证我们会为给定的程序编写尽可能好的代码。
+

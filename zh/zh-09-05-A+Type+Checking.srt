@@ -1,0 +1,410 @@
+0
+00:00:04,509 --> 00:00:11,509
+In this video we're going to talk about type checking in cool. Thus far, we've
+在这段视频中，我们将讨论如何在酷中进行类型签入。到目前为止，我们已经
+
+1
+00:00:12,160 --> 00:00:16,990
+seen two examples of formal notation used to specify parts of a compiler. Regular
+查看了用于指定编译器各部分的两个形式表示法示例。常规
+
+2
+00:00:16,990 --> 00:00:21,820
+expressions were used in lexical analysis, and context free grammars which we used in
+表达式用在词法分析中，上下文无关文法用在
+
+3
+00:00:21,820 --> 00:00:26,060
+parsing. It turns out that there's another formalism which has gained widespread
+正在解析。原来，还有另一种形式主义，它得到了广泛的支持
+
+4
+00:00:26,060 --> 00:00:32,710
+acceptance in type checking, and that's logical rules of inference. If-else rules
+类型检查中的接受，这是推理的逻辑规则。If-Else规则
+
+5
+00:00:32,710 --> 00:00:36,960
+are logical statements that have the form; if some hypothesis is true then some
+是具有以下形式的逻辑语句；如果某些假设为真，则某些
+
+6
+00:00:36,960 --> 00:00:41,149
+conclusion is true. So, if-else rules are implication statements that some
+结论是正确的。因此，IF-ELSE规则是一些隐含语句
+
+7
+00:00:41,149 --> 00:00:46,469
+hypothesis implies some conclusion And in the particular case of type checking an
+假设隐含了一些结论，在类型检查的特定情况下，
+
+8
+00:00:46,469 --> 00:00:50,359
+example or typical kind of reasoning that we see in type checking is that if a
+我们在类型检查中看到的示例或典型类型的推理是，如果
+
+9
+00:00:50,359 --> 00:00:55,120
+couple of expressions have certain types then some other expression is guaranteed
+几个表达式具有特定的类型，则保证另一个表达式
+
+10
+00:00:55,120 --> 00:00:59,639
+to have a certain type. And so clearly that the type checking statement here is
+拥有某种类型。很明显，这里的类型检查语句是
+
+11
+00:00:59,639 --> 00:01:05,369
+an example of an inference rule. An inference rule notation is just a compact
+推理规则的示例。推理规则符号只是紧凑的
+
+12
+00:01:05,369 --> 00:01:11,940
+way of encoding these kinds of if then statements. Now if you haven't seen this
+这类IF THEN语句的编码方式。如果你还没有看过这个
+
+13
+00:01:11,940 --> 00:01:15,970
+notation before, it will be unfamiliar, but actually it's quite easy to read with
+以前的符号，它可能不熟悉，但实际上它很容易阅读
+
+14
+00:01:15,970 --> 00:01:20,670
+practice And we'll start with a very simple system and gradually add features.
+练习之后，我们将从一个非常简单的系统开始，然后逐步添加功能。
+
+15
+00:01:20,670 --> 00:01:26,000
+So we'll use a logical conjunction for the English word and, and implication for the
+因此，我们将对英语单词AND使用逻辑连接词，对
+
+16
+00:01:26,000 --> 00:01:32,280
+English word if and then. And now, one special thing, the string x colon t is
+英语单词IF和THEN。现在，有一件特别的事，字符串x冒号t是
+
+17
+00:01:32,280 --> 00:01:38,500
+read that x has type t. So this is logical assertion saying that x has a particular
+读一下x的类型是t，所以这是逻辑断言，说x有一个特殊的
+
+18
+00:01:38,500 --> 00:01:45,500
+type. So now consider the following very simple type rule. If E one has type int,
+键入。因此，现在考虑以下非常简单的类型规则。如果E 1具有INT类型，
+
+19
+00:01:46,880 --> 00:01:53,310
+and E two has type int, then E one plus E two also has type int. And we could just
+E 2是int类型，那么E 1加E 2也是int类型。我们可以干脆
+
+20
+00:01:53,310 --> 00:01:56,780
+take the definitions we gave on the previous slide and just gradually reduce
+采用我们在上一张幻灯片中给出的定义，然后逐步减少
+
+21
+00:01:56,780 --> 00:02:03,170
+this to a mathematical statement. So, for example, we can replace the if then with
+这可以归结为一个数学陈述。例如，我们可以将IF THEN替换为
+
+22
+00:02:03,170 --> 00:02:08,030
+an implication. And we can replace the word and with a conjunction. And now we
+一种暗示。我们可以用连词代替and这个词。现在我们
+
+23
+00:02:08,030 --> 00:02:12,999
+just have these has type statements, alright? And we had a notation for that,
+只要有这些HAS类型语句就行了，好吗？我们对此有一个记号，
+
+24
+00:02:12,999 --> 00:02:17,049
+and we wind up with this purely mathematical statement that, which says
+我们最终得到了这个纯粹的数学陈述，它说
+
+25
+00:02:17,049 --> 00:02:21,349
+exactly the same thing. That if E1 has type int and E2 has type int, that implies
+完全一样的事情。如果E1有INT类型，E2有INT类型，这意味着
+
+26
+00:02:21,349 --> 00:02:27,790
+that E1 + E2 has type int. And notice that, that statement that we just wrote
+E1+E2的类型是int。注意，我们刚才写的那个声明
+
+27
+00:02:27,790 --> 00:02:32,969
+out is a special case of an inference rule. It's a bunch of hypothesis conjoined
+OUT是推理规则的特例。这是一堆连结在一起的假设
+
+28
+00:02:32,969 --> 00:02:39,389
+together and implies some conclusion. The traditional notation for inference rules
+并暗示了一些结论。推理规则的传统表示法
+
+29
+00:02:39,389 --> 00:02:44,189
+is given here. The hypotheses are written about the horizontal line, and the
+是在这里给出的。假设是关于水平线的，而
+
+30
+00:02:44,189 --> 00:02:47,739
+conclusion is written below. And it means exactly the same thing as what we had on
+结论写在下面。它的意思和我们穿的完全一样
+
+31
+00:02:47,739 --> 00:02:52,159
+the previous slide. Mainly that if all the things above the horizontal line are true.
+上一张幻灯片。主要是如果水平线上的所有东西都是真的。
+
+32
+00:02:52,159 --> 00:02:56,650
+These are all the hypotheses, then the thing below. The horizontal line can be
+这些都是假设，然后是下面的事情。水平线可以是
+
+33
+00:02:56,650 --> 00:03:00,629
+concluded to be true. And there's one piece of new notation here. This is the
+断定是真的。这里有一个新的符号。这是
+
+34
+00:03:00,629 --> 00:03:06,150
+turnstiles that are used for the hypotheses and the conclusion. And the
+用于假设和结论的旋转门。以及
+
+35
+00:03:06,150 --> 00:03:10,989
+turnstile is read, it is provable that. And what this means is that we're just
+旋转栅门是读过的，这是可以证明的。这意味着我们只是
+
+36
+00:03:10,989 --> 00:03:15,980
+going to say explicitly. That something is provable in the system of rules that we're
+我要明确地说。在我们所处的规则体系中有些东西是可以证明的
+
+37
+00:03:15,980 --> 00:03:20,159
+defining. So the way you would read this is that if it's provable that all these
+定义。所以你解读这个的方式是，如果所有这些都是可以证明的
+
+38
+00:03:20,159 --> 00:03:24,189
+hypotheses are true. So, if it's provable the first hypothesis is true, all the
+假设是正确的。所以，如果第一个假设是真的，那么所有的
+
+39
+00:03:24,189 --> 00:03:27,999
+middle hypotheses, and if it's improvable, if it's provable the last hypothesis is
+中间假设，如果它是可以改进的，如果它是可证明的，那么最后一个假设是
+
+40
+00:03:27,999 --> 00:03:34,019
+true. Then it is provable that the conclusion is true And cool type rules are
+没错。那么可以证明结论是真的，酷的类型规则是
+
+41
+00:03:34,019 --> 00:03:39,349
+going to have. The following kinds of hypothesis and conclusions we're going to
+将会有。我们要做的假设和结论有以下几种
+
+42
+00:03:39,349 --> 00:03:46,180
+prove, within the system, that some expression has a particular type. So with
+在系统中证明某个表达式具有特定类型。所以有了
+
+43
+00:03:46,180 --> 00:03:49,609
+those definitions out of the way we actually have enough to write at least a
+我们实际上有足够的定义来编写至少一个
+
+44
+00:03:49,609 --> 00:03:54,249
+few simple type rules. So, if I integer literally if it's an integer class
+几个简单的类型规则。因此，如果I按字面意义整型，如果它是一个整型类
+
+45
+00:03:54,249 --> 00:03:59,980
+interfering in my program then this rules says it is provable that I has type ENT.
+干扰我的程序，那么这个规则说我有ENT类型是可以证明的。
+
+46
+00:03:59,980 --> 00:04:05,049
+So every integer constant has type ENT. And here's the rule for add written out
+所以每个整数常量都有ENT类型。下面是添加写出的规则
+
+47
+00:04:05,049 --> 00:04:09,739
+now in the [inaudible] rule notation. If it's provable then that E1 has type int
+现在用[听不见的]规则符号。如果它是可证明，则E1具有INT类型
+
+48
+00:04:09,739 --> 00:04:15,529
+and is provable that E2 has type ENT. Then it is provable that E1 plus E2 has type
+可以证明E2具有ENT型。那么就可以证明E1+E2是有类型的
+
+49
+00:04:15,529 --> 00:04:22,390
+ENT. So notice that these rules give templates for describing how to type
+请进。请注意，这些规则提供了描述如何键入的模板
+
+50
+00:04:22,390 --> 00:04:26,470
+integers and expressions. The rule for integer constants just use a generic
+整数和表达式。整数常量规则仅使用泛型
+
+51
+00:04:26,470 --> 00:04:30,560
+integer i. It didn't give a separate rule for every possible integer, and the rule
+整数i。它没有为每个可能的整数给出单独的规则，而规则
+
+52
+00:04:30,560 --> 00:04:34,660
+for plus used expressions e one and e two. It didn't tell you what particular
+用于加号使用的表达式e1和e2。它没有告诉你具体是什么
+
+53
+00:04:34,660 --> 00:04:39,340
+expressions they were. It just said give me any expression e one, any expressions e
+他们的表情是。它只是说给我任何表情e一，任何表情e
+
+54
+00:04:39,340 --> 00:04:45,440
+one and e two that have type int. And so we can plug any expressions we want in
+类型为int的1和e 2。所以我们可以插入任何我们想要的表达式
+
+55
+00:04:45,440 --> 00:04:50,550
+that satisfy the hypotheses, and then we can produce a complete typing for actual
+满足假设，然后我们就可以为Actual生成一个完整的类型
+
+56
+00:04:50,550 --> 00:04:57,550
+expressions. So as a concrete example, let's show that one plus two has type ent.
+表情。作为一个具体的例子，让我们展示一下1加2的类型为ent。
+
+57
+00:04:58,220 --> 00:05:03,210
+So we want to type the expression one plus two, and since we know the rule for add
+所以我们想键入表达式1+2，因为我们知道加法的规则
+
+58
+00:05:03,210 --> 00:05:07,690
+that means we need to construct a proof of the type of the number one, and a proof of
+这意味着我们需要构造数字1的类型的证明，以及数字1的类型的证明
+
+59
+00:05:07,690 --> 00:05:12,230
+the type of the number two. And we have a rule for dealing with integer classes,
+数字2的类型。我们有一个处理整数类的规则，
+
+60
+00:05:12,230 --> 00:05:16,150
+mainly we can prove because one is an integer class that has type ent, and we
+我们可以证明的主要原因是，其中一个是类型为ent的整数类，而我们
+
+61
+00:05:16,150 --> 00:05:21,120
+can prove that two is type ent, and then now we have the two hypothesis we need for
+可以证明二是ENT型的，那么现在我们就有了我们需要的两个假设
+
+62
+00:05:21,120 --> 00:05:28,120
+the sum expression and we can prove that one plus two has type ent. So, an
+求和表达式，我们可以证明一加二具有ENT型。所以，一个
+
+63
+00:05:28,470 --> 00:05:32,640
+important property of any reasonable type system is that it be sound. And sound is
+任何合理类型系统的重要属性都是健全的。而声音是
+
+64
+00:05:32,640 --> 00:05:38,790
+here is a correctness condition. What we want is whatever the type system can prove
+这里有一个正确的条件。我们需要的是类型系统能证明的任何东西
+
+65
+00:05:38,790 --> 00:05:42,560
+that some expression has the type systems has a particular type T. The if I actually
+某些表达式的类型系统具有特定的类型T。如果我实际上
+
+66
+00:05:42,560 --> 00:05:46,840
+run that program. If I take E and I execute it on the computer the value that
+运行那个程序。如果我取E并在计算机上执行它，
+
+67
+00:05:46,840 --> 00:05:51,960
+it returns, the value that comes after running E in fact has the type predicted
+它返回，则运行E之后的值实际上具有预测的类型
+
+68
+00:05:51,960 --> 00:05:57,270
+by the type system. So, if the type system It is able to give types of things that
+通过类型系统。因此，如果类型系统能够给出
+
+69
+00:05:57,270 --> 00:06:01,130
+actually reflect what kind of value you get when you run the program then we say
+实际反映您在运行程序时获得的价值，然后我们说
+
+70
+00:06:01,130 --> 00:06:06,320
+that the type system is sound. Now clearly we only want sound rules but some sound
+打字系统是健全的。现在很明显，我们只想要健全的规则，但也要一些健全的
+
+71
+00:06:06,320 --> 00:06:12,040
+rules are actually quite a bit better than others, so for example. If I have an
+例如，规则实际上比其他规则要好得多。如果我有一个
+
+72
+00:06:12,040 --> 00:06:19,040
+integer literal And I want to give it a type, while we, we, I showed you the best
+整型文字，我想给它一个类型，而我们，我们，我给你们展示了最好的
+
+73
+00:06:20,900 --> 00:06:23,660
+possible rule before where we said that [inaudible] has type [inaudible] But it
+可能的规则之前我们说过[听不见]有类型[听不见]但它
+
+74
+00:06:23,660 --> 00:06:27,860
+would also be correct, just not very precise to say that has [inaudible] has
+也会是正确的，只是不太准确地说有[听不见]有
+
+75
+00:06:27,860 --> 00:06:33,680
+type object. Certainly if I evaluate an integer I will get back an object because
+键入Object。当然，如果我计算一个整数，我会得到一个对象，因为
+
+76
+00:06:33,680 --> 00:06:38,280
+every integer in , is also an object But this isn't all that useful because now I
+中的每个整数也是一个对象，但这不是很有用，因为现在我
+
+77
+00:06:38,280 --> 00:06:43,090
+can't do any of the integer operations And so there are lots of different sound
+我不能做任何整数运算，所以有很多不同的声音
+
+78
+00:06:43,090 --> 00:06:47,750
+rules, there's not just one unique rule for any given [inaudible] expression that
+规则，对于任何给定的[听不见的]表达式，不只有一条唯一的规则
+
+79
+00:06:47,750 --> 00:06:50,810
+will be sound, but some of them are better than others, and in the case of integer
+将是健全的，但它们中的一些比其他的要好，并且在整数的情况下
+
+80
+00:06:50,810 --> 00:06:55,530
+literals the one we really want. Literal has type it because that is the most
+字面意思就是我们真正想要的。文本类型为它，因为这是最多的
+
+81
+00:06:55,530 --> 00:06:58,840
+specific type that we can give to that type of program.
+我们可以为该类型的程序指定的特定类型。
+

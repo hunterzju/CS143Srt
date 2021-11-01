@@ -1,0 +1,190 @@
+0
+00:00:01,439 --> 00:00:06,050
+Now you might think that the unambiguous if, then, else grammar is complicated and hard
+现在你可能认为明确的IF，THEN，ELSE语法是复杂和困难的
+
+1
+00:00:06,050 --> 00:00:10,959
+to understand and frankly I would have to agree with you. Unfortunately, it's
+为了理解，坦率地说，我不得不同意你的观点。不幸的是，这是
+
+2
+00:00:10,959 --> 00:00:15,699
+impossible to automatically convert an unambiguous grammar to an ambiguous one,
+不可能自动将无歧义语法转换成歧义语法，
+
+3
+00:00:15,699 --> 00:00:19,190
+so we have to do these conversions by hand. If we're going to have unambiguous
+所以我们必须手工完成这些转换。如果我们要有明确的
+
+4
+00:00:19,190 --> 00:00:23,020
+grammars, we have t o figure out how to write them by hand and that does result
+语法，我们必须弄清楚如何用手写，这确实是有结果的
+
+5
+00:00:23,020 --> 00:00:27,820
+insignificantly more complex grammars and grammars that are hard to read and
+微不足道的更复杂的语法和难以阅读的语法
+
+6
+00:00:27,820 --> 00:00:33,160
+maintain than if we use the, well more straightforward ambiguous grammars. A
+维护比我们使用，更直接，更多歧义的语法。一个
+
+7
+00:00:33,160 --> 00:00:38,670
+possibility is to we'll try to somehow live with ambiguity cuz that will allow us
+可能的情况是，我们会尝试以某种方式与模棱两可相处，因为这会让我们
+
+8
+00:00:38,670 --> 00:00:43,899
+more depth natural definitions. And, but then we would need some disambiguation
+更深入的自然定义。然后，我们需要一些消除歧义的方法
+
+9
+00:00:43,899 --> 00:00:48,440
+mechanism. We need some way to tell which Parse tree we want when more than one
+机械装置。当有多个解析树时，我们需要某种方法来告诉我们需要哪个解析树
+
+10
+00:00:48,440 --> 00:00:55,229
+Parse tree is possible. In fact, most practical parsing tools adopt the second
+解析树是可能的。事实上，大多数实用的解析工具都采用第二种方法
+
+11
+00:00:55,229 --> 00:00:58,989
+approach. So, instead of rewriting the grammar, we used the more natural
+进场。因此，我们没有重写语法，而是使用了更自然的
+
+12
+00:00:58,989 --> 00:01:03,690
+ambiguous grammar and the tool provide some kind of disambiguating declarations.
+歧义语法和该工具提供了某种消除歧义的声明。
+
+13
+00:01:03,690 --> 00:01:09,070
+The most popular form of disambiguating declarations are precedence and
+最流行的消除声明歧义的形式是优先和
+
+14
+00:01:09,070 --> 00:01:16,070
+associativity declarations. So, here is a natural grammar for plus over the integers
+关联性声明。所以，这里有一个整数加法的自然语法
+
+15
+00:01:16,320 --> 00:01:21,040
+and this is ambiguous even just with a single infix operation, we can get
+即使只有一次中缀操作，这也是模棱两可的，我们可以得到
+
+16
+00:01:21,040 --> 00:01:25,650
+ambiguity because this grammar doesn't tell us whether plus is left associative
+多义性，因为这个语法没有告诉我们加号是否是左联想的
+
+17
+00:01:25,650 --> 00:01:30,840
+or right associative. And. So, simple solution here is to have associativity
+或右关联。和。因此，这里的简单解决方案是具有结合性
+
+18
+00:01:30,840 --> 00:01:35,600
+declarations. So here, we declare plus to be left associative and this is the
+声明。因此，在这里，我们将加号声明为左关联，这是
+
+19
+00:01:35,600 --> 00:01:41,360
+notation used in Bison. So, Bison is a particular tool and a present left plus
+野牛中使用的记数法。因此，野牛是一种特殊的工具和现在的左撇子加号
+
+20
+00:01:41,360 --> 00:01:46,950
+declares that plus is a left-associative operation and so that would rule out this
+声明加号是左结合运算，所以这就排除了这一点
+
+21
+00:01:46,950 --> 00:01:51,820
+particular Parse tree over here. Here [inaudible] more complex grammar
+这里有一棵特别的解析树。这里[听不见]更复杂的语法
+
+22
+00:01:51,820 --> 00:01:56,770
+essentially the grammar we began with the, at the start of this video. Here we have
+本质上，我们开始的语法，在这段视频的开头。我们这里有
+
+23
+00:01:56,770 --> 00:02:00,920
+plus and times over the integers and again this grammar is ambiguous because it
+对整数进行加法和乘法，同样，此语法是不明确的，因为它
+
+24
+00:02:00,920 --> 00:02:05,960
+doesn't say what the precedence of times is with respect to plus. And the solution
+没有说明时间相对于加号的优先顺序是什么。以及解决方案
+
+25
+00:02:05,960 --> 00:02:11,830
+for this is to have multiple associativity declarations. We declare plus to be left
+因为这意味着要有多个结合性声明。我们声明把加号留下来
+
+26
+00:02:11,830 --> 00:02:16,730
+associative and we declare times to be left associative and then the precedence
+关联，我们将时间声明为左关联，然后声明优先级
+
+27
+00:02:16,730 --> 00:02:21,230
+between plus and times is given by the order. So the fact here that times appears
+加号和乘号之间是按顺序给出的。所以这里的事实是“泰晤士报”出现了
+
+28
+00:02:21,230 --> 00:02:28,230
+after. Plus means that times has a higher precedence than plus. Just one word of
+之后。加号表示时间优先于加号。只有一句话
+
+29
+00:02:33,760 --> 00:02:37,810
+caution, These declarations are called associativity and precedence declarations
+注意，这些声明称为结合性声明和优先级声明
+
+30
+00:02:37,810 --> 00:02:42,170
+but that's not what's quite what's going on inside the parser. The parser doesn't
+但这并不是解析器内部正在发生的事情。解析器不会
+
+31
+00:02:42,170 --> 00:02:45,750
+really understand about associativity and precedence. Instead, these declarations
+真正理解结合性和优先性。相反，这些声明
+
+32
+00:02:45,750 --> 00:02:50,560
+tell it to make certain kinds of moves in certain situations. We won't really be
+告诉它在特定的情况下做出特定的动作。我们不会真的
+
+33
+00:02:50,560 --> 00:02:54,480
+able to explain this until we get much further into parsing technology, but just
+在我们深入了解解析技术之前，我可以解释这一点，但是
+
+34
+00:02:54,480 --> 00:02:59,180
+be aware that we have to be a little bit cautious in using these declarations.
+请注意，我们在使用这些声明时必须稍微谨慎一些。
+
+35
+00:02:59,180 --> 00:03:02,480
+Usually they behave like associativity and precedence in the way you expect but there
+通常，它们的行为方式与您预期的结合性和优先级相似，但是
+
+36
+00:03:02,480 --> 00:03:07,709
+are some situations in which they will cause Rising behavior And is important
+在某些情况下，它们会导致行为上升，这一点很重要
+
+37
+00:03:07,709 --> 00:03:11,590
+that you check the behavior of your grammar after you add these declarations.
+在添加这些声明之后检查语法的行为。
+

@@ -1,0 +1,835 @@
+0
+00:00:03,889 --> 00:00:07,089
+In this video, we're gonna put together what we've learned about first and follow
+在这段视频中，我们先把我们学到的东西放在一起，然后
+
+1
+00:00:07,089 --> 00:00:14,089
+sets to construct LL1 parsing tables. Our goal is to construct a parsing table T for
+设置以构造LL1解析表。我们的目标是为以下内容构造一个解析表T
+
+2
+00:00:15,930 --> 00:00:20,880
+a context free grammar G. And this is done by production. So we're gonna do this one
+上下文无关文法G，这是通过产生式完成的。所以我们要做这件事
+
+3
+00:00:20,880 --> 00:00:24,730
+production at, at time. And we're going to in turn, consider each production, A goes
+在，在时间生产。我们将轮流考虑每一部作品，A是
+
+4
+00:00:24,730 --> 00:00:31,730
+to alpha in the grammar G. And so the first case Is if we are trying to figure
+语法中的阿尔法，所以第一种情况是，如果我们试图计算
+
+5
+00:00:32,870 --> 00:00:38,609
+out whether we can use A goes to alpha and T happens to be in the first of alpha.
+我们是否可以用A表示为α，而T恰好在α的第一位。
+
+6
+00:00:38,609 --> 00:00:43,359
+Alright, so if we know that some terminal T is in the first of the right hand side,
+好的，如果我们知道某个终端T在右手边的第一个，
+
+7
+00:00:43,359 --> 00:00:48,710
+then. If we were in a situation where A was the leftmost non terminal, and T was
+然后。如果我们处于这样一种情况，A是最左边的非终结点，而T是
+
+8
+00:00:48,710 --> 00:00:52,710
+the next token of input, then, then expanding by A goes to alpha would be a
+输入的下一个令牌，然后，用A扩展到alpha将是a
+
+9
+00:00:52,710 --> 00:00:56,949
+good move because the alpha could potentially, through more, productions,
+很好的一步，因为阿尔法有可能通过更多的生产，
+
+10
+00:00:56,949 --> 00:01:02,120
+match the T. And so we'll add to the parsing table at the A, T entry, The right
+匹配T，因此我们将添加到右侧A，T条目的解析表中
+
+11
+00:01:02,120 --> 00:01:07,530
+hand side alpha. Alright, the other situation that we're interested in is,
+手侧阿尔法。好的，我们感兴趣的另一种情况是，
+
+12
+00:01:07,530 --> 00:01:14,229
+what if we need to get rid of, the A, okay? So if the A cannot possibly match
+如果我们要除掉A怎么办，好吗？所以如果A不可能匹配
+
+13
+00:01:14,229 --> 00:01:17,750
+the T, alright? So let's say the T is not in the first of alpha, or we have some
+T，好吗？假设T不在α的第一位，或者我们有一些
+
+14
+00:01:17,750 --> 00:01:23,630
+other situation where we want to erase the A. Well, then it would be okay, to use
+我们想要删除A的其他情况。嗯，那么可以使用
+
+15
+00:01:23,630 --> 00:01:29,259
+production A goes to alpha, provided that. Alpha can actually go to Epsilon, so alpha
+生产A归阿尔法所有，前提是。Alpha实际上可以去Epsilon，所以Alpha
+
+16
+00:01:29,259 --> 00:01:34,130
+can go away completely, Alright? So we can eliminate all trace of the A. And T
+就能完全消失，好吗？所以我们可以消除所有A和T的痕迹
+
+17
+00:01:34,130 --> 00:01:39,380
+follows A in the grammar. So T is able to come after, excuse me, T is able to come
+在语法上跟在A后面。所以T可以跟在后面，打扰一下，T可以来
+
+18
+00:01:39,380 --> 00:01:43,810
+after A in some derivation. So if T is in the follow of A, and the right hand side
+在某些推导中，在A之后。所以如果T在A的后面，在右手边
+
+19
+00:01:43,810 --> 00:01:47,740
+of the [inaudible] code epsilon, then we add the move that when A is the leftmost
+在[听不见]代码ε的基础上，我们添加了当A在最左边时的移动
+
+20
+00:01:47,740 --> 00:01:54,649
+non terminal, and T is the next input, we can expand A by A goes to alpha. And
+非终端，T是下一个输入，我们可以将A扩展到α。和
+
+21
+00:01:54,649 --> 00:01:58,930
+finally, a special case for dollar, because dollar's technically not a
+最后，美元有一个特例，因为从技术上讲，美元不是
+
+22
+00:01:58,930 --> 00:02:05,229
+terminal symbol. If we're at the end of the input, okay, so we have some stuff
+端子符号。如果我们在输入的末尾，好的，我们有一些东西
+
+23
+00:02:05,229 --> 00:02:08,820
+left on the stack, particularly we have if nonterminal a is still our leftmost
+留在堆栈上，特别是如果非终结符a仍然是我们最左边的话
+
+24
+00:02:08,820 --> 00:02:13,610
+nonterminal, but we've run out of input, well then our only hope is to get rid of
+非终结性的，但是我们的输入已经用完了，那么我们唯一的希望就是去掉
+
+25
+00:02:13,610 --> 00:02:18,080
+the a completely. And so we want to pick a production for a that can go to epsilon,
+完全是a级的。所以我们想为a挑选一部可以进入epsilon的作品，
+
+26
+00:02:18,080 --> 00:02:21,790
+so we look for a production a goes to alpha, where epsilon is in the first of
+所以我们寻找a到alpha的乘积，其中epsilon在第一个
+
+27
+00:02:21,790 --> 00:02:28,790
+alpha, and dollar can follow a in a derivation. So that is the procedure, or
+α和美元在派生中可以跟在a后面。所以这就是程序，或者
+
+28
+00:02:28,910 --> 00:02:33,629
+those are the rules, for constructing a parsing table. And now let's work through
+这些是构造解析表的规则。现在让我们一起来完成
+
+29
+00:02:33,629 --> 00:02:36,890
+an example. So here's our favorite grammar that we've been looking at for the last
+举个例子。下面是我们最喜欢的语法，我们在过去的一段时间里一直在看
+
+30
+00:02:36,890 --> 00:02:41,540
+few videos. And now let's take a look at what the parsing table will look like,
+几乎没有录像带。现在让我们看看解析表将是什么样子，
+
+31
+00:02:41,540 --> 00:02:47,170
+alright? And the parsing table will consist of, columns that are labeled by
+好吗？解析表将由、列组成，这些列由
+
+32
+00:02:47,170 --> 00:02:52,659
+the terminal symbols of the grammar. All right, so here we'll have open paren,
+语法的末尾符号。好的，现在我们让帕伦开门，
+
+33
+00:02:52,659 --> 00:02:59,659
+closed paren, plus times and inch. And then the rose will be labeled by the
+闭合的帕伦，再加上几次又一寸。然后玫瑰花会被贴上标签
+
+34
+00:03:00,360 --> 00:03:07,360
+terminal symbol, so we'll have E, T, X, and Y. All right, and now we're just going
+终端符号，所以我们有E，T，X和Y。好的，现在我们开始
+
+35
+00:03:07,690 --> 00:03:13,560
+to take each production, and apply our rules, and see what entries in the table
+获取每个产品，并应用我们的规则，看看表中有哪些条目
+
+36
+00:03:13,560 --> 00:03:20,110
+we create. All right, so when would we use E goes to TX? Alright, well, so the first
+我们创造。好的，那我们什么时候去德克萨斯州？好的，那么第一个
+
+37
+00:03:20,110 --> 00:03:24,690
+thing to observe about this production is that it cannot produce epsilon on the
+关于这个产品需要注意的一点是，它不能在
+
+38
+00:03:24,690 --> 00:03:29,890
+right hand side. So TX always produces at least one terminal. And so, the second
+右手边。因此，TX始终至少生成一个终端。因此，第二个
+
+39
+00:03:29,890 --> 00:03:33,150
+case, where we're interested in whether the production can go to zero, as it could
+在这种情况下，我们感兴趣的是产量是否会降至零，因为它可能
+
+40
+00:03:33,150 --> 00:03:37,870
+go to epsilon, excuse me, is not going to apply. All right, So we just have to
+去埃西隆，对不起，是不适用的。好的，所以我们只需要
+
+41
+00:03:37,870 --> 00:03:42,610
+consider what it can generate in the first position. So the only things that this
+考虑一下它在第一个位置可以产生什么。所以这件事唯一能做的就是
+
+42
+00:03:42,610 --> 00:03:44,959
+[inaudible] can generate in the first position are things that are in the first
+[听不见]可以在第一个位置产生的是在第一个位置的东西
+
+43
+00:03:44,959 --> 00:03:48,959
+of T, which are open paren and int. So there are two situations in which we will
+T，它们是开放的Paren和INT。因此，在两种情况下，我们将
+
+44
+00:03:48,959 --> 00:03:54,209
+use the production E goes to TX, that is if E is the leftmost nonterminal, and the
+使用产生式E转到TX，也就是说，如果E是最左边的非终端，并且
+
+45
+00:03:54,209 --> 00:04:01,209
+next input is an open paren. Okay? And the other one is that, if the next input is a
+下一个输入是一个开放的Paren。好吧?另一个是，如果下一个输入是
+
+46
+00:04:01,769 --> 00:04:08,769
+[inaudible], alright? Okay, so now let's take a look at this production. Right. So
+[听不见]，好吗？好，那么现在我们来看一下这部作品。正确的。所以
+
+47
+00:04:09,790 --> 00:04:14,430
+when are we going to use T goes to open paren E closed paren. Well if T is the
+我们什么时候用T去打开Paren E关闭Paren。如果T是
+
+48
+00:04:14,430 --> 00:04:19,190
+leftmost non-terminal, alright? That's this one on the left hand side and an open
+最左边的非终结点，好吗？就是左手边的这个，还有一个空口
+
+49
+00:04:19,190 --> 00:04:23,620
+paren, is the next symbol in the input, kay. That's the only thing in the first of
+Paren是输入中的下一个符号Kay。这是第一件事中唯一的一件事
+
+50
+00:04:23,620 --> 00:04:28,500
+this right hand side. Then it would be a good move to expa nd by open paren E
+这是右手边。那么开通Paren E就是一个很好的举措
+
+51
+00:04:28,500 --> 00:04:34,220
+closed paren. So there's only one situation. Where we use that production.
+关了帕伦。所以只有一种情况。我们用那部作品的地方。
+
+52
+00:04:34,220 --> 00:04:38,140
+Alright? And for the other production, the other T production, we're going to use
+好吗？对于另一个产品，另一个T产品，我们将使用
+
+53
+00:04:38,140 --> 00:04:43,250
+that when T is the leftmost nonterminal, and there's an INT in the input. So over
+当T是最左边的非终结符时，输入中有一个int。所以结束了
+
+54
+00:04:43,250 --> 00:04:48,690
+here, we'll have [inaudible]. And I forgot one column over here for dollar. So we'll
+在这里，我们会有[听不见]的声音。我忘了这里有一栏是关于美元的。所以我们会
+
+55
+00:04:48,690 --> 00:04:54,440
+stick dollar in there at the very end. Okay? So now, we've covered these first
+把美元插在最后面。好吧?所以现在，我们已经首先介绍了这些
+
+56
+00:04:54,440 --> 00:04:59,910
+three productions. Let's take a look at this production. So when would we use X
+三部作品。我们来看看这部作品。那么我们什么时候使用X呢？
+
+57
+00:04:59,910 --> 00:05:05,360
+goes to plus E. Well clearly the only thing on the first of the right hand side
+是加E。很明显，右手边第一个位置上唯一的东西
+
+58
+00:05:05,360 --> 00:05:10,520
+is plus, and the terminal, symbol on the right hand side is X, so the X plus entry
+是加号，而右手边的终端符号是X，所以X加号条目
+
+59
+00:05:10,520 --> 00:05:17,300
+we would want to expand by X goes to plus E. And similarly for Y, the production,
+我们想要将X扩展到+E，同样地，对于Y，生产，
+
+60
+00:05:17,300 --> 00:05:21,630
+the first production involving Y, when Y is the terminal, non terminal we're trying
+第一个涉及Y的产品，当Y是终端时，我们尝试的是非终端
+
+61
+00:05:21,630 --> 00:05:26,110
+to expand and there's a times in the input, we would use the production Y goes
+为了扩展，并且在输入中有一个倍数，我们将使用乘积Y Go
+
+62
+00:05:26,110 --> 00:05:31,950
+to times T. Okay? And now we just have the two epsilon productions left. And these
+敬时代T，好吗？现在我们只剩下两部ε的作品了。还有这些
+
+63
+00:05:31,950 --> 00:05:35,990
+are the only productions, actually, that can go to epsilon. And so when would we
+实际上，这是唯一可以颁给epsilon的作品。那么我们什么时候
+
+64
+00:05:35,990 --> 00:05:42,990
+use, when would we use X goes to epsilon or Y goes to epsilon. Alright, so recall
+使用，我们什么时候使用X去epsilon或Y去epsilon。好的，那么回想一下
+
+65
+00:05:43,820 --> 00:05:50,820
+that we need to know. What is in the follow of X in order to know when to use X
+这是我们需要知道的。为了知道何时使用X，X后面跟什么
+
+66
+00:05:51,970 --> 00:05:56,500
+goes to epsilon. And we computed that in the last lecture. But let's just write it
+去了埃西隆。我们在上一节课中计算了这一点。但我们还是把它写下来吧
+
+67
+00:05:56,500 --> 00:06:03,220
+down again here. Okay. And so what was in the follow of x, well we had to look at
+这里又下来了。好吧。那么x后面的是什么，我们必须看一下
+
+68
+00:06:03,220 --> 00:06:07,710
+where x was used in the grammar, x was used there. I, it appears at the right
+其中x在语法中使用，x在那里使用。我，它出现在右边
+
+69
+00:06:07,710 --> 00:06:11,870
+hand side of the production. So it would be things that were in the follow of e.
+制作过程中的另一面。所以应该是跟在e后面的东西。
+
+70
+00:06:11,870 --> 00:06:15,250
+What was in the follow of e, well, e is the start symbol, so [inaudible] is in the
+跟在e后面的是，嗯，e是开始符号，所以[undible]在
+
+71
+00:06:15,250 --> 00:06:21,720
+follow of e, close paren is in the follow of e. Alright? And then what was in the
+紧跟在e后面，帕伦跟在e后面，好吗？然后里面有什么
+
+72
+00:06:21,720 --> 00:06:26,570
+follow of y. That's the other one where we'll need to know the follow set. Again
+跟在y后面，这是另一个我们需要知道后面集合的地方。又一次
+
+73
+00:06:26,570 --> 00:06:32,180
+we have to look at where Y is used so Y is used there. That means everything that's
+我们必须看一下Y在哪里使用，所以Y在哪里使用。这意味着所有这些
+
+74
+00:06:32,180 --> 00:06:39,180
+in the follow of T is in the follow of Y. The follow of y will therefore include the
+在T的后面是在Y的后面。因此，y的后面将包括
+
+75
+00:06:39,870 --> 00:06:46,220
+first of x because x can come after t. So plus will be in the follow of y. Alright
+首先是x，因为x可以在t之后，所以加号将在y之后，好的
+
+76
+00:06:46,220 --> 00:06:49,830
+but then x can go to epsilon and so everything is in the follow of E will be
+但是x可以去ε，所以E后面的所有东西都会是
+
+77
+00:06:49,830 --> 00:06:53,470
+in the follow of t and therefore also in the follow of y. So the other two things
+在t之后，因此也在y之后。所以另外两件事
+
+78
+00:06:53,470 --> 00:06:59,440
+in the follow of y were the dollar sign and close paren. Alright and so this is
+跟在y后面的是美元符号和闭合的Paren。好的，这是
+
+79
+00:06:59,440 --> 00:07:06,440
+saying okay, is that if we are in a situation. Where we have, an X. Okay?
+说好的，那就是如果我们处于一种情况下。在我们有的地方，一个X，好吗？
+
+80
+00:07:06,530 --> 00:07:10,650
+Let's just focus on the X goes to epsilon production for a moment. Let's say that we
+让我们暂时关注一下X到epsilon生产的情况。比方说，我们
+
+81
+00:07:10,650 --> 00:07:15,690
+have X on the stack, okay, on top of the stack, and $ is our next input. Well, what
+将X放在堆栈上，好的，放在堆栈的顶部，$是我们的下一个输入。嗯，什么？
+
+82
+00:07:15,690 --> 00:07:19,960
+can we do? At the end of the input we have to get rid of the X so obviously we want
+我们能做些什么吗？在输入的最后，我们必须去掉X，所以显然我们希望
+
+83
+00:07:19,960 --> 00:07:24,650
+to use the X goes to epsilon move, okay, so that makes sense. And the other
+用X表示的是ε移动，好的，这是有意义的。而另一个
+
+84
+00:07:24,650 --> 00:07:30,680
+situation that follows it tell us to use X goes to epsilon, as if there is a) on the
+紧随其后的情况告诉我们使用X转到epsilon，就好像在
+
+85
+00:07:30,680 --> 00:07:36,530
+stack, because the X cannot generate a) by itself. But hopefully some other symbol
+堆栈，因为X本身不能生成a)。但希望能有其他的象征
+
+86
+00:07:36,530 --> 00:07:39,800
+that's on the stack will be able to generate once we get rid of the x okay so
+一旦我们去掉x，堆栈上的数据就会生成，好的，所以
+
+87
+00:07:39,800 --> 00:07:45,370
+we also use x goes to epsilon In this situation. And then [inaudible] for follow
+在这种情况下，我们也使用x到epsilon。然后[听不见]跟随
+
+88
+00:07:45,370 --> 00:07:50,530
+of Y, or for Y goes to epsilon, that production. There are three things in the
+Y的乘积，或者Y归ε的乘积。这本书里有三样东西
+
+89
+00:07:50,530 --> 00:07:56,190
+follow, three terminals in the follow of Y. And we should use Y goes to epsilon if
+下面是Y后面的三个终端，如果我们使用Y到epsilon，我们应该使用Y去epsilon
+
+90
+00:07:56,190 --> 00:08:01,080
+they are the next thing in the input. So, so, if we see a plus and we're trying to
+它们是输入中的下一项内容。所以，所以，如果我们看到了积极的一面，我们试图
+
+91
+00:08:01,080 --> 00:08:05,530
+expand a Y we'll use Y goes to epsilon. If we see a closed paren and we see, and
+展开Y，我们将使用Y转到ε。如果我们看到一只关闭的帕伦，我们看到，而且
+
+92
+00:08:05,530 --> 00:08:08,090
+we're trying to expand a Y we'll use Y goes to epsilon. And finally if we're
+我们试着把y展开，我们会用y去epsilon。最后，如果我们
+
+93
+00:08:08,090 --> 00:08:12,180
+completely out of input and we still have a Y left over, we'll use Y goes to
+完全没有输入，我们还有一个Y剩余，我们将使用Y转到
+
+94
+00:08:12,180 --> 00:08:17,050
+epsilon. And that is the complete parsing table, all right? And now you can see. How
+埃普西隆。这就是完整的解析表，好吗？现在你可以看到了。多么
+
+95
+00:08:17,050 --> 00:08:21,560
+this will work in every situation, Okay. For our leftmost on terminal, and for
+这在任何情况下都行得通，好的。我们最左边的航站楼，还有
+
+96
+00:08:21,560 --> 00:08:27,840
+every possible input or lack of input, we have a production that we can use. And now
+每一种可能的投入或缺少投入，我们都有一个我们可以使用的产品。而现在
+
+97
+00:08:27,840 --> 00:08:31,250
+there are a lot of blank entries in this table. And what do those correspond to?
+此表中有许多空白条目。那么这些对应的是什么呢？
+
+98
+00:08:31,250 --> 00:08:37,409
+Let's say that we, we're trying to expand x. And the next input symbol was a open
+假设我们，我们正在尝试扩展x。下一个输入符号是一个开放的
+
+99
+00:08:37,409 --> 00:08:43,680
+paren. Well, there's no entry here. Okay, so that's an error. That's a parsing
+帕伦。嗯，这里没有入口。好的，所以这是个错误。这是一个语法分析
+
+100
+00:08:43,679 --> 00:08:47,250
+error. So whenever you encounter a blank entry in a table, you try to view the
+错误。因此，每当您在表中遇到空白条目时，都会尝试查看
+
+101
+00:08:47,250 --> 00:08:50,530
+blank entry when you're parsing, that's when you [inaudible] a parsing error,
+当您在解析时输入空白，即当您[听不到]解析错误时，
+
+102
+00:08:50,530 --> 00:08:54,630
+because what this tells us, the fact that there's a blank entry, it tells us that
+因为这告诉我们，事实上有一个空白条目，它告诉我们
+
+103
+00:08:54,630 --> 00:08:59,440
+there is no valid move. There is no way that we could parse that string. And we
+没有有效的移动。我们不可能解析那个字符串。而我们
+
+104
+00:08:59,440 --> 00:09:04,640
+discovered that at the point where we tried to access an error or blank entry in
+发现在我们尝试访问中的错误或空白条目时
+
+105
+00:09:04,640 --> 00:09:10,950
+the table. So now, let's consider what happens when we try to build an LL1
+这张桌子。现在，让我们考虑一下当我们尝试构建LL1时会发生什么
+
+106
+00:09:10,950 --> 00:09:16,330
+parsing table for a grammar that is not LL1. And let's take a look at the simple
+正在分析表以查找不是LL1的语法。让我们来看一下简单的
+
+107
+00:09:16,330 --> 00:09:21,140
+left recursive grammar that we have looked at before. So S goes to SA is one
+左递归语法，我们之前已经看过了。所以S去SA是一个
+
+108
+00:09:21,140 --> 00:09:26,760
+production, and S goes to B is the other production. And to build a parsing table
+生产，S去B是另一个生产。并构建一个解析表
+
+109
+00:09:26,760 --> 00:09:32,750
+for this, we'll need to know the first and follow sets. So let's take a look at the
+为此，我们需要知道第一组和后续组。那么让我们来看一下
+
+110
+00:09:32,750 --> 00:09:37,590
+first of S. Alright. So what can S produce in the first position? Well, it can
+首先，好的。那么，S在第一个位置能产生什么呢？嗯，它可以
+
+111
+00:09:37,590 --> 00:09:43,650
+clearly produce a B. And, there's no epsilon. There's no possibility of
+很明显会产生一个B，而且，没有ε。是不可能的
+
+112
+00:09:43,650 --> 00:09:46,920
+generating epsilon from S. As a matter of fact that's the only thing that's going to
+从S生成epsilon事实上，这是唯一要做的事情
+
+113
+00:09:46,920 --> 00:09:52,810
+be in the first of S. And what about the follow of S, well, what can follow an S?
+在S的第一个，那S的后面呢，那么，什么可以跟在S后面呢？
+
+114
+00:09:52,810 --> 00:09:58,360
+Well that's the start symbol, so clearly dollar isn't the follow of S. And then the
+这是开始符号，所以很明显美元不是S的后缀，然后是
+
+115
+00:09:58,360 --> 00:10:03,650
+sub-terminal, the terminal A appears right after S in the first production, so A, is
+子终端，终端A在第一个生产中紧跟在S之后，所以A是
+
+116
+00:10:03,650 --> 00:10:07,770
+also in the follow of S. And now we're ready to build our table. And it's going
+也是在S之后，现在我们准备构建我们的表。而且它还在继续
+
+117
+00:10:07,770 --> 00:10:13,070
+to be a very small table, because we only have one non-terminal. And then we have
+一张非常小的桌子，因为我们只有一张非终端机。然后我们就有了
+
+118
+00:10:13,070 --> 00:10:16,900
+two terminals, A and B. And we have the end of input symbol. So it's just three
+两个端子，A和B，我们有输入符号的结尾。所以现在只有三个人
+
+119
+00:10:16,900 --> 00:10:23,280
+entries potentially, in this table, Alright? And so now, let's take each
+潜在的条目，在这张表里，好吗？所以现在，让我们把每个人
+
+120
+00:10:23,280 --> 00:10:26,280
+production, and see where we should put it. So let's just take a look at the
+生产，看看我们应该把它放在哪里。所以让我们先来看一下
+
+121
+00:10:26,280 --> 00:10:30,780
+second production first. Cuz that's [inaudible] for no particular reason. So
+二次生产先行。因为那是[听不见]的，没有特别的原因。所以
+
+122
+00:10:30,780 --> 00:10:35,900
+if S goes to B, when should we use that? Well, clearly, if we see a B in the input,
+如果S去B，我们应该什么时候使用它？很明显，如果我们在输入中看到B，
+
+123
+00:10:35,900 --> 00:10:40,370
+this would be a good one to use. Cuz 'cause, the because that, the first of the
+这将是一个很好的使用。因为因为，因为那个，第一个
+
+124
+00:10:40,370 --> 00:10:45,460
+right hand side includes B, alright? So, so S goes to B. Would be used if we see a
+右手边包括B，好吗？所以，S转到了B。如果我们看到一个
+
+125
+00:10:45,460 --> 00:10:51,240
+B in the input. And now what about S goes to SA? Well here, again this can't
+输入中的B。现在S去SA怎么办？好吧，在这里，再说一遍，这不可能
+
+126
+00:10:51,240 --> 00:10:54,830
+generate epsilons so we're only interested in what it can produc e in the first
+产生ε，所以我们只对它在第一个阶段能产生什么感兴趣
+
+127
+00:10:54,830 --> 00:11:00,730
+position. And once again, the first of S is just B. And so we also have the move,
+位置。再一次，S的第一个就是B，所以我们也有移动，
+
+128
+00:11:00,730 --> 00:11:06,410
+in the SB entry, we would have the move as goes to SA. And now we see the problem,
+在SB条目中，我们将移动到SA。现在我们看到了问题所在，
+
+129
+00:11:06,410 --> 00:11:13,290
+right? Here we have an entry that has multiple moves. This is a multiply defined
+对吗？这里我们有一个有多个动作的条目。这是一个多重定义的
+
+130
+00:11:13,290 --> 00:11:20,290
+entry. Okay, and what does that mean? Well that means if we see an s in if we have an
+进入。好的，那是什么意思？那就是说，如果我们看到一个s，如果我们有一个
+
+131
+00:11:22,650 --> 00:11:26,410
+s and we want to expand, okay we're trying to, if s is our leftmost non terminal so
+我们想要扩展，好的，我们正在尝试，如果s是我们最左边的非终结点，那么
+
+132
+00:11:26,410 --> 00:11:33,410
+it's at the top of the stack, and b is our next input symbol, alright, this table
+它在堆栈的顶部，b是我们的下一个输入符号，好的，这张表
+
+133
+00:11:34,070 --> 00:11:37,290
+doesn't tell us exactly what move to make. It's not deterministic. It says there's
+并不能确切告诉我们该采取什么行动。这不是决定论的。上面说有
+
+134
+00:11:37,290 --> 00:11:43,880
+two possible moves. That we can make. And so, this is how you know a grammar is not
+两个可能的动作。这是我们能做的。所以，这就是你如何知道语法不是
+
+135
+00:11:43,880 --> 00:11:49,600
+[laugh](1) because if it winds up that you build the [laugh](1) parsing table and you
+[笑](1)因为如果它结束了，您构建了[笑](1)解析表，并且您
+
+136
+00:11:49,600 --> 00:11:54,690
+have more than one entry. More than one possible move in some, position in the
+有多个条目。在某些位置有多个可能的移动，在
+
+137
+00:11:54,690 --> 00:11:58,800
+table, some entry, excuse me. I used the word entry incorrectly. So if you wind up,
+桌子，一些条目，打扰一下。我把条目这个词用错了。所以如果你结束了，
+
+138
+00:11:58,800 --> 00:12:02,610
+let me say that again. If you wind, if you build the table and some entry in the
+让我再说一遍。如果缠绕，如果构建表并在
+
+139
+00:12:02,610 --> 00:12:08,150
+table has more than one move in it, then, there's not an unique move For every
+表中有多个移动，那么，每个移动都不是唯一的
+
+140
+00:12:08,150 --> 00:12:15,150
+situation for the parser. And that grammar is not [laugh](1) So, we just said if any
+解析器的情况。这个语法不是[笑](1)，所以我们刚才说如果有
+
+141
+00:12:16,650 --> 00:12:22,370
+entry is multiply defined in the parsing table, then the grammar is not LO1. And in
+在解析表中重复定义条目，则语法不是LO1。以及在
+
+142
+00:12:22,370 --> 00:12:28,029
+fact, this is the definition of an LO1 grammar, so the only way to be sure that
+事实上，这是LO1语法的定义，所以要确定
+
+143
+00:12:28,029 --> 00:12:35,029
+the grammar is LO1 or the mechanical way to check that the grammar is LO1, is to
+语法是LO1，或者检查语法是LO1的机械方法是to
+
+144
+00:12:35,130 --> 00:12:42,130
+build the LO1 parsing table and see if all the entries in the table is unique. Now,
+构建LO1解析表，查看表中的所有条目是否都是唯一的。现在,
+
+145
+00:12:42,180 --> 00:12:45,450
+that, we do know, however, that there are certain classes of grammars that are
+然而，我们确实知道，有某些类别的语法是
+
+146
+00:12:45,450 --> 00:12:51,070
+guaranteed not to be L1, not to be L1. And what are some of those? Well, any grammar
+保证不是L1，不是L1。其中的一些是什么呢？嗯，任何语法
+
+147
+00:12:51,070 --> 00:12:58,070
+that is not left factored. Will not be lo1, okay. Any grammar that is left
+这一点没有被考虑在内。不会是LO1，好吗。剩下的任何语法
+
+148
+00:12:58,730 --> 00:13:05,730
+recursive will not be lo1. Okay any grammar that is ambiguous, Is also
+递归将不是LO1。好的，任何模棱两可的语法，也是
+
+149
+00:13:07,520 --> 00:13:14,520
+guaranteed to not be L1. But this is not an exhaustive list. Other grammars are not
+保证不是L1。但这并不是一份详尽的清单。其他语法则不是
+
+150
+00:13:15,430 --> 00:13:22,430
+L1 too. So in particular If the grammar required more than one token of look
+L1也是。因此，特别是如果语法需要一个以上的外观标记
+
+151
+00:13:24,610 --> 00:13:28,520
+ahead, it would not be all one. But even that isn't a complete list. So e ven
+在未来，这不会是一帆风顺的。但即便如此，这也不是一份完整的清单。所以即使是这样
+
+152
+00:13:28,520 --> 00:13:33,170
+grammar is beyond that, that are not going to be all one. So what this amounts to,
+语法超越了这一点，那不会是全部的。所以这相当于，
+
+153
+00:13:33,170 --> 00:13:37,279
+these three things here, amount to quick checks that you can do. To test whether a
+这里的这三件事，相当于你可以做的快速检查。测试是否存在
+
+154
+00:13:37,279 --> 00:13:44,070
+grammar is guaranteed not to be L1. But, if, just because a grammar is left
+语法保证不是L1。但是，如果，仅仅因为留下了一个语法
+
+155
+00:13:44,070 --> 00:13:48,570
+factored, and it is not left recursive, and is ambig-, unambiguous, that doesn't
+因式分解，它不是左递归的，而且是大的，毫不含糊的，这不
+
+156
+00:13:48,570 --> 00:13:51,640
+guarantee that it's L1. And the only way to know for sure is to construct the
+保证是L1。唯一确定的方法就是构建
+
+157
+00:13:51,640 --> 00:13:57,360
+parsing table, and see if all of the entries in it are unique. And
+解析表，并查看表中的所有条目是否都是唯一的。和
+
+158
+00:13:57,360 --> 00:14:02,250
+unfortunately it turns out. That most programming languages, they're context
+不幸的是，事实证明。大多数编程语言，它们是上下文
+
+159
+00:14:02,250 --> 00:14:05,230
+free grammar. So the grammars that describe most programming languages are
+自由语法。因此，描述大多数编程语言的语法是
+
+160
+00:14:05,230 --> 00:14:12,010
+not LL1. And, the L1 grammars are too weak to actually capture all of the interesting
+不是LL1。而且，L1语法太弱，不能真正捕捉到所有有趣的内容
+
+161
+00:14:12,010 --> 00:14:16,630
+and important constructs in commonly using programming languages. And there are more
+以及常用编程语言中的重要构造。而且还有更多
+
+162
+00:14:16,630 --> 00:14:22,170
+powerful. Formalism for describing grammars and or practical grammars, and
+很强大。用于描述语法和/或实用语法的形式主义，以及
+
+163
+00:14:22,170 --> 00:14:25,710
+we're going to be looking at those in future videos. It turns out that they
+我们将在未来的视频中看到这些。事实证明，他们
+
+164
+00:14:25,710 --> 00:14:29,400
+build on everything that we've learned here over the last few videos for Elmer
+以我们在这里为埃尔默制作的最后几个视频中学到的所有内容为基础
+
+165
+00:14:29,400 --> 00:14:34,420
+grammar so none of that will be wasted, but they assembled those ideas in a more
+语法，所以所有这些都不会被浪费，但他们把这些想法集中在一个更多的
+
+166
+00:14:34,420 --> 00:14:38,259
+sophisticated way to build more powerful parts.
+以复杂的方式制造更强大的部件。
+

@@ -1,0 +1,685 @@
+0
+00:00:01,630 --> 00:00:06,300
+So here is the left factor grammar now type out neatly. And we
+这就是现在打字整齐的左因数语法。而我们
+
+1
+00:00:06,300 --> 00:00:12,730
+use this grammar to construct a parsing table. And let's not worry right now about
+使用此语法构建解析表。我们现在不用担心
+
+2
+00:00:12,730 --> 00:00:19,730
+how we got this table, I'm not gonna give the algorithm right now. But, let's just say
+我们是怎么弄到这张桌子的，我现在不会给出算法。但是，这么说吧
+
+3
+00:00:20,140 --> 00:00:24,859
+that we got it somehow. And, what I'm going to explain is how we got the table.
+我们以某种方式得到了它。我要解释的是我们是怎么弄到这张桌子的。
+
+4
+00:00:24,859 --> 00:00:30,759
+So, One dimension of the table is the current left most, non-terminal in the par
+因此，表的一个维度是当前最左边的非终结点
+
+5
+00:00:30,759 --> 00:00:37,480
+stream. That's on the rows. And then the columns represent the next input token So,
+溪流。那是排成一排的。然后这些列表示下一个输入令牌So，
+
+6
+00:00:37,480 --> 00:00:42,180
+the next token in the input stream. And, then the entry is the right hand side of the
+输入流中的下一个令牌。然后，条目就是
+
+7
+00:00:42,180 --> 00:00:45,970
+production to use. So, which production that we should used at that point
+要使用的产品。那么，在这一点上我们应该使用哪种产品呢
+
+8
+00:00:45,970 --> 00:00:51,510
+in the pars. That's the production that's predicted. So let's do an example.
+在帕尔斯。这就是预测的产量。让我们举个例子。
+
+9
+00:00:51,510 --> 00:00:57,920
+So let's look at E INT entry. So this entry right here. Now what this says is that
+那么让我们来看一下E，int条目。所以这个条目就在这里。这上面说的是
+
+10
+00:00:57,920 --> 00:01:01,610
+when the current nonterminal is E, meaning the left most nonterminal on the parks
+当当前非终端为E时，表示公园中最左侧的非终端
+
+11
+00:01:01,610 --> 00:01:05,859
+tree and the next input is in, the thing that we see coming up in the input is
+树，下一个输入在中，我们在输入中看到的内容是
+
+12
+00:01:05,859 --> 00:01:09,969
+an integer. Then we should use the production E goes to TX. So we should expand
+一个整数。那么我们应该用生产E去德克萨斯州。所以我们应该扩大规模
+
+13
+00:01:09,969 --> 00:01:16,969
+E with the children TX. Let's do another example. So when the current non-terminal
+E和孩子们一起去德克萨斯州。让我们再举一个例子。所以当当前的非终端
+
+14
+00:01:20,119 --> 00:01:26,630
+is Y and the current token, the current input is plus, then we should
+是Y并且是当前令牌，则当前输入是加号，那么我们应该
+
+15
+00:01:26,630 --> 00:01:32,139
+use the production Y goes to epsilon. Okay, what that says is, it's a little bit
+使用产品Y转到epsilon。好的，上面说的是，这有点
+
+16
+00:01:32,139 --> 00:01:36,799
+different situation than the previous one, it says look when you see a plus in the input
+与前一种情况不同，它说当您在输入中看到加号时请查看
+
+17
+00:01:36,799 --> 00:01:41,389
+and your current left most non-terminal is y, the only way this parse
+当前最左边的非终结符是y，这个解析的唯一方法
+
+18
+00:01:41,389 --> 00:01:45,200
+is going to succeed is if the y doesn't produce anything. You need to get rid of the
+如果y不产生任何东西，它就会成功。你需要去掉那些
+
+19
+00:01:45,200 --> 00:01:50,340
+y and move on to a nother non-terminal whichever one is left-most after you get rid
+y，然后移动到另一个非终端，不管哪个是剩下的-大多数是在你摆脱之后。
+
+20
+00:01:50,340 --> 00:01:55,979
+of the y. If you want to have any hope of parsing this particular string. And finally,
+如果您想要有任何希望解析这个特定的字符串。最后，
+
+21
+00:01:55,979 --> 00:02:02,979
+notice that a lot of the entries are blank and those are error entries. So
+请注意，许多条目为空，这些条目是错误条目。所以
+
+22
+00:02:03,119 --> 00:02:08,220
+let's take a look at the E star entry. That says that if the leftmost non terminal
+我们来看一下E星条目。也就是说，如果最左边的非终端
+
+23
+00:02:08,220 --> 00:02:13,860
+is E and the next input token is a time symbol, a star. Well, then there is
+是E，下一个输入令牌是时间符号，即星号。嗯，那就有
+
+24
+00:02:13,860 --> 00:02:19,550
+no move that you can make. There is, there is no production you can use for E that's
+你不能采取任何行动。没有可以用于E的产品，那就是
+
+25
+00:02:19,550 --> 00:02:24,890
+going to successfully parse that input. And this is the point at which you would raise
+将成功解析该输入。在这一点上，你会提出
+
+26
+00:02:24,890 --> 00:02:31,170
+a parsing error. In the rest of this video, I'm gonna give the algorithm for parsing
+分析错误。在这段视频的睡觉中，我将给出解析算法
+
+27
+00:02:31,170 --> 00:02:35,240
+using a parsing table. And then in future videos, we'll explain how to construct
+使用解析表。在以后的视频中，我们将解释如何构建
+
+28
+00:02:35,240 --> 00:02:39,280
+a parsing table. So the method for parsing using a parsing table is similar
+解析表。因此，使用解析表进行解析的方法是类似的
+
+29
+00:02:39,280 --> 00:02:44,880
+to recursive descent. Expect that for the leftmost non terminal S in the tree,
+到递归下降。期望对于树中最左边的非终端S，
+
+30
+00:02:44,880 --> 00:02:49,420
+we look at the next input token A. And then as we just illustrated with the examples,
+我们查看下一个输入令牌A，然后正如我们刚才用示例说明的那样，
+
+31
+00:02:49,420 --> 00:02:54,910
+we look up in the table the production to use at the low, at the, at the
+我们在表中查到最低处、最低处、最低处的产量
+
+32
+00:02:54,910 --> 00:03:01,910
+entry S, A. And instead of using recursive functions, to trace out the parse
+条目S、A，并且不使用递归函数来跟踪解析
+
+33
+00:03:02,920 --> 00:03:08,910
+tree, we're going to have a stack of records that can, record the frontier. And
+树，我们会有一叠记录，可以记录边疆。和
+
+34
+00:03:08,910 --> 00:03:13,640
+so at any point in the [inaudible] tree we will have some non-terminals that have yet
+因此，在(听不见的)树中的任何点上，我们都会有一些尚未
+
+35
+00:03:13,640 --> 00:03:17,980
+to be expanded. Those are always at the frontier at the current leaves of the [inaudible]
+待扩展。那些总是在边疆的[听不见的]当前的树叶
+
+36
+00:03:17,980 --> 00:03:21,700
+tree. And also there are some terminals that we have yet to match against.
+树。还有一些终端我们还没有与之匹配。
+
+37
+00:03:21,700 --> 00:03:25,620
+Those will all be recorded out of stack. The important property of the stack
+这些都将记录在堆叠之外。堆栈的重要属性
+
+38
+00:03:25,620 --> 00:03:30,530
+is that the left most pending terminal or non-terminal is always at the top of the stack.
+最左边的挂起终端或非终端始终位于堆栈的顶部。
+
+39
+00:03:30,530 --> 00:03:34,060
+So, either the terminal we are trying to match or the non-terminal we are
+因此，要么是我们试图匹配的终端，要么是我们所在的非终端
+
+40
+00:03:34,060 --> 00:03:40,550
+trying to expand will always be on top of our stack. We'll reject if we reach an error
+努力扩张永远是我们的头等大事。如果我们犯了错误，我们会拒绝的
+
+41
+00:03:40,550 --> 00:03:43,550
+state. So if we look up one of those empty entries in the table, we will reject
+州政府。因此，如果我们在表中查找其中一个空条目，我们将拒绝
+
+42
+00:03:43,550 --> 00:03:47,810
+the string. And we'll accept if we reach the end of the input, and we have an empty
+那根绳子。如果我们到达输入的末尾，我们会接受，我们有一个空的
+
+43
+00:03:47,810 --> 00:03:54,220
+stack. Meaning we have no pending unmatched terminals or unexpanded non terminals.
+堆栈。这意味着我们没有挂起的未匹配终端或未扩展的非终端。
+
+44
+00:03:54,220 --> 00:04:00,900
+So, here's the algorithm, we initialize the stack to just the start symbol
+所以，这是算法，我们将堆栈初始化为开始符号
+
+45
+00:04:00,900 --> 00:04:07,160
+S and a special symbol $. The $ is not a part of the alphabet or you can think
+s和特殊符号$。$不是字母表的一部分，或者您可以认为
+
+46
+00:04:07,160 --> 00:04:12,260
+of it we extend wherever our alphabet is with a new symbol $. $ Marks the
+无论我们的字母表在哪里，我们都会用一个新符号$来扩展它。$标记
+
+47
+00:04:12,260 --> 00:04:16,250
+mottom of the stack and you can think of it also as marking the end of input. So,
+堆栈的座右铭，您也可以将其视为输入结束的标志。所以,
+
+48
+00:04:16,250 --> 00:04:21,040
+this is just a way of recording where the end of the input is going to be. Okay,
+这只是一种记录输入结束位置的方式。好吧,
+
+49
+00:04:21,040 --> 00:04:26,810
+so the, so once we've matched, something against S, then whatever's left, it better
+所以，所以一旦我们匹配了一些东西来对抗S，那么不管剩下的是什么，它都会更好
+
+50
+00:04:26,810 --> 00:04:32,540
+be at the end of the input. That's what the, that stack, expresses. And now we're
+在输入的末尾。这就是那个，那个堆栈所表达的意思。现在我们是
+
+51
+00:04:32,540 --> 00:04:37,870
+at a loop, so we're gonna repeat the following moves until; we can't repeat them
+在一个循环中，所以我们将重复下面的动作，直到；我们不能重复它们
+
+52
+00:04:37,870 --> 00:04:43,240
+anymore Until the stack is empty. Okay? And there's two possible moves. Let's
+直到堆栈为空。好吧?有两种可能的行动。我们走吧
+
+53
+00:04:43,240 --> 00:04:47,690
+do the terminals first. So let's say the top of our stack is a terminal. So here
+先把终端做一下。我们假设堆栈的顶部是一个终端。所以在这里
+
+54
+00:04:47,690 --> 00:04:52,160
+we're dividing the stack to the top of the stack and the rest of the stack. So,
+我们将堆栈划分为堆栈的顶部和堆栈的睡觉。所以,
+
+55
+00:04:52,160 --> 00:04:55,570
+what are we going to do if the top of the stack is a terminal? Well we're going
+如果堆栈的顶部是终端，我们该怎么办？好的，我们要走了
+
+56
+00:04:55,570 --> 00:04:59,600
+to try to match the input. So we're going to say well if the top of the stack, the terminal
+尝试匹配输入。所以我们会说，如果堆栈的顶部，终端
+
+57
+00:04:59,600 --> 00:05:04,030
+on top of the stack, matches the next thing in the input, then we advance the
+在堆栈顶部，匹配输入中的下一项，然后我们将
+
+58
+00:05:04,030 --> 00:05:10,180
+input. And we pop the stack. So we have successfully matched the input against
+输入。然后我们弹出堆栈。所以我们已经成功地将输入与
+
+59
+00:05:10,180 --> 00:05:15,030
+the, the terminal. And so that terminal is done, and we should progress into
+这个，这个航站楼。航站楼已经完工，我们应该进入
+
+60
+00:05:15,030 --> 00:05:18,470
+the stack, and match the next thing that hasn't been handled yet. And if they
+堆栈，并匹配下一个尚未处理的内容。如果他们
+
+61
+00:05:18,470 --> 00:05:22,810
+don't match, if the terminal that we are looking at doesn't match the next thing in
+不匹配，如果我们正在查看的终端与
+
+62
+00:05:22,810 --> 00:05:27,380
+the input, well, that's an error. We don't have any backtracking here. There's no way
+输入，嗯，那是个错误。我们这里没有任何回头路。这是不可能的
+
+63
+00:05:27,380 --> 00:05:32,040
+to parse the string, so we'll raise [inaudible]. Now the second class of moves
+来解析字符串，因此我们将引发[不可闻]。现在是第二类动作
+
+64
+00:05:32,040 --> 00:05:36,610
+is deals with the non-terminal. So let's say at the top of the stack is the non-terminal
+是和非终点站打交道的。我们假设堆栈的顶部是非终结符
+
+65
+00:05:36,610 --> 00:05:40,490
+x. So remember that the top of the stack will be a non-terminal, exactly
+x.所以请记住，堆栈的顶部将是一个非终结点，准确地说
+
+66
+00:05:40,490 --> 00:05:44,690
+when that is the left most non-terminal. So now what we, now what we
+当那是最左边的非终结点时。所以现在我们，现在我们
+
+67
+00:05:44,690 --> 00:05:49,830
+do is we look at our pricing table under the entry for x and the next input symbol
+我们要做的是查看x条目下的定价表和下一个输入符号
+
+68
+00:05:49,830 --> 00:05:54,820
+and that should give us the right hand side of a production. Okay? And now what we
+这应该会给我们带来一部作品的右手边。好吧?现在我们要做的是
+
+69
+00:05:54,820 --> 00:06:01,110
+do is we pop X off the stack, and we push the, the children of X i n the parse
+我们要做的就是将X从堆栈中弹出，并将X的子级推入解析
+
+70
+00:06:01,110 --> 00:06:06,150
+tree under the stack. So this is the way we expand X. So now, the leftmost unhandled
+堆栈下面的树。这就是我们展开X的方式，所以现在，最左边的未处理
+
+71
+00:06:06,150 --> 00:06:10,090
+thing in the parse is going to be Y1, because that's the first child of X.
+解析中的值将是Y1，因为它是X的第一个子级。
+
+72
+00:06:10,090 --> 00:06:13,400
+And then all the other children of X are next. And then whatever else is in the
+然后X的所有其他子代就是下一个。然后不管里面还有什么
+
+73
+00:06:13,400 --> 00:06:20,080
+stack. And again, if there's no entry, for, the current non terminal and input in
+堆栈。同样，如果没有条目，则当前的非终端和输入
+
+74
+00:06:20,080 --> 00:06:27,080
+the table, then that's an error, and the parsing stops. So let's through an example
+表，那么这就是一个错误，解析就停止了。那么让我们通过一个例子
+
+75
+00:06:29,190 --> 00:06:35,350
+using our, pricing table, and. You might want to refer back to the parsing table, have
+使用我们的、定价表和。您可能希望回过头来参考解析表，
+
+76
+00:06:35,350 --> 00:06:39,190
+not included it here, because there isn't space for it. But I'll work through
+这里没有包括它，因为没有空间放它。不过，我会熬过去的
+
+77
+00:06:39,190 --> 00:06:43,730
+it, and you can go back and look at it at some point, and convince yourself that I'd
+你可以在某个时候回去看看它，然后说服自己我会
+
+78
+00:06:43,730 --> 00:06:49,550
+made the right moves. So initially, our stack is E$. So E was our start symbol, and
+做出了正确的举动。所以最初，我们的堆栈是E$。所以E是我们的开始符号
+
+79
+00:06:49,550 --> 00:06:53,990
+$ is our end of input symbol. And our input, we're gonna try to parse the input
+$是我们的输入结束符号。我们的输入，我们将尝试解析输入
+
+80
+00:06:53,990 --> 00:06:57,300
+[inaudible] times [inaudible], that's what we want to parse. And then, of course, we
+[听不见]倍[听不见]，这就是我们要分析的。然后，当然，我们
+
+81
+00:06:57,300 --> 00:07:01,380
+have our new symbol $, we'll tack that onto the end of the input. And if all goes
+有了我们的新符号$，我们将把它添加到输入的末尾。如果一切顺利
+
+82
+00:07:01,380 --> 00:07:05,729
+well, the dollar sign on the stack will match up against the dollar sign at the end
+嗯，堆叠上的美元符号将与末尾的美元符号相匹配
+
+83
+00:07:05,729 --> 00:07:09,760
+of the input. Again, dollar sign here is just a way of marking. The end of the input
+输入的数据。再说一遍，这里的美元符号只是一种标记方式。输入的末尾
+
+84
+00:07:09,760 --> 00:07:15,300
+and expressing that we need to parse the entire input. And so now if you look up
+并表示我们需要解析整个输入。所以现在如果你抬头看
+
+85
+00:07:15,300 --> 00:07:22,300
+the E int entry, so the first terminal in the, the next terminal in the input and
+E int条目，因此中的第一个端子、输入中的下一个端子和
+
+86
+00:07:22,520 --> 00:07:25,919
+the left most [inaudible] terminal in our parse, you would see that we're actually supposed
+解析中最左边的[听不见]终端，您会看到我们实际上应该
+
+87
+00:07:25,919 --> 00:07:31,070
+to take is to use the production E goes to TX. And let me over here at the
+拿就是用产品E去德克萨斯州。让我在这里的
+
+88
+00:07:31,070 --> 00:07:38,070
+same time construct our pars-trey. 'Kay, so initially our stack, again, the stack is
+同时构建我们的分析树。好的，所以最初我们的堆栈，再一次，堆栈是
+
+89
+00:07:38,290 --> 00:07:42,460
+the frontier of the parstrey. Initially, all we have is the root of the
+牧场的边疆地区。最初，我们所拥有的只是
+
+90
+00:07:42,460 --> 00:07:46,090
+parstrey and that is its own frontier, it's just one symbol, we haven't processed
+那是它自己的边界，它只是一个符号，我们还没有处理
+
+91
+00:07:46,090 --> 00:07:51,800
+it yet. And so E is on the stack, E is unexpanded in the parstrey, and now we're
+还没有。所以E在堆栈上，E在行列式中未展开，现在我们
+
+92
+00:07:51,800 --> 00:07:58,800
+going to use the production E goes to TX. So we'll have, T and X added as children.
+要使用生产E去德克萨斯州。所以我们会把T和X作为孩子加起来。
+
+93
+00:07:59,300 --> 00:08:03,960
+What happens next? Well E is popped off the stack. T and X are pushed on to the stack.
+接下来会发生什么？好的，E从堆栈中弹出。T和X被压入堆栈。
+
+94
+00:08:03,960 --> 00:08:09,430
+And now notice the frontier of the parse tree, is TX. So t hese is usually unprocessed
+现在请注意解析树的边界是tx。所以这些通常是未经处理的
+
+95
+00:08:09,430 --> 00:08:15,680
+leaves Either unmatched input or unexpanded non-terminals And in fact the
+留下不匹配的输入或未扩展的非终端，事实上
+
+96
+00:08:15,680 --> 00:08:20,150
+stack records exactly which one is left most. So T is at the top of the stack.
+堆栈准确地记录了哪一个是最左边的。所以T在堆栈的顶部。
+
+97
+00:08:20,150 --> 00:08:25,740
+X is below it, on the stack. Okay well we still haven't consumed any input.
+X在它的下面，在堆栈上。好的，我们仍然没有消耗任何输入。
+
+98
+00:08:25,740 --> 00:08:30,889
+And now if we look at the T, int entry it says to use T goes to int Y. And so now we
+现在如果我们看一下T，它说使用T变成了，所以现在我们
+
+99
+00:08:30,889 --> 00:08:36,830
+can expand T by [inaudible] y. And now what's going to happen is T is popped off
+可以将T扩展[听不见]y。现在将会发生的是T被弹出
+
+100
+00:08:36,830 --> 00:08:43,380
+the stack. Int and Y are pushed onto the stack and now notice the stack is Int Y X
+堆栈。将INT和Y推送到堆栈上，现在请注意堆栈是Int Y X
+
+101
+00:08:43,380 --> 00:08:50,380
+from top to bottom. The frontier of the parse tree is Int Y X. Okay? And now we have
+从上到下。解析树的边界是Int Y X，好吗？现在我们有了
+
+102
+00:08:52,680 --> 00:08:55,930
+a case where we have a terminal on top of the stack. And so now we're gonna try
+在这种情况下，我们在堆栈的顶部有一个终端。所以现在我们要试着
+
+103
+00:08:55,930 --> 00:08:59,390
+to match it against the first terminal in the input and indeed they match. And so
+将其与输入中的第一个端子进行匹配，并且它们确实匹配。因此，
+
+104
+00:08:59,390 --> 00:09:03,580
+what happens is [inaudible] just popped off the stack and the terminal and sorry the
+发生的事情是[听不见]刚刚从堆栈和终端中弹出，抱歉
+
+105
+00:09:03,580 --> 00:09:07,120
+input pointer advances in the input. Here I've recorded that by just discarding
+输入指针在输入中前进。我在这里记录了这一点，只需丢弃
+
+106
+00:09:07,120 --> 00:09:11,000
+the portion of the input that we've processed. So now we have [inaudible] left
+我们已处理的输入部分。所以现在我们只剩下[听不见]了
+
+107
+00:09:11,000 --> 00:09:16,140
+to go and the inch has been removed from the stack. And so now what's on top of the
+带走，英寸已经从堆叠中移走了。所以现在最重要的是
+
+108
+00:09:16,140 --> 00:09:22,899
+stack is Y. Y is indeed the leftmost unprocessed thing on the frontier. And, the
+堆栈是Y，Y确实是边界上最左边未处理的东西。而且，这个
+
+109
+00:09:22,899 --> 00:09:29,240
+table says that, for non terminal Y, on, input times, we should use production
+表中显示，对于非终端Y、ON、输入时间，我们应该使用生产
+
+110
+00:09:29,240 --> 00:09:36,240
+Y goes to times T. So let's put that in here. And now what's going to happen. Y is
+Y表示乘以T，所以我们把它放在这里。现在我们来看看接下来会发生什么。Y是
+
+111
+00:09:37,110 --> 00:09:41,480
+going to be popped off the stack. Times T is going to be pushed on to the stack. And
+将从堆栈中弹出。乘以T将被压入堆栈。和
+
+112
+00:09:41,480 --> 00:09:47,380
+now notice our stack is times T, X and the frontier, the unprocessed frontier of the
+现在请注意，我们的堆栈是乘以T、X和边界，即未处理的边界
+
+113
+00:09:47,380 --> 00:09:54,070
+parse tree is times T X. Okay. So now we have another terminal on top of the stack,
+解析树是乘以T×X的，好的。所以现在我们在堆栈的顶部有了另一个终端，
+
+114
+00:09:54,070 --> 00:09:58,850
+it matches the next terminal in the input. So we pop the terminal off the stack, we advance
+它与输入中的下一个端子匹配。所以我们把终端从堆栈上弹出来，我们前进
+
+115
+00:09:58,850 --> 00:10:04,440
+the input player. Now we have T as our left most nonterminal. Int is the next
+输入播放器。现在我们将T作为最左边的非终结点。INT是下一个
+
+116
+00:10:04,440 --> 00:10:09,370
+thing in the input stream and the table says, well in this situation, we should use
+输入流中的内容，表中显示，在这种情况下，我们应该使用
+
+117
+00:10:09,370 --> 00:10:16,370
+the production T goes from INT Y.  What does that mean? That means that T gets popped
+T是从int Y开始的，这是什么意思？这意味着T会被弹出
+
+118
+00:10:20,430 --> 00:10:25,130
+of the stack. Int and Y get pushed onto the stack. Notice that the stack is Int,
+堆栈中的。INT和Y被压入堆栈。请注意，堆栈是Int，
+
+119
+00:10:25,130 --> 00:10:29,440
+Y, X, and the end process frontier of the parse t ree from left to right is Int,
+Y，X，并且解析树从左到右的结束进程边界是Int，
+
+120
+00:10:29,440 --> 00:10:35,000
+Y, X. Once again we have a terminal on top of the stack, we match it against the next
+Y，X。再一次，我们在堆栈的顶部有一个终端，我们将它与下一个终端进行匹配
+
+121
+00:10:35,000 --> 00:10:41,240
+terminal in the input string, they match. And now we have consumed all the input, dollar
+输入字符串中的终端，则它们匹配。现在我们已经消耗了所有的投入，美元
+
+122
+00:10:41,240 --> 00:10:45,540
+sign is the only thing left to go in the input. But our stack is not empty.
+标牌是唯一需要输入的东西。但是我们的堆栈不是空的。
+
+123
+00:10:45,540 --> 00:10:49,980
+Okay and so at this point what does that mean. Well, if the stack is not empty and
+好的，那么在这一点上，这意味着什么。如果堆栈不是空的
+
+124
+00:10:49,980 --> 00:10:54,459
+we are out of input then everything that's left on the stack had better generate the
+我们没有输入了，那么堆栈上剩下的所有东西最好都生成
+
+125
+00:10:54,459 --> 00:10:58,410
+empty strings. So we'd better be using only epsilon productions from here on and
+空字符串。所以我们最好从现在开始只使用epsilon产品
+
+126
+00:10:58,410 --> 00:11:05,410
+indeed the table says that when Y is our next non terminal and dollar sign we are at
+事实上，表格上说，当Y是我们的下一个非终结点和美元符号时，我们就在
+
+127
+00:11:05,440 --> 00:11:11,110
+the end of the input we should use the production Y goes to epsilon. So Y goes to
+输入的末尾，我们应该使用乘积Y转到epsilon。所以Y去了
+
+128
+00:11:11,110 --> 00:11:16,649
+epsilon that means Y just gets pop off the stack. Epsilon gets pushed on the stack; epsilon
+Epsilon，这意味着Y只是从堆栈中取出POP。epsilon被推送到堆栈上；epsilon
+
+129
+00:11:16,649 --> 00:11:20,100
+is the empty string so nothing gets pushed on the stack. And now we're down
+是空字符串，因此不会将任何内容推送到堆栈上。现在我们倒下了
+
+130
+00:11:20,100 --> 00:11:27,100
+to X and in the situation where X is the next non-terminal dollar sign is, we're
+在X是下一个非终端美元符号的情况下，我们
+
+131
+00:11:27,600 --> 00:11:32,800
+at the end of the input so dollar sign is our next symbol. Then the table also
+在输入的末尾，所以美元符号是我们的下一个符号。那么这张桌子也
+
+132
+00:11:32,800 --> 00:11:39,230
+says to use production X goes to epsilon. And then what happens? Well, X gets
+说要用生产X去epsilon。然后会发生什么呢？嗯，X得到了
+
+133
+00:11:39,230 --> 00:11:43,029
+popped off the stack and nothing gets pushed on because the production was X goes
+从堆栈中弹出，没有任何事情被推入，因为制作是X Go
+
+134
+00:11:43,029 --> 00:11:47,510
+to the empty string. And now we see we have dollar sign on top of the stack, dollar
+添加到空字符串。现在我们看到堆栈的顶部有美元符号，美元
+
+135
+00:11:47,510 --> 00:11:52,149
+sign in the input. And so we have emptied the stack. We have, reached the end
+在输入内容上签名。所以我们已经清空了堆栈。我们已经，走到了尽头
+
+136
+00:11:52,149 --> 00:11:55,810
+of the input, and so we accept. That is a successful parse.
+所以我们接受了。这是一个成功的解析。
+

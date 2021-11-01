@@ -1,0 +1,210 @@
+0
+00:00:01,380 --> 00:00:05,310
+Now, that we know how many temporaries or intermediate values we need
+现在，我们知道需要多少临时值或中间值
+
+1
+00:00:05,310 --> 00:00:09,970
+to evaluate a function and we also know where those intermediate value is going to
+对函数求值，我们还知道这些中间值将在哪里
+
+2
+00:00:09,970 --> 00:00:15,130
+be stored in activation record. The last thing we need to know in order to code generation
+存储在激活记录中。为了生成代码，我们需要知道的最后一件事是
+
+3
+00:00:15,130 --> 00:00:21,499
+is how many temporaries are in use at each point in the program. Change colors
+是程序中每个点使用的临时文件的数量。更改颜色
+
+4
+00:00:21,499 --> 00:00:25,050
+here and so the way we're going to do that is we're going to add a new argument
+我们要做的就是在这里添加一个新的参数
+
+5
+00:00:25,050 --> 00:00:29,949
+to co-generation which is the position of the next available temporary.
+去热电联产，这是下一个可供临时使用的位置。
+
+6
+00:00:29,949 --> 00:00:34,970
+So as temporaries gets used up, this argument, the co-generation will change while
+因此，随着时间的耗尽，这种争论，联产将会改变，而
+
+7
+00:00:34,970 --> 00:00:39,370
+other expressions to save their values and save places without stepping on
+其他表达式，用于保存它们的值和保存位置，而不需要执行任何操作
+
+8
+00:00:39,370 --> 00:00:44,460
+temporaries that are already having saved by all other expressions. And as you'll see
+已由所有其他表达式保存的临时文件。正如你会看到的
+
+9
+00:00:44,460 --> 00:00:49,940
+in a, in a moment here when we do an example, the temporary area of the activation
+在a中，在我们举个例子的时候，激活的临时区域
+
+10
+00:00:49,940 --> 00:00:52,870
+r ecord is going to be used like a small fixed size stack. Essentially,
+Record将像一个小的固定大小的堆栈一样使用。从本质上讲，
+
+11
+00:00:52,870 --> 00:00:57,030
+we're going to have the same stack discipline that we had before only all
+我们将拥有与之前相同的堆栈规则
+
+12
+00:00:57,030 --> 00:01:01,239
+the computation on the stack pointer, all the discussion, all the computation of
+堆栈指针的计算，所有的讨论，所有的计算
+
+13
+00:01:01,239 --> 00:01:06,049
+what all sets to use has already been done by the compiler. So, what we used to do by
+编译器已经完成了所有集合要使用的内容。所以，我们过去做的是
+
+14
+00:01:06,049 --> 00:01:11,909
+pushing and popping element from the stack in the generated code allow that computation
+在生成的代码中从堆栈推送和弹出元素允许该计算
+
+15
+00:01:11,909 --> 00:01:15,259
+has been moved into the compiler and all that happens now is a bunch
+已经移到编译器中了，现在发生的一切都是一堆
+
+16
+00:01:15,259 --> 00:01:21,649
+of stores and load. To fix off that from the frame pointer So let's take a look
+储存和装货。把它从帧指针中去掉，让我们来看看
+
+17
+00:01:21,649 --> 00:01:27,359
+at how this works. Here's the code that we had for e1 + e2 under the old scheme
+这是怎么运作的。这是我们在旧方案下针对e1+e2的代码
+
+18
+00:01:27,359 --> 00:01:32,060
+where we didn't have a separate area in the activation records for temporaries.
+我们在临时激活记录中没有单独的区域。
+
+19
+00:01:32,060 --> 00:01:35,479
+So we would generate a code for e1, and then we would save the results
+因此，我们将为E1生成代码，然后保存结果
+
+20
+00:01:35,479 --> 00:01:39,600
+of e1 on the stack, and that would be done by saving the value of the accumulator under
+的值，这可以通过将累加器的值保存在
+
+21
+00:01:39,600 --> 00:01:44,249
+the stack and then we would have to adjust the stack pointer And then after we
+堆栈，然后我们必须调整堆栈指针，然后在我们
+
+22
+00:01:44,249 --> 00:01:51,139
+had evaluated the two, then we would load the results of e1 back into a temporary register,
+评估了这两个参数后，我们会将E1的结果加载回临时寄存器，
+
+23
+00:01:51,139 --> 00:01:55,850
+we could do the add And then we could pop the value off of the stack, the
+我们可以做加法，然后我们可以从堆栈中弹出值，
+
+24
+00:01:55,850 --> 00:02:01,149
+intermediate value off of the stack Down to the new scheme. Co-generations going to
+从堆栈向下移至新方案的中间值。共同世代将走向
+
+25
+00:02:01,149 --> 00:02:06,039
+take a second argument saying what is the position of the next available temporary so
+使用第二个参数，说明下一个可用临时So的位置是什么
+
+26
+00:02:06,039 --> 00:02:10,940
+what is the position of the next unused temporary inside of the activation record
+激活记录中下一个未使用的临时文件的位置是什么
+
+27
+00:02:10,940 --> 00:02:17,410
+and so now we generate code for e1 and we pass along the argument okay because e1 may
+现在我们为E1生成代码，我们传递参数，因为E1可能
+
+28
+00:02:17,410 --> 00:02:23,730
+itself have some temporaries that it needs to store And, and then after you [inaudible]
+它本身有一些需要存储的时间，然后在你之后[听不见]
+
+29
+00:02:23,730 --> 00:02:29,440
+to evaluating, now we just do a direct store into, into the activation record
+要进行评估，现在我们只需直接存储到激活记录中
+
+30
+00:02:29,440 --> 00:02:33,660
+at all set empty from the frame pointer And so now as we have to do in store,
+从帧指针开始完全设置为空，因此现在正如我们必须在存储器中所做的那样，
+
+31
+00:02:33,660 --> 00:02:38,120
+we have to save e1 in the activation record so we have it for later
+我们必须将E1保存在激活记录中，以便稍后使用
+
+32
+00:02:38,120 --> 00:02:42,500
+on but we have to do any manipulation of the stacks. So, we could place two instructions
+但我们必须对堆栈进行任何操作。因此，我们可以放置两条指令
+
+33
+00:02:42,500 --> 00:02:48,050
+here by one And then we generate code for e2 but now. We just save
+这里是1，然后我们为e2生成代码，但是现在。我们只是省了点钱
+
+34
+00:02:48,050 --> 00:02:54,670
+the temporary value at position at, at all set empty from the frame pointer so the next
+位于的位置的临时值从帧指针开始设置为空，因此下一个
+
+35
+00:02:54,670 --> 00:03:01,060
+available temporary would be of address empty o r offset, excuse me, nt+4
+可用的临时地址为空或偏移量，对不起，NT+4
+
+36
+00:03:01,060 --> 00:03:07,910
+And then after each was evaluating, now we have to load the value of e1 back into a temporary
+然后在每次求值之后，现在我们必须将e1的值加载回临时
+
+37
+00:03:07,910 --> 00:03:12,940
+and again that was all set NT from the frame pointer of the current activation
+同样，这都是从当前激活的帧指针设置的NT
+
+38
+00:03:12,940 --> 00:03:17,870
+record and then we can do the add and once again we saved the manipulation
+记录，然后我们可以执行添加操作，并再次保存操作
+
+39
+00:03:17,870 --> 00:03:21,440
+of the stack pointers. So this code sequence here is two instructions
+堆栈指针的。所以这里的代码序列是两条指令
+
+40
+00:03:21,440 --> 00:03:25,160
+shorter than the one we had before and this actually substantially more
+比我们之前的要短，而这个实际上要多得多
+
+41
+00:03:25,160 --> 00:03:25,410
+efficient.
+效率很高。
+

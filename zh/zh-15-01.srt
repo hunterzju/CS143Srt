@@ -1,0 +1,450 @@
+0
+00:00:03,980 --> 00:00:07,859
+PROFESSOR: In this video, we're going to begin our discussion of global program optimization.
+教授：在这段视频中，我们将开始讨论全球程序优化。
+
+1
+00:00:07,859 --> 00:00:12,030
+And it turns out that, in order to talk about global optimization, there's another topic
+事实证明，为了谈论全局优化，还有另一个主题
+
+2
+00:00:12,030 --> 00:00:19,030
+that we have to deal with first known as data flow analysis.
+我们首先要处理的是数据流分析。
+
+3
+00:00:19,240 --> 00:00:23,910
+Let's begin by reviewing the simple basic-block optimizations. In particular, constant propagation
+让我们首先回顾一下简单的基本挡路优化。具体地说，恒定传播
+
+4
+00:00:23,910 --> 00:00:29,050
+and dead code elimination. So here's a little piece of code. And you'll notice that there's
+和死码消除。这里有一小段代码。你会注意到这里有
+
+5
+00:00:29,050 --> 00:00:36,050
+an assignment of a constant X. And we know from our lecture in local optimizations that
+一个常数X的赋值，我们从我们的课程“局部优化”中了解到
+
+6
+00:00:36,110 --> 00:00:41,250
+that constant assignment could be propagated forward to the uses of X. If the basic block
+这个常量赋值可以被转发给X的用法。如果基本的挡路
+
+7
+00:00:41,250 --> 00:00:48,250
+is in single assignment form, this is particularly easy to do. And then if the value of X here
+是以单一作业形式进行的，这特别容易做到。如果这里X的值
+
+8
+00:00:48,390 --> 00:00:53,430
+is not used anyplace else in the program, that statement is dead and can be deleted.
+不在程序中的任何其他地方使用，则该语句已失效，可以删除。
+
+9
+00:00:53,430 --> 00:00:58,769
+So here's a simple example over a basic block combining constant propagation and dead code
+因此，这里有一个简单的示例，它基于结合了常量传播和死代码的基本挡路
+
+10
+00:00:58,769 --> 00:01:00,660
+elimination.
+淘汰赛。
+
+11
+00:01:00,660 --> 00:01:07,460
+Now, these optimizations can be extended to an entire control-flow graph. So here now
+现在，这些优化可以扩展到整个控制流图。所以现在在这里
+
+12
+00:01:07,460 --> 00:01:14,210
+we have a nontrivial control-flow graph. Remember, a control-flow graph is a graph of basic blocks
+我们有一个非常重要的控制流图。请记住，控制流图是基本块的图
+
+13
+00:01:14,210 --> 00:01:20,000
+where the nodes are the basic blocks and the edges show the transfers of control between
+其中节点是基本块，而边表示控制在
+
+14
+00:01:20,000 --> 00:01:26,360
+basic blocks. And so this first basic block here has a testament, an if statement. And
+基本块。所以这里的第一个基本挡路有一个证明，一个if语句。和
+
+15
+00:01:26,360 --> 00:01:30,740
+it'll go to one basic block if the test is true. Into a different basic block if the
+如果测试是真的，就给一个基本的挡路。转换为不同的基本挡路，如果
+
+16
+00:01:30,740 --> 00:01:32,930
+test is false.
+测试为假。
+
+17
+00:01:32,930 --> 00:01:39,930
+Now, in this control-flow graph, we can observe that X is assigned a constant. And then down
+现在，在这个控制流图中，我们可以观察到X被分配了一个常量。然后向下
+
+18
+00:01:39,960 --> 00:01:45,500
+here, there are uses of X. And, in fact, in this particular case, it is going to be safe
+在这里，有X的用法。事实上，在这种情况下，它将是安全的
+
+19
+00:01:45,500 --> 00:01:51,970
+to replace this use of X by the constant 3. So just like we propagated constants in a
+将X的这种用法替换为常量3。因此，就像我们在
+
+20
+00:01:51,970 --> 00:01:58,000
+single basic block, we can also, at least in some circumstances, propagate constants
+单一的基本挡路，我们还可以，至少在某些情况下，传播常量
+
+21
+00:01:58,000 --> 00:02:01,070
+across entire control-flow graphs.
+跨越整个控制流图。
+
+22
+00:02:01,070 --> 00:02:08,070
+Now, it turns out that there are some situations in which it's not safe to propagate constants.
+现在，事实证明，在某些情况下传播常量是不安全的。
+
+23
+00:02:08,280 --> 00:02:14,879
+So here again let's observe that we have an assignment of X, an assignment of a constant
+在这里，让我们再次观察一下，我们有一个X的赋值，一个常量的赋值
+
+24
+00:02:14,879 --> 00:02:21,879
+X, and down here we have a use of X. But we cannot replace this X here by 3. And why is
+在这下面我们有X的用法，但是我们不能用3来代替这个X，为什么呢？
+
+25
+00:02:22,390 --> 00:02:27,209
+that? Well, that's because over here, we have another assignment X where X gets the value
+那?嗯，那是因为在这里，我们有另一个赋值X，其中X得到值
+
+26
+00:02:27,209 --> 00:02:28,430
+4.
+4.
+
+27
+00:02:28,430 --> 00:02:33,670
+And the interesting thing about this example is that notice that X is only assigned constants.
+这个例子的有趣之处在于，请注意，X只分配了常量。
+
+28
+00:02:33,670 --> 00:02:39,420
+So X is assigned a constant here, and X is assigned a constant here, but this value of
+所以X在这里被赋值为常量，X在这里被赋值为常量，但是
+
+29
+00:02:39,420 --> 00:02:44,780
+X down here is not known. We don't know which constant it's going to be, because if we come
+这里的X是未知的。我们不知道它会是哪个常数，因为如果我们来
+
+30
+00:02:44,780 --> 00:02:50,840
+from this path in the execution, then X will be 4. And if we come from this path, the value
+在执行过程中，从这条路径开始，X将是4。如果我们从这条路径开始，则值
+
+31
+00:02:50,840 --> 00:02:55,950
+of X will be 3. And so we can't replace x here by either one of those values, and it's
+将会是3，所以我们不能用这两个值中的任何一个来代替这里的x，它是
+
+32
+00:02:55,950 --> 00:03:02,189
+not safe in this case to propagate constants to this use of X.
+在这种情况下，将常量传播到X的此用法是不安全的。
+
+33
+00:03:02,189 --> 00:03:08,450
+And so the question then is, how do we know when it is OK to globally propagate constants?
+那么问题就来了，我们怎么知道什么时候可以全局传播常量呢？
+
+34
+00:03:08,450 --> 00:03:14,680
+Now, for constant propagation, it turns out there's a simple criteria. To replace a use
+现在，对于恒定的传播，结果是有一个简单的标准。要替换使用，请执行以下操作
+
+35
+00:03:14,680 --> 00:03:20,129
+of x by a constant k, we have to know the following fact that on every path to the use
+x乘以常数k，我们必须知道以下事实，即在使用的每条路径上
+
+36
+00:03:20,129 --> 00:03:25,870
+of x. So every path that leads to the use of x, the last assignment that x is, x is
+所以每条通向x使用的路径，x的最后一个赋值，x是
+
+37
+00:03:25,870 --> 00:03:31,239
+equal to k. So every single path that goes to x-- and this make sense, I think, intuitively--
+等于k。所以通向x的每一条路径--我认为，直觉上讲，这是有意义的--
+
+38
+00:03:31,239 --> 00:03:36,349
+we must have assigned a constant x along that path. And that must, in fact, be the last
+我们一定是沿着那条路径分配了一个常数x。事实上，这肯定是最后一次
+
+39
+00:03:36,349 --> 00:03:41,159
+assignment to x on each path.
+为每条路径上的x赋值。
+
+40
+00:03:41,159 --> 00:03:45,549
+Let's take a look at our example again, and I'll switch colors here. So here we have the
+让我们再看看我们的示例，我将在这里切换颜色。所以我们在这里看到了
+
+41
+00:03:45,549 --> 00:03:49,930
+assignment X equals 3, and down here we have the use of X. And now what we need to do is
+赋值X等于3，下面我们有X的用法，现在我们需要做的是
+
+42
+00:03:49,930 --> 00:03:56,060
+we need to check, in order to replace this X by 3, that on every path it arrives at this
+我们需要检查，为了将这个X替换为3，在它到达的每条路径上
+
+43
+00:03:56,060 --> 00:04:00,909
+X. It reaches this X that X is assigned 3 along that path. Well, there are only two
+到达这个X，X沿着那条路径被指定为3。嗯，只有两个
+
+44
+00:04:00,909 --> 00:04:06,279
+paths. There's this path, and there's this path. And it's easy to see that this assignment
+路径。有这条路，也有这条路。很容易看出，这项任务
+
+45
+00:04:06,279 --> 00:04:11,319
+is on both of those paths. And therefore the last assignment done on both paths, on all
+都在这两条路上。因此，在两条路径上完成的最后一次赋值是在所有
+
+46
+00:04:11,319 --> 00:04:17,540
+paths, is X equals 3. And therefore we can replace this X by 3.
+路径，是X等于3，因此我们可以用3代替这个X。
+
+47
+00:04:17,540 --> 00:04:24,540
+In contrast, with this use of X in this example, we have a path here where X is assigned 3,
+相反，在本例中使用X的情况下，我们这里有一条路径，其中X被指定为3，
+
+48
+00:04:25,060 --> 00:04:31,210
+and we have a path here that reaches along this path. Let me draw the whole path, actually.
+我们这里有一条沿着这条路延伸的小路。实际上，让我画出整个路线。
+
+49
+00:04:31,210 --> 00:04:37,060
+And along this path, the last assignment to X is 4, and so we cannot propagate any constant
+沿着这条路径，X的最后一个赋值是4，所以我们不能传播任何常量
+
+50
+00:04:37,060 --> 00:04:40,660
+value to this use of X.
+这种使用X的价值。
+
+51
+00:04:40,660 --> 00:04:44,640
+In general, the correctness condition that a variable is assigned the same constant to
+一般而言，变量被赋予相同常量的正确性条件
+
+52
+00:04:44,640 --> 00:04:50,730
+lock all paths to a use of that variable is not that easy to check, because 'quot;all paths'quot;
+锁定使用该变量的所有路径并不那么容易检查，因为“所有路径”
+
+53
+00:04:50,730 --> 00:04:55,200
+includes paths that go around loops as well as paths that go through conditionals, as
+包括绕过循环的路径以及通过条件条件的路径，如
+
+54
+00:04:55,200 --> 00:05:02,200
+we saw in the example. So checking these conditions is done through a family of techniques called
+我们在示例中看到。因此，检查这些条件是通过一系列称为
+
+55
+00:05:03,370 --> 00:05:08,210
+'quot;global dataflow analysis,'quot; and it's designed specifically to check conditions like this.
+“全球数据流分析”，它是专门为检查这样的条件而设计的。
+
+56
+00:05:08,210 --> 00:05:12,090
+And essentially, global dataflow analysis is called 'quot;global'quot; because it requires an
+从本质上讲，全局数据流分析被称为“全局”，因为它需要
+
+57
+00:05:12,090 --> 00:05:16,990
+analysis of the entire control-flow graph.
+分析整个控制流图。
+
+58
+00:05:16,990 --> 00:05:21,140
+Stepping back for a moment, there are many global optimization tasks that we would like
+退一步说，我们希望有许多全局优化任务
+
+59
+00:05:21,140 --> 00:05:25,960
+a compiler to perform. A constant propagation, global constant propagation, is just one of
+要执行的编译器。常量传播，全局常量传播，只是
+
+60
+00:05:25,960 --> 00:05:31,190
+those. Now, it turns out that all of these global optimization problems share several
+那些。现在，事实证明，所有这些全局优化问题都有几个共同点
+
+61
+00:05:31,190 --> 00:05:37,490
+common traits. So first of all, the optimization always depends on knowing some property X
+共同的特点。所以首先，优化总是依赖于知道一些属性X
+
+62
+00:05:37,490 --> 00:05:43,180
+at a particular point in the program. So we want to know some piece of very local information.
+在程序中的特定时间点。所以我们想知道一些非常地方性的信息。
+
+63
+00:05:43,180 --> 00:05:49,410
+So, for example, is X at a particular point in the program guaranteed to be a constant?
+那么，例如，程序中某一特定点的X是否保证为常量？
+
+64
+00:05:49,410 --> 00:05:52,780
+OK? That's the property for a constant propagation.
+好的?这就是常量传播的性质。
+
+65
+00:05:52,780 --> 00:05:58,680
+Now, however, even though we want to know some local fact, something that's specific
+然而，现在，尽管我们想知道一些当地的事实，一些具体的事情
+
+66
+00:05:58,680 --> 00:06:03,900
+to a particular point in the program, proving this fact requires knowledge of the entire
+对于程序中的某个特定点，要证明这一事实需要了解整个
+
+67
+00:06:03,900 --> 00:06:08,770
+program, so at least the entire control-flow graph. So as we saw in the case of constant
+程序，因此至少是整个控制流图。因此，正如我们在常量情况下看到的那样
+
+68
+00:06:08,770 --> 00:06:13,620
+propagation, to figure out whether X is a constant at a particular point in the program
+传播，以确定X是否为程序中特定点的常量
+
+69
+00:06:13,620 --> 00:06:19,010
+requires reasoning about all the paths that lead to that statement. And that is a global
+需要对通向该语句的所有路径进行推理。这是一个全球性的
+
+70
+00:06:19,010 --> 00:06:23,380
+property. So when you think about all-paths, that could be a path from the entry point
+财产。因此，当您考虑所有路径时，这可能是从入口点开始的路径
+
+71
+00:06:23,380 --> 00:06:29,510
+of the method all the way through loops and across conditionals to the particular statement.
+方法的所有过程，通过循环并跨越特定语句的条件。
+
+72
+00:06:29,510 --> 00:06:35,820
+So, in general, that's a very hard problem to solve. And for certain kinds of questions,
+所以，总的来说，这是一个很难解决的问题。对于某些类型的问题，
+
+73
+00:06:35,820 --> 00:06:40,860
+it's really extremely expensive to solve it exactly. The thing that saves us is that it
+准确地解决这个问题真的非常昂贵。拯救我们的是它
+
+74
+00:06:40,860 --> 00:06:47,820
+is OK always to be conservative. So typically for these optimizations-- and if we want to
+总是保守是可以的。所以通常情况下，对于这些优化--如果我们想
+
+75
+00:06:47,820 --> 00:06:53,050
+know some property X-- then what we really want to know is either X is definitely true--
+知道一些属性X--那么我们真正想知道的是，要么X绝对是真的--
+
+76
+00:06:53,050 --> 00:06:57,870
+So if we say that the property is true, then we have to be right. We can't make a mistake.
+因此，如果我们说属性是真实的，那么我们就必须是正确的。我们不能犯错误。
+
+77
+00:06:57,870 --> 00:07:03,100
+But it is always OK to say that you don't know. So it's OK to give up and say we don't
+但是说你不知道总是可以的。所以放弃也没关系，说我们不会
+
+78
+00:07:03,100 --> 00:07:07,140
+know whether the property holds or not. Because of the worst case, we just don't do the optimization.
+知道房产是否保有。因为最坏的情况，我们就是不做优化。
+
+79
+00:07:07,140 --> 00:07:12,820
+If we can't establish the conditions that would mean it was definitely correct to the
+如果我们不能确定条件，那就意味着它肯定是正确的
+
+80
+00:07:12,820 --> 00:07:17,460
+optimizations, then we want to play it safe and not do the optimization.
+优化，那么我们希望稳妥行事，不做优化。
+
+81
+00:07:17,460 --> 00:07:22,150
+So having approximate techniques or techniques that don't always give the correct answer
+因此，拥有近似的技术或技术并不总是能给出正确的答案
+
+82
+00:07:22,150 --> 00:07:27,960
+to the questions that we wanted to ask is OK as long as we are always right when we
+对我们想问的问题的回答是可以的，只要我们总是对的
+
+83
+00:07:27,960 --> 00:07:32,990
+say that the property holds and otherwise we just say that we don't know whether the
+假设该属性保持不变，否则我们只会说我们不知道
+
+84
+00:07:32,990 --> 00:07:36,200
+property holds or not.
+属性是否有效。
+
+85
+00:07:36,200 --> 00:07:42,060
+To sum up, global dataflow analysis is a standard technique or family of techniques for solving
+总而言之，全局数据流分析是解决以下问题的标准技术或技术系列
+
+86
+00:07:42,060 --> 00:07:47,310
+problems with the characteristics that we just discussed. And global constant propagation
+与我们刚才讨论的特征有关的问题。和全局恒定传播
+
+87
+00:07:47,310 --> 00:07:52,810
+is one example of an optimization that requires global dataflow analysis. And in the next
+是需要全局数据流分析的优化的一个示例。在接下来的时间里
+
+88
+00:07:52,810 --> 00:07:57,750
+several videos, we'll be looking at global constant propagation and another dataflow
+几个视频，我们将看到全局常量传播和另一个数据流
+
+89
+00:07:57,750 --> 00:07:59,590
+analysis in more detail.
+更详细的分析。
+

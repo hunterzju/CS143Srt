@@ -1,0 +1,310 @@
+0
+00:00:04,230 --> 00:00:07,200
+In this video, we're going to talk about the first of three garbage collection
+在此视频中，我们将讨论三个垃圾收集中的第一个
+
+1
+00:00:07,200 --> 00:00:10,870
+techniques that we're going to look at in detail. First one is mark-and-sweep.
+我们将详细介绍的技术。第一个是标记和清扫。
+
+2
+00:00:10,870 --> 00:00:17,870
+Mark-and-sweep works in two phases. And it's called, not surprisingly, mark and
+标记和清除分两个阶段工作。它被称为马克和马克，这并不令人惊讶。
+
+3
+00:00:19,410 --> 00:00:23,769
+sweep. So, the mark phase is going to trace all the reachable objects. So, when
+清扫一下。因此，标记阶段将跟踪所有可达对象。那么，什么时候
+
+4
+00:00:23,769 --> 00:00:26,330
+memory runs out and we stop to do the garbage collection, the first thing we're
+内存耗尽，我们停下来进行垃圾收集，我们要做的第一件事
+
+5
+00:00:26,330 --> 00:00:29,710
+going to do is go and trace out all the reachable objects. And then the Sweep
+接下来要做的就是找出所有可到达的对象。然后清扫
+
+6
+00:00:29,710 --> 00:00:35,190
+phase is going to collect all the garbage objects. And to support this, every object
+阶段将收集所有垃圾对象。为了支持这一点，每个物体
+
+7
+00:00:35,190 --> 00:00:39,480
+is going to have an extra bit somewhere in it called the mark bit. And, this is
+在它的某个地方会有一个额外的比特，叫做标记比特。还有，这是
+
+8
+00:00:39,480 --> 00:00:42,120
+reserved from memory management and it's not going to be used by anything except
+从内存管理中保留，并且它不会被任何人使用，除非
+
+9
+00:00:42,120 --> 00:00:46,289
+the garbage collector. And initially, before we start a garbage collection, the
+垃圾收集器。最初，在我们开始垃圾收集之前，
+
+10
+00:00:46,289 --> 00:00:50,940
+mark bit of every object will always be zero. And that's going to be set to one,
+每个对象的标记位将始终为零。这将被设置为1，
+
+11
+00:00:50,940 --> 00:00:54,230
+for the reachable objects in the mark phase. So, when we mark an object, we mark
+用于标记阶段的可访问对象。所以，当我们标记一个物体时，我们就标记了
+
+12
+00:00:54,230 --> 00:00:59,789
+it with a And that indicates that the object is reachable. So, here is the mark
+它带有和，表示该对象是可访问的。所以，这是标记
+
+13
+00:00:59,789 --> 00:01:04,360
+phase. It's going to be a work list based algorithm and so initially our work list
+阶段。这将是一个基于工作列表的算法，所以最初我们的工作列表
+
+14
+00:01:04,360 --> 00:01:10,000
+consists of all the roots so all the initial pointers held in registers and
+由所有根组成，因此寄存器中保存的所有初始指针
+
+15
+00:01:10,000 --> 00:01:13,660
+then while the work list, the to-do list is not empty, we're going to do the
+然后，虽然工作列表、待办事项列表不是空的，但我们要做的是
+
+16
+00:01:13,660 --> 00:01:18,050
+following. We pick some element v out of the to-do list we'll remove it from the
+下面是。我们从待办事项列表中选择一些元素v，然后将其从
+
+17
+00:01:18,050 --> 00:01:25,050
+to-do list, okay. And then, this is the crux of the algorithm. If the object v is
+待办事项清单，好的。然后，这就是算法的症结所在。如果对象v是
+
+18
+00:01:25,470 --> 00:01:30,390
+not already marked then we mark it, okay. So, we say, mark bit to one and then we
+还没有做标记，那我们就做标记，好的。所以，我们说，将比特标记为1，然后我们
+
+19
+00:01:30,390 --> 00:01:35,030
+find all the pointers inside of it, alright. And we add those to our work
+找到里面的所有指针，好的。我们把这些加到我们的工作中
+
+20
+00:01:35,030 --> 00:01:39,640
+list. So, everything, every point gets added to work list. Now, if v is already
+列表。所以，每一件事，每一点都会被添加到工作清单中。现在，如果v已经是
+
+21
+00:01:39,640 --> 00:01:43,130
+marked, well then we have already processed it and we've already add all the
+标记，那么我们已经对其进行了处理，并且我们已经添加了所有
+
+22
+00:01:43,130 --> 00:01:46,340
+things it points to, to the work list. And so we just need to do nothing there is no
+它指向的东西，工作清单。所以我们只需要什么都不做就没有
+
+23
+00:01:46,340 --> 00:01:53,340
+else branch and we just drop it from the to-do list. So, once we've completed the
+Else分支，我们将其从待办事项列表中删除。所以，一旦我们完成了
+
+24
+00:01:53,540 --> 00:01:57,380
+mark phase and every reachable object has been marked, then the sweep phase is going
+标记阶段，并且每个可到达的对象都已被标记，则扫描阶段正在进行
+
+25
+00:01:57,380 --> 00:02:02,350
+to scan th rough the heap looking for objects that have mark bit zero. And the
+扫描整个堆，查找标记位为零的对象。以及
+
+26
+00:02:02,350 --> 00:02:05,280
+sweep phase is just going to march through all of memory. It's going to start at the
+扫描阶段将在所有内存中行进。它将从
+
+27
+00:02:05,280 --> 00:02:10,229
+bottom of the heap and walk over every object in the heap and check its mark bit.
+堆的底部，遍历堆中的每个对象并检查其标记位。
+
+28
+00:02:10,229 --> 00:02:14,280
+And so, any of the objects that it finds that have mark bit zero, they were not
+因此，它发现的任何具有零标记位的对象，它们都不是
+
+29
+00:02:14,280 --> 00:02:18,170
+visited in mark phase and they're clearly not reachable. S, all those objects will
+在标记阶段访问过，显然无法联系到。%s，则所有这些对象都将
+
+30
+00:02:18,170 --> 00:02:23,569
+be added to a free list. And as we go through the memory is one other detail
+被添加到免费列表中。当我们回顾记忆的时候，还有一个细节
+
+31
+00:02:23,569 --> 00:02:27,709
+that's important. Any object that has its mark bit set is gonna have its mark bit
+这很重要。任何设置了其标记位的对象都将具有其标记位
+
+32
+00:02:27,709 --> 00:02:33,980
+reset to zero. So, that way it's ready for the next garbage collection. So, here is
+重置为零。这样，它就为下一次垃圾收集做好了准备。所以，这就是
+
+33
+00:02:33,980 --> 00:02:40,599
+the pseudo-code for the sweep phase and this will function, size of p is going to
+扫描相位的伪代码，这将起作用，p的大小将为
+
+34
+00:02:40,599 --> 00:02:46,030
+size of block, the size of the object that starts at pointer p, alright. And as
+挡路的大小，从指针p开始的对象的大小。以及AS
+
+35
+00:02:46,030 --> 00:02:50,719
+you'll see this is actually, the reason that we have the size of objects encoded
+您将看到这实际上是我们对对象大小进行编码的原因
+
+36
+00:02:50,719 --> 00:02:55,269
+in the object in COOL. So, remember in the header for COOL objects there is a size
+在冷状态下的物体中。所以，请记住，在酷对象的标题中有一个大小
+
+37
+00:02:55,269 --> 00:02:58,180
+field that is, so that the garbage collector as it's walking through memory
+字段，以便垃圾回收器在遍历内存时
+
+38
+00:02:58,180 --> 00:03:02,620
+can figure out how big the objects are. Anyway, we start at the bottom of the
+可以计算出这些物体有多大。不管怎样，我们从最底层开始
+
+39
+00:03:02,620 --> 00:03:06,659
+heap. And while we haven't reached the top of the heap, we do the following. We look
+堆。虽然我们还没有到达堆的顶部，但我们执行以下操作。我们看着
+
+40
+00:03:06,659 --> 00:03:10,560
+at where we're pointing and then we'll always be pointing to the beginning of an
+在我们所指向的地方，然后我们将始终指向一个
+
+41
+00:03:10,560 --> 00:03:15,349
+object. So, we check to see if the mark bit of that object is one. And if it is,
+对象。因此，我们检查该对象的标记位是否为1。如果是的话，
+
+42
+00:03:15,349 --> 00:03:18,769
+well then it was a reachable object. So, we just reset its mark bit to zero.
+好吧，那么它是一个可以触及的物体。因此，我们只需将其标记位重置为零。
+
+43
+00:03:18,769 --> 00:03:23,489
+Otherwise, if its mark bit was zero, then we're going to add that block of memory,
+否则，如果它的标记位是0，那么我们将添加那个挡路内存，
+
+44
+00:03:23,489 --> 00:03:29,060
+okay, which is the size of the object to the free list. And finally, in either
+好的，这是空闲列表中对象的大小。最后，无论是在哪一种情况下
+
+45
+00:03:29,060 --> 00:03:34,120
+case, okay, we're going to increment p by the size of the object that it points to
+在这种情况下，好的，我们将根据它所指向的对象的大小来递增p
+
+46
+00:03:34,120 --> 00:03:37,819
+so we point to the next object. Then we'll just repeat that loop over and over again
+所以我们指向下一个物体。然后我们就一遍又一遍地重复这个循环
+
+47
+00:03:37,819 --> 00:03:41,439
+resetting the mark bits of things that were reached and adding things that were
+重置已到达的内容的标记位，并添加
+
+48
+00:03:41,439 --> 00:03:47,749
+not reached for the free list until we've touched every object in the heap. Here's a
+在我们接触到堆中的每个对象之前，不会到达空闲列表。这是一个
+
+49
+00:03:47,749 --> 00:03:51,749
+little example. So, we're starting out here with a, a heap and we're gonna assume
+举个小例子。所以，我们从一个堆开始，我们要假设
+
+50
+00:03:51,749 --> 00:03:56,579
+there's just one root for simplicity. And here are all the objects and initially
+简约只有一个根基。这里是所有的物体，最初
+
+51
+00:03:56,579 --> 00:04:01,139
+their marked bits are zero and we do have a free list, an initial free list over
+它们的标记位是零，我们确实有一个空闲列表，初始空闲列表
+
+52
+00:04:01,139 --> 00:04:04,620
+here. Notice that, you know, there's a little bit of memory that is on the free
+这里。请注意，您知道，有一点内存是空闲的
+
+53
+00:04:04,620 --> 00:04:09,639
+list. Okay. So, after the mark phase, what has happened? Well, we've gone through,
+列表。好吧。那么，在标记阶段之后，发生了什么？嗯，我们已经谈过了，
+
+54
+00:04:09,639 --> 00:04:12,569
+and touched all the reachable objects. So, we started with A and, of course, we set
+触摸所有可触及的物体。所以，我们从A开始，当然，我们设置了
+
+55
+00:04:12,569 --> 00:04:16,930
+its mark bit to one. And then we followed pointers reachable from A, set the mark
+它的标记位为1。然后我们跟随从A可达的指针，设置标记
+
+56
+00:04:16,930 --> 00:04:20,290
+bit there. Follow the pointer reachable from C, set the mark bit there. And so we
+在那里咬一口。跟随可从C到达的指针，将标记位设置在那里。所以我们
+
+57
+00:04:20,290 --> 00:04:26,970
+wind up A, C, and E being marked, nothing else is marked, okay. And now the sweep
+结束A、C和E的标记，其他的都没有标记，好吗？现在是清扫
+
+58
+00:04:26,970 --> 00:04:31,600
+phase will go through memory, it's going to reset all the marked bits to zero. And
+相位将通过存储器，它将把所有标记的位重置为0。和
+
+59
+00:04:31,600 --> 00:04:36,100
+as it finds unreachable objects, in this case B and D, it's going to add them to
+当它发现无法到达的对象(在本例中是B和D)时，它将把它们添加到
+
+60
+00:04:36,100 --> 00:04:40,060
+the free list and so what we'll wind up the free list will wind up being a linked
+空闲列表以及我们将结束的空闲列表最终将是一个链接的
+
+61
+00:04:40,060 --> 00:04:45,640
+list of, of, of blocks of memory that are available for future allocations.
+可供将来分配的内存块的、的列表。
+

@@ -1,0 +1,925 @@
+0
+00:00:03,970 --> 00:00:07,880
+In this video, we are going to move beyond our discussion of Run-time Organization
+在本视频中，我们将超越对运行时组织的讨论
+
+1
+00:00:07,880 --> 00:00:13,020
+and begin talking about code generation And in this first you know, it was
+开始讨论代码生成，在这第一个中，您知道，它是
+
+2
+00:00:13,020 --> 00:00:16,320
+probably quite a long series of videos on code generation, we are gonna talk about
+可能会有相当长的一系列关于代码生成的视频，我们将讨论
+
+3
+00:00:16,320 --> 00:00:23,320
+the simplest model for code generation which is called a stack machine. So, in a
+最简单的代码生成模型，称为堆栈机。所以，在一个
+
+4
+00:00:25,869 --> 00:00:30,199
+stack machine, you might guess that the primary storage is some kind of a stack
+堆栈机器，您可能会猜想主存储是某种堆栈
+
+5
+00:00:30,199 --> 00:00:34,000
+and you would be right. In fact, the only storage that the stack machine has is the
+那你就是对的。事实上，堆栈机器拥有的唯一存储空间是
+
+6
+00:00:34,000 --> 00:00:40,720
+stack And the way the stack machine works is that it executed an instruction, and
+堆栈和堆栈机器的工作方式是它执行指令，并且
+
+7
+00:00:40,720 --> 00:00:46,110
+all instruction have the form. There's some function of some arguments and they
+所有的说明书都有这样的形式。有些论点有一些作用，它们
+
+8
+00:00:46,110 --> 00:00:52,690
+produce one result. And what that does is it'll pop in upper hands for the stack so
+产生一个结果。它所做的就是它会在堆栈中占据上风，所以
+
+9
+00:00:52,690 --> 00:00:58,260
+the arguments a1 through an are stored at the top of the stack. It will then compute
+参数A1到An存储在堆栈的顶部。然后它将计算
+
+10
+00:00:58,260 --> 00:01:04,970
+the function f using those operands and it will push the result r back on top of the
+函数f使用这些操作数，它将把结果r推回到
+
+11
+00:01:04,970 --> 00:01:10,150
+stack. Okay, So, let's take a look at a simple example. Let's see how we would
+堆栈。好的，那么，我们来看一个简单的例子。让我们看看我们会怎么做
+
+12
+00:01:10,150 --> 00:01:17,150
+compute seven plus five using a stack machine. So, we would have our stack And
+用堆叠机计算7加5。所以，我们会有我们的堆栈
+
+13
+00:01:18,860 --> 00:01:23,350
+initially the stack might have, already have some stuff on it but we don't care
+最初堆栈可能有，已经有一些内容了，但是我们不在乎
+
+14
+00:01:23,350 --> 00:01:29,020
+what that stuff is and so it will execute seven plus five. What we would do, well
+那是什么，所以它会执行7加5。我们会怎么做，好吧
+
+15
+00:01:29,020 --> 00:01:32,390
+first we will have to get the seven and the five out of the stack so as we get
+首先，我们必须将7和5从堆栈中取出，这样我们就可以得到
+
+16
+00:01:32,390 --> 00:01:36,080
+pushed on stack and we'll see more about how that happens in a minute. And let's
+推送到堆栈上，我们将立即看到更多关于这是如何发生的。让我们
+
+17
+00:01:36,080 --> 00:01:40,190
+say that seven and five were both on the stack. And so now we wanted to compute the
+假设七号和五号都在堆栈上。所以现在我们想要计算
+
+18
+00:01:40,190 --> 00:01:45,370
+addition on seven and five so, addition takes two arguments so we would pop the
+7和5的加法因此，加法需要两个参数，所以我们将弹出
+
+19
+00:01:45,370 --> 00:01:51,860
+two arguments off the stack. And we wined up with the five and the seven Pop-up the
+堆栈中的两个参数。我们赢了5个和7个弹出式菜单
+
+20
+00:01:51,860 --> 00:01:57,650
+stack. We will perform the operation plus and then the result will get push back
+堆栈。我们将执行加法运算，然后结果将被推送
+
+21
+00:01:57,650 --> 00:02:03,740
+under the stack. So this would be good to twelve and then twelve will get push back
+在堆栈下面。所以这对12是好的，然后12会被推回去
+
+22
+00:02:03,740 --> 00:02:10,740
+on to our stack. Okay. And I noticed that I did indicate that there might be some
+加入我们的队伍。好吧。我注意到我确实暗示过可能会有一些
+
+23
+00:02:11,569 --> 00:02:16,209
+other stuff on this stack already. Let me give that stuff a name. And let me talk
+这堆东西上已经有其他东西了。让我给那东西起个名字。让我来谈谈
+
+24
+00:02:16,209 --> 00:02:20,459
+about one very important property of the stack machine. So, those we have evaluated
+堆叠机的一个非常重要的特性。所以，我们评估过的那些
+
+25
+00:02:20,459 --> 00:02:26,290
+seve n+5, we round up in the situation where the results of that operation was on
+Sevn+5，我们在操作结果打开的情况下进行四舍五入
+
+26
+00:02:26,290 --> 00:02:29,990
+top of the stop of the stack. Okay, and the initial stack contents was unchanged.
+堆栈停靠点的顶部。好的，初始的堆栈内容没有改变。
+
+27
+00:02:29,990 --> 00:02:34,770
+This stack, the stack that was below the arguments that we are interested in didn't
+这个堆栈，我们感兴趣的参数下面的堆栈没有
+
+28
+00:02:34,770 --> 00:02:41,510
+get modified. Okay. So, we have survived through all the operations unchanged. And
+去修改一下吧。好吧。所以，我们安然无恙地度过了所有的手术。和
+
+29
+00:02:41,510 --> 00:02:46,700
+this is an important property of the stack machine. That we will exploit and the
+这是堆叠机的一个重要特性。我们要利用的是
+
+30
+00:02:46,700 --> 00:02:52,930
+general to say what the general property is when you evaluate an expression the
+一般表示在计算表达式时的一般属性是什么
+
+31
+00:02:52,930 --> 00:02:56,230
+result of the expression will be on top of the stack and the contents of the stack
+表达式的结果将位于堆栈的顶部，并且堆栈的内容
+
+32
+00:02:56,230 --> 00:03:03,230
+prior to the beginning evaluation of the expression will be preserved. So, now
+开始之前表达式的求值将被保留。那么现在
+
+33
+00:03:04,360 --> 00:03:09,520
+let's take by how we could program a stack machine. So, let's have a language with
+让我们来看看如何对堆叠机进行编程。所以，让我们用一种语言
+
+34
+00:03:09,520 --> 00:03:15,110
+just two instructions in it. We can push an engine run to the stack and then we
+里面只有两条说明。我们可以将引擎运行推送到堆栈，然后我们
+
+35
+00:03:15,110 --> 00:03:19,030
+have the operation add which will add the two integers on the top of the stack. And
+使用操作add，该操作将把堆栈顶部的两个整数相加。和
+
+36
+00:03:19,030 --> 00:03:23,660
+now, let's take a look at this program which pushes seven and then pushes five
+现在，让我们看一下这个程序，它先推7，然后推5
+
+37
+00:03:23,660 --> 00:03:28,480
+and then does an add. So, let's think about how this program would work. Okay,
+然后进行加法运算。那么，让我们来考虑一下这个项目是如何运作的。好吧,
+
+38
+00:03:28,480 --> 00:03:34,519
+so we have our stack contents and now, and the first instruction is to push seven. So
+现在我们有了堆栈内容，第一条指令是压入7。所以
+
+39
+00:03:34,519 --> 00:03:40,590
+wined up with the seven on the stack, added to the stack and now we push five.
+与堆栈上的七个人一起喝酒，添加到堆栈中，现在我们推五个。
+
+40
+00:03:40,590 --> 00:03:47,590
+Okay. And so the next step, we'll have five and seven on top of the stack then
+好吧。所以下一步，我们将有5个和7个在堆栈的顶部
+
+41
+00:03:47,849 --> 00:03:52,870
+we'll perform the add and then we'll pop these two elements off the stack and add
+我们将执行相加，然后将这两个元素从堆栈中弹出并相加
+
+42
+00:03:52,870 --> 00:03:59,870
+them and push the result back on. And we'll wind up with twelve on the stack and
+并将结果推回。我们最后会有12个人在堆栈上
+
+43
+00:04:01,099 --> 00:04:08,099
+again the original stack contents are preserved. Now, what interesting property
+再次保留原始堆栈内容。现在，什么有趣的属性
+
+44
+00:04:08,860 --> 00:04:13,840
+of stack machine code is that the location of the upper hands and result is not
+堆栈机器代码的关键是上手的位置和结果不是
+
+45
+00:04:13,840 --> 00:04:17,879
+exquisitely stated in the instruction. And that's because these instructions always
+说明书中写得很精美。那是因为这些指示总是
+
+46
+00:04:17,879 --> 00:04:22,970
+refer to the top of the stack. And this is in contrast were register machine or
+请参阅堆栈的顶部。与此形成对比的是寄存机或
+
+47
+00:04:22,970 --> 00:04:29,280
+register instructions that explicitly name where they take their upper hands from and
+注册明确指定它们的上手位置和位置的指令
+
+48
+00:04:29,280 --> 00:04:34,110
+where they put the results. So for example you might be familiar from seeing some
+他们把结果放在哪里。举个例子，你可能会因为看到一些
+
+49
+00:04:34,110 --> 00:04:38,650
+machine code or assembly code in the past or and add instruction by typically take
+机器代码或汇编代码在过去或与加法指令通常采取
+
+50
+00:04:38,650 --> 00:04:43,080
+three registers, two for the arguments, two for the registered
+三个寄存器，两个用于参数，两个用于已注册的
+
+51
+00:04:43,080 --> 00:04:47,840
+arguments are gonna be added together and one for the destination for the result
+参数将被加在一起，一个参数用于结果的目的地
+
+52
+00:04:47,840 --> 00:04:54,440
+where in the stack machine we just have. A single word add and no explicit naming of
+在堆叠机的什么地方我们只有。只有一个单词add，没有显式命名
+
+53
+00:04:54,440 --> 00:04:58,240
+the arguments because it's fixed, where the arguments will come from. The
+论点，因为它是固定的，论点将从哪里来。这个
+
+54
+00:04:58,240 --> 00:05:01,750
+arguments will always be popped from the stack and the result will always be placed
+参数将始终从堆栈中弹出，并且结果将始终放置
+
+55
+00:05:01,750 --> 00:05:06,280
+back on top of the stack. And. The interesting property here is that it leads
+回到堆栈的顶端。和。这里有趣的属性是它引导
+
+56
+00:05:06,280 --> 00:05:11,220
+to more compact programs because we have to say less in the instructions the
+更紧凑的程序，因为我们必须在指令中少说
+
+57
+00:05:11,220 --> 00:05:15,520
+programs themselves are actually quite a bit smaller than register machine
+程序本身实际上比寄存器机器小得多
+
+58
+00:05:15,520 --> 00:05:21,210
+programs. And this is one of the reason, reasons that Java bytecode uses a stack
+程序。这也是Java字节码使用堆栈的原因之一
+
+59
+00:05:21,210 --> 00:05:26,460
+evaluation model because it leads to more compact programs and especially in the
+评估模型，因为它导致更紧凑的程序，特别是在
+
+60
+00:05:26,460 --> 00:05:32,090
+early days of Java when it was very expensive to ship these programs around
+Java的早期，那时到处运送这些程序非常昂贵
+
+61
+00:05:32,090 --> 00:05:37,780
+the Internet to download them, having very small compact code was a good property.
+在互联网上下载它们，有非常小的压缩代码是一个很好的属性。
+
+62
+00:05:37,780 --> 00:05:43,430
+And by we might wonder why would we prefer register machine and the answer is that
+我们可能会想，为什么我们更喜欢登记机，答案是
+
+63
+00:05:43,430 --> 00:05:48,000
+register machine code is generally faster because we can place the data exactly
+寄存器机器码通常更快，因为我们可以准确地放置数据
+
+64
+00:05:48,000 --> 00:05:52,919
+where we wanted to be. We will generally have fewer, you know, immediate operations
+我们想去的地方。我们通常会有较少的，你知道的，立即行动
+
+65
+00:05:52,919 --> 00:05:56,660
+and less manipulation of the stack, pushing and popping stuff to get to the
+减少了对堆栈的操作，推入和弹出内容即可到达
+
+66
+00:05:56,660 --> 00:06:01,289
+data that we want. And then it turns out that there isn't inter-media point between
+我们想要的数据。然后，事实证明，在媒体之间没有中间点
+
+67
+00:06:01,289 --> 00:06:04,740
+a pure stack machine and a pure register machine, that's interesting. This is
+一台纯粹的堆叠机和一台纯粹的寄存器机器，这很有趣。这是
+
+68
+00:06:04,740 --> 00:06:09,389
+called an N register stack machine. And conceptually, the idea of the N register
+称为N寄存器堆栈机。从概念上讲，N寄存器的概念
+
+69
+00:06:09,389 --> 00:06:15,759
+stack machine is to keep the. Top end locations of the stack in registers. And
+堆叠机是用来保存的。寄存器中堆栈的顶端位置。和
+
+70
+00:06:15,759 --> 00:06:20,000
+the particular variant of the un-resourced stack machine that we particularly
+没有资源的堆叠机的特定变体，我们特别
+
+71
+00:06:20,000 --> 00:06:23,460
+interested in is the one register stack machine because the terms that you get
+感兴趣的是单寄存器堆栈机器，因为
+
+72
+00:06:23,460 --> 00:06:29,509
+widely benefit by even having a single register that's dedicated to the top of
+广泛受益，即使只有一个寄存器专门用于
+
+73
+00:06:29,509 --> 00:06:34,500
+the stack. This register is called the accumulator so the dedicated registry here
+堆栈。此寄存器称为累加器，因此此处的专用注册表
+
+74
+00:06:34,500 --> 00:06:38,600
+is called the accumulator. It's called that because intuitively it accumulates
+被称为累加器。之所以这样叫是因为直觉上它会积累
+
+75
+00:06:38,600 --> 00:06:45,600
+the results of operations and then all the other data lives on the stack. So, what is
+操作的结果，然后所有其他数据都存储在堆栈中。那么，什么是
+
+76
+00:06:46,610 --> 00:06:50,830
+the advantage of a one register stack machine? Well, let's think about the add
+单寄存器堆栈机器的优势是什么？好的，让我们来考虑一下
+
+77
+00:06:50,830 --> 00:06:54,750
+instruction and how it works in a pure stack machine? So, in the pure stack
+指令以及它在纯堆栈机器中是如何工作的？因此，在纯堆栈中
+
+78
+00:06:54,750 --> 00:07:01,100
+machine, what is the add instruction going to do it's going to pop two arguments from
+机器，加法指令要做什么它将从下面弹出两个参数
+
+79
+00:07:01,100 --> 00:07:07,780
+the stacks, a five and seven. And it's going to add them and then it's gonna put
+堆栈，5号和7号。它会把它们相加，然后它会把它们
+
+80
+00:07:07,780 --> 00:07:14,380
+the result back onto the stack. And let's just name the rest of the stack contents
+将结果放回堆栈。让我们将堆栈内容的睡觉命名为
+
+81
+00:07:14,380 --> 00:07:19,430
+there. And that requires three memory operations. After load, two arguments and
+那里。这需要三次内存操作。加载后，两个参数和
+
+82
+00:07:19,430 --> 00:07:25,740
+then store one result. But in the one razor stack machine, the add operation
+然后存储一个结果。但是在一个剃须刀堆叠机中，加法操作
+
+83
+00:07:25,740 --> 00:07:31,830
+actually does a lot of its work out of the one register. So, the one of the arguments
+实际上它的很多工作都是在一个寄存器之外完成的。所以，其中一个论点
+
+84
+00:07:31,830 --> 00:07:35,889
+is already stored in the register because that's the conceptually the top of the, of
+已经存储在寄存器中，因为从概念上讲，这是
+
+85
+00:07:35,889 --> 00:07:39,759
+the stack. And, the result will be pushed back on the top of the stack which again
+堆栈。并且，结果将被推回到堆栈的顶部，该堆栈再次
+
+86
+00:07:39,759 --> 00:07:44,710
+is just the accumulated register. So here, one of the arguments in the right are both
+就是累加的寄存器。所以在这里，右边的一个论点都是
+
+87
+00:07:44,710 --> 00:07:48,620
+taking from registers and there's only one memory reference to get the second
+从寄存器中获取，并且只有一个内存引用来获取第二个
+
+88
+00:07:48,620 --> 00:07:55,620
+argument from the portion of the stack that's stored in the memory. So in
+参数来自存储在内存中的堆栈部分。所以在
+
+89
+00:07:56,069 --> 00:08:00,610
+general, let's think about how we would evaluate and arbitrary expression using a
+一般情况下，让我们考虑一下如何使用
+
+90
+00:08:00,610 --> 00:08:04,349
+stack machine. So now this isn't I should say, you know, just stack machine called
+堆叠机。所以这不是我应该说的，你知道，只是堆叠机，叫做
+
+91
+00:08:04,349 --> 00:08:08,360
+like we're looking at it before. This is not just a sequence of bytecode level
+就像我们之前看到的一样。这不仅仅是字节码级别的序列
+
+92
+00:08:08,360 --> 00:08:12,490
+operations, this is actually a full expression as you might find in Kuhl so
+操作，这实际上是一个完整的表达式，您可能会在Kuhl中找到，因此
+
+93
+00:08:12,490 --> 00:08:18,560
+there are other complex expressions nested inside of some operation. All right. And
+在某些操作中还嵌套了其他复杂表达式。好的。和
+
+94
+00:08:18,560 --> 00:08:21,979
+so, forget the operation that takes N arguments and those arguments are
+所以，忘掉接受N个参数的操作，这些参数是
+
+95
+00:08:21,979 --> 00:08:26,110
+expression that themselves needs to be evaluated so here's a general strategy for
+表达式本身需要求值，所以这里有一个通用策略
+
+96
+00:08:26,110 --> 00:08:30,970
+doing that with the stack machines. So, for each of the sub-expression, each of
+使用堆叠机可以做到这一点。因此，对于每个子表达式，每个
+
+97
+00:08:30,970 --> 00:08:36,179
+the arguments in order we're going to evaluate it recursively using the same
+参数的顺序是，我们将使用相同的
+
+98
+00:08:36,179 --> 00:08:43,179
+stack machine strategy and that will end up putting the result when we evaluate EI,
+堆叠机策略，这将在我们评估EI时最终将结果放入其中，
+
+99
+00:08:43,188 --> 00:08:47,829
+recursively the results will be in the accumulator. And so the results is in the
+递归地，结果将在累加器中。所以结果在
+
+100
+00:08:47,829 --> 00:08:53,519
+accumulator, alright. And then we're going to push that results onto the memory
+累加器，好的。然后我们将把结果推送到内存中
+
+101
+00:08:53,519 --> 00:08:55,929
+stack. So we'r e going to take that results and we're gonna free up the
+堆栈。所以我们要把结果拿出来，我们要把
+
+102
+00:08:55,929 --> 00:09:02,699
+accumulator and save it on the stack, the portion of stack that's in memory, okay.
+累加器，并将其保存在堆栈上，堆栈的一部分在内存中，好的。
+
+103
+00:09:02,699 --> 00:09:07,819
+So we do this evaluating the sub-expressions for the first and -one
+因此，我们计算第一个和-1的子表达式
+
+104
+00:09:07,819 --> 00:09:11,779
+arguments. So everything except the last one, okay. We're gonna use the same
+争论。所以除了最后一个，所有的都是，好的。我们会用同样的
+
+105
+00:09:11,779 --> 00:09:18,779
+strategy, for the last one, for en. We just evaluate. We don't push the result on
+战略，为最后一个，为恩。我们只是评估一下。我们不会把结果推后
+
+106
+00:09:19,869 --> 00:09:25,389
+the stack. That just means that the result is left in the accumulator okay so now we
+堆栈。这只意味着结果留在累加器中，好的，那么现在我们
+
+107
+00:09:25,389 --> 00:09:29,499
+have one of the arguments of the accumulator. The last one we evaluated and
+有一个累加器的参数。上一次我们评估的是
+
+108
+00:09:29,499 --> 00:09:33,850
+the other in line as one are o the top of the portion of the stack that's in memory.
+排成一行的另一个是o，在内存中的堆栈部分的顶部。
+
+109
+00:09:33,850 --> 00:09:39,050
+So that what we all have to do is we pop in -one values from the stack and combine
+因此，我们都要做的是从堆栈中弹出一个值并合并
+
+110
+00:09:39,050 --> 00:09:43,939
+any compute up using the -one values plus the value of the accumulator and we store
+使用-1值加上累加器的值的任何计算，我们存储
+
+111
+00:09:43,939 --> 00:09:48,489
+the result back into the accumulator, okay. So that's the general strategy for
+把结果放回累加器，好的。这就是我们的总体战略
+
+112
+00:09:48,489 --> 00:09:55,489
+evaluating an expression using a stack machine. So let's do this now for a simple
+使用堆栈机器计算表达式。所以现在让我们来做个简单的
+
+113
+00:09:55,639 --> 00:09:59,850
+example. Let's take our same example that we've been using and let's evaluate the
+举个例子。让我们以我们一直使用的相同示例为例，让我们评估
+
+114
+00:09:59,850 --> 00:10:04,850
+expression seven plus five. So, how we're gonna do that? Well, we're evaluating a
+表达式七加五。那么，我们要怎么做呢？嗯，我们正在评估一个
+
+115
+00:10:04,850 --> 00:10:09,079
+plus expression and that takes two arguments, two expression as the way to
+加号表达式，它接受两个参数，两个表达式作为
+
+116
+00:10:09,079 --> 00:10:12,639
+evaluate each of those. So first we evaluate the expression seven. Let me
+评估其中的每一个。所以首先我们计算表达式7。让我
+
+117
+00:10:12,639 --> 00:10:19,639
+actually, let me draw our stack here. Okay, so we have our initial content to
+实际上，让我在这里画个句号。好的，我们的初始内容是
+
+118
+00:10:19,660 --> 00:10:23,879
+the stack, we have our initial accumulator. And so now we're evaluating
+堆栈，我们就有了初始累加器。所以现在我们正在评估
+
+119
+00:10:23,879 --> 00:10:29,079
+seven, okay? And of course a constant loose evaluate to itself and the result is
+七个，好吗？当然，对自身进行持续宽松的评估，结果是
+
+120
+00:10:29,079 --> 00:10:33,649
+toward the accumulator, okay? So that's the first step after evaluating seven. And
+对着蓄电池，好吗？所以这是评估七个之后的第一步。和
+
+121
+00:10:33,649 --> 00:10:37,350
+now because that's the first argument to plus, it has to get pushed on to the
+现在因为这是加号的第一个参数，所以它必须被推到
+
+122
+00:10:37,350 --> 00:10:43,759
+stack, the portion of the stack in main memory. So. Now, we have a situation that
+堆栈，主内存中堆栈的一部分。所以。现在，我们的情况是
+
+123
+00:10:43,759 --> 00:10:49,480
+looks like this. All right, in the course to seven is still in the accumulator but
+看起来是这样的。好的，在到7点的航程中还在累加器里，但是
+
+124
+00:10:49,480 --> 00:10:53,639
+we're now about to override it, we're not gonna use that value again. Because the
+我们现在要覆盖它，我们不会再使用该值。因为
+
+125
+00:10:53,639 --> 00:10:57,739
+next thing we're gonna do is evaluate the second argument to plus and that happens
+接下来我们要做的是将第二个参数求值为+，这会发生
+
+126
+00:10:57,739 --> 00:11:01,999
+to be in this case also a constant expression five and so that will get
+在这种情况下也是一个常量表达式5，所以它将得到
+
+127
+00:11:01,999 --> 00:11:05,720
+evaluated and then stored in the accumulator. Okay, so I will override the
+求值，然后存储在累加器中。好的，所以我会重写
+
+128
+00:11:05,720 --> 00:11:12,720
+seven. This will be five there, all right? And now, we have evaluated both arguments.
+七。这里是五个人，好吗？现在，我们评估了这两个论点。
+
+129
+00:11:13,139 --> 00:11:17,499
+Okay, remember in the case of just having two arguments. The first argument gets
+好的，记住在只有两个论点的情况下。第一个参数得到
+
+130
+00:11:17,499 --> 00:11:21,059
+evaluated and saved on the stack so it doesn't, so we don't lose the value when
+评估并保存在堆栈上，这样它就不会丢失，因此在执行以下操作时不会丢失该值
+
+131
+00:11:21,059 --> 00:11:24,509
+we evaluate the second argument. And the second argument we uses is the last one we
+我们评估第二个论点。我们使用的第二个参数是我们使用的最后一个参数
+
+132
+00:11:24,509 --> 00:11:31,509
+can just leave in the accumulator And that way actually evaluates the plus. Okay, so
+可以直接留在累加器中，这样就可以计算加号。好的，那么
+
+133
+00:11:31,879 --> 00:11:38,879
+we do the accumulator gets the accumulator plus the top of the memory stack. So in
+我们这样做，累加器获得累加器加上内存堆栈的顶部。所以在
+
+134
+00:11:41,809 --> 00:11:48,759
+this case, that results in adding seven and five. And we line up and of course we
+在这种情况下，结果是7和5相加。我们排好队，当然我们
+
+135
+00:11:48,759 --> 00:11:54,100
+pop the argument from the memory stack, right. So we have just the original
+从内存堆栈中弹出参数，对。所以我们只有原件
+
+136
+00:11:54,100 --> 00:12:01,100
+contents there and now the value twelve in the accumulator. So, as I think you would
+内容和现在累加器中的值12。所以，就像我想的那样
+
+137
+00:12:03,549 --> 00:12:10,429
+see from the example, the invariant that we're gonna maintain with the stack
+从示例中可以看出，我们将使用堆栈维护的不变量
+
+138
+00:12:10,429 --> 00:12:15,329
+machine is that after we evaluate an expression e, the accumulator holds the
+机器是在我们对表达式e求值之后，累加器保存
+
+139
+00:12:15,329 --> 00:12:19,920
+value of e so the result of evaluating e winds up in the accumulator and the stack is
+值，因此计算e的结果在累加器中结束，堆栈为
+
+140
+00:12:19,920 --> 00:12:26,040
+unchanged. And so the stack, the memory portion of the stack is whatever it was
+没变。所以堆栈，堆栈的内存部分是什么
+
+141
+00:12:26,040 --> 00:12:31,899
+before we start of evaluating e. And this is a very, very important property,
+在我们开始评估e之前，这是一个非常非常重要的性质，
+
+142
+00:12:31,899 --> 00:12:38,899
+expression evaluation preserves the stack. So, now let's look at a more elaborated
+表达式求值保留堆栈。那么现在我们来看一个更详细的
+
+143
+00:12:41,549 --> 00:12:48,549
+example, just slightly more elaborate, three+7+5. And the interesting thing about
+例如，只是稍微详细一点，3+7+5，有趣的是
+
+144
+00:12:48,689 --> 00:12:55,119
+this example. Is that now one of the arguments to the other plus is itself a
+这个例子。现在另一个加号的其中一个论点本身就是一个
+
+145
+00:12:55,119 --> 00:12:58,269
+compound expression. So it would have to be, that would have to be evaluated
+复合表达式。所以它必须是，那必须要评估
+
+146
+00:12:58,269 --> 00:13:03,019
+recursively as part of evaluating the entire expression so let's see how this
+递归作为计算整个表达式的一部分，让我们看看这是如何实现的
+
+147
+00:13:03,019 --> 00:13:07,290
+works. So the first thing that's going to happen or evaluating the outer plus, we're
+很管用。所以要做的第一件事就是评估外加，我们是
+
+148
+00:13:07,290 --> 00:13:11,459
+gonna evaluate the first argument to that plus that's just the constant three so
+我要计算第一个参数，加上，这只是常数3，所以
+
+149
+00:13:11,459 --> 00:13:17,149
+we're gonna load it into the accumulator. And that's the result of evaluating three.
+我们要把它装进蓄电池。这就是三次评估的结果。
+
+150
+00:13:17,149 --> 00:13:21,089
+And now because it's the first argument to the plus, we have to save it before we can
+现在因为这是加号的第一个参数，所以我们必须先保存它，然后才能
+
+151
+00:13:21,089 --> 00:13:27,199
+get around to evaluating the addition itself. So that result is pushed on to the
+抽出时间来评估添加本身。因此，结果会被推送到
+
+152
+00:13:27,199 --> 00:13:34,199
+stack. And now we're g onna evaluate the second argument to the outer plus and that
+堆栈。现在我们要将第二个参数求值为外部加号，也就是
+
+153
+00:13:35,220 --> 00:13:40,230
+itself has two arguments. And the first argument to that, to the inner plus is
+它本身有两个论点。关于这一点的第一个论据是，对内部加号的第一个论点是
+
+154
+00:13:40,230 --> 00:13:43,809
+seven. And so that winds up getting stored in the accumulator, that's the result of
+七。所以最终被存储在累加器中，这就是
+
+155
+00:13:43,809 --> 00:13:48,230
+evaluating seven. And then because the inner plus has two arguments, we have to
+评估7号。因为内加号有两个论点，所以我们必须
+
+156
+00:13:48,230 --> 00:13:52,220
+evaluate the second, evaluate the second argument to the inner plus, the seven has
+对第二个求值，对第二个自变量求值为内部加号，7有
+
+157
+00:13:52,220 --> 00:13:56,519
+to get saved to the stack. So now, the stack has seven three and whenever it had
+才能保存到堆栈中。所以现在，堆栈有7，3，只要它有
+
+158
+00:13:56,519 --> 00:14:03,519
+before we start it. Next, we're gonna evaluate the second argument to the inner
+在我们开始之前。接下来，我们将从内部评估第二个论点
+
+159
+00:14:03,809 --> 00:14:09,669
+plus And so evaluating a constant five will result in five being loaded in the
+加法求值为常数5将导致将5加载到
+
+160
+00:14:09,669 --> 00:14:14,519
+accumulator and now, we have evaluated all the arguments to the inner plus, okay. And
+累加器，现在，我们已经将所有参数求值为内部加号，好的。和
+
+161
+00:14:14,519 --> 00:14:20,540
+so we know from our stack discipline that the last arguments is in the accumulator
+因此，我们从堆栈规则中知道最后一个参数在累加器中
+
+162
+00:14:20,540 --> 00:14:24,029
+and the first argument will be on top of the stack. So the next thing that will
+第一个参数将位于堆栈的顶部。所以接下来要做的就是
+
+163
+00:14:24,029 --> 00:14:28,059
+happen is that we'll pop that second argument from the stack added to the
+我们将从堆栈中弹出第二个参数，并将其添加到
+
+164
+00:14:28,059 --> 00:14:32,389
+accumulator and store back into the accumulator and so now we have the results
+累加器，并存储回累加器，现在我们就有了结果。
+
+165
+00:14:32,389 --> 00:14:39,389
+of the inner plus in the accumulator. We also have the pop, the seven from the
+累加器中的内加。我们还有流行音乐，七个来自
+
+166
+00:14:39,459 --> 00:14:46,459
+stack, okay and finally now we've evaluated the second argument to the outer
+堆栈，好的，最后我们对外部的第二个参数求值
+
+167
+00:14:47,660 --> 00:14:52,679
+plus. So now we can perform the outer edition. And what is that involve that
+另外。现在我们可以表演外版了。这又牵涉到什么呢？
+
+168
+00:14:52,679 --> 00:14:56,329
+takes the stack contents then adds it to the value that is currently on the top of
+获取堆栈内容，然后将其添加到当前位于
+
+169
+00:14:56,329 --> 00:15:01,829
+the stack which is the value three which is what we saved a long time ago now to,
+堆栈是我们很久以前保存的值3，
+
+170
+00:15:01,829 --> 00:15:06,980
+to remember it from what it was to do the other addition and we wind up. After we
+从做另一个加法的过程中记住它，最后我们就得到了。在我们之后
+
+171
+00:15:06,980 --> 00:15:12,249
+pop the stack with fifteen in the accumulator, that's the results of the
+在累加器中弹出15的堆栈，这是
+
+172
+00:15:12,249 --> 00:15:17,589
+entire expression, and notice it's the same stack that we started with. Okay? So
+整个表达式，注意这与我们开始时使用的堆栈相同。好吧?所以
+
+173
+00:15:17,589 --> 00:15:22,589
+evaluating this entire expression, resulted in the, result in any accumulator
+对此整个表达式求值，会导致产生任何累加器
+
+174
+00:15:22,589 --> 00:15:27,600
+and the stack being unchanged And if you looked at that the sub-expression, you can
+堆栈保持不变，如果您查看该子表达式，您可以
+
+175
+00:15:27,600 --> 00:15:32,399
+see that the same things happened. So let's take a look at the evaluation of
+确保同样的事情发生。那么我们来看一下这个评价，
+
+176
+00:15:32,399 --> 00:15:39,399
+seven plus five. So where that take place that started here. Okay. Started at this
+七加五。从这里开始，这一切就发生在哪里。好吧。从这个开始
+
+177
+00:15:39,669 --> 00:15:46,669
+instruction. And, it lasted down to here and you can see that the evaluation of
+指示。而且，它一直持续到这里，你可以看到，对
+
+178
+00:15:46,790 --> 00:15:51,889
+seven + five which encompasses these five expressions resulted in twelve being put
+包含这五个表达式的7+5导致了12个
+
+179
+00:15:51,889 --> 00:15:56,179
+on top of the stack, that's the result of seven + five and it didn't affect the
+在堆栈的顶部，这是7+5的结果，它不会影响
+
+180
+00:15:56,179 --> 00:16:01,339
+contents I'm sorry. It resulted in twelve being placed in the accumulator and it
+内容我很抱歉。这导致12个被放置在累加器中，并且它
+
+181
+00:16:01,339 --> 00:16:05,509
+will left the stack unchanged to where it was when the evaluation of seven plus five
+将使堆栈保持不变，直到评估为7加5时的位置
+
+182
+00:16:05,509 --> 00:16:09,549
+began. So here is where it began and the value we had saved three was on the top of
+开始了。这就是它开始的地方，我们节省了3英镑的价值在
+
+183
+00:16:09,549 --> 00:16:13,459
+the stack and when we're done evaluating seven plus five indeed again the value
+堆栈，当我们计算完7加5时，实际上也是值
+
+184
+00:16:13,459 --> 00:16:18,709
+three and. All the other stuff that was there before are still on the stack.
+三加三。以前在那里的所有其他东西都还在堆栈上。
+

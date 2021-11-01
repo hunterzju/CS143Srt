@@ -1,0 +1,410 @@
+0
+00:00:03,780 --> 00:00:07,960
+In this video, we're going to continue our discussion of top-down parsing algorithms
+在本视频中，我们将继续讨论自上而下的解析算法
+
+1
+00:00:07,960 --> 00:00:14,960
+with another strategy called predictive parsing. So, predictive parsing is a lot
+使用另一种称为预测性解析的策略。因此，预测性语法分析的工作量很大
+
+2
+00:00:16,480 --> 00:00:21,290
+like recursive descent. It's still a top-down parser. But the parser is able to
+就像递归下降一样。它仍然是一个自上而下的解析器。但是解析器能够
+
+3
+00:00:21,290 --> 00:00:25,500
+predict which production to use. And it's never wrong. [inaudible] parser is always
+预测要使用的产品。而且从来没有错过。[听不见]解析器总是
+
+4
+00:00:25,500 --> 00:00:31,840
+able to guess correctly which production will yield to, will lead to a successful
+能够正确地猜测哪种生产将让位于哪一种生产，将会导致一次成功的
+
+5
+00:00:31,840 --> 00:00:37,160
+parse, if any production. Well, it lead to a successful parse. And it does have some
+解析，如果有产品的话。嗯，它导致了一个成功的解析。而且它确实有一些
+
+6
+00:00:37,160 --> 00:00:41,449
+two ways; first of all it looks at the next few tokens, so it uses look-ahead to
+两种方式；首先，它查看接下来的几个令牌，因此它使用前瞻性来
+
+7
+00:00:41,449 --> 00:00:46,519
+try to figure out which production should be used. So, based on what's coming up in
+试着想清楚应该使用哪种产品。所以，根据即将发生的事情
+
+8
+00:00:46,519 --> 00:00:52,559
+the input string, but also it restricts the grammars. So this, this is only works
+输入字符串，但也限制了语法。所以这，这是唯一有效的
+
+9
+00:00:52,559 --> 00:00:59,079
+for a restricted form of grammars. And there's, the advantage is that there's no
+以获取受限形式的语法。还有，好处就是没有
+
+10
+00:00:59,079 --> 00:01:04,059
+back tracking involved and so the parser is completely deterministic if you were to
+涉及回溯，因此解析器是完全确定的，如果您要这样做的话
+
+11
+00:01:04,059 --> 00:01:11,059
+try alternatives. The predictive parsers accept what are called the LLK grammars.
+尝试其他选择。预测解析器接受所谓的LLK语法。
+
+12
+00:01:11,530 --> 00:01:18,140
+And this is a really cryptic name, and so let me explain it. The first L stands for
+这是一个非常神秘的名字，让我来解释一下。第一个L代表
+
+13
+00:01:18,140 --> 00:01:22,990
+left-to-right scan. So that means we're starting at the left end of the input and
+从左向右扫描。这意味着我们从输入的左端开始，
+
+14
+00:01:22,990 --> 00:01:26,789
+reading left to right. And in fact that's what we always do, so all the techniques
+从左到右阅读。事实上，这就是我们一直在做的，所以所有的技术
+
+15
+00:01:26,789 --> 00:01:32,770
+that we looked at, look at will have an L in the first position. The second L stands
+我们看过的，第一个位置会有一个L。第二个L代表
+
+16
+00:01:32,770 --> 00:01:38,020
+for a leftmost derivation. So we are constructing a leftmost derivation. That
+用于最左边的派生。所以我们正在构造一个最左边的派生。那
+
+17
+00:01:38,020 --> 00:01:44,280
+means we're always working on the leftmost non-terminal in the parse tree. And K
+这意味着我们总是处理解析树中最左边的非终结符。和K
+
+18
+00:01:44,280 --> 00:01:51,280
+here, stands for K tokens of look ahead. And in practice, while the theory is
+在这里，代表展望未来的K个代币。在实践中，虽然理论上
+
+19
+00:01:55,060 --> 00:01:59,979
+developed for arbitrary 'k', in practice, 'k' is always equal to one. And so in
+为任意的‘k’开发的，在实践中，‘k’总是等于1。所以在
+
+20
+00:01:59,979 --> 00:02:06,979
+fact, we'll only discuss the 'k's, 'k' equals to one, in these videos. To review,
+事实上，在这些视频中，我们将只讨论‘k’，‘k’等于1。回顾一下，
+
+21
+00:02:07,049 --> 00:02:11,510
+in recursive descent parsing in each step, there may be many choices of production to
+在每个步骤的递归下降解析中，可能有许多生成选择
+
+22
+00:02:11,510 --> 00:02:18,510
+use, and so we need to use backtracking to undo bad choices. In an LL-1 parser, in
+使用，所以我们需要使用回溯来撤销错误的选择。在LL-1解析器中，
+
+23
+00:02:19,120 --> 00:02:23,319
+every step, there's only going to be one choice of productions, of possible
+每一步，都只有一种可能的制作选择
+
+24
+00:02:23,319 --> 00:02:28,720
+production to use. And, and what does that mean? Well, it means that if I have an
+要使用的产品。这是什么意思？嗯，这意味着如果我有一个
+
+25
+00:02:28,720 --> 00:02:33,129
+input string if I have a configuration of the parser where I have some terminal
+如果我在某个终端上配置了解析器，则输入字符串
+
+26
+00:02:33,129 --> 00:02:40,049
+symbols omega and a non terminal a you know, possibly now followed by some other
+符号omega和非终端a，现在可能后面跟着其他
+
+27
+00:02:40,049 --> 00:02:44,540
+stuff there could be terminals and nonterminals, but again a here is the
+这里可以有终端和非终端，但这里也是
+
+28
+00:02:44,540 --> 00:02:51,540
+leftmost nonterminal. And, the next input. Is a token T Well then there is exactly
+最左边的非终结符。然后，下一个输入。是一个记号T，那么正好有
+
+29
+00:02:54,519 --> 00:03:01,519
+one production A goes to alpha on input T. Okay, there's only one possible production
+一个结果A在输入T上变为alpha。好的，只有一个可能的结果
+
+30
+00:03:05,480 --> 00:03:12,010
+that we can use. And any other production is guaranteed to be incorrect. Now it can
+这是我们可以利用的。任何其他的作品都保证是不正确的。现在它可以了
+
+31
+00:03:12,010 --> 00:03:17,700
+be that, that even A goes to Alpha won't succeed. It could be that we will be in a
+也就是说，即使A去阿尔法也不会成功。有可能我们会在一个
+
+32
+00:03:17,700 --> 00:03:22,209
+situation where there's no production we could use. But in [inaudible] parser,
+没有我们可以使用的产品的情况。但是在[听不见的]解析器中，
+
+33
+00:03:22,209 --> 00:03:27,790
+there will always be at most one that we could use. So in this case we would chose
+我们最多只能用一个。所以在这种情况下我们会选择
+
+34
+00:03:27,790 --> 00:03:34,790
+to rewrite the string to Omega Alpha Beta. Let's take a look at our favorite grammar,
+将字符串重写为Omega Alpha Beta。让我们来看看我们最喜欢的语法，
+
+35
+00:03:36,110 --> 00:03:41,189
+the one we've been using for the last couple of videos. We can see an issue here
+就是我们在上几个视频里用的那个。我们在这里可以看到一个问题
+
+36
+00:03:41,189 --> 00:03:45,370
+with using this grammar for a predictive parser. Take a look at the first two
+将此语法用于预测性解析器。看一下前两个
+
+37
+00:03:45,370 --> 00:03:51,409
+productions for T. They both begin with N's. And so if I tell you that the next
+T的作品都是以N开头的，所以如果我告诉你们下一个
+
+38
+00:03:51,409 --> 00:03:56,640
+terminal in the input stream as we're parsing along is an integer that doesn't
+我们正在解析的输入流中的终端是一个整数，它不
+
+39
+00:03:56,640 --> 00:04:01,739
+really help you in trying to distinguish between these two productions in deciding,
+真的能帮助你在决定的时候区分这两部作品，
+
+40
+00:04:01,739 --> 00:04:07,099
+deciding which one to use. So in fact with only one token of look ahead, I can't
+决定使用哪一个。所以事实上，只有一个标志是向前看的，我不能
+
+41
+00:04:07,099 --> 00:04:13,430
+choose between these two productions. And that is not the only problem actually, so
+在这两部作品中选择一部。实际上，这并不是唯一的问题，所以
+
+42
+00:04:13,430 --> 00:04:18,570
+we have a problem with T but the same problem exist with E. We can see that here
+我们对T有问题，但对E也有同样的问题。我们可以在这里看到这一点
+
+43
+00:04:18,570 --> 00:04:24,830
+both production for E begin with the non-terminal T, and it is really clear
+E的两个产生式都以非末尾T开头，这一点非常清楚
+
+44
+00:04:24,830 --> 00:04:29,190
+what we're to make of that because a T against a non-terminal terminal, so how we
+我们应该怎么做，因为T对着一个非终端终端，那么我们如何
+
+45
+00:04:29,190 --> 00:04:34,220
+even do the prediction but the fact that they begin with the same thing suggest
+甚至还做了预测，但事实是它们都是以同样的事情开始的，这一事实表明
+
+46
+00:04:34,220 --> 00:04:38,600
+that it's not going to be easy for us to predict which production to use based of
+对于我们来说，要根据哪种产品来预测要使用哪种产品并不是一件容易的事
+
+47
+00:04:38,600 --> 00:04:44,620
+only a single token of look ahead. So what we need to do here is we need to change
+只有一个标志，那就是向前看。所以我们需要在这里做的是我们需要改变
+
+48
+00:04:44,620 --> 00:04:49,199
+the grammar. This grammar is actually unacceptable for predictive parsing, or at
+语法。这种语法对于预测性分析来说实际上是不可接受的，或者在
+
+49
+00:04:49,199 --> 00:04:53,720
+least for LL1 parsing. And we need to do something that's called left factoring the
+至少用于LL1解析。我们需要做一些叫做“左因式分解”的事情
+
+50
+00:04:53,720 --> 00:05:00,720
+grammar. So the idea behind left factoring is to eliminate the common prefixes of
+语法。因此，左因式分解背后的思想是消除
+
+51
+00:05:02,009 --> 00:05:07,410
+multiple productions for one non terminal. So that's a mouthful. Let's do an example.
+一个非终端的多个产品。所以这真是一张大嘴巴。让我们举个例子。
+
+52
+00:05:07,410 --> 00:05:12,120
+Let's begin with the productions for E. And we can see, again, that E, that both
+让我们从E的乘积开始，我们可以再次看到，E，两者
+
+53
+00:05:12,120 --> 00:05:16,530
+productions for E begin with the same, the same prefix. What we're going to do is
+E的乘积以相同的、相同的前缀开头。我们要做的是
+
+54
+00:05:16,530 --> 00:05:20,530
+just factor out that common prefix into a single production. So we're going to have
+只需将公共前缀分解到单个产品中即可。所以我们将会有
+
+55
+00:05:20,530 --> 00:05:27,530
+one production where E goes to T. And then we're going to have multiple suffixes. So
+一个E转到T的结果，然后我们会有多个后缀。所以
+
+56
+00:05:27,560 --> 00:05:31,729
+let's introduce a new non terminal X that will handle the rest. So here, we have E
+让我们介绍一个新的非终端X，它将处理睡觉。所以在这里，我们有E
+
+57
+00:05:31,729 --> 00:05:35,550
+goes to TX. So it says that everything that E produces begins with T, and that's
+去德克萨斯州。所以它说E产生的所有东西都以T开头，那就是
+
+58
+00:05:35,550 --> 00:05:39,360
+consistent with these two productions. And now we have to write another production
+与这两部作品一致。现在我们还得写另一部作品
+
+59
+00:05:39,360 --> 00:05:45,850
+for X that handles the rest. And what would that be? Well, one possibility is if
+对于处理睡觉的X来说。那会是什么呢？嗯，一种可能性是如果
+
+60
+00:05:45,850 --> 00:05:48,699
+we're in this production, we need to have a Plus E and then in this production
+我们在这部作品中，我们需要有一个加号E，然后在这部作品中
+
+61
+00:05:48,699 --> 00:05:53,630
+there's nothing. So that's easy to handle, right. One possibility for X as it goes to
+什么都没有。所以这很容易处理，对吧。X的一种可能性是，当它到达
+
+62
+00:05:53,630 --> 00:05:59,199
+Plus E and the other possibility as it goes to Epsilon. And now you can see the
+加上E和另一种可能性，因为它去了爱普西隆。现在你可以看到
+
+63
+00:05:59,199 --> 00:06:03,650
+general idea. We factor other common prefix, we have one production that deals
+大概的想法。我们考虑其他共同的前缀，我们有一个产品，交易
+
+64
+00:06:03,650 --> 00:06:10,319
+with the prefix and then we write, and then we introduce a non terminal or the
+使用前缀，然后我们编写，然后我们引入一个非终结符或
+
+65
+00:06:10,319 --> 00:06:15,849
+different suffixes. And then we just have, multiple productions, one for each
+不同的后缀。然后我们只有多部作品，一部一部
+
+66
+00:06:15,849 --> 00:06:19,889
+possible suffix. And you can see what this is going to do. This is effectively going
+可能的后缀。你可以看到这会有什么效果。这实际上是在进行
+
+67
+00:06:19,889 --> 00:06:24,389
+to delay the decision about which production we're using. So instead of
+推迟我们使用哪种产品的决定。因此，与其这样做，不如说
+
+68
+00:06:24,389 --> 00:06:30,039
+having to decide immediately which production we're going to use for E. Here,
+我们必须立即决定要对E使用哪种产品。在这里，
+
+69
+00:06:30,039 --> 00:06:34,240
+in this grammar, we wait until we've already seen the T, whatever is derived
+在这个语法中，我们一直等到我们已经看到了T，不管是从哪个派生出来的
+
+70
+00:06:34,240 --> 00:06:38,580
+from the T. And then we have to decide whether the rest of the production is a
+然后我们要决定这部作品的睡觉是不是
+
+71
+00:06:38,580 --> 00:06:45,580
+plus, E or the empty string. Let's do the other, set of productions. So we have tea
+加上E或空字符串。我们来做另一套作品吧。所以我们有茶
+
+72
+00:06:48,990 --> 00:06:53,669
+goes to, and now the common prefix is int that we want to eliminate So we're going
+转到，现在公共前缀是int，我们想要消除它，所以我们要
+
+73
+00:06:53,669 --> 00:06:59,229
+to have just one production that begins with int and then we'll have a new, a
+只有一部以int开头的作品，然后我们就会有一个新的，一个
+
+74
+00:06:59,229 --> 00:07:03,610
+non-terminal to stand for the various possible suffixes. And now we also have
+非末尾，代表各种可能的后缀。现在我们也有
+
+75
+00:07:03,610 --> 00:07:06,389
+another production that doesn't h ave anything to do with int, and so we'll just
+另一部与int无关的作品，所以我们就
+
+76
+00:07:06,389 --> 00:07:10,449
+leave that one alone, that production just stays here. Because it already begins with
+别管那个了，那部作品就留在这里。因为它已经开始于
+
+77
+00:07:10,449 --> 00:07:14,910
+something different we won't have any trouble predicting between these two
+一些不同的东西，我们可以毫不费力地预测这两个
+
+78
+00:07:14,910 --> 00:07:20,970
+possible productions, these two possible productions. And now we have to write. The
+可能的作品，这两个可能的作品。现在我们要写了。这个
+
+79
+00:07:20,970 --> 00:07:26,750
+productions for Y And again, we just take, the suffixes of the productions that we,
+Y的乘积，再一次，我们只取乘积的后缀，
+
+80
+00:07:26,750 --> 00:07:30,660
+left factored and write them down as alternatives. So one is empty and the
+左因数并将其记为备选方案。所以其中一个是空的，而
+
+81
+00:07:30,660 --> 00:07:36,340
+other one is times T. So we wind up with times T or epsilon.
+另一个是时间T，所以我们最终得到了时间T或ε。
+

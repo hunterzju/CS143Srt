@@ -1,0 +1,180 @@
+0
+00:00:03,780 --> 00:00:07,200
+In this video we're going to talk about ambiguous context free grammars in
+在本视频中，我们将讨论以下内容中的模糊上下文无关文法
+
+1
+00:00:07,200 --> 00:00:14,200
+programming languages and what to do about them. We'll begin by looking at our
+编程语言以及如何处理它们。我们先来看看我们的
+
+2
+00:00:16,120 --> 00:00:21,670
+favorite grammar for expressions over + and and identifiers and we'll just look
++和和标识符上的表达式最喜欢的语法，我们只看一下
+
+3
+00:00:21,670 --> 00:00:28,670
+at the string id id + id. Now it turns out that this particular string and let's
+在字符串id+id处。现在发现这个特殊的字符串，让我们
+
+4
+00:00:29,230 --> 00:00:36,230
+write it down one more time, id id + id. This string has two parse tree using this
+再写一遍，id，id+id。此字符串有两个使用此字符串的分析树
+
+5
+00:00:38,429 --> 00:00:43,409
+grammar. Let's do the Parse tree on the left first. We begin with the start symbol
+语法。让我们先做左边的解析树。我们从开始符号开始
+
+6
+00:00:43,409 --> 00:00:48,929
+e and the first production in this derivation that gives us this Parse tree
+E和这个派生中的第一个结果，它给出了这个解析树
+
+7
+00:00:48,929 --> 00:00:55,929
+must be that e goes to e + e. E + e And then we replace the left most e by e e.
+一定是e变成了e+e，然后我们把最左边的e换成了e。
+
+8
+00:01:02,199 --> 00:01:07,950
+We use the production e goes to e e and we still have the plus e left over and at
+我们用e到e的乘积，我们还有剩余的加e和
+
+9
+00:01:07,950 --> 00:01:11,060
+this point you can see that we're going to get this parse tree. We've done with those
+在这一点上，您可以看到我们将获得这个解析树。我们已经处理完了那些
+
+10
+00:01:11,060 --> 00:01:16,570
+two productions. We have done this much. The construction of the parse tree and the
+两部作品。我们已经做了这么多。解析树的构造和
+
+11
+00:01:16,570 --> 00:01:20,369
+rest of productions are just generating these id's. So that's a three more
+睡觉的制作就是在生成这些id。所以这又是3
+
+12
+00:01:20,369 --> 00:01:27,369
+productions and we can see that, you know if we do those we'll get id id + id no
+我们可以看到，如果我们这样做，我们会得到id+id no
+
+13
+00:01:27,990 --> 00:01:33,810
+problem, alright. So now let's switch and do the derivation on the right or excuse
+有问题，好吧。现在让我们交换一下，做右边或借口上的推导
+
+14
+00:01:33,810 --> 00:01:38,930
+me, the parse tree on the right so this begins also with e. But this time we use
+Me，右侧的解析树也以e开头，但这一次我们使用
+
+15
+00:01:38,930 --> 00:01:44,350
+the production e goes to e e first, all right? And now we're gonna replace the
+作品e先去e e，好吗？现在我们要替换
+
+16
+00:01:44,350 --> 00:01:51,350
+right most e. By e goes to e + e so we have e e + e and now we've, with those
+右边大部分e，by e是e+e，所以我们有e，e+e，现在我们用这些
+
+17
+00:01:55,560 --> 00:02:00,200
+two productions we've done this portion of the parse tree and once again with three
+我们已经完成了解析树的这一部分的两个结果，并再次使用了三个
+
+18
+00:02:00,200 --> 00:02:07,200
+more productions we can get to id id + id so there you can see we've got two
+更多的作品，我们可以找到id，id+id，所以你可以看到我们有两个
+
+19
+00:02:13,450 --> 00:02:20,239
+derivations. That produced two distinct Parse trees. And just to be completely
+派生。这就产生了两个截然不同的解析树。我想说的是，我想说的是
+
+20
+00:02:20,239 --> 00:02:24,459
+clear about this, in this case we're getting two different Parse trees. Each of
+明确这一点，在本例中，我们得到两个不同的解析树。每一个
+
+21
+00:02:24,459 --> 00:02:29,239
+these derivation, each of these Parse trees has many derivations. Each Parse
+这些派生，这些解析树中的每一个都有很多派生。每次解析
+
+22
+00:02:29,239 --> 00:02:33,370
+tree has a left most derivation, a right most derivation and many other
+树有最左边的派生、最右边的派生和许多其他派生
+
+23
+00:02:33,370 --> 00:02:38,459
+derivations. This situation is something different. Here we have two derivations
+派生。这种情况是不同的。这里我们有两个派生
+
+24
+00:02:38,459 --> 00:02:43,480
+that yield completely different Parse trees and that is the sign or the
+生成完全不同的解析树，这就是符号或
+
+25
+00:02:43,480 --> 00:02:48,099
+definition of an ambiguous grammar. So a grammar is ambiguous if it has more than
+歧义语法的定义。因此，如果一个语法包含的内容多于一个，则该语法是不明确的
+
+26
+00:02:48,099 --> 00:02:54,400
+one Parse tree for some string. And another way of saying the same thing is
+某个字符串的一棵解析树。另一种说法是同样的事情
+
+27
+00:02:54,400 --> 00:02:59,110
+that there is more than one right most or left most derivation for some string. So
+某个字符串有多个最右边或最左边的派生。所以
+
+28
+00:02:59,110 --> 00:03:03,400
+if some string has two right most derivations or more or two left
+如果某个字符串有两个最右侧派生词或更多或两个左侧派生词
+
+29
+00:03:03,400 --> 00:03:08,810
+derivations or more then the, that string will have two distinct parse trees and
+派生或更多派生，该字符串将有两个截然不同的分析树，并且
+
+30
+00:03:08,810 --> 00:03:15,810
+that grammar will be ambiguous. Ambiguity is bad. If you have multiple parse trees
+那个语法将是模棱两可的。模棱两可是不好的。如果您有多个解析树
+
+31
+00:03:17,230 --> 00:03:20,819
+for some program then that essentially means that you're leaving it up to the
+对于某些程序而言，这实质上意味着您将把它留给
+
+32
+00:03:20,819 --> 00:03:25,569
+compiler to pick which of those two possible interpretations of the program
+编译器选择这两种可能的程序解释中的哪一种
+
+33
+00:03:25,569 --> 00:03:30,790
+you want it to generate code for and that's not a good idea. We don't like to
+您希望它为生成代码，这不是一个好主意。我们不喜欢
+
+34
+00:03:30,790 --> 00:03:34,189
+have ambiguity in our programming languages and leave decisions about what
+在我们的编程语言中有模棱两可的地方，让我们来决定什么是
+
+35
+00:03:34,189 --> 00:03:36,110
+the program means up to the compiler.
+该程序的意思是最高可达编译器。
+

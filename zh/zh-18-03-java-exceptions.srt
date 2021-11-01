@@ -1,0 +1,870 @@
+0
+00:00:04,040 --> 00:00:11,040
+In this video, we're going to talk about programmer defined exceptions. So, think
+在本视频中，我们将讨论程序员定义的异常。所以，我想
+
+1
+00:00:11,520 --> 00:00:15,219
+about the following typical programming scenario. You're deep into some fairly
+关于以下典型的编程方案。你深陷一些公平的
+
+2
+00:00:15,219 --> 00:00:20,540
+complex section of code and you come to a place where you could experience an
+复杂的代码段，您会来到一个地方，在那里您可以体验到
+
+3
+00:00:20,540 --> 00:00:24,950
+unexpected error. That there could be something that could happen that would
+意外错误。可能会发生一些事情
+
+4
+00:00:24,950 --> 00:00:28,860
+violate some important property of your program. So, for example, maybe you're
+违反程序的一些重要属性。所以，举个例子，也许你是
+
+5
+00:00:28,860 --> 00:00:32,680
+going to discover there's a place where you could be out of memory or there's some
+你会发现有一个地方你可能没有记忆，或者有一些
+
+6
+00:00:32,680 --> 00:00:36,810
+data structure that doesn't satisfy some variant. So, a list that's supposed to be
+不满足某些变体的数据结构。所以，一份应该是
+
+7
+00:00:36,810 --> 00:00:39,640
+sorted, that is not, or something like that. And the question is, how do you
+分类的，那不是，或者类似的东西。问题是，你怎么
+
+8
+00:00:39,640 --> 00:00:44,250
+handle these errors? How do you write code that will handle the error gracefully and
+是否处理这些错误？如何编写代码来优雅地处理错误，并
+
+9
+00:00:44,250 --> 00:00:50,510
+not make your program really, really ugly? So, a popular solution to this problem in
+而不是让你的节目变得非常非常丑陋？因此，这个问题的一个流行解决方案是
+
+10
+00:00:50,510 --> 00:00:55,450
+many languages including Java is add a new kind of value to the language called an
+包括Java在内的许多语言都给语言增加了一种新的价值，称为
+
+11
+00:00:55,450 --> 00:00:59,520
+exception. And we'll have a couple of control constructs for dealing with
+例外情况。我们将有几个控件构造来处理
+
+12
+00:00:59,520 --> 00:01:03,780
+exceptions. Here is the two that are probably the most popular. And these are,
+例外情况。这里有两个可能是最受欢迎的。这些是，
+
+13
+00:01:03,780 --> 00:01:08,820
+as they appear in Java. So, we can throw exceptions and what this does is it causes
+因为它们出现在Java中。因此，我们可以抛出异常，这会导致
+
+14
+00:01:08,820 --> 00:01:14,850
+an exception to be created at this point wherever the throw occurs. And, that
+此时无论发生抛出的位置都要创建异常。还有，那就是
+
+15
+00:01:14,850 --> 00:01:18,360
+exception will simply propagate out of the program. It will basically halt the
+异常将简单地传播出程序。它将从根本上停止
+
+16
+00:01:18,360 --> 00:01:25,360
+execution of the program at that point and any containing constructs will also throw
+在该点上执行程序和任何包含构造也将抛出
+
+17
+00:01:26,690 --> 00:01:30,460
+the exception. So, the exception will, you know, simply propagate up out of the code
+例外情况。因此，您知道，异常将简单地向上传播到代码之外
+
+18
+00:01:30,460 --> 00:01:37,190
+that, that's currently executing, until it hits a try catch. So, how does this work?
+那个，那个当前正在执行的，直到它命中了一个try catch。那么，这是怎么运作的呢？
+
+19
+00:01:37,190 --> 00:01:41,610
+Well, we can try something. We can execute some expression here and this will be some
+嗯，我们可以试一试。我们可以在这里执行一些表达式，这将是一些
+
+20
+00:01:41,610 --> 00:01:46,590
+expression. And if this expression throws an exception, if the throw occurs
+表达式。如果此表达式引发异常，如果发生抛出
+
+21
+00:01:46,590 --> 00:01:51,710
+somewhere inside this expression, then we will catch that exception and there can be
+在此表达式中的某个位置，那么我们将捕获该异常，并且可以
+
+22
+00:01:51,710 --> 00:01:56,450
+a binding here to say what we are going to call the exception value. So, this is like
+这里有一个绑定，用来表示我们将称之为异常值的内容。所以，这就像是
+
+23
+00:01:56,450 --> 00:02:00,770
+a let, we will grab the exception that comes out of here. We'll call it X and
+首先，我们将捕获从这里传出的异常。我们就叫它X，然后
+
+24
+00:02:00,770 --> 00:02:05,950
+then we can execute this piece of cleanup code to how, to handle the exception in
+然后，我们可以执行这段清理代码，以如何处理中的异常
+
+25
+00:02:05,950 --> 00:02:12,950
+some way. And so, the basic idea behind this thi design for handling exceptions,
+以某种方式。因此，这个处理异常的设计背后的基本思想，
+
+26
+00:02:13,930 --> 00:02:16,989
+is that the place where you have the exception, the place where you actually
+那是你有例外的地方吗，就是你实际
+
+27
+00:02:16,989 --> 00:02:20,939
+detect the exception, might be somewhere deep inside the code and not a very good
+检测到异常，可能是在代码内部的某个位置，不是很好
+
+28
+00:02:20,939 --> 00:02:24,790
+place for actually dealing with the exception. So, what you want to do is get
+实际处理异常的位置。所以，你要做的就是
+
+29
+00:02:24,790 --> 00:02:28,549
+out of that part of the code, get back to some higher level point where you can
+在代码的这一部分之外，返回到某个更高级别的点，在那里您可以
+
+30
+00:02:28,549 --> 00:02:34,029
+clean things up deal with the exception, and then retry, perhaps, some larger block
+进行清理，处理异常，然后重试，也许可以重试一些更大的挡路
+
+31
+00:02:34,029 --> 00:02:41,029
+of code. Here's a little example of using exceptions. So, here we have our main
+代码。这里有一个使用异常的小示例。所以，这里我们有我们的主要
+
+32
+00:02:42,150 --> 00:02:45,680
+method. And what are we going to do? We're going to have a try-block that just calls
+方法。那我们要做什么呢？我们要试一试--挡路只打个招呼
+
+33
+00:02:45,680 --> 00:02:51,269
+a function X. And if that raises a, an exception, then we will catch the
+函数X。如果这引发了一个异常，那么我们将捕获
+
+34
+00:02:51,269 --> 00:02:53,540
+exception. In this case we don't do anything with the exception, we just print
+例外情况。在本例中，我们对异常不做任何操作，我们只打印
+
+35
+00:02:53,540 --> 00:02:57,499
+out a message saying there was an error and we terminate the program. So, we don't
+发出一条消息说出现错误，我们终止该程序。所以，我们不会
+
+36
+00:02:57,499 --> 00:03:01,099
+do anything very smart but we do catch the exception and at least print out an error
+做任何非常聪明的事情，但是我们确实捕捉到了异常，并且至少打印出了一个错误
+
+37
+00:03:01,099 --> 00:03:07,449
+rather than just terminating. So, what does x do? Well, X simply throws an
+而不是简单地终止。那么，x是做什么的呢？嗯，X只是抛出一个
+
+38
+00:03:07,449 --> 00:03:14,449
+exception. So this function X allocates an exception object. This is just a value,
+例外情况。所以这个函数X分配一个异常对象。这只是一个值，
+
+39
+00:03:14,739 --> 00:03:17,799
+it's just a class like everything else. But it has a special property that it can
+这只是一门课，就像其他所有的课一样。但它有一种特殊的性质，它可以
+
+40
+00:03:17,799 --> 00:03:22,139
+be thrown. So, when we throw it, that's when X terminates abnormally and we end up
+被扔出去。所以，当我们抛出它的时候，就是X异常终止的时候，我们最终
+
+41
+00:03:22,139 --> 00:03:27,819
+in the catch block of the try-catch expression back in the main method. Now,
+在Catch挡路的try-catch表达式中返回了Main方法。现在,
+
+42
+00:03:27,819 --> 00:03:33,109
+in the last couple of slides, I gave you a very informal description of how
+在最后几张幻灯片中，我非常非正式地描述了
+
+43
+00:03:33,109 --> 00:03:37,959
+exceptions work and it, it might not have been very clear and in fact it's hard I
+异常起作用，这可能不是很清楚，事实上我很难
+
+44
+00:03:37,959 --> 00:03:43,909
+think to give a very clear description without some kind of formal description of
+认为在没有某种形式的描述的情况下给出一个非常清楚的描述
+
+45
+00:03:43,909 --> 00:03:47,749
+how exceptions are supposed to behave. But fortunately, we've looked at operational
+异常应该如何表现。但幸运的是，我们已经看到了可操作的
+
+46
+00:03:47,749 --> 00:03:51,499
+semantics in this class and so now you're familiar with those kinds of descriptions
+这个类中的语义，所以现在您已经熟悉了这些类型的描述
+
+47
+00:03:51,499 --> 00:03:56,139
+of language behavior and I can actually describe you pretty succinctly how
+语言行为，我可以非常简洁地描述你是如何
+
+48
+00:03:56,139 --> 00:04:01,109
+try-catch actually really works, alright. So, we're going to give operational rules
+Try-Catch真的很管用，好吧。所以，我们要给出操作规则
+
+49
+00:04:01,109 --> 00:04:06,329
+here for Try-Catch expressions. And I just noticed, I just poin t out here that I had
+下面是try-catch表达式。我刚刚注意到，我只是在这里指出我有
+
+50
+00:04:06,329 --> 00:04:10,769
+some kind of font problem and so I had to write in the turnstiles by hand in this
+一些字体问题，所以我不得不在旋转栅门上手写这个
+
+51
+00:04:10,769 --> 00:04:15,889
+slide. So those handwritten characters are all supposed to be the turnstile
+滑行。所以那些手写的字符都应该是旋转门
+
+52
+00:04:15,889 --> 00:04:21,730
+character. Now, to more important things there's a distinction with exceptions.
+性格。现在，对于更重要的事情，例外是有区别的。
+
+53
+00:04:21,730 --> 00:04:26,570
+Okay, there are two kinds of states that an exception object could be in. It could
+好的，异常对象可能处于两种状态。它可能会
+
+54
+00:04:26,570 --> 00:04:31,370
+just be an ordinary value. So, when I say new exception object in Java, so, when I
+只要做一个普通的价值就行了。所以，当我在Java中提到新的异常对象时，所以，当我
+
+55
+00:04:31,370 --> 00:04:34,950
+say something new, something exception class is just an ordinary value. At that
+说点新的，例外的类只是一个普通值。在那件事上
+
+56
+00:04:34,950 --> 00:04:39,970
+point, it just behaves like any other object. But then, there is a distinction
+点，它的行为就像任何其他对象一样。但话说回来，这是有区别的
+
+57
+00:04:39,970 --> 00:04:43,270
+when the object is thrown. So, when the exception is actually thrown, it becomes a
+当对象被抛出时。因此，当异常实际引发时，它将成为
+
+58
+00:04:43,270 --> 00:04:47,390
+special kind of value and it gets treated differently, alright. So, we're going to
+一种特殊的价值，它会得到不同的对待，好吧。所以，我们要去
+
+59
+00:04:47,390 --> 00:04:53,250
+distinguish between an ordinary object V, okay. And objects that have been thrown,
+区分一个普通的物体V，好的。以及被抛出的物体，
+
+60
+00:04:53,250 --> 00:04:59,980
+okay, which are then active exceptions. Alright? So, let's take a look at some of
+好的，这就是有效的例外。好吗？那么让我们来看看一些
+
+61
+00:04:59,980 --> 00:05:05,740
+the operational rules for the exception constructs. So, here's one rule for its
+异常构造的操作规则。所以，这是它的一条规则
+
+62
+00:05:05,740 --> 00:05:10,910
+try-catch-block. And what this rule says is that if an expression evaluates to an
+尝尝-接住-挡路。此规则说明的是，如果表达式的计算结果为
+
+63
+00:05:10,910 --> 00:05:15,520
+ordinary value. If it doesn't throw an exception, then the results of the
+普通值。如果它没有引发异常，则
+
+64
+00:05:15,520 --> 00:05:19,290
+try-catch-block is just that value. So, the way the try-catch-block works is you
+尝尝-接住-挡路就是这样的价值。所以，挡路的工作方式就是你
+
+65
+00:05:19,290 --> 00:05:24,770
+evaluate the expression in the try-block. If that terminates normally with a value,
+评估Try-挡路中的表达式。如果它以一个值正常终止，
+
+66
+00:05:24,770 --> 00:05:30,590
+then the results of the whole expression is just that value, alright? Now, the
+那么整个表达式的结果就是那个值，对吗？现在，
+
+67
+00:05:30,590 --> 00:05:34,720
+other possibility is that you'll evaluate a try catch block and when you go to
+另一种可能性是，您将评估一次尝试捕捉挡路，当您转到
+
+68
+00:05:34,720 --> 00:05:39,100
+evaluate the expression of the try-block E1, it will throw an exception. So, it
+评估Try-挡路E1的表达式，它将抛出异常。所以，它
+
+69
+00:05:39,100 --> 00:05:43,760
+could result in a thrown exception. And so, in this case. Okay, that is that,
+可能会导致引发异常。所以，在这种情况下。好的，那就是，
+
+70
+00:05:43,760 --> 00:05:49,490
+excuse me, that is this case where E1 evaluates to one of these special values
+打扰一下，在这种情况下，e1的计算结果是这些特定值之一
+
+71
+00:05:49,490 --> 00:05:54,740
+has been marked as a thrown exception. What do we do in that case? Well, like
+已标记为引发的异常。在这种情况下我们该怎么办？嗯，就像
+
+72
+00:05:54,740 --> 00:05:59,760
+unwrap the exception, we pull out value that is in the thrown exception, alright.
+展开异常，我们取出抛出的异常中的值，好的。
+
+73
+00:05:59,760 --> 00:06:05,270
+We bind it to some local name, alright, that's named in the catch expression and
+我们将其绑定到某个本地名称，该名称在catch表达式中命名
+
+74
+00:06:05,270 --> 00:06:09,490
+then we evaluate the cleanup code. So, with the ex ception value available, we
+然后我们评估清理代码。因此，有了可用的Exception值，我们
+
+75
+00:06:09,490 --> 00:06:14,250
+evaluate E2 and whatever the result is of E2, that is the result of the
+评估E2以及E2的结果是什么，这是
+
+76
+00:06:14,250 --> 00:06:21,250
+try-catch-block. How does throw work? It's very simple. So, throw just takes an
+尝尝-接住-挡路。投掷是怎么做的？这很简单。所以，投掷只需要一次
+
+77
+00:06:22,700 --> 00:06:27,550
+expression, it evaluates that expression against some value V. And then, it marks
+表达式，它根据某个值V对该表达式求值，然后标记
+
+78
+00:06:27,550 --> 00:06:33,480
+that value as a thrown exception, as a thrown exception so it wraps the value in
+将该值作为抛出的异常，作为抛出的异常，因此它将该值包装在
+
+79
+00:06:33,480 --> 00:06:38,960
+this T thing and that indicate that this exception now has been thrown. Now, the
+这个T和那个表示这个异常现在已经被抛出了。现在，
+
+80
+00:06:38,960 --> 00:06:42,770
+only other thing we need to talk about is how the rest of the language, all the
+我们唯一需要谈的就是睡觉的语言，所有的
+
+81
+00:06:42,770 --> 00:06:48,830
+other constructs in the language deal with these thrown exceptions. And that's very
+该语言中的其他构造处理这些抛出的异常。这是非常重要的
+
+82
+00:06:48,830 --> 00:06:54,750
+simple. We want those thrown exceptions to simply propagate out of any other kind of
+很简单。我们希望这些抛出的异常只是从任何其他类型的
+
+83
+00:06:54,750 --> 00:06:58,300
+expression. So, for example, we'll just do one example here because the idea is the
+表达式。举个例子，我们在这里只做一个例子，因为我们的想法是
+
+84
+00:06:58,300 --> 00:07:04,620
+same for every other language construct. Let's say, that we're evaluating E1 + E2,
+对于所有其他语言构造都是如此。比方说，我们评估的是E1+E2，
+
+85
+00:07:04,620 --> 00:07:10,389
+alright. So, the first thing we have to do of course is to evaluate E1 and if that
+好的。所以，我们要做的第一件事当然是评估E1，如果
+
+86
+00:07:10,389 --> 00:07:14,770
+happens the thrown exception. So, if something goes wrong in the evaluation of
+发生引发的异常。因此，如果在评估过程中出现问题
+
+87
+00:07:14,770 --> 00:07:19,300
+E1 and E1 evaluates to the thrown in exception, well then we stop the
+e1和e1的计算结果为抛出的异常，那么我们停止
+
+88
+00:07:19,300 --> 00:07:23,450
+evaluation of the plus right there. We don't even evaluate E2, notice that E2 is
+对那里的加号进行评估。我们甚至不评估E2，请注意E2是
+
+89
+00:07:23,450 --> 00:07:28,990
+not mentioned here above the line of one of the things to be evaluated so that E1
+此处未提及要评估的其中一件事，因此E1
+
+90
+00:07:28,990 --> 00:07:33,170
+terminates normally with an exception, then the results of the entire addition is
+正常终止，但出现异常，则整个加法的结果为
+
+91
+00:07:33,170 --> 00:07:38,990
+that exception. And similarly, for all the other constructs if, if there's, one of
+这是个例外。类似地，对于所有其他构造，如果有一个
+
+92
+00:07:38,990 --> 00:07:42,889
+their sub-expressions results in an exception. In fact, if the, if, as soon as
+它们的子表达式会导致异常。事实上，如果如果，如果，尽快
+
+93
+00:07:42,889 --> 00:07:47,480
+one of their sub-expressions results in an exception, they stop evaluating and
+它们的一个子表达式导致异常，则它们停止计算并
+
+94
+00:07:47,480 --> 00:07:51,400
+propagate that exception up. The only thing that will stop the exception from
+向上传播该异常。唯一可以阻止异常发生的事情是
+
+95
+00:07:51,400 --> 00:07:55,030
+propagating all the way out to become the result of the whole program is if it is
+一直传播成为整个项目的结果是如果它是
+
+96
+00:07:55,030 --> 00:08:02,030
+caught in a try-catch-block. There are many ways to implement exceptions and here
+陷入了一场试抓挡路的游戏。实现异常的方法有很多种，这里
+
+97
+00:08:02,889 --> 00:08:08,010
+is one simple way to do it. So, we encounter a try expression, we will mark
+是做这件事的一种简单方法。因此，我们遇到一个try表达式，我们将标记
+
+98
+00:08:08,010 --> 00:08:11,250
+the current location in the stack. So, we will mark the position in the stack where
+堆栈中的当前位置。因此，我们将在堆栈中标记以下位置
+
+99
+00:08:11,250 --> 00:08:17,300
+we encountered the try. So, for example, here, say, is our s tack. Let's say that,
+我们遇到了一次尝试。举个例子，这里是我们的大头针。这么说吧，
+
+100
+00:08:17,300 --> 00:08:22,120
+you know, the stack is going this way. We encounter a try expression here so we put
+你知道，这堆东西往这边走了。我们在这里遇到了一个try表达式，所以我们把
+
+101
+00:08:22,120 --> 00:08:25,770
+some kind of marker in the stack to indicate that there's a try that was
+堆栈中的某种标记表示有一次尝试
+
+102
+00:08:25,770 --> 00:08:29,560
+encountered there. And then you go on, you know, evaluating things inside of the try
+在那里遇到的。然后你继续，你知道，在试验中进行评估
+
+103
+00:08:29,560 --> 00:08:34,620
+which might add more stuff to the stack. Now, when we throw an exception, if down
+这可能会将更多的内容添加到堆栈中。现在，当我们抛出异常时，如果向下
+
+104
+00:08:34,620 --> 00:08:39,599
+here, all of a sudden a throw occurs and we're at this point in the execution,
+在这里，突然发生了一次投掷，我们在执行死刑的这一点上，
+
+105
+00:08:39,599 --> 00:08:43,219
+what's going to happen is we're going to unwind the stacks. We're going to knock
+接下来会发生的是，我们要把堆栈拆开。我们要去敲门
+
+106
+00:08:43,219 --> 00:08:46,689
+everything off the stack. We're going to pop all of this stuff of the stack, so
+堆叠中的所有东西。我们要把堆栈中的所有东西都放出来，所以
+
+107
+00:08:46,689 --> 00:08:51,699
+it's all gone, back to the first try. And then we'll execute the corresponding
+一切都过去了，回到第一次尝试。然后我们将执行相应的
+
+108
+00:08:51,699 --> 00:08:55,249
+catch. So, here we marked, you know, the place and the code where there was a try
+接住。所以，我们在这里标出了，你知道，试过的地方和代码
+
+109
+00:08:55,249 --> 00:09:00,189
+and we can use that to find the expression the piece of the code that has the
+我们可以使用它来查找表达式，即包含
+
+110
+00:09:00,189 --> 00:09:03,620
+corresponding catch-block and we'll unwind the stack to that point and then begin
+相应的Catch-挡路，我们将展开堆栈到该点，然后开始
+
+111
+00:09:03,620 --> 00:09:10,620
+evaluation of the catch. So at this particular design it has the disadvantage
+对渔获物的评估。所以在这个特殊的设计中，它有一个缺点
+
+112
+00:09:11,170 --> 00:09:15,439
+that try actually cost something. So, even if you don't throw an, even if you don't
+这种尝试实际上是要付出一些代价的。所以，即使你没有抛出，即使你没有
+
+113
+00:09:15,439 --> 00:09:19,649
+throw an exception, you still pay something to execute a try-catch-block.
+抛出一个异常，您仍然需要支付一些费用来执行一个Try-Catch-挡路。
+
+114
+00:09:19,649 --> 00:09:23,620
+You have to at least mark the stack and, and remember to unmark it of course, when
+您至少必须标记堆栈，并且，当然，记住在下列情况下取消标记它
+
+115
+00:09:23,620 --> 00:09:27,749
+you pop things off the stack when you leave the try-block. So, more complex
+当你离开挡路试吃的时候，你会把东西从堆里弹出来。所以，更复杂的是
+
+116
+00:09:27,749 --> 00:09:33,519
+techniques tries to reduce the cost of try and throw and also trade off between them.
+技术试图降低尝试和投掷的成本，并在它们之间进行权衡。
+
+117
+00:09:33,519 --> 00:09:37,930
+And generally the thing you want to do is because exceptions are probably relatively
+一般来说，你想做的事情是因为例外可能相对
+
+118
+00:09:37,930 --> 00:09:43,480
+rare in, in most programs is to make the cost of try as low as possible, possibly
+在，在大多数程序中很少见的是尽可能地降低尝试的成本
+
+119
+00:09:43,480 --> 00:09:50,480
+at the expense of making throws slightly more expensive. Now, here's a little
+代价是让投掷稍微贵一点。现在，这里有一点
+
+120
+00:09:52,059 --> 00:09:56,850
+trivia question about Java. So, what happens to an uncaught exception as thrown
+关于Java的琐碎问题。那么，抛出未捕获的异常会发生什么呢
+
+121
+00:09:56,850 --> 00:10:01,889
+during object finalization? So, if you don't know what object finalization is,
+在对象定版期间？所以，如果你不知道什么是对象终结，
+
+122
+00:10:01,889 --> 00:10:05,839
+well, when an object is collected, when an object is garbage collected, it is
+嗯，当一个对象被收集时，当一个对象被垃圾收集时，它是
+
+123
+00:10:05,839 --> 00:10:12,619
+possible to run a method on that object to clean it up before the garbage collector
+可以在垃圾回收器之前对该对象运行方法以将其清除
+
+124
+00:10:12,619 --> 00:10:16,680
+actually deallocates it and this is called the finali zation method. So, objects have
+实际上解除了它的分配，这被称为终结化方法。所以，物体有
+
+125
+00:10:16,680 --> 00:10:21,439
+finalization methods in, in Java and those methods are essentially invoked by the
+中的终结方法以及Java中的这些方法实质上是由
+
+126
+00:10:21,439 --> 00:10:24,759
+garbage collector. Some garbage collector discovers that some objects, this garbage
+垃圾收集器。一些垃圾回收器发现某些对象、此垃圾
+
+127
+00:10:24,759 --> 00:10:28,860
+is going to be clean it up, it will first invoke the finalization method. And why
+要清理它，它将首先调用finalization方法。为什么？
+
+128
+00:10:28,860 --> 00:10:34,949
+would you wanted to do this unless, say, we have an object and it might have, say,
+你会想这样做吗，除非，比如说，我们有一个物体，它可能有，比如说，
+
+129
+00:10:34,949 --> 00:10:39,569
+a file handle. It might have a pointer to an open file or something like that. And
+文件句柄。它可能有一个指向打开的文件或类似文件的指针。和
+
+130
+00:10:39,569 --> 00:10:43,569
+now, when this object becomes unreachable, it will be collected by the garbage
+现在，当此对象变得不可访问时，它将由垃圾回收
+
+131
+00:10:43,569 --> 00:10:47,110
+collector. But if you don't close the file, well, that's gonna cause problems.
+收藏家。但如果你不关闭文件那就会有问题。
+
+132
+00:10:47,110 --> 00:10:50,930
+Having lots of open files that are hanging around without the program using them it
+有许多打开的文件在没有程序使用的情况下挂起
+
+133
+00:10:50,930 --> 00:10:55,209
+can cause problems later on, especially if you run out of file handles. Usually,
+可能会在以后导致问题，特别是在用完文件句柄的情况下。通常，
+
+134
+00:10:55,209 --> 00:10:59,829
+there's a fixed number of file handles available from the operating system. So,
+操作系统提供固定数量的文件句柄。所以,
+
+135
+00:10:59,829 --> 00:11:02,430
+the right thing to do is when this is garbage collected is to first close the
+正确的做法是在垃圾回收时首先关闭
+
+136
+00:11:02,430 --> 00:11:08,119
+file and essentially get rid of this pointer, okay, and then, deallocate the
+文件，并从本质上消除此指针，好的，然后释放
+
+137
+00:11:08,119 --> 00:11:12,709
+object, and that it was object finalization is for. So, again, you can
+对象，并且它是用于对象终结的。所以，再一次，你可以
+
+138
+00:11:12,709 --> 00:11:17,559
+define the method in Java that will be run by the garbage collector to kinda clean up
+在Java中定义将由垃圾收集器运行以进行某种清理的方法
+
+139
+00:11:17,559 --> 00:11:22,689
+any resources the object has before it's actually deallocated. And now the question
+对象在实际释放之前拥有的所有资源。现在的问题是
+
+140
+00:11:22,689 --> 00:11:26,649
+is, if that finalization method raises an exception, who catches it? Because it was
+是，如果该finalization方法引发异常，谁会捕获它？因为它是
+
+141
+00:11:26,649 --> 00:11:29,649
+invoked by the garbage collector, it's unpredictable when it's going to be
+由垃圾收集器调用，则无法预测它将在何时
+
+142
+00:11:29,649 --> 00:11:34,269
+invoked and it's not clear where that exception should be handled. And the
+调用，并且不清楚应该在哪里处理该异常。以及
+
+143
+00:11:34,269 --> 00:11:40,790
+answer to the question is no one handles that method or nothing handles that
+问题的答案是没有人处理该方法，或者没有任何东西处理该方法
+
+144
+00:11:40,790 --> 00:11:45,990
+method. The exception is simply dropped. And so, any exceptions that happen during
+方法。该例外被简单地丢弃。因此，在此期间发生的任何异常
+
+145
+00:11:45,990 --> 00:11:50,389
+object finalization that are not handled within the finalization method itself are
+未在终结化方法本身内处理的对象终结化是
+
+146
+00:11:50,389 --> 00:11:56,559
+simply thrown away. One of the nice innovations in Java is that exceptions are
+干脆扔掉。Java中的一个很好的创新是异常是
+
+147
+00:11:56,559 --> 00:12:02,619
+actually part of the method interface and they are checked by the compiler. So, in,
+实际上是方法接口的一部分，它们由编译器检查。那么，在，
+
+148
+00:12:02,619 --> 00:12:05,730
+in the example that I gave at the beginning of this lecture, we had a method
+在本课开始时我给出的例子中，我们有一个方法
+
+149
+00:12:05,730 --> 00:12:09,730
+X that could raise an exception, my exception, and notice that the declaration
+这可能会引发异常，我的异常，请注意，声明
+
+150
+00:12:09,730 --> 00:12:14,249
+of X actually declares that X can throw that exception. So, it's part of the
+实际上声明了X可以抛出该异常。所以，这是
+
+151
+00:12:14,249 --> 00:12:18,649
+interfaced X, part of the checked interfaced X that it can raise a
+接口X，这是选中的接口X的一部分，它可以引发
+
+152
+00:12:18,649 --> 00:12:22,889
+particular exception. And why would you want to check this at compile time? Well,
+特别例外。为什么要在编译时检查这一点？井,
+
+153
+00:12:22,889 --> 00:12:27,720
+the observation that was made, actually in the original Java project was that there
+实际上，在最初的Java项目中观察到的是
+
+154
+00:12:27,720 --> 00:12:32,410
+were many exceptions that could be raised by Java programs and people easily lost
+是否有许多Java程序可能引发的异常，人们很容易丢失
+
+155
+00:12:32,410 --> 00:12:36,129
+rack of what possible exceptions could be raised, they didn't know what exceptions
+他们不知道可能会引发什么异常，也不知道有哪些异常
+
+156
+00:12:36,129 --> 00:12:41,199
+they had to handle. And in fact, when they added this to the language the compiler
+他们必须要处理。事实上，当他们把这个添加到语言中时，编译器
+
+157
+00:12:41,199 --> 00:12:46,269
+would actually enforce now that a method declared every exception it could raise.
+现在，方法声明了它可以引发的所有异常，这一点实际上是强制执行的。
+
+158
+00:12:46,269 --> 00:12:51,290
+They discovered lots of places in the, in the compiler where there were exceptions
+他们在编译器中发现了很多有异常的地方
+
+159
+00:12:51,290 --> 00:12:57,529
+being raised but not properly handled. So, this led to better air handling in, in the
+被养大但没有得到妥善处理的。所以，这导致了更好的空气处理，在
+
+160
+00:12:57,529 --> 00:13:02,860
+Java compiler itself, and, and I think people generally agree that this is een a
+Java编译器本身，我想人们普遍同意这甚至是一种
+
+161
+00:13:02,860 --> 00:13:07,439
+good idea because it helps programmers to write more robust code because they can
+好主意，因为它可以帮助程序员编写更健壮的代码，因为他们可以
+
+162
+00:13:07,439 --> 00:13:12,670
+see exactly which exceptions they have to handle. Now, there are some exceptions to
+确切地查看他们必须处理哪些异常。现在，有一些例外
+
+163
+00:13:12,670 --> 00:13:17,439
+this rule. In particular there's, there's some kinds of runtime errors that don't
+这条规则。尤其是，有一些类型的运行时错误不会
+
+164
+00:13:17,439 --> 00:13:22,589
+have to be part of the method signature simply because it's very hard to check
+必须是方法签名的一部分，因为很难检查
+
+165
+00:13:22,589 --> 00:13:25,819
+statistically that the method would never raise them. So, things like dereferencing
+从统计学上讲，这种方法永远不会提高它们。所以，像取消引用这样的事情
+
+166
+00:13:25,819 --> 00:13:31,709
+null or interprocedural overflow don't have to be handled and declared in the
+NULL或过程间溢出不必在
+
+167
+00:13:31,709 --> 00:13:38,709
+interface. But for the most part any exception that a, a method can raise has
+接口。但是在大多数情况下，一个方法可以引发的任何异常都有
+
+168
+00:13:38,949 --> 00:13:42,429
+to be declared as part of its interface in Java. And then there are other
+在Java中声明为其接口的一部分。然后还有其他的
+
+169
+00:13:42,429 --> 00:13:47,249
+mundane-type rules about the particular design for exceptions in Java. So, for
+关于Java中异常的特定设计的普通类型规则。所以，对于
+
+170
+00:13:47,249 --> 00:13:51,800
+example, throw has to be applied to an object of type exception, it can't be
+例如，抛出必须应用于类型为Exception的对象，而不能
+
+171
+00:13:51,800 --> 00:13:56,389
+applied to an object of an arbitrary type. But overall exceptions are rather nicely
+应用于任意类型的对象。但总体而言，例外情况相当不错
+
+172
+00:13:56,389 --> 00:14:03,389
+done in Java and that this particular idea of, of declaring the types of exceptions
+这是用Java完成的，这个声明异常类型的特定想法
+
+173
+00:14:04,170 --> 00:14:06,920
+that a method can raise was a new idea in Java.
+方法可以引发的问题在Java中是一个新概念。
+

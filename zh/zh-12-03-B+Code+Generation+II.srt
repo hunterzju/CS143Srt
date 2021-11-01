@@ -1,0 +1,150 @@
+0
+00:00:00,760 --> 00:00:03,840
+So to summarize the main points one very important thing is
+所以总结一下要点，非常重要的一点是
+
+1
+00:00:03,840 --> 00:00:08,420
+that the activation record has to be designed together with the code generation.
+激活记录必须与代码生成一起设计。
+
+2
+00:00:08,420 --> 00:00:12,300
+So you have to do these things at the same time. You can't just design the
+所以你必须同时做这些事情。你不能仅仅设计
+
+3
+00:00:12,300 --> 00:00:15,400
+activation record without thinking about what code you're going to generate And
+激活记录，而不用考虑要生成什么代码
+
+4
+00:00:15,400 --> 00:00:19,270
+you can't just think about generating code without making some decisions about where
+您不能只考虑生成代码，而不决定在何处生成代码
+
+5
+00:00:19,270 --> 00:00:23,300
+the data is going to be lived. So the code and the data it manipulates, have
+数据将会是真实的。所以代码和它操作的数据
+
+6
+00:00:23,300 --> 00:00:29,460
+to be designed simultaneously. Code generation can be done by a recursive traversal
+要同时设计。代码生成可以通过递归遍历来完成
+
+7
+00:00:29,460 --> 00:00:34,289
+of the abstract syntax street, so just like type checking. Cogeneration can
+抽象语法街，所以就像类型检查一样。热电联产可以
+
+8
+00:00:34,289 --> 00:00:39,440
+be expressed as a r ecursive tree-walk And that's a very handy way to think about
+被表达为一种令人厌烦的树木漫步，这是一种非常方便的方式来思考
+
+9
+00:00:39,440 --> 00:00:43,829
+cogeneration because it allows you to think about one case at a time without having
+热电联产，因为它允许您一次考虑一个案例，而不需要
+
+10
+00:00:43,829 --> 00:00:48,979
+to get mixed up thinking about all the different constructs at one time. >> And
+把一次考虑所有不同的结构搞混了。>>和
+
+11
+00:00:48,979 --> 00:00:55,440
+finally I recommend that you use a stack machine for your compiler. So if you're
+最后，我建议您在编译器中使用堆栈机器。所以如果你是
+
+12
+00:00:55,440 --> 00:00:59,679
+implementing a course project, the stack machine is the simplest discipline and
+实施一个课程项目，堆叠机是最简单的学科
+
+13
+00:00:59,679 --> 00:01:03,959
+it gives you a nice framework for think, for breaking up the project into manageable
+它为您提供了一个很好的思考框架，可以将项目分解成可管理的
+
+14
+00:01:03,959 --> 00:01:07,850
+pieces. And because of that simplicity, I think it's a really good way
+碎片。由于这种简单性，我认为这是一种非常好的方式
+
+15
+00:01:07,850 --> 00:01:14,850
+to learn about writing compilers. Now, it is important to realize that production compilers
+学习如何编写编译器。现在，重要的是要认识到产生式编译器
+
+16
+00:01:15,120 --> 00:01:20,230
+do, do some different things. They're not quite as simple as, the stack
+做，做一些不同的事情。它们并不像堆栈那样简单
+
+17
+00:01:20,230 --> 00:01:26,320
+machine cogeneration that we have outlined in the last few videos. So, the main differences,
+我们在最后几个视频中概述的机器热电联产。所以，主要的不同之处在于，
+
+18
+00:01:26,320 --> 00:01:30,900
+or, or, the main difference, is that the big emphasis in a production compiler
+或者，或者说，主要的区别在于，在生产编译器中最重要的是
+
+19
+00:01:30,900 --> 00:01:35,900
+is on keeping values and registers. It's much more efficient to do
+就是保存价值和记录。这样做效率要高得多
+
+20
+00:01:35,900 --> 00:01:41,370
+operations out of registers than to be saving and loading values from the stack And
+寄存器外的操作，而不是从堆栈中保存和加载值
+
+21
+00:01:41,370 --> 00:01:45,210
+so, especially the values in the current activation record or current stack
+所以，特别是当前激活记录或当前堆栈中的值
+
+22
+00:01:45,210 --> 00:01:50,820
+frame. It, in production compiler we try to keep those in registers instead of on the
+画框。在生产编译器中，我们尝试将这些内容保存在寄存器中，而不是放在
+
+23
+00:01:50,820 --> 00:01:57,460
+stack And also, typically a pressure compiler, to the extent that it has to use
+堆栈，并且通常是压力编译器，在一定程度上它必须使用
+
+24
+00:01:57,460 --> 00:02:01,390
+temporaries, in the activation record. These would be resolved, laid out directly
+临时的，在激活记录中。这些都会被解决，直接列出
+
+25
+00:02:01,390 --> 00:02:04,590
+in the activation record, not pushed and popped from the stack. That means they'd be
+在激活记录中，不从堆栈推送和弹出。那就意味着他们会
+
+26
+00:02:04,590 --> 00:02:09,869
+assigned, pre-assigned locations in the activation record, just like, the function
+激活记录中已分配的、预先分配的位置，就像函数一样
+
+27
+00:02:09,869 --> 00:02:13,920
+arguments in the simple language we looked at are assigned fixed positions in the activation
+我们看到的简单语言中的参数在激活中被分配了固定的位置
+
+28
+00:02:13,920 --> 00:02:17,290
+record. So those temporary values would also be assigned fixed positions,
+录音。所以这些临时值也会被分配固定位置，
+
+29
+00:02:17,290 --> 00:02:20,709
+so you could save the trouble of manipulating the stack pointer.
+因此，您可以省去操作堆栈指针的麻烦。
+

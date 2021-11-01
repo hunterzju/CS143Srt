@@ -1,0 +1,895 @@
+0
+00:00:04,110 --> 00:00:07,760
+In this video we're finally gonna come to the technical highlight of bottom up
+在这段视频中，我们最终将看到自下而上的技术亮点
+
+1
+00:00:07,760 --> 00:00:11,660
+parsings After all the definitions of the previous videos now we're actually gonna
+解析完之前视频的所有定义，现在我们实际上要
+
+2
+00:00:11,660 --> 00:00:18,660
+be able to give the algorithm for recognizing viable prefixes. So let's dive
+能够给出识别可行前缀的算法。所以让我们潜水吧
+
+3
+00:00:18,750 --> 00:00:23,960
+straight into the algorithm. The first step is really just a very technical point
+直接进入算法。第一步真的只是一个非常技术性的问题
+
+4
+00:00:23,960 --> 00:00:28,540
+and it's not, not that important. But we're going to do it anyway because it
+这不是，也不是那么重要。但不管怎样，我们还是要这么做，因为它
+
+5
+00:00:28,540 --> 00:00:34,620
+makes things simpler Is to add a dummy production as prime goes to S to our
+让事情变得更简单的是添加一个虚拟的产品，因为质数转到S到我们的
+
+6
+00:00:34,620 --> 00:00:39,640
+grammar of interest G. So, just to set the stage we are trying to compute the viable
+感兴趣的语法。所以，为了做好准备，我们尝试计算可行的
+
+7
+00:00:39,640 --> 00:00:44,280
+prefixes of G. We're trying to come up with a, algorithm for recognizing the
+前缀G。我们正试图想出一种算法来识别
+
+8
+00:00:44,280 --> 00:00:48,829
+viable prefixes of G. If S is the start symbol, we're going to make up a new start
+G的可行前缀。如果S是开始符号，我们将组成一个新的开始
+
+9
+00:00:48,829 --> 00:00:52,960
+symbol as prime, so as prime would be the new start symbol of augmented grammar and
+作为素数的符号，因此素数将成为扩充语法的新起点
+
+10
+00:00:52,960 --> 00:00:57,239
+it's just one production for as prime as prime goes to S. Right. So this just allow
+这只是一部素数为S的素数制作的作品。所以这只是允许
+
+11
+00:00:57,239 --> 00:01:01,320
+us to know exactly where our start symbol is used, in particular our new start
+我们要确切地知道我们的开始符号在哪里使用，特别是我们的新开始
+
+12
+00:01:01,320 --> 00:01:05,189
+symbol as prime is only used in one place and. Left hand side of this one
+作为质数的符号只在一个地方使用，并且。这张的左手边
+
+13
+00:01:05,188 --> 00:01:10,900
+production, and that just makes things a little bit simpler. Now, recall what we
+生产，这只会让事情变得简单一点。现在，回想一下我们
+
+14
+00:01:10,900 --> 00:01:17,490
+are trying to do. We claim that the set of viable prefixes for a given grammar is
+都在努力做到这一点。我们认为给定语法的可行前缀集是
+
+15
+00:01:17,490 --> 00:01:21,110
+regular and so what we're going to do is we're going to construct a
+所以我们要做的是，我们要构建一个
+
+16
+00:01:21,110 --> 00:01:26,170
+non-deterministic final automaton that recognizes the viable prefixes, okay? And
+识别可行前缀的非确定性最终自动机，好吗？和
+
+17
+00:01:26,170 --> 00:01:32,200
+the states of this NFA are going to be the items of the grammar. Now the input to the
+这个NFA的状态将是语法的项目。现在，输入到
+
+18
+00:01:32,200 --> 00:01:39,200
+NFA is the stack. So the NFA reads the stack, okay? And then it, So let's
+NFA是堆栈。所以NFA读取堆栈，好吗？然后它，所以让我们
+
+19
+00:01:40,310 --> 00:01:43,549
+indicate this, so the NFA is gonna take the stack as an argument, and it's either
+指出这一点，所以NFA会将堆栈作为参数，它要么
+
+20
+00:01:43,549 --> 00:01:48,090
+gonna say yes, that's a viable prefix, or no. And it's gonna read the stack from
+我会说是，这是个可行的前缀，或者不是。它将从堆栈中读取
+
+21
+00:01:48,090 --> 00:01:51,770
+bottom to top. So it's gonna start at the bottom of the stack, and read towards the
+从下到上。所以它将从堆栈的底部开始，读到
+
+22
+00:01:51,770 --> 00:01:56,479
+top of the stack. And our goal here is to write a non entromystic finite automaton
+堆栈的顶部。我们的目标是编写一个非熵的有限自动机
+
+23
+00:01:56,479 --> 00:02:02,030
+that recognizes the valid stacks of the purser. So that is how we'll know. That,
+来识别事务长的有效堆栈。所以这就是我们知道的方式。那,
+
+24
+00:02:02,030 --> 00:02:06,140
+our parser hasn't really counted any parse errors. Because this automaton that we're
+我们的解析器并没有真正统计出任何解析错误。因为这个机器人，我们是
+
+25
+00:02:06,140 --> 00:02:10,789
+going to construct will always output e ither yes, this stack is okay, meaning it
+要进行构造将始终输出YES，这个堆栈是好的，这意味着它
+
+26
+00:02:10,788 --> 00:02:17,540
+could wind up, parsing, the input. Or no, what we've got on the stack now, doesn't
+可能会结束、解析、输入。或者不，我们现在在堆栈上的东西，不会
+
+27
+00:02:17,540 --> 00:02:22,790
+resemble any valid stack for any possible parse of any input string for this
+类似于对此输入字符串的任何可能解析的任何有效堆栈
+
+28
+00:02:22,790 --> 00:02:29,790
+grammar. Okay, so let's think about, what we, what we need the moves of this machine
+语法。好的，那么让我们想一想，我们需要什么，我们需要这台机器的动作
+
+29
+00:02:30,810 --> 00:02:36,340
+to be. So let's say that we're in the state E, arrow, alpha dot X beta. Now,
+成为。假设我们处于状态E，箭头，α点Xβ。现在,
+
+30
+00:02:36,340 --> 00:02:43,200
+what does that say? So that says that so far, we've seen alpha on the stack. Okay,
+上面写的是什么？也就是说，到目前为止，我们已经看到了堆栈上的α。好吧,
+
+31
+00:02:43,200 --> 00:02:48,000
+so remember the machine is reading the stack from bottom to top. This records the
+所以请记住，机器是从下到上读取堆栈的。这记录了
+
+32
+00:02:48,000 --> 00:02:52,660
+fact that the machine has already seen 'quot;alpha'quot; on the stack. So, what would be an
+事实上，机器已经在堆栈上看到了‘alpha’。那么，
+
+33
+00:02:52,660 --> 00:02:56,879
+okay thing to see next on the stack? Well, if this is a valid stack, if having
+堆栈上的下一个要看的是什么？如果这是一个有效的堆栈，如果有
+
+34
+00:02:56,879 --> 00:02:59,430
+'quot;alpha'quot; on the stack at this point is valid, well then certainly it would be
+堆栈上的‘alpha’在这一点上是有效的，那么它肯定是有效的
+
+35
+00:02:59,430 --> 00:03:04,319
+okay if the next thing on the stack was an 'quot;X.'quot; So, we have a transition that if
+好的，如果堆栈上的下一件事是“X”，那么我们有一个转换，如果
+
+36
+00:03:04,319 --> 00:03:08,690
+we're in this state Where we are working on this production, and we've seen alpha
+我们在这个州，我们正在制作这部作品，我们已经看到了阿尔法
+
+37
+00:03:08,690 --> 00:03:13,349
+on the stack. If the next thing is an X on input X, then we can go to this state.
+在堆栈上。如果下一件事是输入X上的X，那么我们可以进入这种状态。
+
+38
+00:03:13,349 --> 00:03:17,290
+Where now we record the fact that we've seen alpha X on the stack, and we're
+现在我们记录我们在堆栈上看到αX的事实，我们是
+
+39
+00:03:17,290 --> 00:03:22,269
+waiting to see, the remaining portion, beta, of that production. Okay, so this is
+我们拭目以待，那部作品的剩余部分，测试版。好的，这就是
+
+40
+00:03:22,269 --> 00:03:28,580
+one kind of move that the non triamistic phymotine can make, and again, we do, we
+一种非三位一体的植物体可以做的动作，我们又一次做了，我们
+
+41
+00:03:28,580 --> 00:03:33,980
+add this kind of a move for every item. So for every item in the grammar, I, if it,
+每件商品都要加这样的动作。所以对于语法中的每一项，我，如果它，
+
+42
+00:03:33,980 --> 00:03:37,569
+if the dot is not all the way at the right end, then there will be a move like this
+如果圆点不是一直在正确的一端，那么就会有这样的移动
+
+43
+00:03:37,569 --> 00:03:42,069
+where the dot moves over, for whatever symbol happens to come to the right of the
+点移动的位置，因为任何符号恰好位于
+
+44
+00:03:42,069 --> 00:03:48,349
+dot. The other class of transitions are the following And these are the, the more
+多特。另一类转换如下所示，这些是、更多
+
+45
+00:03:48,349 --> 00:03:55,050
+interesting ones. So let's say that we're in this, configuration here. Where again,
+有趣的事。让我们假设我们在这个构型中。再说一遍，
+
+46
+00:03:55,050 --> 00:04:02,040
+we've seen alpha. And then the next thing on the stack is X. And here, X is a non
+我们见过阿尔法。然后堆栈上的下一项是X。在这里，X是一个非
+
+47
+00:04:02,040 --> 00:04:08,319
+terminal. [sound]. And I should have said that in the previous case. X was either a
+终点站。[声音]。在之前的案例中我应该这么说的。X要么是一个
+
+48
+00:04:08,319 --> 00:04:12,909
+terminal or a non terminal. So this X here is any grammar symbol, not just a non
+终端或非终端。所以这里的X是任何语法符号，而不仅仅是非
+
+49
+00:04:12,909 --> 00:04:17,060
+terminal. But this, #four here, the, the moves here in part four are specifically
+终点站。但是这个，这里的第四个，第四部分这里的动作是特别的
+
+50
+00:04:17,060 --> 00:04:23,319
+for non terminals. Okay, so anyway, if, X is not on the stack. Okay, let's assume
+用于非终端。好的，不管怎样，如果X不在堆栈上。好的，让我们假设
+
+51
+00:04:23,319 --> 00:04:28,599
+that we've seen alpha, and then the next thing on the stack is not S. Well, is it
+我们已经看到了阿尔法，然后堆栈上的下一个东西不是S。嗯，是吗？
+
+52
+00:04:28,599 --> 00:04:33,749
+possible that there could be a valid configuration of the parser where we saw
+可能存在我们看到的解析器的有效配置
+
+53
+00:04:33,749 --> 00:04:38,680
+alpha but then X didn't appear next? And, the answer is yes because as we said
+但是然后X没有出现在下一个？答案是肯定的，因为正如我们所说的
+
+54
+00:04:38,680 --> 00:04:43,770
+before, the stack is a sequence of partial right hand sides. So it could be that all
+在此之前，堆栈是部分右侧的序列。所以可能就是这样
+
+55
+00:04:43,770 --> 00:04:48,389
+that's on the stack right now for this production. Is alpha and if the next thing
+这就是现在这部作品要做的事情。是阿尔法，如果下一件事
+
+56
+00:04:48,389 --> 00:04:53,029
+on the stack is eventually going to reduce to X. It might not be X itself, it might
+最终将减少到X。它可能不是X本身，它可能
+
+57
+00:04:53,029 --> 00:04:57,110
+be something that will eventually reduce to X. Well, what does that mean? Well,
+最终会化为X的东西。嗯，那是什么意思？井,
+
+58
+00:04:57,110 --> 00:05:01,330
+that means that whatever is there on the stack has to be derived from X, it has to
+这意味着堆栈上的任何内容都必须从X派生，它必须
+
+59
+00:05:01,330 --> 00:05:07,159
+be something that can be Generated by using a sequence of X productions, 'cause
+是可以通过使用一系列X产品来生成的东西，因为
+
+60
+00:05:07,159 --> 00:05:11,399
+eventually it's going to reduce the X. So for every item that looks like this, and
+最终它会降低X，所以对于每一件看起来像这样的东西，
+
+61
+00:05:11,399 --> 00:05:16,300
+for every production for X now we're going to add the following move, we're going to
+现在，对于X的每一次生产，我们将添加以下移动，我们将
+
+62
+00:05:16,300 --> 00:05:20,649
+say that if there's no X on the stack, well then, we can make an epsilon move, we
+假设堆栈上没有X，那么，我们可以进行ε移动，我们
+
+63
+00:05:20,649 --> 00:05:25,129
+can just shift to a state where we try to recognize the right hand side plus
+可以直接转换到这样一种状态，在这种状态下，我们试图识别右手边的加号
+
+64
+00:05:25,129 --> 00:05:29,610
+something derived from X. And these are the only two kinds of moves Either the
+从X派生的东西。这是唯一的两种动作
+
+65
+00:05:29,610 --> 00:05:33,509
+items, eith sorry, either the grammar symbols we're looking for are there on the
+很抱歉，我们要找的语法符号要么在
+
+66
+00:05:33,509 --> 00:05:39,409
+stack and we extend. >> The prefix of a right hand side. So this rule here extends
+堆栈，我们扩展。>>右手边的前缀。所以这条规则在这里延伸了
+
+67
+00:05:39,409 --> 00:05:44,180
+a prefix. So as we see more of that production on the stack or, it tries to
+前缀。因此，当我们在堆栈上看到更多产品时，它会尝试
+
+68
+00:05:44,180 --> 00:05:48,699
+guess or tries to discover where the ends of the prefixes are. So if, if alpha's as
+猜测或尝试找出前缀的末尾在哪里。所以如果，如果阿尔法作为
+
+69
+00:05:48,699 --> 00:05:52,999
+much of the production that is on the stack currently, well then this must be,
+目前堆栈上的大部分产品，那么这肯定是，
+
+70
+00:05:52,999 --> 00:05:57,089
+this x here must this, this point here must mark the start of another right hand
+这里的x必须是这个，这里的这个点一定标志着另一只右手的开始。
+
+71
+00:05:57,089 --> 00:06:00,960
+side in our stack of right hand sides. So we would expect to see something derived
+在我们的右手边堆叠中的一边。所以我们希望看到一些衍生出来的东西
+
+72
+00:06:00,960 --> 00:06:07,960
+from some production for x. Two more rules. Every state in this automaton is
+从x的一些制作中得到的。还有两条规则。这个自动机中的每个状态都是
+
+73
+00:06:08,749 --> 00:06:13,649
+going to be an accepting state. That means that if the automaton manages to
+将会是一个可以接受的状态。这意味着如果自动机设法
+
+74
+00:06:13,649 --> 00:06:20,649
+successfully consume the entire stack, then the then the stack is viable. And
+成功消耗整个堆栈，则堆栈是可行的。和
+
+75
+00:06:20,809 --> 00:06:25,309
+just notice that not every state is going to have transition on every possibl e,
+请注意，并不是每个州都会在所有可能的情况下进行过渡，
+
+76
+00:06:25,309 --> 00:06:28,929
+symbol. So there will be plenty of possible stacks that, that are rejected
+符号。所以会有很多可能的堆栈被拒绝
+
+77
+00:06:28,929 --> 00:06:33,229
+simply because the automaton gets stuck. And finally, the start state of this
+很简单，因为机器人卡住了。最后，这个开始的状态
+
+78
+00:06:33,229 --> 00:06:39,199
+automaton is the item as prime goes to dot S. So remember, the states of the machine
+自动机是质数转到点s时的项目。所以记住，机器的状态
+
+79
+00:06:39,199 --> 00:06:44,229
+are the items of the grammar. And this is why we added, this, dummy production, is
+是文法中的项目。这就是为什么我们增加了，这个，虚拟制作，是
+
+80
+00:06:44,229 --> 00:06:51,229
+just so that we could conveniently name the start state. So now, let's consider,
+这样我们就可以方便地命名开始状态。所以现在，让我们考虑一下，
+
+81
+00:06:51,509 --> 00:06:55,839
+one of our, grammars we've been using a lot, so this is the grammar. And now we're
+这是我们经常使用的语法之一，所以这就是语法。现在我们是
+
+82
+00:06:55,839 --> 00:07:00,639
+going to augment it, with the extra production as prime goes to E. And let's
+为了增加它，将额外的产量作为质数分配给E，让我们
+
+83
+00:07:00,639 --> 00:07:06,389
+take a look at the automaton for that recognizes the viable prefixes of this
+让我们看一下的自动机，它可以识别以下内容的可行前缀
+
+84
+00:07:06,389 --> 00:07:11,330
+grammar. And here it is, and as you can see, it's rather large it has a lot of
+语法。这就是，正如你所看到的，它相当大，有很多
+
+85
+00:07:11,330 --> 00:07:16,429
+states and a lot of transitions, and I just want to show it to you here before we
+状态和很多过渡，我只想在我们开始之前展示给你们看
+
+86
+00:07:16,429 --> 00:07:23,199
+describe how we calculated it, just so you can get an idea that these [inaudible] for
+描述一下我们是如何计算出来的，这样你就可以知道这些(听不见的)
+
+87
+00:07:23,199 --> 00:07:27,539
+recognizing viable prefixes for grammars are actually quite elaborate. But, now
+识别语法的可行前缀实际上相当复杂。但是，现在
+
+88
+00:07:27,539 --> 00:07:33,809
+let's break this down and see how it was produced. So, let's begin with the start
+让我们把它分解一下，看看它是如何制作的。那么，让我们从开始说起
+
+89
+00:07:33,809 --> 00:07:37,909
+state of this machine, so we have S prime goes to dot E. And, remember what this
+这台机器的状态，所以我们有S一撇转到点E，记住这是什么
+
+90
+00:07:37,909 --> 00:07:42,869
+says is we want to be able to reduced to the start symbol to the new start symbol.
+就是说我们要能够把开始符号降到新的开始符号。
+
+91
+00:07:42,869 --> 00:07:47,069
+And so we're reading the stack, and we're hoping to see an E on the stack, and if we
+所以我们正在读取堆栈，我们希望在堆栈上看到一个E，如果我们
+
+92
+00:07:47,069 --> 00:07:51,349
+don't then we're happy to see something derived from E. So, what transition we
+不是吗？我们很高兴看到E派生出一些东西。那么，我们的过渡是什么呢？
+
+93
+00:07:51,349 --> 00:07:57,599
+make from the state. One possibility is that we do in fact see an eon a stack, and
+从州里弄来的。一种可能性是，我们确实看到了一个堆叠的Eon，并且
+
+94
+00:07:57,599 --> 00:08:03,409
+in that case the dot simply moves over saying yes we've read the first item on
+在这种情况下，圆点只是移到前面说，是的，我们已经阅读了上面的第一条
+
+95
+00:08:03,409 --> 00:08:07,099
+the stack or the, we've read the E on the stack and so we've seen the full right
+堆栈或，我们已经读取了堆栈上的E，所以我们看到了完整的权利
+
+96
+00:08:07,099 --> 00:08:11,659
+hand side of this production. Now that would indicate that we were probably done
+这部作品的另一面。现在这表明我们很可能已经完成了
+
+97
+00:08:11,659 --> 00:08:14,979
+with parsing. This is the state that you would reach, have you'd read the entire
+通过解析。这就是你会达到的境界，你有没有读过完整的
+
+98
+00:08:14,979 --> 00:08:19,429
+input and successfully parsed it, you would have reduced the old start symbol
+输入并成功解析它，您就会减少旧的开始符号
+
+99
+00:08:19,429 --> 00:08:26,199
+and be about to reduce to the augmented the, the new start symbol. But if you're
+并即将缩减为增加的，新的开始符号。但如果你
+
+100
+00:08:26,199 --> 00:08:30,429
+not so fortunate as to see an E on the stack, then you need to hope that you'll
+没有那么幸运地看到堆栈上有一个E，那么您需要希望您将
+
+101
+00:08:30,429 --> 00:08:34,409
+see something derive fro m E. And there are a couple of possibilities there. One
+我们可以看到一些东西是从mE中衍生出来的，有几种可能性。一
+
+102
+00:08:34,409 --> 00:08:38,979
+is that we could see something that would eventually use this production, E goes to
+我们可以看到一些最终会用到这部作品的东西，E转到
+
+103
+00:08:38,979 --> 00:08:43,149
+T. And since we haven't seen any of it yet, we put the dot all the way at the
+因为我们还没有看到任何东西，所以我们把圆点一直放在
+
+104
+00:08:43,149 --> 00:08:47,240
+left, indicating that we're hoping to see a T, which could then reduce to E, and
+左边，表示我们希望看到一个T，然后它可能会减少到E，并且
+
+105
+00:08:47,240 --> 00:08:53,259
+which could then reduce to S prime. Now if we don't see a T on the stack by itself
+然后可能会降到S素数。现在，如果我们在堆栈上没有看到T本身
+
+106
+00:08:53,259 --> 00:08:57,769
+the other possibility is that we could be working on this production. E goes to, T
+另一种可能性是我们可能正在制作这部作品。E转到，T转到
+
+107
+00:08:57,769 --> 00:09:02,100
+plus E. And again, we haven't seen any of it, so the dot Goes on the left hand side.
+再说一次，我们没有见过任何东西，所以这个点在左手边。
+
+108
+00:09:02,100 --> 00:09:08,399
+And then notice how we're crucially using the power of nondeterministic automata. So
+然后注意我们是如何关键地使用非确定自动机的力量的。所以
+
+109
+00:09:08,399 --> 00:09:12,129
+here we don't know which production is going to, which right hand side of a
+在这里，我们不知道哪部影片将会上映，一部影片的右手边是哪一部
+
+110
+00:09:12,129 --> 00:09:15,440
+production is going to appear on the stack. And in fact, I notice that these
+生产将会出现在堆栈上。事实上，我注意到这些
+
+111
+00:09:15,440 --> 00:09:21,069
+productions are not even left factored, so we don't know whether it's going to be
+产量甚至没有被考虑在内，所以我们不知道它是否会
+
+112
+00:09:21,069 --> 00:09:27,350
+just a T there or a T plus E, but. We just use the guessing power of the [inaudible]
+那里只有T或者T加E，但是。我们只是利用[听不见的]的猜测能力
+
+113
+00:09:27,350 --> 00:09:34,350
+chromatin you chose which one to, to use. Remember the [inaudible] sepse is any
+染色质你选择用哪一种。记住[听不见的]脓液是任何
+
+114
+00:09:35,240 --> 00:09:39,199
+possible choice except. So you can always guess correctly. So intuitively you can.
+可能的选择除了。所以你总能猜对。所以直觉上你可以。
+
+115
+00:09:39,199 --> 00:09:42,360
+You will be able to pick the right one. Now of course we could compile this down
+你会选对的。现在，我们当然可以把这个汇编下来
+
+116
+00:09:42,360 --> 00:09:47,560
+to a deterministic machine that won't have to make any guesses. But at this level
+一台不需要进行任何猜测的确定性机器。但在这个层面上
+
+117
+00:09:47,560 --> 00:09:52,680
+we're writing [inaudible] it's extremely useful not to have to figure out which of
+我们在写[听不见]不用弄清楚是哪一种是非常有用的
+
+118
+00:09:52,680 --> 00:09:59,680
+these two productions to use. We can just try both and see what happens. Now let's
+这两部作品都要用。我们可以两种都试一试，看看会发生什么。现在让我们
+
+119
+00:09:59,680 --> 00:10:06,680
+focus on this, state, E goes to dot T. What are the possibilities there? Well,
+关注这一点，状态，E是点T，有什么可能性呢？井,
+
+120
+00:10:06,980 --> 00:10:10,470
+one possibility is that we see a T on the stack. And then we see in a complete right
+一种可能性是我们在堆栈上看到T。然后我们看到在一个完全正确的位置
+
+121
+00:10:10,470 --> 00:10:16,089
+hand side. And notice how when the dot was all the way to the right hand side, that
+手边。注意当圆点一直位于右手边时，
+
+122
+00:10:16,089 --> 00:10:19,279
+is going to indicate that we're ready to do a reduce. So we'll talk about that a
+将表明我们已经准备好进行减量。所以我们会讨论这件事
+
+123
+00:10:19,279 --> 00:10:22,470
+little bit later, but essentially that's how we're going to recognize handles. When
+稍晚一点，但本质上这就是我们识别句柄的方式。什么时候
+
+124
+00:10:22,470 --> 00:10:25,949
+we finally reach a state where the dot is all the way to the right hand side that's
+我们最终到达了这样一种状态，即圆点一直在右手边，也就是
+
+125
+00:10:25,949 --> 00:10:32,639
+going to say this could be a handle that you might want to reduce. Now if we don't
+我想说这可能是您想要减小的句柄。现在如果我们不
+
+126
+00:10:32,639 --> 00:10:36,670
+see a T on the stack , then we just see something derived from T, and there's a
+在堆栈上看到一个T，然后我们看到一些从T派生出来的东西，还有一个
+
+127
+00:10:36,670 --> 00:10:40,149
+couple of possibilities, a few possibilities there. One possibility is
+有几种可能性，有几种可能性。一种可能性是
+
+128
+00:10:40,149 --> 00:10:42,990
+that it's going to be the production T goes to int, so since we're just starting
+这将是产品T转到INT，所以既然我们才刚刚开始
+
+129
+00:10:42,990 --> 00:10:46,540
+on this production again, we just put the dot all the way at the left. Another
+在这部作品中，我们只是把圆点一直放在左边。另一个
+
+130
+00:10:46,540 --> 00:10:53,339
+possibility we're working on T goes to (E). And the third possibility that we're
+我们在研究T的可能性是(E)。第三种可能性是我们
+
+131
+00:10:53,339 --> 00:10:57,509
+working on T goes to int x T. And each of the case here, notice that the dots are
+对T的运算为int x T。这里的每个例子，请注意，点是
+
+132
+00:10:57,509 --> 00:11:00,769
+all the way at the left indicating that we're just getting started, we have not
+一直走在左边，表明我们才刚刚开始，我们还没有
+
+133
+00:11:00,769 --> 00:11:07,769
+actually seen any of the right hand side yet. Now let's shift our focus to this
+实际上还没见过右手边的任何人。现在让我们把焦点转移到这个
+
+134
+00:11:08,060 --> 00:11:15,050
+production, E goes to, dot T plus E. This item, excuse me One possibility is that we
+生产，E去，T点加E。这个项目，打扰一下，一种可能是我们
+
+135
+00:11:15,050 --> 00:11:18,899
+see an E on the see a T on the stack, okay, in which case the dot just moves
+在堆栈上看到E，在堆栈上看到T，在这种情况下，点只是移动
+
+136
+00:11:18,899 --> 00:11:23,610
+over. And the other possibility is that we see something derived from T, in which
+完毕。另一种可能性是我们看到一些从T派生出来的东西，其中
+
+137
+00:11:23,610 --> 00:11:28,269
+case we will go to one of the states that begins a T production. And notice here
+万一我们要去一个开始T生产的州。注意这里
+
+138
+00:11:28,269 --> 00:11:31,560
+that we already have all three of those items in our automaton. We're just going
+我们的机器人里已经有了这三样东西。我们要走了
+
+139
+00:11:31,560 --> 00:11:38,560
+to it states that we went to from the item E goes to dot T. So this, this item, E
+表示我们从项目E转到了点T。所以这个，这个项目，E
+
+140
+00:11:38,759 --> 00:11:45,759
+goes to dot T plus E, could also move to those three states. Now let's focus on
+移到T加E点，也可以移到这三个态。现在我们来关注一下
+
+141
+00:11:46,680 --> 00:11:51,769
+this, item here. T goes to dot, open-paren, E closed-paren. Well, there's
+这个，这里的项目。T转到点，开-Paren，E-Closed-Paren。嗯，这里有
+
+142
+00:11:51,769 --> 00:11:56,449
+only one possible move here, so this is only a, a terminal, it's not, it's not a
+这里只有一个可能的动作，所以这只是一个，一个终端，不是，不是
+
+143
+00:11:56,449 --> 00:11:59,850
+non-terminal, so there's not going to be any possibility of having something
+非终结性的，所以不会有任何的可能性
+
+144
+00:11:59,850 --> 00:12:03,389
+derived from open-paren. We just have to see the open-paren in the input. So
+从开帕伦派生出来的。我们只需看到输入中的开放参数。所以
+
+145
+00:12:03,389 --> 00:12:06,649
+there's only one possible transition here, which is that we see, the open-paren,
+这里只有一个可能的过渡，那就是我们看到，开放的帕伦，
+
+146
+00:12:06,649 --> 00:12:12,449
+excuse me, on the stack, and the dot just moves over. Now, from this state, once
+打扰一下，在堆叠上，圆点刚刚移了过来。现在，从这个州，曾经
+
+147
+00:12:12,449 --> 00:12:17,850
+again, we got is just next to a, or just to the left of a non-terminal, so we might
+同样，我们得到的就在a旁边，或者就在非终结符的左边，所以我们可能
+
+148
+00:12:17,850 --> 00:12:20,920
+see that non-terminal on the stack or we might see something derived from that
+看到堆栈上的非终端，或者我们可能会看到从该堆栈派生的内容
+
+149
+00:12:20,920 --> 00:12:24,670
+non-terminal. Well, if we see that non-terminal on the stack, your dot just
+非终端。嗯，如果我们看到堆栈上的非终结符，您的圆点
+
+150
+00:12:24,670 --> 00:12:30,740
+moves over and we get T(E.) indicating that we've seen an both an ( and E on the
+移过去，我们得到T(E)。表示我们在
+
+151
+00:12:30,740 --> 00:12:36,399
+stack and we're still waiting to see the ). Well we might also see somethin g
+堆栈，我们还在等着看)。嗯，我们可能还会看到一些
+
+152
+00:12:36,399 --> 00:12:41,839
+derived from e, okay. So we add these two transitions to the two items that begin
+从e派生出来的，好的。因此，我们将这两个转换添加到开始的两个项目中
+
+153
+00:12:41,839 --> 00:12:47,850
+productions for e. [sound]. Alright, now, let's focus on this state. T goes to open
+为e.[声音]制作的作品。好了，现在让我们来关注一下这个状态。%t去开业
+
+154
+00:12:47,850 --> 00:12:52,839
+paren E dot closed paren. Again, 'cause it's a terminal, that the dot it's next to
+E点闭合的Paren。再说一次，因为它是一个终端，它旁边的圆点
+
+155
+00:12:52,839 --> 00:12:57,389
+is only one possible move. We have to see that open paren if we see anything at all.
+这只是一种可能的举动。如果我们看到什么的话，我们必须去看看那个敞开的帕伦。
+
+156
+00:12:57,389 --> 00:13:01,670
+And we'll wind up with the item T goes to open paren E, closed paren dot. And now
+最后我们会看到项目T去打开Paren E，闭合的Paren点。而现在
+
+157
+00:13:01,670 --> 00:13:07,060
+we've recognized the entire right hand side of that production on the stack.
+我们已经认出了堆栈上那部作品的整个右手边。
+
+158
+00:13:07,060 --> 00:13:12,680
+Let's take a look at this, item. So we're here, because a terminal symbol, the, only
+我们来看看这个，项目。所以我们在这里，因为一个终端符号，唯一的
+
+159
+00:13:12,680 --> 00:13:15,269
+possibility is to read that terminal symbol on the stack. So this would be the
+可能是读取堆栈上的终端符号。所以这将是
+
+160
+00:13:15,269 --> 00:13:20,930
+next item. E goes to T plus dot E. [sound]. Focusing on that item again
+下一件。E转到T加点E[发音]。再次把注意力放在那个项目上
+
+161
+00:13:20,930 --> 00:13:27,259
+[inaudible] we could possible see an E on the stack. Right, in which case we would
+[听不见]我们可以在堆叠上看到一个E。对，那样的话我们就
+
+162
+00:13:27,259 --> 00:13:32,399
+have recognized the entire writing inside of this production, We have E goes T+E. Or
+已经认出了这部作品里面的全部文字，我们有E去T+E，或者说是E去T+E。
+
+163
+00:13:32,399 --> 00:13:36,160
+we can see something derived from here, which case we make a transition back to
+我们可以从这里看到一些东西，在这种情况下，我们可以转换回
+
+164
+00:13:36,160 --> 00:13:43,160
+one of those two states. Now, where we got productions left to go, or items left to
+这两个州中的一个。现在，我们还有作品要去的地方，或者剩下的项目要去的地方
+
+165
+00:13:43,559 --> 00:13:49,889
+go Here, we haw T goes to.int. So, we would have to see it next on to stack, and
+到这儿去，我们要去的地方是.int。因此，我们将不得不在下一个堆栈中看到它，并且
+
+166
+00:13:49,889 --> 00:13:55,499
+that would be the full right hand side of that production. Down here, we still have
+那将是那部作品的全部右手边。在这下面，我们还有
+
+167
+00:13:55,499 --> 00:14:00,639
+T goes to dot [inaudible] times T. So again, there's a terminal symbol here
+转到点[听不见]倍，所以这里又有一个终端符号
+
+168
+00:14:00,639 --> 00:14:04,699
+[inaudible]. And so that would be the next thing we would need to see on the stack
+[听不见]。因此，这将是我们需要在堆栈上看到的下一件事
+
+169
+00:14:04,699 --> 00:14:11,189
+for this production to remain viable. And once we've seen the [inaudible] we would
+才能让这部作品继续存在。一旦我们看到[听不见的]我们就会
+
+170
+00:14:11,189 --> 00:14:16,540
+like to see the times. So we wind up in this state and now we've got dot next to
+我喜欢看“泰晤士报”。所以我们最终来到了这个州，现在我们在旁边有一个圆点
+
+171
+00:14:16,540 --> 00:14:22,259
+T. So, again, one possibility is that we see the T on the stack and then we've seen
+再说一次，一种可能是我们看到堆栈上的T，然后我们看到
+
+172
+00:14:22,259 --> 00:14:25,860
+the full right-hand side of this production. But we might only see
+这部作品的全部右手边。但我们可能只能看到
+
+173
+00:14:25,860 --> 00:14:30,870
+something derive from T. The might, the, the T might not be there yet. It might be
+从T派生出的一些东西，可能还没有到那个地步，那个T可能还没有到那里。可能是因为
+
+174
+00:14:30,870 --> 00:14:34,819
+in a state where we're still waiting for the T to appear through some sequence of
+在我们仍在等待T通过某个序列出现的状态下
+
+175
+00:14:34,819 --> 00:14:37,870
+reductions. But then we would need to see something derive from T. And in this case
+减价。但是我们需要看到一些从T派生出来的东西，在这种情况下
+
+176
+00:14:37,870 --> 00:14:44,029
+we would make a transition to one of the three states that begin the productions
+我们将过渡到开始制作的三个州之一
+
+177
+00:14:44,029 --> 00:14:49,990
+for T. And that 's the full automaton. That is, those are all the states and all
+对于T来说，这就是完整的自动机。也就是说，这些就是所有的状态和所有的状态。
+
+178
+00:14:49,990 --> 00:14:55,430
+the transitions for the automaton that recognizes the viable prefixes of this grammar.
+识别此语法的可行前缀的自动机的转换。
+

@@ -1,0 +1,405 @@
+0
+00:00:04,089 --> 00:00:07,629
+In the next several videos we're going to apply what we've learned in the class to
+在接下来的几个视频中，我们将把我们在课堂上学到的知识应用到
+
+1
+00:00:07,629 --> 00:00:12,090
+analysis of various features of Java. This will give us a chance to both look at a
+分析了Java的各种特性。这将给我们一个机会，让我们既能看到
+
+2
+00:00:12,090 --> 00:00:16,760
+real programming language and how it's designed and been done. And also to talk
+真正的编程语言，以及它是如何设计和实现的。也是为了谈论
+
+3
+00:00:16,760 --> 00:00:22,190
+about some features that art in Cool that we haven't been able to cover thus far in
+关于Cool中的一些艺术特性，我们到目前为止还没有在
+
+4
+00:00:22,190 --> 00:00:29,190
+the course. For the perspective of this class, Java is a kind of Cool on steroids.
+这门课。从这个类的角度来看，Java是一种对类固醇的冷静。
+
+5
+00:00:29,270 --> 00:00:35,539
+It's Cool plus more features, many more features. At, at their core Java and Cool
+这是很酷的，加上更多的功能，更多的功能。At，其核心是Java和Cool
+
+6
+00:00:35,539 --> 00:00:41,370
+are very similar. Java and Cool are both typed object oriented garbage collected
+是非常相似的。Java和Cool都是面向对象的类型化垃圾回收
+
+7
+00:00:41,370 --> 00:00:47,770
+languages. They were both designed in the early 1990s and so they share a common
+语言。它们都是在20世纪90年代初设计的，因此它们有一个共同之处
+
+8
+00:00:47,770 --> 00:00:52,350
+culture there with the ideas that were current at that time. So in this video,
+那里的文化带有当时流行的思想。所以在这段视频中，
+
+9
+00:00:52,350 --> 00:00:56,079
+I'm just going to give a little bit of history of Java so that will be the focus
+我只想简单介绍一下Java的历史，这将是重点
+
+10
+00:00:56,079 --> 00:00:59,969
+really of this rather short video. And then in the subsequent videos, we'll talk
+这段相当短的视频真的很精彩。然后在接下来的视频中，我们将谈论
+
+11
+00:00:59,969 --> 00:01:05,149
+about all the features or some of the features of Java that are not in Cool. And
+关于Java的所有特性或一些不太酷的特性。和
+
+12
+00:01:05,149 --> 00:01:08,420
+we'll use the ideas of course that we've been discussing all along through the
+当然，我们将使用我们一直在讨论的想法
+
+13
+00:01:08,420 --> 00:01:12,479
+class, to explain a little bit about those ideas. But I think these are all important
+同学们，来解释一下这些想法。但我认为这些都很重要
+
+14
+00:01:12,479 --> 00:01:18,869
+language constructs that are unfortunately were too time consuming or too complicated
+不幸的是，语言构造太耗时或太复杂
+
+15
+00:01:18,869 --> 00:01:24,259
+to add to the course project. So I think it's useful to use a language like
+要添加到课程项目中。所以我认为使用像这样的语言是有用的
+
+16
+00:01:24,259 --> 00:01:31,259
+[inaudible] to illustrate how these ideas work and what some of the issues are. So
+[听不见]来说明这些想法是如何运作的，以及其中的一些问题是什么。所以
+
+17
+00:01:32,799 --> 00:01:37,939
+Java began as a project called Oak at SUN Microsystems and it was originally
+Java最初是SUN Microsystems的一个名为Oak的项目，最初是
+
+18
+00:01:37,939 --> 00:01:42,380
+targeted at set top devices. And so what was a set top device? This was a little
+目标是机顶盒设备。那么什么是机顶盒设备呢？这是一个小小的
+
+19
+00:01:42,380 --> 00:01:47,719
+box that was gonna sit on top of your TV So you had your TV screen, and then there
+这个盒子会放在你的电视上，这样你就有了电视屏幕，然后就在那里
+
+20
+00:01:47,719 --> 00:01:51,539
+was going to be this little thing up here that was going to sit on top of the TV
+这上面会有一个小东西，它会坐在电视顶上
+
+21
+00:01:51,539 --> 00:01:54,859
+that was going to control all your cable programming. So this would essentially
+它会控制你所有的有线电视节目。所以这基本上会
+
+22
+00:01:54,859 --> 00:01:59,189
+would connect to some kind of network and it would help you to do, you know to make
+会连接到某种网络，这会帮助你做，你知道要做的事
+
+23
+00:01:59,189 --> 00:02:03,729
+your TV more interactive. Okay, so this was back in the days before every TV was
+让您的电视更具互动性。好的，这是在每一台电视还没有出现之前的日子里
+
+24
+00:02:03,729 --> 00:02:08,950
+really a computer by itself. The initial develo pment of, of Oak took several
+实际上它本身就是一台电脑。橡树的最初开发花了几个月的时间。
+
+25
+00:02:08,949 --> 00:02:15,659
+years. I believe the project ran from about 91 to 94 and what happened, at least
+几年了。我相信这个项目大约从91年持续到94年，至少发生了什么
+
+26
+00:02:15,659 --> 00:02:22,450
+as I understand it, is that this set top device market just never took off. So this
+据我所知，这个机顶盒市场从来没有起飞过。所以这件事
+
+27
+00:02:22,450 --> 00:02:28,610
+never became a popular never, never became a popular idea with consumers and, and so
+从来没有成为一个流行的，从来没有成为消费者欢迎的想法，所以
+
+28
+00:02:28,610 --> 00:02:34,730
+there really was a kind of limited up side or a limited potential for, for Oak at the
+对于奥克来说，确实有一种有限的上行空间或有限的潜力
+
+29
+00:02:34,730 --> 00:02:39,870
+time. And then something happened, the Internet happened. So also in the early
+时间到了。然后发生了一些事情，互联网发生了。同样在早期也是如此
+
+30
+00:02:39,870 --> 00:02:44,819
+90s the Internet revolution was really gathering steam. Everybody was getting on
+90年代的互联网革命确实愈演愈烈。每个人都上了车
+
+31
+00:02:44,819 --> 00:02:51,700
+the Internet and it became obvious sometime 93, 94 that there was going to be
+互联网，很明显在93，94年的某个时候，将会有
+
+32
+00:02:51,700 --> 00:02:57,010
+a need for programming languages that really addressed these specific issues on
+需要能够真正解决这些特定问题的编程语言
+
+33
+00:02:57,010 --> 00:03:03,769
+the Internet. And in particular people were very concerned about security. And,
+互联网。尤其是人们非常关心安全问题。和,
+
+34
+00:03:03,769 --> 00:03:10,170
+they didn't want to be downloading lots of binaries that were programs written in C
+他们不想下载很多用C编写的二进制程序
+
+35
+00:03:10,170 --> 00:03:14,249
+and passing those around on the Internet because it was just really no guarantee
+并在互联网上传播这些信息，因为这真的不能保证
+
+36
+00:03:14,249 --> 00:03:19,599
+that those programs would work as intended and not crash your machine. So you know,
+这些程序将按预期工作，而不会使您的机器崩溃。所以你知道，
+
+37
+00:03:19,599 --> 00:03:24,680
+they needed to be able to share code over the Internet from other people that you
+他们需要能够通过Internet与其他人共享代码，
+
+38
+00:03:24,680 --> 00:03:30,579
+didn't necessarily trust completely meant that we needed safer languages than
+不一定完全信任意味着我们需要比
+
+39
+00:03:30,579 --> 00:03:35,840
+languages like C and C++ and so there was an opportunity there for a, a new language
+像C和C++这样的语言，所以那里有一种，一种新的语言的机会
+
+40
+00:03:35,840 --> 00:03:42,840
+and there were several candidates actually. Besides Java, Tickle and Python
+实际上有几个候选人。除了Java、Tickle和Python
+
+41
+00:03:42,980 --> 00:03:49,650
+were very serious candidates to become the Internet programming language eventually
+我们都是非常认真的候选人，最终会成为互联网编程语言
+
+42
+00:03:49,650 --> 00:03:56,650
+the backing of SUN Microsystems, the backing of SUN gave to Java helped it to
+SUN Microsystems的支持，SUN给予Java的支持帮助它
+
+43
+00:03:56,659 --> 00:04:01,859
+really gain a very, very strong presence on the Internet. But you know, the point
+在互联网上真的获得了非常非常强大的影响力。但你知道，重点是
+
+44
+00:04:01,859 --> 00:04:07,819
+of this story is that every new language needs a killer app. Every programming
+这个故事的核心是，每一种新语言都需要一个杀手级的应用程序。每一个节目
+
+45
+00:04:07,819 --> 00:04:12,349
+language rides into the world on the back of some application. So there has to be
+语言是在一些应用程序的支持下进入这个世界的。所以一定会有
+
+46
+00:04:12,349 --> 00:04:17,840
+some kind of new application that people want to write that the existing languages
+人们想要编写的某种新的应用程序，即现有的语言
+
+47
+00:04:17,839 --> 00:04:23,099
+don't serve very well and that provides the opportunity and therefore makes it
+发球不是很好，这提供了机会，因此使它
+
+48
+00:04:23,099 --> 00:04:27,319
+worthwhile for people to learn a new programming language. And so the fact that
+对于人们来说，学习一门新的编程语言是值得的。所以事实是
+
+49
+00:04:27,319 --> 00:04:31,130
+Ja va was a very safe language, it had the garbage collection. It had the type system
+JAVA是一种非常安全的语言，它有垃圾收集功能。它有类型系统
+
+50
+00:04:31,130 --> 00:04:38,030
+that made it well suited at the time to the, the needs of the emerging needs of
+这使得它在当时很好地适应了新兴需求的需要
+
+51
+00:04:38,030 --> 00:04:42,789
+internet programming. And it became very popular I think primarily because of that
+互联网编程。它变得非常受欢迎，我认为主要是因为
+
+52
+00:04:42,789 --> 00:04:48,220
+reason. And if you if you recall there was a lecture or a video early on, on the
+原因。如果你还记得早些时候有一场讲座或一段视频，在
+
+53
+00:04:48,220 --> 00:04:54,160
+economy of programming languages. And I would recommend actually that if you
+编程语言的经济性。实际上我会建议如果你
+
+54
+00:04:54,160 --> 00:04:58,120
+haven't watched that one, then you go back and take a look because there I discuss
+我没看过那部，那你回去看看吧，因为我在那里讨论过
+
+55
+00:04:58,120 --> 00:05:04,650
+some of these ideas about how languages are adopted in more detail. So Java also
+其中一些关于语言如何被采用的想法更加详细。所以Java也是
+
+56
+00:05:04,650 --> 00:05:09,000
+came into existence in a particular technical environment and it's very
+它是在特定的技术环境中产生的，它非常
+
+57
+00:05:09,000 --> 00:05:13,389
+common. In fact, it's normal for new programming languages to borrow heavily
+很普通。事实上，新的编程语言大量借用是很正常的
+
+58
+00:05:13,389 --> 00:05:19,639
+from their predecessors and new languages are often mostly recombinations of ideas
+来自它们的前辈和新的语言通常是思想的重新组合
+
+59
+00:05:19,639 --> 00:05:25,060
+from previous languages in a new design perhaps with some innovations thrown in.
+在一个新的设计中使用以前的语言，也许还加入了一些创新。
+
+60
+00:05:25,060 --> 00:05:30,500
+And the particular influences on Java. Again this is at least so far as I
+以及它对Java的特殊影响。再说一次，至少到目前为止我
+
+61
+00:05:30,500 --> 00:05:37,500
+understand it so the type system in Java, or its, its commitment to types probably
+了解它，可能是因为Java中的类型系统，或者它对类型的承诺
+
+62
+00:05:37,900 --> 00:05:44,900
+is traceable to Modula-3 and the ideas there where people try to build a sort of
+可以追溯到模3和那里的想法，在那里人们试图建立一种
+
+63
+00:05:46,460 --> 00:05:51,190
+programming language that would scale in a realistic way to large systems but also be
+一种编程语言，它将以一种现实的方式扩展到大型系统，但同时也
+
+64
+00:05:51,190 --> 00:05:58,190
+strongly typed. The object orientation of Java is traceable to languages like
+强类型。Java的面向对象可以追溯到像这样的语言
+
+65
+00:05:58,500 --> 00:06:05,349
+Objective C and C++ and, and also Eiffel which also had the idea of interfaces
+目标C和C++，还有同样具有接口思想的Eiffel
+
+66
+00:06:05,349 --> 00:06:10,060
+which is a prominent feature in Java. And finally Java is quite a dynamic language
+这是Java中的一个突出特性。最后，Java是一种非常动态的语言
+
+67
+00:06:10,060 --> 00:06:14,889
+meaning that there many things that are not done staticly. They're done
+这意味着有很多事情不是静态地做的。他们做完了
+
+68
+00:06:14,889 --> 00:06:19,520
+dynamically so features like reflection would be one example of that. And there
+动态的，所以像反射这样的功能就是一个例子。还有那里
+
+69
+00:06:19,520 --> 00:06:23,080
+are actually quite a few other features and there is some history there. There's
+实际上还有相当多的其他功能，而且那里有一些历史。那里有
+
+70
+00:06:23,080 --> 00:06:28,780
+some shared culture there with Lisp. This was a or is a functional family language
+在那里和Lisp有一些共同的文化。这是一种或现在是一种实用的家庭语言
+
+71
+00:06:28,780 --> 00:06:35,150
+but is also a very, very dynamic language. As I said at the beginning this video is
+但也是一种非常非常有活力的语言。正如我在开头所说的，这个视频是
+
+72
+00:06:35,150 --> 00:06:39,740
+just an introduction and overview and in the next few videos, we'll be looking at
+这只是一个介绍和概述，在接下来的几个视频中，我们将看到
+
+73
+00:06:39,740 --> 00:06:43,220
+specific features of Java and how they work. And that will includes things like
+Java的特定功能及其工作方式。这份遗嘱包括像这样的东西
+
+74
+00:06:43,220 --> 00:06:48,669
+exceptions, interfaces, and threads. As well as a bunch of other features that
+异常、接口和线程。以及一系列其他功能，这些功能
+
+75
+00:06:48,669 --> 00:06:53,689
+we'll discuss at least, briefly. One thing to realize is that Java is a big language.
+我们将至少简短地讨论一下。需要认识到的一件事是Java是一种很大的语言。
+
+76
+00:06:53,689 --> 00:06:59,560
+It is not simple. The language manual for Java runs to hundreds and hundreds of
+这并不简单。Java的语言手册有成百上千的
+
+77
+00:06:59,560 --> 00:07:05,680
+pages. It has lots of features. And perhaps more importantly, lots of feature
+佩奇。它有很多特点。也许更重要的是，很多功能
+
+78
+00:07:05,680 --> 00:07:10,379
+interactions. So. The hard part of designing a language of course is getting
+互动。所以。当然，设计一门语言最难的部分是
+
+79
+00:07:10,379 --> 00:07:15,159
+all the feature interactions right. All the combinations of the features and, you
+所有功能交互都是正确的。所有功能和您的组合
+
+80
+00:07:15,159 --> 00:07:18,189
+know making sure there are no surprising interactions between them.
+要知道，要确保他们之间没有令人惊讶的互动。
+

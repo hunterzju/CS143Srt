@@ -1,0 +1,625 @@
+0
+00:00:04,019 --> 00:00:08,100
+In this video we're gonna continue our discussion on self-type, by talking about
+在这段视频中，我们将继续讨论自我类型，通过讨论
+
+1
+00:00:08,100 --> 00:00:12,119
+the type-level operations that are available on self-type. And this will help
+Self-type上可用的类型级操作。这会有帮助的
+
+2
+00:00:12,119 --> 00:00:19,119
+to clarify what self-type actually is, and it's role in the type system. Let's begin
+阐明自我类型到底是什么，以及它在类型系统中的作用。我们开始吧
+
+3
+00:00:20,630 --> 00:00:23,690
+by thinking about the example that we discussed last time and if you've
+想一想我们上次讨论的例子，如果你已经
+
+4
+00:00:23,690 --> 00:00:27,150
+forgotten what that is, let me just write it down quickly. We had a class called
+忘了那是什么了，让我快点写下来。我们有个班级叫
+
+5
+00:00:27,150 --> 00:00:34,150
+count, and count had one. Field an integer I that was initialized to zero and it had
+伯爵，伯爵有一个。字段是一个初始化为零的整数i，它具有
+
+6
+00:00:36,700 --> 00:00:43,700
+one method called INC that returned something itself type and all it did was
+一个名为Inc的方法返回本身类型的内容，它所做的一切是
+
+7
+00:00:45,149 --> 00:00:52,149
+to increment the counter field and return the self-objects. And I've probably made
+若要递增计数器字段并返回自身对象，请执行以下操作。我可能已经做了
+
+8
+00:00:52,270 --> 00:00:56,800
+some syntax errors here but that's not really important. That's basic code for
+这里有一些语法错误，但这并不重要。这是的基本代码
+
+9
+00:00:56,800 --> 00:01:01,480
+the CAL class. And the question is what can be the dynamic type of the object
+CAL课程。问题是什么可以是对象的动态类型
+
+10
+00:01:01,480 --> 00:01:06,930
+that's actually returned by INC. And the answer here is it could be whatever is the
+实际上是由Inc.退还的。这里的答案是，它可能是
+
+11
+00:01:06,930 --> 00:01:13,369
+type of this self-object. Whatever is the dynamic type of the self-object. And if we
+此自我对象的类型。自我客体的动态类型是什么。如果我们
+
+12
+00:01:13,369 --> 00:01:18,729
+think about a big program where there is multiple classes that inherit from count.
+想想一个大程序，其中有多个类继承自Count。
+
+13
+00:01:18,729 --> 00:01:25,729
+Then the answer is that INC could return count. Or any subclass of count. So it's
+那么答案就是Inc可以返回Count。或Count的任何子类。所以这就是
+
+14
+00:01:33,289 --> 00:01:37,969
+going to return something that's at least, at most count, and, but it could return
+返回一些至少最重要的东西，但是它可能会返回
+
+15
+00:01:37,969 --> 00:01:40,740
+something more specific. The dynamic type, could be something more specific, it
+一些更具体的东西。动态类型，可以是更具体的，它
+
+16
+00:01:40,740 --> 00:01:46,560
+could be a sub classic count, or a sub class of a sub class of count. Anything
+可以是子经典计数，也可以是计数的子类的子类。什么都行
+
+17
+00:01:46,560 --> 00:01:52,520
+that inherits directly or indirectly from count is a possibility. So what's the
+直接或间接从Count继承的是一种可能性。那么是什么原因呢？
+
+18
+00:01:52,520 --> 00:01:58,749
+general case? Well, let's think about a class c. And in this class C, there's some
+一般情况下呢？好，让我们来考虑一个c类。在这个c类中，有一些
+
+19
+00:01:58,749 --> 00:02:05,749
+expression buried somewhere inside of it that has the type self-type. It doesn't
+埋藏在其内部某处、类型为Self类型的表达式。它不会
+
+20
+00:02:05,889 --> 00:02:09,720
+really matter how that expression got the type, self-type or what it is. Let's just
+很重要的一点是，这个表达式是如何获得类型、自我类型或者是什么类型的。我们就这样吧
+
+21
+00:02:09,720 --> 00:02:16,170
+say that it has that type somehow. Well, what are the possible dynamic types of the
+不知怎么的说它就是那种类型。那么，可能的动态类型是什么呢？
+
+22
+00:02:16,170 --> 00:02:20,370
+expression e. And from our discussion on the previous slide, it seems clear the
+表达式e。从我们对上一张幻灯片的讨论中，似乎很清楚
+
+23
+00:02:20,370 --> 00:02:25,450
+dynamic type of e, when you run e, you're going to get back something that's a
+动态类型的e，当你运行e时，你会得到一个
+
+24
+00:02:25,450 --> 00:02:30,660
+subtype of the class c, the enclosing class in which the self-type appears. And
+类c的子类型，即自我类型出现在其中的封闭类。和
+
+25
+00:02:30,660 --> 00:02:34,180
+that's interestin g because it shows us that the, the meaning of self-type
+这很有趣，因为它向我们展示了自我类型的意义
+
+26
+00:02:34,180 --> 00:02:39,420
+actually depends on the context. So, what this self-type means, this self-type means
+实际上取决于上下文。所以，这种自我类型的意思是，这种自我类型的意思是
+
+27
+00:02:39,420 --> 00:02:45,010
+a subtype of the class C. If I'd written self-type in a class D, in the de,
+类C的子类型。如果我在D类中写自类型，
+
+28
+00:02:45,010 --> 00:02:49,300
+somewhere in the definition of class D, there it would mean a subtype of the class
+在类D的定义中的某个位置，它将表示类的子类型
+
+29
+00:02:49,300 --> 00:02:55,500
+D. And so to remind ourselves, what class we're talking about, what enclosing class
+提醒我们自己，我们谈论的是什么类，包围的是什么类
+
+30
+00:02:55,500 --> 00:02:59,620
+we're talking about, we're gonna subscript occurrences of self-type with a class
+我们正在讨论的是，我们将用一个类将自我类型的出现放在下标中
+
+31
+00:02:59,620 --> 00:03:04,960
+name. So self-types of c here is going to refer to a syntactic occurrence of the
+名字。所以这里的c的自我类型指的是
+
+32
+00:03:04,960 --> 00:03:10,250
+keyword self-type in the body of the class c. And this also suggests a very simple
+关键字self-type在类c的主体中。这也暗示了一个非常简单的
+
+33
+00:03:10,250 --> 00:03:15,440
+typing rule. And really the first useful fact about self-type, which is that
+键入规则。关于自我类型，第一个有用的事实是
+
+34
+00:03:15,440 --> 00:03:22,440
+self-types of c is a sub type of c. And this is really a key idea here that a
+自我类型的c是c的一个子类型，这是一个非常关键的概念
+
+35
+00:03:22,850 --> 00:03:29,280
+self-typing class C is some sub-type of the class C, because it also helps
+自键入类C是类C的某个子类型，因为它还有助于
+
+36
+00:03:29,280 --> 00:03:32,940
+illustrate what self-type really is. The best way to think of an occurrence of
+说明自我类型到底是什么。最好的方式来想一件事情的发生
+
+37
+00:03:32,940 --> 00:03:38,490
+self-type is that it's a type variable that ranges over all the sub-classes of
+Self-type是一个类型变量，其范围遍及的所有子类
+
+38
+00:03:38,490 --> 00:03:41,500
+the class in which it appears. So self-types of C you should think of as a
+它出现的班级。所以C语言的自我类型应该被认为是一种
+
+39
+00:03:41,500 --> 00:03:45,800
+type variable, it's something that doesn't have a fixed type, but is guaranteed to be
+类型变量，它是没有固定类型，但保证是
+
+40
+00:03:45,800 --> 00:03:51,210
+some type founded by C, so it's gonna be only one of the class. That inherits
+一些由C创建的类型，所以它将只是类中的一个。它继承了
+
+41
+00:03:51,210 --> 00:03:58,210
+directly or indirectly from the class c. Now that rule that self-types of c is a
+直接或间接地来自类c。现在，c的自身类型是一个
+
+42
+00:03:59,650 --> 00:04:03,750
+sub type of the class c has an important consequence. It means that when we're
+类c的子类型具有重要的结果。这意味着当我们在
+
+43
+00:04:03,750 --> 00:04:09,319
+doing type checking with self-type, it is always safe, always safe to replace
+用自己的类型做类型检查，总是安全的，替换总是安全的
+
+44
+00:04:09,319 --> 00:04:13,980
+self-types of c by c. So I say, it's okay to promote any self-types of c, which
+c的自我类型。所以我说，提升任何c的自我类型都是可以的，这
+
+45
+00:04:13,980 --> 00:04:19,470
+could be c or a sub type of c, to just say, okay, we're just going to say it's c.
+可以是c，也可以是c的一个子类，也就是说，好的，我们就说它是c。
+
+46
+00:04:19,470 --> 00:04:24,770
+And that suggests one way to handle self-type which is just to replace all the
+这就提出了一种处理自我类型的方法，那就是替换所有的
+
+47
+00:04:24,770 --> 00:04:29,789
+occurrences of self-type sub C by C. Now unfortunately that turns out not to be
+C出现自体类型SUB C的次数现在不幸的是，事实证明并非如此
+
+48
+00:04:29,789 --> 00:04:33,770
+very useful. Its sound, it's correct to do that, but that's really just like not
+非常有用。听起来，这样做是正确的，但那真的就像不是
+
+49
+00:04:33,770 --> 00:04:38,870
+having self-type at all. That's as if we went back to the example we did in the
+完全没有自我类型。这就好像我们回到了我们在
+
+50
+00:04:38,870 --> 00:04:43,360
+last video where we started out without self-type and we found out we couldn't use
+上一个视频我们开始时没有输入Self-type，但是我们发现我们不能使用
+
+51
+00:04:43,360 --> 00:04:49,360
+inheritance in the way we expected. So to do better than just throwing all the
+以我们预期的方式继承遗产。所以要做得更好，而不是仅仅把所有的
+
+52
+00:04:49,360 --> 00:04:54,499
+self-types away, we need to incorporate self-type into the type system. And the
+离开自我类型，我们需要将自我类型纳入类型体系。以及
+
+53
+00:04:54,499 --> 00:04:58,490
+way we're going to do that is by looking at the operations that work on types in
+我们要做到这一点的方法是通过查看
+
+54
+00:04:58,490 --> 00:05:01,680
+the type system, and there are two of them. There's the sub-type relationship
+类型系统，其中有两个。这是一种子类型的关系
+
+55
+00:05:01,680 --> 00:05:05,349
+that we've talked about before, so when one type is a sub-type of another, and
+我们以前讨论过，所以当一种类型是另一种类型的子类型时，
+
+56
+00:05:05,349 --> 00:05:09,819
+there's the least upper bound operation that tells us what the smallest type is
+有一个最小的上界运算告诉我们最小的类型是什么
+
+57
+00:05:09,819 --> 00:05:14,909
+that's bigger than both of two argument types. And, all we have to do and what
+这比这两种参数类型都要大。我们要做的就是
+
+58
+00:05:14,909 --> 00:05:20,050
+we're going to do now is extend these operations to handle the type self-type.
+我们现在要做的是扩展这些操作，以处理类型为self的类型。
+
+59
+00:05:20,050 --> 00:05:24,300
+So let's begin with a sub-type relationship and in our definition here
+那么让我们从子类型关系开始，在我们这里的定义中
+
+60
+00:05:24,300 --> 00:05:28,229
+we're going to use sub-types T and T', and these are just normal class names. They
+我们将使用子类型T和T‘，这些只是普通的类名。他们
+
+61
+00:05:28,229 --> 00:05:35,229
+are class names but not self-types. So one possibility is that we have self on both
+是类名，但不是自身类型。所以一种可能是我们在这两个地方都有自己
+
+62
+00:05:35,309 --> 00:05:42,309
+sides of. Convince yourself of this. Think of self-type again, as a variable. And we
+侧面。让自己相信这一点。再把Self-type看作一个变量。而我们
+
+63
+00:05:49,990 --> 00:05:55,449
+can plug in, for that variable, any sub-type of C. But, just like variables in
+可以为该变量插入C语言的任何子类型，但是，就像
+
+64
+00:05:55,449 --> 00:06:00,169
+algebra, if we plug in one particular class for an occurrence of this variable,
+代数，如果我们插入一个特定的类来表示这个变量的出现，
+
+65
+00:06:00,169 --> 00:06:02,639
+we have to pick the same one for every occurrence of the variable. So in
+我们必须为该变量的每次出现选择相同的值。所以在
+
+66
+00:06:02,639 --> 00:06:08,990
+particular, now if we pick some sub-class A of C, then we wind up with A. Is the sub
+具体地说，现在如果我们选择C的某个子类A，那么我们得到的结果是A是子类
+
+67
+00:06:08,990 --> 00:06:12,879
+type of A. If we plug in A for both sides we can see if their relationship holds
+A类型。如果我们两边都插入A，我们就能看到他们的关系是否成立。
+
+68
+00:06:12,879 --> 00:06:17,699
+similarly C is the sub type of C and for any sub type we might pick, if we bind the
+类似地，C是C的子类型，对于我们可能选择的任何子类型，如果我们将
+
+69
+00:06:17,699 --> 00:06:22,589
+variable to that sub type we can see that this relationship will be true. Now
+变量设置为该子类型，则可以看出此关系将为真。现在
+
+70
+00:06:22,589 --> 00:06:26,949
+another thing you might think is what if the self-type sub-C is compared with
+您可能会想到的另一件事是，如果将自体型SUB-C与
+
+71
+00:06:26,949 --> 00:06:32,349
+self-type from another class? Say self-type sub-D. And it turns out in the
+另一个班级的自我打字？说自己类型的子D。结果发现，在
+
+72
+00:06:32,349 --> 00:06:36,509
+cool type rules this will just never come up. The cool type rules are written in
+酷的类型规则这是永远不会出现的。酷类型规则是用
+
+73
+00:06:36,509 --> 00:06:41,279
+such a way that we never need to compare self-types from different classes. And I
+这样我们就不需要比较不同班级的自我类型了。而我
+
+74
+00:06:41,279 --> 00:06:44,360
+haven't shown you that, that's the case yet. But when we actually go through the
+我还没给你看呢，情况就是这样。但是当我们真正经历了
+
+75
+00:06:44,360 --> 00:06:51,360
+type rules for self-type you'll see that is true. Now another possibility is that
+自我类型的类型规则，您将看到这是真的。现在另一种可能性是
+
+76
+00:06:52,479 --> 00:06:56,180
+we have self-type on one side and the n a regular type on the other side. So when is
+我们一面有Self-type，另一面有n-a普通型。那么什么时候是
+
+77
+00:06:56,180 --> 00:07:02,949
+self-types of c a type of t? Well, we're going to say if that's true if C is the
+自我类型的c，a类型的t？好吧，我们要说如果这是真的，如果C是
+
+78
+00:07:02,949 --> 00:07:07,889
+subtype of T. And here we're using our rule that it's always safe to replace
+子类型T，这里我们使用我们的规则，替换总是安全的
+
+79
+00:07:07,889 --> 00:07:14,889
+self-type by the class that, that index is in. So in this case C is a super-type of
+由该索引所在的类自行键入。所以在这种情况下，C是超类型的
+
+80
+00:07:15,369 --> 00:07:20,419
+anything that self-type C could be. Clearly if C is a sub-type of T if T is at
+任何可能是自我C型的东西。显然，如果C是T的子类型，如果T在
+
+81
+00:07:20,419 --> 00:07:24,749
+least C or possibly something higher in the class higher key, then T would be a
+最小的C或可能是类中更高的键，那么T将是一个
+
+82
+00:07:24,749 --> 00:07:31,749
+super-type of anything that self-types of C could stand for. Another case is when we
+任何自我类型的C都可以代表的超级类型。另一种情况是当我们
+
+83
+00:07:31,919 --> 00:07:36,089
+have a regular class name on the left hand side of the sub typing relationship and
+在子类型关系的左侧有一个常规类名，并且
+
+84
+00:07:36,089 --> 00:07:41,119
+self-type on the right hand side. And in this case it turns out we have to say that
+在右手边自己打字。在这种情况下，我们不得不说
+
+85
+00:07:41,119 --> 00:07:47,289
+this relationship is false. That so T is never, a regular class name is never. A
+这种关系是错误的。所以T永远不是，正规的类名永远不是。一个
+
+86
+00:07:47,289 --> 00:07:51,610
+sub type of self-type sub C. And to see this just think about the possibilities.
+子类型的自我类型的子C，要看到这一点，只需考虑一下可能性。
+
+87
+00:07:51,610 --> 00:07:56,689
+So where can C and T be in the type hierarchy? So, if T and C are
+那么C和T可以在类型层次结构中的什么位置呢？所以，如果T和C是
+
+88
+00:07:56,689 --> 00:08:02,169
+unrelated. You know, if they are inherent from object and they have nothing to do
+不相干的。你知道，如果它们是物体固有的，它们与
+
+89
+00:08:02,169 --> 00:08:08,349
+with each other. Well, than clearly T can't be a sub type of self-type sub C.
+彼此之间。那么很明显T不可能是自体型SubC的子类型。
+
+90
+00:08:08,349 --> 00:08:12,719
+They are just two unregulated classes. So, the only way that this could
+他们只是两个不受管制的班级。所以，只有这样才能
+
+91
+00:08:12,719 --> 00:08:18,039
+possibility work out is if they are related somehow. Now if. If T is a sub
+解决问题的可能性在于它们之间是否有某种联系。现在如果。如果T是SUB
+
+92
+00:08:18,039 --> 00:08:23,119
+type of C well then you might think that could work out. But it turns out that we
+C型，那么你可能会认为这是可行的。但事实证明，我们
+
+93
+00:08:23,119 --> 00:08:28,439
+can't allow it even in that case. And here's the reason why, think about a
+即使在这种情况下也不能允许。这就是原因所在，想一想
+
+94
+00:08:28,439 --> 00:08:35,439
+hierarchy where T has some subclass, let's just say that it has a subclass A. And now
+层次结构，其中T有一些子类，让我们假设它有一个子类A，现在
+
+95
+00:08:36,539 --> 00:08:43,330
+because self-types of C ranges over all the possible subtypes of C, we could plug
+因为C的自身类型覆盖了C的所有可能的子类型，所以我们可以插入
+
+96
+00:08:43,330 --> 00:08:49,840
+in A here and T is not a subtype of A, they're in the wrong relationship. And so
+这里的A和T不是A的子类型，他们处于错误的关系中。因此，
+
+97
+00:08:49,840 --> 00:08:55,090
+it doesn't work for all the possible values of subtypes of C we can't say that
+它并不适用于C类型子类型的所有可能值，我们不能说
+
+98
+00:08:55,090 --> 00:09:01,030
+this is true we have to say that it is false. Now there is one very special case.
+这是真的，我们不得不说它是假的。现在有一个非常特殊的情况。
+
+99
+00:09:01,030 --> 00:09:07,590
+Where one could argue that we should allow this to be true. And that is in the case
+有人可能会争辩说，我们应该允许这是真的。在这种情况下，情况就是这样
+
+100
+00:09:07,590 --> 00:09:12,870
+where T is actually a leaf of the class hierarchy. And let me actually draw this a
+其中T实际上是类层次结构的叶子。让我把这张图画成
+
+101
+00:09:12,870 --> 00:09:18,430
+little bit differently just to emphasize this. Let's say t hat C. Is a class up
+只是为了强调这一点，有点不同。比方说，C比以前高了一级。
+
+102
+00:09:18,430 --> 00:09:24,030
+here and then T you know, is through some chain of inheritance relationships is a
+在这里，你知道，通过一些继承关系链是一个
+
+103
+00:09:24,030 --> 00:09:27,570
+subtype of C. So it's not immediate but there might be other classes in between.
+子类型C，所以它不是直接的，但是在两者之间可能有其他类。
+
+104
+00:09:27,570 --> 00:09:31,330
+Just emphasize, this isn't, doesn't, this relationship doesn't have to be immediate
+我只想强调，这不是，不是，我们的关系不一定是直接的
+
+105
+00:09:31,330 --> 00:09:36,770
+inheritance. It could be transitive inheritance. And now if T is a leaf. Of
+继承。它可以是传递性继承。现在如果T是一片叶子。的
+
+106
+00:09:36,770 --> 00:09:43,770
+the hierarchy. If n is the only leaf of c, if c has no other sub classes then in
+层级结构。如果n是c的唯一叶，如果c没有其他子类，则在
+
+107
+00:09:44,910 --> 00:09:51,700
+fact T is a subtype of SELF_TYPE sub C. Because it is the unique minimal type that
+事实T是SELF_TYPE SUB C的子类型，因为它是
+
+108
+00:09:51,700 --> 00:09:58,320
+is in the subtype hierarchy of C. But the problem is that this is extremely fragile,
+在C的子类型层次结构中，但问题是这是非常脆弱的，
+
+109
+00:09:58,320 --> 00:10:02,740
+and doesn't work, if you modify the program. In particular, a programmer might
+如果你修改程序，它就不起作用了。具体地说，程序员可能
+
+110
+00:10:02,740 --> 00:10:09,740
+come along, and add some class A over here that's unrelated to T, but is also a
+来吧，在这里添加一些A类，它与T无关，但也是一个
+
+111
+00:10:09,830 --> 00:10:15,280
+subclass of C. And now this would no longer work. Because if I plug in A for
+子类C，现在这将不再起作用。因为如果我把A插入到
+
+112
+00:10:15,280 --> 00:10:20,430
+SELF_TYPE sub C, then I see that T is not a subtype of A. Right, so, we can allow
+Self_type sub C，那么我看到T不是A的子类型，所以，我们可以允许
+
+113
+00:10:20,430 --> 00:10:25,300
+it, at a very special K. That C had only a chain of inheritance. Not a general tree
+它，在一个非常特殊的K，C只有一个继承链。不是一般的树
+
+114
+00:10:25,300 --> 00:10:30,630
+under it. And, that T was the least of that chain. But that is so fragile. To
+在它下面。而且，T是那条链条中最小的一条。但那太脆弱了。至
+
+115
+00:10:30,630 --> 00:10:34,660
+future program extensions. And we, you know, if you, if you broke it by
+未来的程序扩展。我们，你知道，如果你，如果你打破它
+
+116
+00:10:34,660 --> 00:10:38,160
+adding another class over here, all of sudden you would get type errors and
+在这里添加另一个类，突然之间您会收到类型错误和
+
+117
+00:10:38,160 --> 00:10:42,290
+pieces of codes that had previously been typed check to work and hadn't changed at
+检查以前键入的代码片段是否起作用，并且未在以下位置更改
+
+118
+00:10:42,290 --> 00:10:48,340
+all. It just wouldn't be a very nice language design. So, summarize, T, is
+全。这不会是一个很好的语言设计。所以，总结一下，T，是
+
+119
+00:10:48,340 --> 00:10:55,340
+never a sub type of self-types of C. And finally if we're comparing two normal
+从来不是自我类型C的子类型，最后，如果我们比较两个正常的
+
+120
+00:10:56,190 --> 00:11:00,440
+types with not self-type then we just use the rules that we gave before. So the
+如果类型不是自类型，那么我们就只使用前面给出的规则。因此，
+
+121
+00:11:00,440 --> 00:11:04,490
+self-typing rules we had for normal class names haven't changed at all. And that
+我们对普通类名的自我键入规则根本没有改变。那就是
+
+122
+00:11:04,490 --> 00:11:08,370
+covers all four cases, we can have self-type on both sides, we can have
+涵盖了所有四种情况，我们可以两边都有自助式，我们可以有
+
+123
+00:11:08,370 --> 00:11:12,250
+self-type just on the left side or just on the right side, and finally we can have a
+在左边或右边自己打字，最后我们可以有一个
+
+124
+00:11:12,250 --> 00:11:14,570
+subtyping relationship with no self-type at all.
+完全没有自身类型的子类型关系。
+

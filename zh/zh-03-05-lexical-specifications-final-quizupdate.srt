@@ -1,0 +1,950 @@
+0
+00:00:00,599 --> 00:00:03,889
+Welcome back. In this video, I'm going to show how to use regular expressions to
+欢迎回来。在本视频中，我将演示如何使用正则表达式
+
+1
+00:00:03,889 --> 00:00:10,889
+specify different aspects of programming languages. Must begin with the keywords
+指定编程语言的不同方面。必须以关键字开头
+
+2
+00:00:12,080 --> 00:00:15,330
+and this serves a relatively simple case and I'll just do it for three keywords.
+这是一个相对简单的例子，我只针对三个关键字这样做。
+
+3
+00:00:15,330 --> 00:00:19,180
+I'll write a regular expression for if, else, or then and it would be obvious how
+我将为If、Else或Then编写一个正则表达式，很明显
+
+4
+00:00:19,180 --> 00:00:24,710
+to do it for more. So let's write a regular expression for if and that would
+为了更多的钱去做这件事。那么让我们为if编写一个正则表达式，这将
+
+5
+00:00:24,710 --> 00:00:30,170
+be under regular expression for i. And followed by the regular expression for f
+位于i的正则表达式下，后跟f的正则表达式
+
+6
+00:00:30,170 --> 00:00:34,690
+and we're taking the concatenation of these two. And then we're going to union
+我们把这两个连接起来。然后我们要去联合
+
+7
+00:00:34,690 --> 00:00:39,100
+that with the regular expression for else and what is that? Well, else consist of
+用Else的正则表达式，那是什么呢？嗯，其他的包括
+
+8
+00:00:39,100 --> 00:00:44,479
+four individual characters so we have to write out a concatenation of those four
+四个单独的字符，所以我们必须写出这四个字符的串联
+
+9
+00:00:44,479 --> 00:00:49,579
+characters. And, as you can see this is a little bit verbose with all of these
+人物。正如您所看到的，所有这些内容都有点冗长
+
+10
+00:00:49,579 --> 00:00:54,909
+quotes and kind of messy to read. So in fact, there's a short hand that's normally
+语录和读起来有点乱七八糟。所以事实上，通常有一只手很短
+
+11
+00:00:54,909 --> 00:01:00,449
+used and let me switch over to that right now. So if I want to write the regular
+二手的，让我现在就切换到那个。所以如果我想写常规的
+
+12
+00:01:00,449 --> 00:01:04,610
+expression for a sequence of single character expressions, I could just
+表达式，我可以只使用一个单字符表达式序列
+
+13
+00:01:04,610 --> 00:01:09,229
+[inaudible] around the outermost characters in the sequence. So for example
+在序列中最外面的字符周围[听不见]。举个例子
+
+14
+00:01:09,229 --> 00:01:13,689
+most of the tools that let you write this, I put a quote at the beginning right IF
+大多数让你写这篇文章的工具，我在开头加了一个引号，如果
+
+15
+00:01:13,689 --> 00:01:18,170
+and then I close quote and this means exactly The same thing as this. This is
+然后我结束引用，这和这个意思完全一样。这是
+
+16
+00:01:18,170 --> 00:01:25,170
+the concatenation of two single character regular expression and similarly for else,
+两个单字符正则表达式连接，对于ELSE类似，
+
+17
+00:01:25,509 --> 00:01:31,950
+And similarly for them. And if I have more keywords I'll just write them out and
+对他们来说也是如此。如果我有更多的关键词，我会把它们写出来
+
+18
+00:01:31,950 --> 00:01:38,950
+union them altogether. Now, let's consider a slightly more complicated example. Let's
+把他们完全联合起来。现在，让我们考虑一个稍微复杂一点的例子。我们走吧
+
+19
+00:01:39,679 --> 00:01:45,070
+think about how to specify the integers who want to be the non-empty strings of
+考虑一下如何指定想要作为的非空字符串的整数
+
+20
+00:01:45,070 --> 00:01:49,149
+digits. So the first problem here is to write out what a digit is and that's
+数字。所以这里的第一个问题是写出数字是什么，那就是
+
+21
+00:01:49,149 --> 00:01:54,450
+pretty straight forward. A digit is just any of the individual characters zero
+非常直截了当。数字只是单个字符零中的任何一个
+
+22
+00:01:54,450 --> 00:01:59,429
+through nine and we already know how to write out single character regular
+过了九点，我们已经知道怎么写单字规则了
+
+23
+00:01:59,429 --> 00:02:06,319
+expressions. And it's just a union of ten of those to specify this and it'll take me
+表情。而这只是十个人的联合来具体说明这一点，这将需要我
+
+24
+00:02:06,319 --> 00:02:13,319
+just a moment to finish. Here we go. So that's a regular expression for the set of
+稍等片刻就结束了。我们开始吧。所以这是集合的正则表达式
+
+25
+00:02:13,970 --> 00:02:18,840
+strings correspondin g to all the single digits. And because we want to refer to
+与所有单个数字相对应的字符串。因为我们想要引用
+
+26
+00:02:18,840 --> 00:02:24,170
+this from time to time and also because as a very common thing to watch too, most
+这是时不时的，也是因为作为一件非常平常的事情，大多数
+
+27
+00:02:24,170 --> 00:02:29,080
+tools have a facility for naming regular expressions. So for example I can name
+工具具有命名正则表达式的功能。举个例子，我可以说出
+
+28
+00:02:29,080 --> 00:02:35,860
+this one to be digit so a single digital is anything that is generated or is in the
+此数字为数字，因此单个数字是生成的或位于
+
+29
+00:02:35,860 --> 00:02:41,340
+set denoted by this regular expression. And now what we want to do is to have
+由此正则表达式表示的集合。现在我们想要做的是
+
+30
+00:02:41,340 --> 00:02:48,340
+multiple digits. Well, we know a way to do that. We can just iterate a single digit
+多位数。我们知道一个方法可以做到这一点。我们可以只迭代一个数字
+
+31
+00:02:48,790 --> 00:02:52,450
+as many times as we like. And so here we get all strings, all possible strings of
+我们想要多少次都行。所以这里我们得到了所有字符串，所有可能的字符串
+
+32
+00:02:52,450 --> 00:02:58,370
+digits and this is very, very close to what we wanted except that the string that
+数字，这非常非常接近我们想要的，除了字符串
+
+33
+00:02:58,370 --> 00:03:04,870
+we want has to be non-empty. We don't want to count the empty string as an integer.
+我们想要的必须是非空的。我们不想将空字符串算作整数。
+
+34
+00:03:04,870 --> 00:03:10,810
+And there's an easy way to do that. We just say that the whole sequence has to
+有一个简单的方法可以做到这一点。我们只是说整个序列必须
+
+35
+00:03:10,810 --> 00:03:16,570
+begin with a single digit and then it's followed by zero or more additional digits
+以单个数字开头，然后是零个或多个附加数字
+
+36
+00:03:16,570 --> 00:03:21,510
+so just. Is just to reiterate that, we see there has to be at least one digit and is
+所以只要。只是重申一下，我们看到必须至少有一个数字，而且是
+
+37
+00:03:21,510 --> 00:03:25,760
+followed by zero more additional digits. And this pattern actually for a given
+后跟零个附加数字。这个模式实际上对于给定的
+
+38
+00:03:25,760 --> 00:03:31,480
+language is extremely common. So if I wanted to say that I have at least one a I
+语言是非常普遍的。所以如果我想说我至少有一个
+
+39
+00:03:31,480 --> 00:03:38,340
+write that as a, a because this has zero or more a, the second part is zero more
+写成a，a，因为这里有零个或更多的a，第二部分是零
+
+40
+00:03:38,340 --> 00:03:42,980
+a's and the first part says there has to be at least one a. And because this is so
+第一部分说必须至少有一个。因为这就是
+
+41
+00:03:42,980 --> 00:03:47,980
+common, there's a short hand for it. I think is supported by every regular
+普通的，有一种简略的说法。我想每个常客都会支持的
+
+42
+00:03:47,980 --> 00:03:53,680
+expression processor and that is to write a plus. An a + means is just, is just a
+表达式处理器，那就是写一个加号。a+的意思是公正，就是一个
+
+43
+00:03:53,680 --> 00:03:58,510
+short hand for a star. And so we can actually simplify this regular expression
+明星的速记。所以我们实际上可以简化这个正则表达式
+
+44
+00:03:58,510 --> 00:04:05,510
+a bit and write simply digit plus. Now, let's look at yet another example even
+加一位，写成简单的数字加。现在，让我们再来看另一个例子
+
+45
+00:04:08,320 --> 00:04:12,850
+more sophisticated than the, the previous two. Let's think about how to define the
+比前两个更老练。让我们考虑一下如何定义
+
+46
+00:04:12,850 --> 00:04:17,709
+identifiers which are strings of letters or digits that begin with a letter. And so
+标识符，是以字母开头的字母或数字字符串。因此，
+
+47
+00:04:17,709 --> 00:04:23,720
+we already know how to do digits so let's focus on the letters for a moment. So how
+我们已经知道如何做数字了，所以让我们把注意力集中在字母上。那么是怎么做到的呢？
+
+48
+00:04:23,720 --> 00:04:27,320
+we write out a regular expression for the letters while we're gonna name it. So
+我们为字母写出一个正则表达式，然后再给它命名。所以
+
+49
+00:04:27,320 --> 00:04:32,760
+we'll say that the letters or actually a single letter. And now we have to write a
+我们会说这些字母或者实际上是一个字母。现在我们要写一个
+
+50
+00:04:32,760 --> 00:04:37,840
+regula r expression for all the individual letters and that's, you know
+所有单个字母的正则表达式，这就是，你知道的
+
+51
+00:04:37,840 --> 00:04:44,840
+straightforward but tedious. We have to say little a, lower case b, lower case c,
+直截了当但冗长乏味。我们必须说小写a，小写b，小写c，
+
+52
+00:04:45,060 --> 00:04:49,900
+lower case d. And well, as you can see, this is gonna be rather a large regular
+小写d。如你所见，这将是一个相当大的规则
+
+53
+00:04:49,900 --> 00:04:54,740
+expression. We're going to have 26 lower case letters and 26 upper case letters and
+表达式。我们将有26个小写字母和26个大写字母，
+
+54
+00:04:54,740 --> 00:04:59,000
+the whole thing is going to be rather tedious as to write down so let's actually
+整个事情要写下来会相当单调乏味，所以我们实际上
+
+55
+00:04:59,000 --> 00:05:05,180
+not do that. Instead, let me mention a shorthand, A tool support to make it
+不要那样做。取而代之的是，让我提一提速记，一种制作它的工具支持
+
+56
+00:05:05,180 --> 00:05:09,090
+easier to write out exactly this kind of regular expression which is called the
+更容易准确地写出这种正则表达式，这种正则表达式称为
+
+57
+00:05:09,090 --> 00:05:13,440
+character range. So inside your square brackets I can write a range of
+字符范围。所以在你的方括号里我可以写一系列
+
+58
+00:05:13,440 --> 00:05:17,470
+characters. So how do I do that? Well, I have the starting character and an ending
+人物。那我该怎么做呢？嗯，我有开头的角色和结尾
+
+59
+00:05:17,470 --> 00:05:22,460
+character and I separate them by a hyphen. And what this means is the union of all
+字符，我用连字符将它们分开。这意味着所有人的联合
+
+60
+00:05:22,460 --> 00:05:26,210
+the single character, regular expressions beginning with the first character and
+单个字符、从第一个字符开始的正则表达式和
+
+61
+00:05:26,210 --> 00:05:30,110
+ending with the second character, so everything in between. So this is exactly
+以第二个字符结尾，所以中间的所有东西。所以这就是
+
+62
+00:05:30,110 --> 00:05:32,870
+the regular expression for all the lower case letters and then I can have another
+所有小写字母的正则表达式，然后我可以有另一个
+
+63
+00:05:32,870 --> 00:05:37,650
+character range and so at the same square brackets for all the upper case letters.
+字符范围，因此所有大写字母都在相同的方括号中。
+
+64
+00:05:37,650 --> 00:05:44,650
+So A through Z, Okay? And this regular expression here on the right defines
+所以从A到Z，好吗？右边的这个正则表达式定义了
+
+65
+00:05:45,400 --> 00:05:50,050
+exactly the big union that I didn't wanna write out, okay? And that gives us a
+就是我不想写出来的大工会，好吗？这给了我们一个
+
+66
+00:05:50,050 --> 00:05:53,520
+definition of the single letter and now we're in great shape. We are, we already
+单个字母的定义，现在我们的状态很好。我们是，我们已经
+
+67
+00:05:53,520 --> 00:05:57,930
+have definition for a digit, we already now we have definition for letter and so
+有了数字的定义，我们现在已经有了字母的定义，所以
+
+68
+00:05:57,930 --> 00:06:03,580
+that we can write out the rest of this definition. So we want the whole Regular
+我们可以写出这个定义的睡觉。所以我们想要整个普通的
+
+69
+00:06:03,580 --> 00:06:07,340
+expression to always begin with a letter. Okay, so identify always begins with a
+表达式始终以字母开头。好的，所以标识总是以一个
+
+70
+00:06:07,340 --> 00:06:13,180
+letter and after that is allowed to be a string of letters or digits, okay? So they
+字母之后可以是一串字母或数字，好吗？所以他们
+
+71
+00:06:13,180 --> 00:06:18,980
+are suggest that there's going to be a union. So After the first letter we can
+暗示将会有一个工会。所以在第一封信之后我们可以
+
+72
+00:06:18,980 --> 00:06:24,540
+have either a letter or a digit and then we can have an arbitrary string of those
+有一个字母或一个数字，然后我们就可以有一个由它们组成的任意字符串
+
+73
+00:06:24,540 --> 00:06:28,970
+things. So we put a start on the whole thing and that is the definition of
+一些事情。所以我们从整个事情开始，这就是
+
+74
+00:06:28,970 --> 00:06:33,540
+identifier. Begins with a single letter and it's followed by zero or more letters
+标识符。以单个字母开头，后跟零个或多个字母
+
+75
+00:06:33,540 --> 00:06:40,540
+and digits. So. Because we're doing a complete lexical specification, we also
+和数字。所以。因为我们正在做一个完整的词汇规范，我们还
+
+76
+00:06:41,790 --> 00:06:48,090
+have to deal with even the parts of the string that we're not really interested
+即使是我们不太感兴趣的字符串部分也要处理
+
+77
+00:06:48,090 --> 00:06:51,639
+in. We have to have at least specification of them so then we can recognize and throw
+在……里面。我们至少要有它们的详细说明，这样我们才能识别并抛出
+
+78
+00:06:51,639 --> 00:06:56,710
+them away. In particular we have to be able to recognize the white space and.
+把他们带走。特别是，我们必须能够识别空格和。
+
+79
+00:06:56,710 --> 00:07:00,820
+We're just gonna take white space to be a non-empty sequence of blanks, new lines
+我们只需要将空格作为一个非空的空格、换行符序列
+
+80
+00:07:00,820 --> 00:07:04,190
+and tabs even though there are other kinds of white space characters. Things like
+和制表符，即使还有其他类型的空格字符。像这样的事情
+
+81
+00:07:04,190 --> 00:07:07,880
+maybe like rubout. Depending on your keyboard, there might be others but these
+也许就像鲁比特一样。根据您的键盘，可能会有其他键盘，但这些键盘除外
+
+82
+00:07:07,880 --> 00:07:12,430
+three will suffice to illustrate all the important points. So, you know, blank is
+三个足以说明所有重要的观点。所以，你知道，空白是
+
+83
+00:07:12,430 --> 00:07:17,639
+relatively easy to write down. That's just a single quote around the blank space but
+相对容易写下来。这只是空白处的单引号，但是
+
+84
+00:07:17,639 --> 00:07:23,100
+there's a problem with new line in tab. Because a new line that carries return in
+制表符中的新行有问题。因为一条新线路承载着回程
+
+85
+00:07:23,100 --> 00:07:27,880
+the file has special meaning typically. You know, and on the line, you end
+该文件通常具有特殊的含义。你知道，在电话线上，你结束了
+
+86
+00:07:27,880 --> 00:07:32,260
+whatever command you're working on in this regular expression tools like SQL tools.
+您在此正则表达式工具(如SQL工具)中使用的任何命令。
+
+87
+00:07:32,260 --> 00:07:37,360
+And, you know, tab also is not an easy thing to write down and it doesn't look
+而且，你知道，标签也不是一件容易写下来的东西，而且它看起来也不是一件容易的事情
+
+88
+00:07:37,360 --> 00:07:41,020
+much different from a blank in a lot of cases. So, what tools do is they provide
+在很多情况下与空白有很大不同。所以，工具所做的就是提供
+
+89
+00:07:41,020 --> 00:07:45,870
+separate name for these and it's, and typically it's done by having some kind of
+它们的名字是分开的，通常情况下，它是通过某种形式的
+
+90
+00:07:45,870 --> 00:07:52,110
+escape character and a backslash. Is the most common one that's used and then
+转义字符和反斜杠。是最常用的一种，然后
+
+91
+00:07:52,110 --> 00:07:57,080
+followed by a name for the character? So back slash n is typically used for new
+后面跟着角色的名字？因此Back劈开n通常用于新建
+
+92
+00:07:57,080 --> 00:08:02,580
+line and back slash t is typically used for tab. And I just want to stress I mean
+线和背劈开测试通常用于制表符。我只想强调一下，我是说
+
+93
+00:08:02,580 --> 00:08:07,199
+the reason for doing this example is to illustrate this that. We have to have a
+做这个例子的原因是为了说明这一点。我们必须要有一个
+
+94
+00:08:07,199 --> 00:08:11,380
+way of naming some characters that don't really have a very nice print
+给一些字体不是很漂亮的人物起名字的方法
+
+95
+00:08:11,380 --> 00:08:16,180
+representation. There are other characters that, that don't even have really any kind
+代理。还有其他的角色，甚至没有任何类型的角色
+
+96
+00:08:16,180 --> 00:08:20,310
+of print representation and we still need a way to talk about them in our regular
+我们仍然需要一种在我们的日常生活中谈论它们的方式
+
+97
+00:08:20,310 --> 00:08:25,090
+expressions because them might be embedded in a file that we have to lexically
+表达式，因为它们可能嵌入到我们必须在词法上
+
+98
+00:08:25,090 --> 00:08:29,699
+analyze at some point. And so anyway, the way this is done is by providing a
+在某一时刻进行分析。所以不管怎样，要做到这一点的方法是提供一个
+
+99
+00:08:29,699 --> 00:08:34,909
+separate. Naming scheme for such on principal characters and typically as the
+分开。主要字符上的此类的命名方案，通常为
+
+100
+00:08:34,909 --> 00:08:38,599
+one that escape sequence. So, something beginning with special character like back
+一个转义序列。所以，以特殊字符开头的东西，比如Back
+
+101
+00:08:38,599 --> 00:08:42,129
+slash followed by the name of the character. So, n for new line and this
+劈开后面跟角色的名字。所以，n代表新行和这个
+
+102
+00:08:42,129 --> 00:08:47,300
+case nt for tab. And so to finish off our definition, this gives us. You know? One
+用于标签的案例NT。为了完成我们的定义，这给了我们。你知道?一
+
+103
+00:08:47,300 --> 00:08:50,980
+character, white space and then we want a non empty sequence or such things so we
+字符、空格，然后我们想要一个非空的序列或诸如此类的东西，所以我们
+
+104
+00:08:50,980 --> 00:08:57,100
+could wrap the whole union there in parenthesis and put a plus on it and that.
+可以把整个工会放在括号里，然后给它加个加号。
+
+105
+00:08:57,100 --> 00:09:04,100
+Get us what we want. Let's pause for a moment in discussing programming languages
+给我们想要的东西。让我们暂停一下讨论编程语言
+
+106
+00:09:04,300 --> 00:09:08,319
+and look at another example of using regular expressions from a different
+中使用正则表达式的另一个示例。
+
+107
+00:09:08,319 --> 00:09:13,319
+domain. Here I have an e-mail address and as it turns out, e-mail addresses form a
+域。这里我有一个电子邮件地址，结果是，电子邮件地址的格式是
+
+108
+00:09:13,319 --> 00:09:17,860
+regular language and every e-mail processing device in the world. So your
+常规语言和世界上每一种电子邮件处理设备。所以你的
+
+109
+00:09:17,860 --> 00:09:23,829
+mailer and the mail servers that you use, all do regular expression processing to
+Mailer和您使用的邮件服务器都执行正则表达式处理
+
+110
+00:09:23,829 --> 00:09:28,589
+understand what the e-mail address is telling them in the e-mail messages that
+了解电子邮件地址在电子邮件消息中告诉他们的信息
+
+111
+00:09:28,589 --> 00:09:33,829
+they go by. And. And so we can think of an e-mail address is being, is consisting of
+他们路过。和。所以我们可以认为电子邮件地址是由
+
+112
+00:09:33,829 --> 00:09:38,430
+four different strings separated by punctuation. There's a username and then
+由标点符号分隔的四个不同字符串。有一个用户名，然后
+
+113
+00:09:38,430 --> 00:09:44,720
+three parts to the domain. Okay. Let's just assume for simplicity that the
+域有三个部分。好吧。为了简单起见，我们假设
+
+114
+00:09:44,720 --> 00:09:49,089
+strings only consist of letters and practice they can consist of other kinds
+字符串只由字母组成，练习它们可以由其他类型组成
+
+115
+00:09:49,089 --> 00:09:52,800
+of characters too but let's just keep things simple and we can write out the
+也可以，但是让我们简单一点，我们可以写出
+
+116
+00:09:52,800 --> 00:09:56,220
+more complicated things using the regular expressions but the structure would be the
+使用正则表达式处理更复杂的事情，但其结构将是
+
+117
+00:09:56,220 --> 00:10:00,579
+same as if we just consider them to be made of letters. And then these four
+就好像我们认为它们是由字母组成的一样。然后这四个人
+
+118
+00:10:00,579 --> 00:10:05,839
+strings are separated by punctuations so there's the @ sign and to decimal points
+字符串由标点符号分隔，因此有@符号和小数点
+
+119
+00:10:05,839 --> 00:10:11,569
+that's. Form the separators of the strings so these is a relatively straightforward
+也就是说，形成字符串的分隔符，所以这是一个相对简单的
+
+120
+00:10:11,569 --> 00:10:16,939
+thing to write a regular expression for given what we know so far so the user name
+为给定我们到目前为止所知的用户名编写正则表达式
+
+121
+00:10:16,939 --> 00:10:23,100
+would be the non-empty sequence of letters and then that would be followed by an @
+将是非空的字母序列，然后是@
+
+122
+00:10:23,100 --> 00:10:28,639
+sign. And then the first part of the domain will also be on empty sequence of
+签名。然后域的第一部分也将在空序列上
+
+123
+00:10:28,639 --> 00:10:35,639
+letters followed by a dot and then the rest is just the same. Hey, so here we're
+字母后面跟着一个点，然后睡觉也是一样的。嘿，所以我们在这里
+
+124
+00:10:39,160 --> 00:10:44,839
+quite concisely, we had specified large family of e-mail addresses. As I said in
+简而言之，我们指定了一大类电子邮件地址。正如我在
+
+125
+00:10:44,839 --> 00:10:48,249
+reality the e-mail addresses are slightly more complicated but they can be written
+实际上，电子邮件地址稍微复杂一些，但它们可以写成
+
+126
+00:10:48,249 --> 00:10:55,249
+out with just a slightly more complicated regular expression. Finally for our last
+只需要稍微复杂一点的正则表达式就可以了。最后是我们最后一次
+
+127
+00:10:56,819 --> 00:11:01,499
+example, let's look at a fragment of the lexical specification of a real
+例如，让我们看一段真实的
+
+128
+00:11:01,499 --> 00:11:06,720
+programming language and this case that language is Pascal which is in the
+编程语言，在这种情况下，该语言是Pascal，它在
+
+129
+00:11:06,720 --> 00:11:11,879
+[inaudible] family of languages, Pascal is an early example of a type language and
+[听不见]语系，帕斯卡是一种类型语言的早期例子，
+
+130
+00:11:11,879 --> 00:11:17,999
+it's in the same general family as Fortran and C. And in this particular fragment of
+它与Fortran和C属于同一个一般家族，并且在这个特定的片段中
+
+131
+00:11:17,999 --> 00:11:22,749
+pascal deals with the definition of numbers and so let's take a look here.
+帕斯卡研究数字的定义，让我们看看这里。
+
+132
+00:11:22,749 --> 00:11:27,100
+I'll start at the bottom and look at what the overall definition of a number is. So
+我将从底部开始，看看数字的整体定义是什么。所以
+
+133
+00:11:27,100 --> 00:11:33,910
+a number consist of three things, some digits, and I'll just read out this
+一个数字由三个东西组成，一些数字，我就读出这个
+
+134
+00:11:33,910 --> 00:11:38,980
+abbreviation and optional fraction. And an optional exponent so we're dealing here
+缩写和可选分数。和一个可选的指数，所以我们在这里处理
+
+135
+00:11:38,980 --> 00:11:44,860
+with floating point numbers and so a floating point number have a bunch of
+浮点数，所以一个浮点数有一串
+
+136
+00:11:44,860 --> 00:11:48,959
+digits and then it can be followed possibly by a fraction or not and that
+数字，然后它可以后跟分数，可能是小数，也可能不是
+
+137
+00:11:48,959 --> 00:11:55,029
+could be followed possibly by an exponent or not and. And the idea, although we
+后面可能跟指数，也可能不跟指数。这个想法，虽然我们
+
+138
+00:11:55,029 --> 00:11:58,540
+can't see it just for this particular definition is that either of action or the
+我看不到这一点，因为这个特殊的定义是动作或
+
+139
+00:11:58,540 --> 00:12:03,619
+exponent can be present independent of the other. So, now let's work briefly from the
+指数可以独立于另一个而存在。那么，现在让我们从
+
+140
+00:12:03,619 --> 00:12:08,100
+bottom up, let's just check the digits on what we expect. So a single digit is in
+从下往上，让我们检查一下我们期望的数字。所以输入的是一个单位数
+
+141
+00:12:08,100 --> 00:12:12,739
+fact the union of all the common digits just as we would hope. And then a
+事实上，正如我们所希望的那样，所有公共数字的结合。然后是一个
+
+142
+00:12:12,739 --> 00:12:17,649
+non-empty sequence of digit is a digit plus so this is what we've already seen.
+非空的数字序列是一个数字加，这就是我们已经看到的。
+
+143
+00:12:17,649 --> 00:12:21,949
+And now the interesting bid is to look at how the optional fraction and the optional
+现在有趣的是看看可选分数和可选分数
+
+144
+00:12:21,949 --> 00:12:25,999
+exponent are defined and the optional fraction looks a little less scary so
+指数被定义，可选分数看起来就不那么可怕了，所以
+
+145
+00:12:25,999 --> 00:12:31,529
+let's do that one first. So what's going on inside the fraction, well if we have a
+我们先做那个吧。那么分数内部发生了什么，如果我们有一个
+
+146
+00:12:31,529 --> 00:12:35,989
+decimal fraction, there is gonna be a decimal point and that's gonna be followed
+小数部分，会有一个小数点，然后紧随其后
+
+147
+00:12:35,989 --> 00:12:40,429
+by strong of digits so this is just. The fractional parts of the floating point
+通过强数字，所以这是公正的。浮点的小数部分
+
+148
+00:12:40,429 --> 00:12:44,579
+number it's just of it comes after the decimal point. And what's this plus
+数字，只是它在小数点之后。还有什么是外加的呢？
+
+149
+00:12:44,579 --> 00:12:49,649
+epsilon doing out here? Well remember, the plus is union and epsilon stands for the
+埃普西隆在这里做什么？记住，加号是Union，epsilon代表
+
+150
+00:12:49,649 --> 00:12:55,869
+empty string. So what this is saying is that either the fractional portion of the
+空字符串。所以这就是说，要么是小数部分
+
+151
+00:12:55,869 --> 00:12:59,959
+number is present or it's completely absent. So this is how you say something
+数字存在或完全不存在。所以这就是你说话的方式
+
+152
+00:12:59,959 --> 00:13:05,220
+is optional. You write out the regular expression for the thing and then you do
+是可选的。你写出这个东西的正则表达式，然后你就可以
+
+153
+00:13:05,220 --> 00:13:09,399
+plus epsilon at the end and that means well, either everything I said before it
+加上末尾的epsilon，意思是，我之前说的每一件事
+
+154
+00:13:09,399 --> 00:13:15,050
+can be there or nothing is there. Okay? And the optional exponent is structured
+可能在那里，或者什么都没有。好吧?并构造可选指数
+
+155
+00:13:15,050 --> 00:13:20,249
+similarly but somewhat more complex. So, you can see the whole exponent is optional
+类似的，但稍微复杂一些。所以你可以看到整个指数是可选的
+
+156
+00:13:20,249 --> 00:13:26,019
+because there's some regular expression here. That's union with epsilon, And so
+因为这里有一些正则表达式。这是与epsilon的结合，所以
+
+157
+00:13:26,019 --> 00:13:31,939
+either Something is there and this is the optional, or this exponent part or is not
+要么是某个东西在那里，这是可选的，要么是这个指数部分，或者不是
+
+158
+00:13:31,939 --> 00:13:36,059
+present at all. And now let's look inside how the exponents define if it's there.
+一点也不会出现。现在让我们来看看指数是如何定义它是否存在的。
+
+159
+00:13:36,059 --> 00:13:40,970
+So, an exponent always begins with e. So this is exponent, you know, standard
+指数总是以e开头。所以这是指数，你知道，标准的
+
+160
+00:13:40,970 --> 00:13:46,619
+exponent notation and it always has a non-empty string of digits. So there's e
+指数表示法，并且它始终具有非空的数字字符串。所以这里有e
+
+161
+00:13:46,619 --> 00:13:51,110
+followed by some digits and in between, there's an optional sign. We know the sign
+后面跟着一些数字，中间有一个可选的符号。我们知道这个标志
+
+162
+00:13:51,110 --> 00:13:57,299
+is optional because epsilon is one of the possibilities. The whole, the whole sign
+是可选的，因为epsilon是可能性之一。整个，整个标志
+
+163
+00:13:57,299 --> 00:14:00,850
+might be absent. And one of the possibilities for the sign, well, it could
+可能会缺席。而标志的一种可能性，嗯，它可能
+
+164
+00:14:00,850 --> 00:14:05,049
+be negative or it could be positive. So, either there's a positive or negative sign
+可以是负面的，也可以是正面的。所以，要么有积极的迹象，要么有消极的迹象
+
+165
+00:14:05,049 --> 00:14:10,910
+or no sign. In which case, presumably, it's interpreted to be positive. Now this
+或者没有迹象。在这种情况下，想必，它被解释为积极的。现在这个
+
+166
+00:14:10,910 --> 00:14:16,019
+idiom where we have + epsilon indicate that something is optional is also
+我们有+epsilon表示某事是可选的成语也是
+
+167
+00:14:16,019 --> 00:14:21,309
+extremely common and so there's another short hand that many tools provide so
+非常常见，所以还有另一个捷径，很多工具都提供了这样的功能
+
+168
+00:14:21,309 --> 00:14:28,309
+another way of writing this, that's common is to say that. That's my fractional
+写这个的另一种方式，通常是这样说的。那是我的分数
+
+169
+00:14:28,920 --> 00:14:35,069
+component and then it might be absent. So the question mark after a regular
+组件，则该组件可能不存在。所以在一个常规事件之后的问号
+
+170
+00:14:35,069 --> 00:14:39,879
+expression just means exactly this construction, that we take that regular
+表达式的意思就是这个结构，也就是说我们取那个正则表达式
+
+171
+00:14:39,879 --> 00:14:45,860
+expression and we or with epsilon. And so this one, this regular expression is a, is
+表达式和我们或与ε。所以这个，这个正则表达式是一个，
+
+172
+00:14:45,860 --> 00:14:48,429
+a little more complicated. There's two optional components so let's just write
+稍微复杂一点。有两个可选组件，所以我们只需编写
+
+173
+00:14:48,429 --> 00:14:54,839
+out what that would look like so we would have the exponent begins with e and then
+得出它看起来是什么样子，所以我们会有指数以e开头，然后
+
+174
+00:14:54,839 --> 00:15:01,660
+we have a sign. Which is either + or - and that's optional so we put a question mark
+我们有个信号。要么是+，要么是-这是可选的，所以我们打了一个问号
+
+175
+00:15:01,660 --> 00:15:08,660
+after it followed by a non-empty string or digits and then this whole thing is
+在它后面跟一个非空字符串或数字，然后整个事情就是
+
+176
+00:15:09,069 --> 00:15:12,009
+optional. The whole exponent is optional. S o this is an alternative and more
+可选。整个指数是可选的。所以这是另一种选择
+
+177
+00:15:12,009 --> 00:15:19,009
+compact way to write this expression. To wrap up, I, I always convinced you in this
+编写此表达式的紧凑方式。总而言之，我，我一直让你相信这一点
+
+178
+00:15:19,549 --> 00:15:23,470
+video that regular expressions can describe many useful languages. We've seen
+视频显示正则表达式可以描述许多有用的语言。我们已经看到
+
+179
+00:15:23,470 --> 00:15:28,579
+some fragments from programming languages but also we saw that e-mail addresses
+一些来自编程语言的片段，但我们也看到了电子邮件地址
+
+180
+00:15:28,579 --> 00:15:33,679
+could be specified this way. Other things that are regular languages are things like
+可以这样指定。其他属于常规语言的东西是类似于
+
+181
+00:15:33,679 --> 00:15:40,679
+phone numbers and file names are also regular. And there are many, many examples
+电话号码和文件名也是常规的。有很多很多的例子
+
+182
+00:15:41,189 --> 00:15:46,160
+in everyday life where regular languages are used to describe some simple set of
+在日常生活中，常规语言被用来描述一些简单的
+
+183
+00:15:46,160 --> 00:15:52,790
+strings. And I also want to emphasize that so far, we've used regular languages as a
+弦。我还想强调的是，到目前为止，我们使用常规语言作为
+
+184
+00:15:52,790 --> 00:15:56,709
+language specification. We use it to define the set of strings we're interested
+语言规范。我们使用它来定义我们感兴趣的字符串集
+
+185
+00:15:56,709 --> 00:16:01,489
+in. But, we haven't said anything about how to actually implement lexical
+在……里面。但是，我们还没有谈到如何实际实现词法
+
+186
+00:16:01,489 --> 00:16:06,449
+analysis. We still need an implementation. And that's what we'll talk about in future
+分析。我们仍然需要一个实现。这就是我们将来要讨论的问题
+
+187
+00:16:06,449 --> 00:16:09,790
+videos. In particular, in particular, we're going to look at the problem of
+视频。特别是，我们要特别关注的问题是
+
+188
+00:16:09,790 --> 00:16:14,939
+given a string as an irregular expression. Or, how do we know whether that string is
+给定一个字符串作为不规则表达式。或者，我们如何知道该字符串是否
+
+189
+00:16:14,939 --> 00:16:17,790
+in the language of the regular expression are.
+正则表达式的语言是。
+

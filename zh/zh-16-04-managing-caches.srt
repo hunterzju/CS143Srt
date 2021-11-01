@@ -1,0 +1,620 @@
+0
+00:00:03,629 --> 00:00:07,609
+In the last few videos, we've talked about managing registers. In this video, we're
+在上几个视频中，我们讨论了如何管理寄存器。在这段视频中，我们将
+
+1
+00:00:07,609 --> 00:00:12,050
+going take a few moments to talk about another very important resource, the cache
+我将花几分钟时间来讨论另一项非常重要的资源，即缓存
+
+2
+00:00:12,050 --> 00:00:19,050
+and what compilers can and can't do to manage them. Modern computer systems have
+以及编译器可以和不能做什么来管理它们。现代计算机系统具有
+
+3
+00:00:20,269 --> 00:00:25,300
+quite elaborate memory hierarchies. And so, if we were to start at the closest
+相当精细的内存层次结构。所以，如果我们从最近的
+
+4
+00:00:25,300 --> 00:00:30,269
+level to the processor itself, we would find that on the chip there are some
+级别到处理器本身，我们会发现芯片上有一些
+
+5
+00:00:30,269 --> 00:00:35,860
+number of registers. And these are very fast access. So, typically that can be
+寄存器数量。这些都是非常快速的访问。因此，通常情况下，这可以是
+
+6
+00:00:35,860 --> 00:00:40,830
+accessed in a single cycle so at the same rate as the clock frequency. And the
+在单个周期内以与时钟频率相同的速率访问。以及
+
+7
+00:00:40,830 --> 00:00:45,360
+problem is that it's very expensive to build such high performance memory. And
+问题是，构建如此高性能的内存非常昂贵。和
+
+8
+00:00:45,360 --> 00:00:50,470
+so, we don't get to have very much of it, typically. You know, you might have 256,
+所以，通常情况下，我们不会拥有太多。你知道，你可能有256个，
+
+9
+00:00:50,470 --> 00:00:57,470
+say, to 8K bytes of registers total available to you on a given processor.
+比方说，在给定的处理器上总共有8K字节的寄存器可供您使用。
+
+10
+00:00:57,780 --> 00:01:02,250
+Now, a very significant portion of the die area and the modern processor would be
+现在，芯片面积和现代处理器的很大一部分将是
+
+11
+00:01:02,250 --> 00:01:07,329
+devoted to the cache. And the cache is also quite high performance but not quite
+全身心投入到高速缓存中。缓存的性能也相当高，但不是很高
+
+12
+00:01:07,329 --> 00:01:11,749
+as high performance as registers. Maybe on average, it would take three cycles just
+与寄存器一样的高性能。也许平均下来，光是它就需要三个周期
+
+13
+00:01:11,749 --> 00:01:15,399
+service something from the cache but you get a lot more of it. And modern
+从缓存中提供服务，但你会得到更多。而且很现代
+
+14
+00:01:15,399 --> 00:01:21,670
+processors would have up to a megabyte of cache. Then, much further away from the
+处理器将拥有高达1兆字节的高速缓存。然后，在更远的地方
+
+15
+00:01:21,670 --> 00:01:26,920
+processor is the main memory, the DRAM, and this is much more expensive to
+处理器是主内存，也就是DRAM，这要昂贵得多
+
+16
+00:01:26,920 --> 00:01:32,439
+allocate to access in time you know, typical values would be twenty to 100
+要及时分配访问权限，典型值为20到100
+
+17
+00:01:32,439 --> 00:01:38,280
+cycles and I think, you know, it's more on 100 toward the 120 these days in most
+循环，我认为，你知道，这些天来大多数人都在100到120之间
+
+18
+00:01:38,280 --> 00:01:43,829
+processors but you get quite a lot of it. You get between 32 megabytes. That would
+处理器，但是你得到了相当多的处理器。大小在32兆字节之间。那将会是
+
+19
+00:01:43,829 --> 00:01:49,539
+be fairly small machine up to four gigabytes for maximally provisions
+相当小的计算机，最高可达4 GB，可提供最多4 GB的资源
+
+20
+00:01:49,539 --> 00:01:56,539
+processor. And finally, farthest away is typically disk. And this takes a very,
+处理器。最后，最远的通常是磁盘。这需要非常，
+
+21
+00:01:56,969 --> 00:02:00,789
+very long time to get to hundreds of thousands or millions of cycles but you
+需要很长时间才能达到几十万或几百万个周期，但是你
+
+22
+00:02:00,789 --> 00:02:07,069
+can have enormous amounts of storage out there, gigabytes to terabytes of storage.
+可以有巨大的存储空间，从千兆字节到兆兆字节。
+
+23
+00:02:07,069 --> 00:02:11,260
+As I said, there are limitations on the size and speed of registers and caches.
+正如我所说的，寄存器和高速缓存的大小和速度是有限制的。
+
+24
+00:02:11,260 --> 00:02:16,330
+And these are limited as much by power actually as, as anything e lse these days.
+而这些实际上和现在的任何电子产品一样，都受到了权力的限制。
+
+25
+00:02:16,330 --> 00:02:20,000
+And I, and so it's, you know, very important people would like to have as
+我，所以，你知道，非常重要的人希望
+
+26
+00:02:20,000 --> 00:02:24,360
+much register and cache as possible but there are real constraints on how big and
+尽可能多的寄存器和高速缓存，但有多大和
+
+27
+00:02:24,360 --> 00:02:29,250
+how fast we can make these relative to the speeds of the processors. Now
+相对于处理器的速度，我们能以多快的速度完成这些任务。现在
+
+28
+00:02:29,250 --> 00:02:33,280
+unfortunately, the cost of a cache miss is very high as we saw in the previous slide.
+不幸的是，正如我们在上一张幻灯片中看到的那样，缓存未命中的成本非常高。
+
+29
+00:02:33,280 --> 00:02:35,810
+If you, you could get something in a couple of cycles from the cache. But if
+如果你，你可以在几个周期内从缓存中得到一些东西。但是如果
+
+30
+00:02:35,810 --> 00:02:41,450
+it's not in the cache, then it could take you a couple of orders of magnitude longer
+它不在缓存中，那么它可能会花费你几个数量级的时间
+
+31
+00:02:41,450 --> 00:02:46,590
+to get it out of the main memory. And so for this reason people, you know, try to
+将其从主存储器中取出。因此，出于这个原因，人们，你知道，试着
+
+32
+00:02:46,590 --> 00:02:53,370
+build caches in between the processor and the main memory to hide that latency of
+在处理器和主内存之间构建缓存，以隐藏
+
+33
+00:02:53,370 --> 00:02:56,540
+the main memory so that most of the data is in the cache. And typically, it
+主存储器，以便大部分数据都在高速缓存中。通常情况下，它
+
+34
+00:02:56,540 --> 00:03:03,500
+requires more than one level of cache these days to match a fast processor well
+目前需要多个级别的高速缓存才能很好地匹配快速处理器
+
+35
+00:03:03,500 --> 00:03:07,560
+with the speed of a very large main memory. So, you know, very common now to
+具有非常大的主存储器的速度。所以，你知道，现在很常见的
+
+36
+00:03:07,560 --> 00:03:11,320
+have two levels of cache and processors and some processors even have three levels
+有两级高速缓存和处理器，有些处理器甚至有三级
+
+37
+00:03:11,320 --> 00:03:18,320
+of cache. So the bottom line is that it's very important to for high performance to
+缓存的大小。所以底线是，要想获得高性能，非常重要的一点是
+
+38
+00:03:19,450 --> 00:03:24,710
+manage these resources properly. Particular to manage the registers and the
+正确管理这些资源。特定于管理寄存器和
+
+39
+00:03:24,710 --> 00:03:31,490
+cache as well if you want your program to perform well. Compilers have become very
+如果您希望您的程序运行良好，也可以使用缓存。编译器已经变得非常
+
+40
+00:03:31,490 --> 00:03:36,370
+good in managing registers and in fact, I think today, most people would agree that
+擅长管理登记簿，事实上，我想今天，大多数人都会同意这一点
+
+41
+00:03:36,370 --> 00:03:40,910
+for almost all programs, compilers do a better job at managing registers than
+对于几乎所有程序，编译器在管理寄存器方面比
+
+42
+00:03:40,910 --> 00:03:45,590
+programmers can. And so, it's very worthwhile to leave the job of allocating
+程序员可以。因此，离开分配工作是非常值得的
+
+43
+00:03:45,590 --> 00:03:50,560
+registers or assigning registers to the compiler. However, compilers are not good
+寄存器或将寄存器分配给编译器。但是，编译器不是很好。
+
+44
+00:03:50,560 --> 00:03:56,100
+at managing caches. And while there's a little bit that compilers can do and
+管理高速缓存。虽然有一些编译器可以做的事情，但是
+
+45
+00:03:56,100 --> 00:04:01,450
+that's what we're going to talk about in this rest of this video for the most part,
+这就是我们将在这段视频的睡觉中谈论的大部分内容，
+
+46
+00:04:01,450 --> 00:04:05,670
+if programmers want to get good cache performance, they have to understand the
+如果程序员想要获得良好的缓存性能，他们必须了解
+
+47
+00:04:05,670 --> 00:04:08,580
+behavior of the cache is on the machine and have to understand what their program
+缓存的行为在机器上，并且必须了解他们的程序是什么
+
+48
+00:04:08,580 --> 00:04:12,930
+is doing, you have to understand a little bit about what the compiler is capable of
+，您必须稍微了解一下编译器的功能。
+
+49
+00:04:12,930 --> 00:04:18,870
+doing and then they still have to , write the program in such a way that is going
+这样做，然后他们仍然必须，以这样一种方式来编写程序
+
+50
+00:04:18,870 --> 00:04:23,060
+to, to be cache friendly. So, it's still very much an open question. How much a
+TO，以便于缓存。所以，这在很大程度上仍然是一个悬而未决的问题。一张多少钱？
+
+51
+00:04:23,060 --> 00:04:26,330
+compiler can do to improve cache performance? Although, there are a few
+编译器可以做些什么来提高缓存性能？不过，还是有几个
+
+52
+00:04:26,330 --> 00:04:32,530
+things that we've found compilers can do reliably. So, to see one of those things
+我们发现编译器可以可靠地做的事情。所以，要想看到这些东西中的一件
+
+53
+00:04:32,530 --> 00:04:39,530
+that compilers can actually do let's take a look at this example loop. So, what we
+编译器实际上可以做的事情，让我们来看看这个示例循环。所以，我们要做的是
+
+54
+00:04:39,590 --> 00:04:45,220
+have here, we have an outer loop on j and inner loop on i and then in each iteration
+在这里，我们在j上有一个外循环，在i上有一个内循环，然后在每次迭代中
+
+55
+00:04:45,220 --> 00:04:52,220
+of the inner loop we're reading from , some vector you know, performing some
+我们正在读取的内部循环的一些向量，你知道的，执行一些
+
+56
+00:04:53,440 --> 00:04:58,270
+computational net value and storing the results into the ith element of the A
+计算净值并将结果存储到A的第i个元素中
+
+57
+00:04:58,270 --> 00:05:03,130
+vector. Now, as it turns out, this particular program has really, really
+矢量。现在，事实证明，这个特别的项目真的，真的
+
+58
+00:05:03,130 --> 00:05:07,600
+terrible cache performance. This is going to behave very badly. And so, let's think
+缓存性能极差。这将会表现得非常糟糕。所以，让我们想一想
+
+59
+00:05:07,600 --> 00:05:14,470
+about what's going to happen. So, let's imagine our cache, you know, as some block
+关于将要发生的事情。所以，让我们想象一下我们的缓存，你知道，就像一些挡路
+
+60
+00:05:14,470 --> 00:05:19,240
+of memory, okay. And so, what's going to happen here. I mean, what's, what's the
+记忆，好的。那么，这里会发生什么。我是说，怎么，怎么回事
+
+61
+00:05:19,240 --> 00:05:26,240
+first iteration going to be? Well, we're going to, you know load and, store some
+第一次迭代会是什么？嗯，我们要，你知道的，装载和储存一些
+
+62
+00:05:26,870 --> 00:05:32,669
+function of that into . And so, what's going to get loaded into the cache is and
+功能就是把它变成。因此，要加载到缓存中的是和
+
+63
+00:05:32,669 --> 00:05:36,919
+. All right, let's assume they just go into different elements in this just for
+。好的，让我们假设它们只是进入了不同的元素，只是为了
+
+64
+00:05:36,919 --> 00:05:40,720
+the sake of argument, let's say they land in the first two elements in the cache.
+为了便于讨论，我们假设它们位于缓存中的前两个元素中。
+
+65
+00:05:40,720 --> 00:05:47,720
+And then we're going to do the second iteration of this and, we'll, we'll load
+然后我们要做这个的第二次迭代，我们会，我们会加载
+
+66
+00:05:49,410 --> 00:05:56,410
+and write it into and so and will be loaded into the cache, all right and so
+并将其写入和，然后将其加载到高速缓存中，好的，等等
+
+67
+00:05:59,230 --> 00:06:04,169
+on. And this will repeat over and over and over again, loading one element of a and
+在……上面。这将一遍又一遍地重复，加载AND的一个元素
+
+68
+00:06:04,169 --> 00:06:08,750
+one element of b the important thing to notice is that all of these references to
+b的一个要素需要注意的重要一点是，所有这些引用
+
+69
+00:06:08,750 --> 00:06:15,750
+a and to b are misses, okay. Every single one of these is a cache miss because on
+A和TO B都错过了，好吗？其中每一个都是缓存未命中，因为打开
+
+70
+00:06:16,160 --> 00:06:20,949
+each iteration of the loop we refer to new elements, okay. So, we're not referring to
+循环的每一次迭代我们都引用新的元素，好的。所以，我们指的不是
+
+71
+00:06:20,949 --> 00:06:26,690
+the same elements as we were on the previous ones. So, now let's ignore for
+这些元素与我们在前几个元素上所用的相同。所以，现在让我们忽略
+
+72
+00:06:26,690 --> 00:06:31,510
+the moment the fact that there may be multiple elements in the same cache line,
+在同一高速缓存线中可能存在多个元素的事实的瞬间，
+
+73
+00:06:31,510 --> 00:06:38,510
+okay. So, some of you probably are aware already. That when we fetch data from
+好吧。所以，你们中的一些人可能已经意识到了。当我们从
+
+74
+00:06:38,620 --> 00:06:43,790
+memory we don't just fetch the one word, okay. So, typically when we refer to for
+记住，我们不能只取一个词，好吗？因此，通常当我们提到for时
+
+75
+00:06:43,790 --> 00:06:49,260
+example you know, is stored here will fetch an entire cache line which will be
+例如，存储在此处的将提取整个缓存线，该缓存线将
+
+76
+00:06:49,260 --> 00:06:54,620
+some block of memory and that may well have, you know, other elements of b in it.
+一些挡路的记忆，你知道，这里面很可能有其他的b元素。
+
+77
+00:06:54,620 --> 00:06:58,169
+So, we might get a couple other elements of b into the cache at the same time but
+因此，我们可能会同时将b的其他几个元素放入高速缓存，但是
+
+78
+00:06:58,169 --> 00:07:01,650
+the important thing here is that on every iteration of the loop, we're referring to
+这里重要的是，在循环的每一次迭代中，我们指的是
+
+79
+00:07:01,650 --> 00:07:07,250
+fresh data, okay. And, and if these data values are large enough, if they take up
+最新数据，好的。如果这些数据值足够大，如果它们占用
+
+80
+00:07:07,250 --> 00:07:13,490
+an entire cache line, then each iteration of the loop is going to be a cache miss
+整个高速缓存线，则循环的每个迭代都将是高速缓存未命中
+
+81
+00:07:13,490 --> 00:07:17,680
+for both elements, and we won't get any benefit of the cache. And this loop will
+对于这两个元素，我们不会从缓存中获得任何好处。这个循环将会
+
+82
+00:07:17,680 --> 00:07:24,630
+run at the rate of at the rate of the main memory and not at the rate of the cache.
+以主内存的速率运行，而不是以高速缓存的速率运行。
+
+83
+00:07:24,630 --> 00:07:28,949
+Now, the other thing that's important here is that this loop bound here is very large
+现在，另一件重要的事情是，这里的循环边界非常大
+
+84
+00:07:28,949 --> 00:07:32,410
+and I picked it to be very large to suggest that it's much larger than the
+我把它选得很大是为了表明它比
+
+85
+00:07:32,410 --> 00:07:36,010
+size of the cache. So, as we get towards the end of the loop what's going to happen
+缓存的大小。所以，当我们到达循环的末尾时，会发生什么
+
+86
+00:07:36,010 --> 00:07:38,770
+is we will have filled up the whole cache, so this whole cache will be filled with
+我们将填满整个高速缓存，因此整个高速缓存将被填满
+
+87
+00:07:38,770 --> 00:07:43,889
+values from a and b, and then it's going to start clobbering values that are
+来自a和b的值，然后它将开始重击符合以下条件的值
+
+88
+00:07:43,889 --> 00:07:46,900
+already in the cache. And if this loop, you know, if the size of these vectors,
+已经在缓存中了。如果这个循环，你知道，如果这些向量的大小，
+
+89
+00:07:46,900 --> 00:07:53,710
+let's say twice the size of the cache by the time we come around and complete the
+比方说，当我们来到这里并完成以下操作时，缓存的大小是原来的两倍
+
+90
+00:07:53,710 --> 00:07:58,400
+entire execution of the. Inner loop. What's in the cache is the second half of
+整个执行过程。内循环。在缓存里的是后半部分的
+
+91
+00:07:58,400 --> 00:08:01,979
+the a and b arrays, it's not the first half of the a and b arrays. And so, then
+a和b数组，它不是a和b数组的前半部分。所以，那么
+
+92
+00:08:01,979 --> 00:08:05,560
+when we go back around and execute another iteration of the outer loop, now what's in
+当我们返回并执行外部循环的另一个迭代时，现在
+
+93
+00:08:05,560 --> 00:08:11,910
+the cache is also, going to be not the data that we're referencing. And so when
+缓存也不会是我们引用的数据。所以当
+
+94
+00:08:11,910 --> 00:08:16,009
+we come back around and begin the execution of the inner loop the second
+我们返回并开始执行第二个内循环
+
+95
+00:08:16,009 --> 00:08:23,009
+time. And we refer to and, and, and . What's in the cache is the values from the
+时间到了。我们指的是和，和，和。缓存中的值来自
+
+96
+00:08:23,080 --> 00:08:26,190
+high numbered elements of the a and b vector and not the low numbered elements.
+a和b向量中编号较高的元素，而不是编号较低的元素。
+
+97
+00:08:26,190 --> 00:08:30,690
+And so, these references are all misses again. And so, the, the basic problem with
+因此，这些引用又都是未命中的。所以，最基本的问题是
+
+98
+00:08:30,690 --> 00:08:33,820
+this loop is, a loop that's structured like this, is that almost every memory
+这个循环是，一个这样结构的循环，几乎每一个记忆
+
+99
+00:08:33,820 --> 00:08:40,099
+reference and if, and if the data values are big enough again that they fill an
+引用和If，并且如果数据值再次足够大，则它们将填充
+
+100
+00:08:40,099 --> 00:08:45,300
+entire cache line then it will be every single memory reference is a cache miss.
+整个高速缓存线，那么它将是每个单个存储器引用都是高速缓存未命中。
+
+101
+00:08:45,300 --> 00:08:50,810
+Now, instead, let's consider an alternative structure for the same
+现在，取而代之的是，让我们考虑一种相同的替代结构
+
+102
+00:08:50,810 --> 00:08:56,170
+program. Here, I've put the i loop at as the outer loop and the j loop as the inner
+程序。在这里，我将i循环作为外部循环，将j循环作为内部循环
+
+103
+00:08:56,170 --> 00:09:03,170
+loop. And here what we do is we load . And we write and then we repeat that
+循环。我们现在要做的就是装载。然后我们写下来，然后我们重复这个过程
+
+104
+00:09:05,230 --> 00:09:10,130
+computation ten times on the same data values. And so here we'll get excellent
+对相同的数据值进行十次计算。所以在这里我们会变得很棒
+
+105
+00:09:10,130 --> 00:09:14,050
+cash performance. We'll, we'll have a miss on the first reference, but then on the
+现金业绩。我们会，我们会错过第一次引用，但是在接下来的
+
+106
+00:09:14,050 --> 00:09:18,920
+subsequent nine references the data will be in the cache or will completely exhaust
+随后的九个引用数据将在缓存中或将完全耗尽
+
+107
+00:09:18,920 --> 00:09:25,920
+our computation on those particular a and b values. And then we'll go on to the next
+我们对这些特殊的a和b值的计算。然后我们将继续下一个
+
+108
+00:09:28,580 --> 00:09:32,050
+a and b values. We'll finish the inner loop and go on to the other and do one
+a和b值。我们将完成内循环，然后转到另一个循环，做一个
+
+109
+00:09:32,050 --> 00:09:35,570
+more iteration of the outer loop. And so, the advantage of this structure is that it
+外部循环的更多迭代。因此，这种结构的优点是它
+
+110
+00:09:35,570 --> 00:09:40,010
+brings the data into the cache and then it uses that data as much as possible, before
+将数据放入高速缓存，然后在此之前尽可能多地使用该数据
+
+111
+00:09:40,010 --> 00:09:45,660
+going on to the next data. Rather than doing a little bit on every data item and
+接下来是下一个数据。而不是在每个数据项上都做一点工作，
+
+112
+00:09:45,660 --> 00:09:49,130
+then going back, you know, doing one pass and then going back and sweeping over all
+然后往回走，你知道的，做一次传球，然后往回走，横扫所有
+
+113
+00:09:49,130 --> 00:09:52,930
+items, items again and doing another little bit. Alright, so this particular
+一件一件，一件一件，再做一点。好的，那么这个特别的
+
+114
+00:09:52,930 --> 00:09:55,950
+structure, where we've exchanged the order of the outer loops sorry, exchanged the
+结构，在该结构中，我们交换了外部循环的顺序对不起，它交换了
+
+115
+00:09:55,950 --> 00:09:59,880
+order of the inner and outer loops, it computes exactly the same thing but it has
+内部循环和外部循环的顺序，它计算的是完全相同的东西，但是它
+
+116
+00:09:59,880 --> 00:10:05,120
+much better cache behavior. And it probably run more than ten times faster.
+更好的缓存行为。而且它的运行速度可能要快十倍以上。
+
+117
+00:10:05,120 --> 00:10:11,000
+Now compilers can preform this simple loop interchange optimization. This particular
+现在编译器可以执行这个简单的循环交换优化。这个特别的
+
+118
+00:10:11,000 --> 00:10:13,820
+kind of optimization is called loop interchange, where you just switch in the
+一种优化称为循环交换，在这种情况下您只需切换到
+
+119
+00:10:13,820 --> 00:10:17,390
+order of loops. In this particular case, it's very easy to see that that's legal
+循环顺序。在这种情况下，很容易看出这是合法的
+
+120
+00:10:17,390 --> 00:10:22,120
+and the compiler could actually figure it out. Not many compilers actually implement
+而编译器实际上可以计算出它。没有多少编译器真正实现
+
+121
+00:10:22,120 --> 00:10:26,370
+this optimization because in general, it's not easy to decide whe ther you can
+这种优化是因为通常不容易决定是否可以
+
+122
+00:10:26,370 --> 00:10:30,620
+reverse the orders of, of the loops. And so usually, a programmer would have to
+颠倒循环、循环的顺序。所以通常情况下，程序员必须
+
+123
+00:10:30,620 --> 00:10:34,360
+figure out that they wanted to do this, in order to improve the performance in the
+弄清楚他们想要这样做，是为了提高
+

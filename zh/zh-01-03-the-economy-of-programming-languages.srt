@@ -1,0 +1,1005 @@
+0
+00:00:03,699 --> 00:00:08,029
+Hello. In this video we're going to talk about something that I've referred to as the economy
+你好。在这段视频中，我们将谈论一些我称之为经济的东西
+
+1
+00:00:08,029 --> 00:00:15,029
+of programming languages. 
+编程语言。
+
+2
+00:00:15,029 --> 00:00:18,949
+So the idea behind this video is that before we get into the
+所以这段视频背后的想法是，在我们进入
+
+3
+00:00:18,970 --> 00:00:25,360
+details of how languages are implemented or designed, I wanted to say something about
+关于语言是如何实现或设计的详细信息，我想说一些关于
+
+4
+00:00:25,360 --> 00:00:31,260
+how languages work in the real world and why certain languages are used and others are not.
+语言在现实世界中是如何工作的，以及为什么某些语言被使用而另一些语言不被使用。
+
+5
+00:00:31,320 --> 00:00:35,180
+And if you look around, there's actually a few obvious questions that come up to anybody
+如果你环顾四周，实际上有几个明显的问题会出现在任何人面前
+
+6
+00:00:35,190 --> 00:00:40,080
+who thinks about programming languages for more than a few minutes. One question is,
+他思考编程语言的时间超过了几分钟。一个问题是，
+
+7
+00:00:40,080 --> 00:00:45,390
+why are there so many of these things? We have hundreds, if not thousands, of programming
+为什么会有这么多这样的东西？我们有成百上千个节目，如果不是几千个的话。
+
+8
+00:00:45,390 --> 00:00:50,310
+languages in everyday use, and why do all these things need to exist? Why wouldn't one
+日常使用的语言，为什么所有这些东西都需要存在？为什么不是呢？
+
+9
+00:00:50,310 --> 00:00:53,350
+programming language for example be enough?
+比如编程语言就够了吗？
+
+10
+00:00:53,350 --> 00:00:56,960
+A related question but slightly different is why are there new programming languages?
+一个相关但略有不同的问题是，为什么会有新的编程语言？
+
+11
+00:00:56,960 --> 00:01:03,130
+That given that we have so many programming languages already, what is the need for new
+既然我们已经有了这么多编程语言，还需要什么新的
+
+12
+00:01:03,130 --> 00:01:08,799
+ones to be created? And finally, how do we know a good programming language when we see
+有没有要创建的？最后，当我们看到一种好的编程语言时，我们如何知道它是一种好的编程语言呢
+
+13
+00:01:08,799 --> 00:01:12,710
+it? So what makes a good programming language and what makes a bad programming language?
+它?那么，是什么造就了一种好的编程语言，是什么造就了一种糟糕的编程语言呢？
+
+14
+00:01:12,710 --> 00:01:19,700
+I just want to spend this video talking about these three questions. And as we'll see, I
+我只想用这段视频来谈谈这三个问题。正如我们将看到的，我
+
+15
+00:01:20,209 --> 00:01:26,119
+think the answers to these questions are largely independent of the technical aspects of language
+我认为这些问题的答案在很大程度上独立于语言的技术方面
+
+16
+00:01:26,119 --> 00:01:33,119
+design and implementation. But very interesting in their own right.
+设计和实施。但它们本身就很有趣。
+
+17
+00:01:33,810 --> 00:01:38,240
+So let's begin with the question of why there are so many programming languages. And at
+那么，让我们从为什么会有这么多编程语言的问题开始。以及在
+
+18
+00:01:38,240 --> 00:01:42,459
+least a partial answer to this question is not too hard to come by. If you think for
+至少这个问题的部分答案并不太难得到。如果你认为
+
+19
+00:01:42,459 --> 00:01:47,639
+a few minutes, you'd realize that the application domains for programming have very distinctive
+几分钟后，您就会意识到用于编程的应用程序域具有非常独特的
+
+20
+00:01:47,639 --> 00:01:54,209
+and conflicting needs. That is, it's very hard to design one language that would actually
+和相互冲突的需求。也就是说，很难设计出一种能够真正
+
+21
+00:01:54,209 --> 00:01:58,770
+do everything in every situation for all programmers.
+在任何情况下为所有程序员做任何事情。
+
+22
+00:01:58,770 --> 00:02:03,700
+And let's just go through some examples. One domain that you might not think about very
+让我们来看看一些例子。一个您可能不太会考虑的领域
+
+23
+00:02:03,700 --> 00:02:12,080
+much is scientific computing. So these are all the big calculations that are done for
+很多都是科学计算。这些就是我们要做的所有大计算
+
+24
+00:02:12,090 --> 00:02:19,090
+engineering applications primarily but also big science and long running experiments,
+主要是工程应用，但也有大科学和长期运行的实验，
+
+25
+00:02:20,790 --> 00:02:22,980
+simulation experiments.
+仿真实验。
+
+26
+00:02:22,980 --> 00:02:28,730
+And what are the needs for such computations? Well typically you need very good floating
+这样的计算又有什么需要呢？嗯，通常情况下，你需要非常好的漂浮力
+
+27
+00:02:28,730 --> 00:02:35,730
+point support. I'll abbreviate that as FP. You need good support for arrays and operations
+点支撑点。我把它缩写为FP。您需要对阵列和操作提供良好的支持
+
+28
+00:02:37,420 --> 00:02:42,840
+on arrays because the most common data type in most scientific applications is larger
+在阵列上，因为大多数科学应用程序中最常见的数据类型是较大的
+
+29
+00:02:42,840 --> 00:02:49,840
+arrays of floating point numbers. And then you also need parallelism. 
+浮点数的数组。然后你还需要并行性。
+
+30
+00:02:49,840 --> 00:02:52,440
+Today to get sufficient
+今天就能得到足够的
+
+31
+00:02:52,450 --> 00:02:57,360
+performance you really have to exploit parallelism in these applications.
+性能您确实必须在这些应用程序中利用并行性。
+
+32
+00:02:57,360 --> 00:03:01,459
+And it's not every language actually supports all of these things well. This is actually
+并不是每种语言都能很好地支持所有这些东西。这实际上是
+
+33
+00:03:01,459 --> 00:03:06,290
+not an exhaustive list of the things you need but a few distinctive things that are needed.
+不是你所需要的东西的详尽清单，而是一些你需要的有特色的东西。
+
+34
+00:03:06,290 --> 00:03:11,120
+But one language that has traditionally done a very good job of supporting these things
+但是有一种语言传统上在支持这些东西方面做得非常好
+
+35
+00:03:11,120 --> 00:03:15,930
+is Fortran. And Fortran is still heavily used in the scientific community.
+是Fortran。而Fortran仍然在科学界大量使用。
+
+36
+00:03:15,930 --> 00:03:20,109
+It was originally designed for scientific applications. If you recall that the name
+它最初是为科学应用而设计的。如果你还记得那个名字
+
+37
+00:03:20,109 --> 00:03:27,109
+means formula translation. And it has evolved over time. It doesn't really look much like
+意思是公式翻译。而且它是随着时间的推移而演变的。它看起来真的不太像
+
+38
+00:03:27,659 --> 00:03:32,319
+the original language anymore but it's always retain this core constituency in scientific
+原来的语言已经不存在了，但它始终保留着这一核心的科学基础
+
+39
+00:03:32,319 --> 00:03:37,260
+computing and remains one of the leading languages in that domain.
+并且仍然是该领域的领先语言之一。
+
+40
+00:03:37,260 --> 00:03:47,720
+Now a completely different kind of a domain is business applications. And so what do you
+现在，一个完全不同类型的领域是业务应用程序。那么你是怎么做的呢？
+
+41
+00:03:47,730 --> 00:03:53,189
+need here? Well so here you're going to need things like persistence. You don't want to
+需要在这里吗？那么，在这里，你需要一些东西，比如坚持不懈。你不会想要的
+
+42
+00:03:53,189 --> 00:03:58,079
+lose your data. Businesses go to a lot of trouble to get the data, and they need a way
+丢失您的数据。企业不厌其烦地获取数据，他们需要一种方法
+
+43
+00:03:58,079 --> 00:04:03,790
+to hold onto it, and they want that to be extremely reliable.
+来保住它，他们希望它是极其可靠的。
+
+44
+00:04:03,790 --> 00:04:10,579
+You're going to need good report facilities. Because typically you want to do something
+你需要好的报告设备。因为通常你会想要做一些
+
+45
+00:04:10,579 --> 00:04:16,739
+with the data. So you need good facilities for report generation. And also, you want
+有了这些数据。因此，您需要良好的工具来生成报告。还有，你想要
+
+46
+00:04:16,738 --> 00:04:20,220
+to be able to exploit the data. The data's actually in many modern businesses one of
+才能利用这些数据。这些数据实际上在许多现代企业中都是
+
+47
+00:04:20,220 --> 00:04:26,510
+the most valuable assets and so you need good facilities for asking questions about your
+最有价值的资产，因此您需要良好的设施来询问有关您的
+
+48
+00:04:26,510 --> 00:04:28,220
+data. Let's call it data analysis.
+数据。让我们称其为数据分析。
+
+49
+00:04:28,220 --> 00:04:34,530
+And again, this is not an exhaustive list of things that you need, but it is representative
+再说一次，这不是您需要的全部清单，但它具有代表性
+
+50
+00:04:34,530 --> 00:04:41,750
+I would say. And probably the most common or one of the most common used languages for
+我会说。可能是最常用或最常用的语言之一
+
+51
+00:04:41,750 --> 00:04:48,280
+this class of applications is SQL, the database query language. So relational databases and
+这类应用程序是SQL，即数据库查询语言。所以关系数据库和
+
+52
+00:04:48,280 --> 00:04:55,220
+their associated programming language-- languages, I should say, but most notably SQL-- really
+他们的相关编程语言--语言，我应该说，但最引人注目的是SQL--真的
+
+53
+00:04:55,220 --> 00:04:59,100
+dominate in this application domain.
+在此应用程序域中占据主导地位。
+
+54
+00:04:59,100 --> 00:05:06,100
+And then another domain, let's do one more, is systems programming.
+然后另一个领域，让我们再做一个，是系统编程。
+
+55
+00:05:06,340 --> 00:05:13,140
+So by this I mean things like embedded systems, things to control devices, operating systems, things like that.
+所以我这里指的是嵌入式系统，控制设备的东西，操作系统，诸如此类的东西。
+
+56
+00:05:13,140 --> 00:05:19,650
+And what are the characteristics here? Well, we need very low level control of the resources.
+这里有什么特色呢？嗯，我们需要对资源进行非常低级别的控制。
+
+57
+00:05:19,650 --> 00:05:24,280
+The whole point of systems programming is to do a good job of managing resources and
+系统编程的重点是做好资源的管理和管理
+
+58
+00:05:24,280 --> 00:05:32,060
+so we really want fine grained control over the resources. And often there's a time aspect,
+所以我们真的想要对资源进行细粒度的控制。通常情况下会有时间方面的问题，
+
+59
+00:05:32,060 --> 00:05:39,060
+so you might have some real time constraints. So you need to be able to reason about time.
+所以你可能会有一些实时的时间限制。所以你需要能够对时间进行推理。
+
+60
+00:05:41,020 --> 00:05:46,590
+Because these are actually again devices and they need to be able to react within certain
+因为这些实际上又是设备，它们需要能够在特定的时间内做出反应
+
+61
+00:05:46,590 --> 00:05:50,960
+amount of time - if it's a network device or something like that - you need to be responsive
+时间长短-如果是网络设备或类似设备-您需要响应
+
+62
+00:05:50,960 --> 00:05:56,470
+to the network. Lots and lots of examples where timing is important. And these are just
+连接到网络。很多很多的例子表明时机很重要。而这些只是
+
+63
+00:05:56,470 --> 00:06:00,780
+two aspects and I'm a little bit - I'm running out of space here so I'll just stop with that.
+有两个方面，我有一点-我的空间快用完了，所以我就到此为止了。
+
+64
+00:06:00,780 --> 00:06:05,900
+But again these are representative of the kinds of things you need in systems programming.
+但是，这些也代表了您在系统编程中需要的东西。
+
+65
+00:06:05,900 --> 00:06:11,150
+And probably today still the most widely used systems programming language or family systems
+今天可能仍然是使用最广泛的系统编程语言或家庭系统
+
+66
+00:06:11,150 --> 00:06:18,150
+of programming languages is the C and to some extent C++ family of languages.
+编程语言中最重要的是C语言，在某种程度上，还有C++语言系列。
+
+67
+00:06:19,190 --> 00:06:23,350
+And as you can see the requirements in these different domains are just completely
+正如您所看到的，这些不同领域中的需求完全是
+
+68
+00:06:23,350 --> 00:06:26,490
+different from each other. What's important in one domain or most important in one
+彼此不同。在一个领域中什么是重要的，或者在一个领域中最重要的是什么
+
+69
+00:06:26,490 --> 00:06:32,140
+domain is not the same as in another domain. And it's easy I think to imagine at least
+域与另一个域中的域不同。我想这很容易想象至少
+
+70
+00:06:32,140 --> 00:06:37,430
+that it would be difficult to integrate all of these into one system that would do a good
+很难将所有这些集成到一个系统中，这样做会很好
+
+71
+00:06:37,430 --> 00:06:43,740
+job on all of these things.
+所有这些东西的工作。
+
+72
+00:06:43,740 --> 00:06:47,980
+That brings us to our second question: Why are there new programming languages?
+这就引出了我们的第二个问题：为什么会有新的编程语言？
+
+73
+00:06:47,980 --> 00:06:54,180
+There are so many languages in existence, why would we ever need to design a new one? And I'm
+现有的语言如此之多，我们为什么还要设计一种新的语言呢？而且我是
+
+74
+00:06:54,180 --> 00:06:58,830
+going to begin the answer to this question with an observation that at first glance has
+我将以一个乍一看的观察来开始回答这个问题
+
+75
+00:06:58,830 --> 00:07:03,180
+nothing to do with the question at all. So let me just take a moment to explain it.
+跟这个问题一点关系都没有。所以让我花点时间来解释一下。
+
+76
+00:07:03,180 --> 00:07:07,680
+I claim that programmer training is the dominant cost for a programming language. And I think
+我认为程序员培训是编程语言的主要成本。我认为
+
+77
+00:07:07,680 --> 00:07:13,800
+this is really important so just going to emphasize the bit that's important here. It's
+这真的很重要，所以我只想强调一下这里的重要部分。它是
+
+78
+00:07:13,800 --> 00:07:18,590
+the programmer training. The cost of educating the programmers in the language. So we think
+程序员培训。用这种语言教育程序员的成本。所以我们认为
+
+79
+00:07:18,590 --> 00:07:23,750
+about a programming language there are several things that have to happen for that language
+关于一种编程语言，该语言必须发生几件事
+
+80
+00:07:23,750 --> 00:07:28,310
+to get used. Somebody has to design it. But that's really not very expensive. That's just
+才能习惯。总得有人来设计它。但是那真的不是很贵。那只是
+
+81
+00:07:28,310 --> 00:07:33,840
+one or very few people typically. Somebody has to build a compiler, but that is also
+通常是一个人或很少的人。必须有人构建一个编译器，但这也是
+
+82
+00:07:33,840 --> 00:07:39,440
+not actually all that expensive. Maybe 10 to 20 people for a really large compiler project
+其实没那么贵。一个非常大的编译器项目可能需要10到20个人
+
+83
+00:07:39,440 --> 00:07:42,170
+can build quite a good compiler.
+可以构建一个相当不错的编译器。
+
+84
+00:07:42,170 --> 00:07:48,140
+The real cost is in all the users and educating them. So if you have thousands or hundreds
+真正的成本在于所有的用户和教育他们。所以如果你有几千或上百个
+
+85
+00:07:48,140 --> 00:07:53,930
+of thousands or millions of users of the language, the time and money that it takes to teach
+对于成千上万或数百万的语言使用者来说，教授这门语言所需的时间和金钱
+
+86
+00:07:53,930 --> 00:07:59,590
+them all the language is really the dominant cost. And here I don't mean just the actual
+他们所有的语言确实是占主导地位的成本。这里我指的不仅仅是实际的
+
+87
+00:07:59,590 --> 00:08:04,180
+dollar expense of buying textbooks and taking classes and things like that.
+买课本、上课之类的美元开销。
+
+88
+00:08:04,180 --> 00:08:08,420
+It's also the fact that the programmers have to decide it's worth it for them to learn
+还有一个事实是，程序员必须决定他们是否值得学习
+
+89
+00:08:08,420 --> 00:08:13,560
+this language and many programmers learn on their own time, but that's a use of their
+这门语言和许多程序员都是在自己的时间里学习的，但这是对他们的
+
+90
+00:08:13,560 --> 00:08:19,180
+time and the expense of their time is a real economic cost. And so if you think about the
+时间和时间的花费是一种真正的经济成本。所以如果你想一想
+
+91
+00:08:19,180 --> 00:08:25,560
+number of hours that it takes to teach a population of a million programmers a language, that's
+教给一百万程序员一门语言所需的小时数，也就是
+
+92
+00:08:25,560 --> 00:08:30,710
+really quite a significant economic investment.
+确实是一项相当可观的经济投资。
+
+93
+00:08:30,710 --> 00:08:35,880
+Now from this observation, we can make a couple of predictions pretty easily. And again, these
+现在从这个观察中，我们可以很容易地做出几个预测。再说一遍，这些
+
+94
+00:08:35,880 --> 00:08:42,880
+are just predictions now that follow from this claim. If you believe that it's true.
+现在只是根据这一说法做出的预测。如果你相信这是真的。
+
+95
+00:08:44,070 --> 00:08:51,070
+So let me erase it and fix it. So first prediction is that widely used languages will be slow
+所以让我把它擦掉然后修好。所以第一个预测是广泛使用的语言将会很慢
+
+96
+00:08:53,820 --> 00:09:00,820
+to change. And why should that be true? Well, if I make a change to a language of lots of
+去改变。为什么会这样呢？嗯，如果我改变了一种有很多语言的语言
+
+97
+00:09:06,100 --> 00:09:11,880
+people use, I have to educate everybody in that community about the change. And so even
+人们使用，我必须教育那个社区的每个人关于这一变化。所以即使是这样
+
+98
+00:09:11,880 --> 00:09:18,550
+relatively minor language extensions small changes to syntax, small new features, even
+相对较小的语言扩展语法的小更改、小的新功能，甚至
+
+99
+00:09:18,550 --> 00:09:22,790
+just simple changes in the interface of the compiler, if you have a lot of users it takes
+只需对编译器的界面进行简单的更改，如果您有很多用户，则需要
+
+100
+00:09:22,790 --> 00:09:27,410
+a very long time and is quite expensive to teach them all about that.
+这需要很长的时间，而且教给他们所有这方面的知识是相当昂贵的。
+
+101
+00:09:27,410 --> 00:09:34,410
+So as languages become widely used the rate of change, their rate of change will slow
+因此，随着语言的广泛使用，它们的变化速度将会减慢
+
+102
+00:09:35,340 --> 00:09:40,720
+down. And this predicts over time as the world of programming grows, as we have more more
+放下。这预示着随着时间的推移，随着编程世界的发展，我们拥有更多
+
+103
+00:09:40,720 --> 00:09:44,810
+programmers in the world, we would expect the most popular languages, which will have
+世界上的程序员，我们期待着最流行的语言，这将有
+
+104
+00:09:44,810 --> 00:09:50,170
+larger and larger user bases so larger and larger programmer basis, to become more and
+越来越大的用户群，所以越来越多的程序员基础，以变得越来越多
+
+105
+00:09:50,170 --> 00:09:55,340
+more ossified. To evolve more and more slowly. And I think actually what you see in practice
+更僵化了。进化得越来越慢。我认为实际上你在实践中看到的
+
+106
+00:09:55,340 --> 00:09:58,960
+is very consistent with that prediction.
+与这一预测非常一致。
+
+107
+00:09:58,960 --> 00:10:05,960
+Now at the other end of the spectrum, this same observation makes an almost what appears
+现在，在光谱的另一端，同样的观察得出了几乎看起来像是
+
+108
+00:10:06,170 --> 00:10:13,170
+to be contradictory prediction, which is that easy to start, it's easy to start a new language.
+矛盾的预测，这是那么容易开始，它很容易开始一门新的语言。
+
+109
+00:10:13,840 --> 00:10:20,840
+That in fact the cost of starting up a new language is very low. And why is that? Well
+事实上，开始一门新语言的成本非常低。为什么会这样呢？井
+
+110
+00:10:21,820 --> 00:10:26,990
+because you start with zero users and so there is essentially zero training cost at the beginning
+因为您从零用户开始，因此从一开始就基本上没有培训成本
+
+111
+00:10:26,990 --> 00:10:32,340
+and then even when you have just a few users the cost of teaching them the changes in the
+然后，即使您只有几个用户，教他们了解
+
+112
+00:10:32,340 --> 00:10:39,310
+language is not very high. And it's so new languages can evolve much more quickly. They
+语言不是很高。因此，新的语言可以发展得更快。他们
+
+113
+00:10:39,310 --> 00:10:46,310
+can adapt much more quickly to changing situations. And it's just not very costly to experiment
+可以更快地适应不断变化的情况。而且实验成本并不是很高
+
+114
+00:10:48,710 --> 00:10:55,710
+with a new language at all. And there's a tension between these two things.
+学习一门新的语言。这两件事之间有一种张力。
+
+115
+00:10:55,900 --> 00:11:01,540
+When is a programmer going to choose between a widely used existing language that perhaps
+程序员什么时候会在一种广泛使用的现有语言之间做出选择，也许
+
+116
+00:11:01,540 --> 00:11:06,710
+doesn't change very quickly, and a brand new language? Well they're going to choose it
+变化不是很快，而一种全新的语言呢？嗯，他们会选择它的
+
+117
+00:11:06,710 --> 00:11:13,710
+if the productivity, if their productivity exceeds the training cost. So if they perceive
+如果生产力，如果他们的生产力超过了培训成本。所以如果他们察觉到
+
+118
+00:11:17,340 --> 00:11:21,890
+that by spending a little bit of time and money to learn this new language, they're
+通过花费一点时间和金钱来学习这门新语言，他们
+
+119
+00:11:21,890 --> 00:11:26,240
+going to be much more productive over a relatively short period of time then they're going to
+在相对较短的时间内，他们的工作效率会大大提高
+
+120
+00:11:26,240 --> 00:11:30,029
+make the switch.
+进行切换。
+
+121
+00:11:30,029 --> 00:11:37,029
+So when is this likely to happen? Well putting this all together languages are most likely
+那么，这可能会在什么时候发生呢？嗯，把所有这些放在一起，语言是最有可能的
+
+122
+00:11:38,100 --> 00:11:45,100
+to be adopted  to fill a void. And again this is a prediction that follows from the fact that programmer
+被采用来填补一个空白。再说一次，这是一种预测，它是基于这样一个事实，即程序员
+
+123
+00:11:54,040 --> 00:12:00,170
+training is the main cost. What do I mean by this? Well what I mean is that, programming
+培训是主要成本。我这么说是什么意思？我的意思是，编程
+
+124
+00:12:00,170 --> 00:12:07,120
+languages exist for purpose, people use them to get work done. And because we're still
+语言的存在是有目的的，人们用它们来完成工作。因为我们还在
+
+125
+00:12:07,120 --> 00:12:11,460
+in the middle of the information revolution and there are new application domains coming
+在信息革命的中期，新的应用领域不断涌现
+
+126
+00:12:11,460 --> 00:12:12,460
+along all the time.
+一直都是这样。
+
+127
+00:12:12,460 --> 00:12:18,940
+So there are new kinds of programming that emerge every few years or even more often
+所以每隔几年甚至更频繁就会出现一些新的编程方式
+
+128
+00:12:18,940 --> 00:12:24,070
+than that. So just in terms of recent history mobile applications are now something that's
+比那还多。因此，就最近的历史而言，移动应用程序现在是
+
+129
+00:12:24,070 --> 00:12:29,940
+relatively new. And there's a lot of new technology being built up to support mobile computing.
+相对较新。有许多新技术正在建立起来，以支持移动计算。
+
+130
+00:12:29,940 --> 00:12:34,240
+A few years ago it was the internet itself was a new programming platform and a bunch
+几年前，互联网本身就是一个新的编程平台
+
+131
+00:12:34,240 --> 00:12:41,150
+of new programming languages like Java in particular got started during that time.
+特别是Java等新的编程语言在此期间开始使用。
+
+132
+00:12:41,150 --> 00:12:45,730
+So a new programming niche is open up because the technology changes that what people want
+因此，一个新的编程利基市场打开了，因为技术改变了人们想要的
+
+133
+00:12:45,730 --> 00:12:52,610
+to do with software changes. And this creates new opportunities for languages. The old languages
+与软件变更有关。这为语言创造了新的机会。古老的语言
+
+134
+00:12:52,610 --> 00:12:59,610
+are slow to change and so they have some difficulty in adapting to fit these new domains. And
+变化很慢，所以他们在适应这些新领域方面有一些困难。和
+
+135
+00:13:02,050 --> 00:13:05,810
+they aren't really necessarily well suited to them for the reasons we talked about on
+由于我们前面谈到的原因，它们不一定真的很适合它们
+
+136
+00:13:05,810 --> 00:13:11,000
+the previous slide with the previous question because it's hard to have one language that
+上一张幻灯片和上一个问题，因为很难有一种语言
+
+137
+00:13:11,000 --> 00:13:13,860
+incorporates all the features you would want.
+集成了您想要的所有功能。
+
+138
+00:13:13,860 --> 00:13:19,330
+And so there are so these languages are not necessarily perfect for these application
+因此，这些语言对于这些应用程序来说不一定是完美的
+
+139
+00:13:19,330 --> 00:13:26,130
+domains. They're slow to adapt to the new situation. And this tends to call forth new
+域。他们适应新形势的速度很慢。而这往往会带来新的
+
+140
+00:13:26,130 --> 00:13:31,430
+languages. So when there's a new opportunity and some application domain. If there are
+语言。因此，当有新的机会和某个应用领域时。如果有
+
+141
+00:13:31,430 --> 00:13:35,750
+enough programmers to support the language, often a new language will arise.
+有足够的程序员来支持这种语言，往往会出现一种新的语言。
+
+142
+00:13:35,750 --> 00:13:42,750
+Just want to point out another prediction that can be made from this one observation.
+我只想指出从这一观察中可以做出的另一个预测。
+
+143
+00:13:44,520 --> 00:13:48,899
+That programmer training and I'll underline that, is a dominant cost per programming language.
+我要强调的是，程序员培训是每种编程语言的主要成本。
+
+144
+00:13:48,899 --> 00:13:55,899
+And that is that new languages  tend to look like old languages. That is that new languages are rarely if ever completely
+这就是说，新的语言往往看起来像旧的语言。这就是说，新语言很少(如果有的话)是完全
+
+145
+00:14:10,410 --> 00:14:17,330
+new. They have a family resemblance to some predecessor language sometimes a number of
+新的。它们与一些以前的语言有家族相似之处，有时有许多
+
+146
+00:14:17,330 --> 00:14:19,130
+predecessor languages.
+前置语言。
+
+147
+00:14:19,130 --> 00:14:24,310
+And why is that? Well partly that it's hard to think of truly new things. But also I think
+为什么会这样呢？嗯，部分原因是很难想出真正新鲜的东西。但我也认为
+
+148
+00:14:24,310 --> 00:14:29,890
+if there's an economic benefit to this namely that it reduces the training cost by having
+如果这样做有经济效益，即通过以下方式降低培训成本
+
+149
+00:14:29,890 --> 00:14:33,839
+your new language look like an old language, by leveraging off what people already know
+通过利用人们已经知道的东西，你的新语言看起来像是一种旧语言
+
+150
+00:14:33,839 --> 00:14:37,740
+about the old language, you make it easier for people to learn the language and make
+关于古老的语言，你让人们更容易学习这种语言，并使
+
+151
+00:14:37,740 --> 00:14:44,740
+them learn it more quickly. And the most classic example of this is a Java versus C++, where
+他们学得更快。最经典的例子是Java与C++，其中
+
+152
+00:14:45,520 --> 00:14:52,470
+Java was designed to look a lot like C++. And that was I think very conscious to make
+Java的设计看起来很像C++。我认为这是非常有意识的
+
+153
+00:14:52,470 --> 00:14:58,170
+it easy for all of the existing C++ programmers to start programming in Java.
+对于所有现有的C++程序员来说，开始使用Java编程都很容易。
+
+154
+00:14:58,170 --> 00:15:05,170
+Finally, we can ask ourselves what is a good programming language. And here unfortunately
+最后，我们可以问问自己什么是好的编程语言。不幸的是，在这里
+
+155
+00:15:06,270 --> 00:15:13,270
+the situation is much less clear. I would just make one claim that there is no and I'll
+情况就不那么明朗了。我只想声明一件事，那就是没有，我会
+
+156
+00:15:14,550 --> 00:15:21,550
+emphasize no universally accepted metric for language design. And what I mean by that?
+强调语言设计没有普遍接受的衡量标准。我这么说是什么意思？
+
+157
+00:15:28,149 --> 00:15:35,149
+Well I guess the most important part of this statement is the universally accepted bit.
+嗯，我想这个声明中最重要的部分是普遍接受的比特。
+
+158
+00:15:37,880 --> 00:15:41,600
+So I mean that people don't agree on what makes a good language.
+所以我的意思是，人们对什么才是一门好的语言意见不一。
+
+159
+00:15:41,600 --> 00:15:46,839
+There are lots of metrics out there and people have proposed lots of ways of measuring programming
+现在有很多度量标准，人们提出了很多衡量编程的方法
+
+160
+00:15:46,839 --> 00:15:53,839
+languages but most people don't believe that these are very good measures and there is
+语言，但大多数人不认为这些是很好的措施，而且有
+
+161
+00:15:54,410 --> 00:15:59,080
+certainly no consensus. If you just look at the world of programmers, they can't agree
+当然没有达成共识。如果你只看程序员的世界，他们不会同意
+
+162
+00:15:59,080 --> 00:16:02,940
+on what the best language is and to convince yourself of this, just go and take a look
+关于什么是最好的语言，要让自己相信这一点，只要去看看就行了
+
+163
+00:16:02,940 --> 00:16:08,610
+at any of the many news group posts where people get into a semi religious arguments
+在许多新闻组的帖子中，任何一个都会让人们陷入半宗教的争论
+
+164
+00:16:08,610 --> 00:16:15,550
+about why one group of languages or particular language is better than another language.
+关于为什么一组语言或特定语言比另一种语言更好。
+
+165
+00:16:15,550 --> 00:16:20,490
+But even in the research community in the scientific community in among people who design
+但即使是在科学界的研究界，在设计
+
+166
+00:16:20,490 --> 00:16:27,490
+languages, I would say there is no universally accepted consensus on what makes a good language.
+关于语言，我想说，关于什么是好的语言，没有一个普遍接受的共识。
+
+167
+00:16:27,649 --> 00:16:31,770
+And to just kind of illustrate the difficulties in trying to come up with such a metric, let
+为了说明尝试提出这样一个度量的困难，让我们
+
+168
+00:16:31,770 --> 00:16:37,720
+me discuss one that I've heard people propose in all seriousness and that is that a good
+我要讨论的是我听到人们非常认真地提出的一个建议，那就是一个很好的
+
+169
+00:16:37,720 --> 00:16:44,720
+language  is one people use. And let me put a question mark on that because I don't believe this
+语言是人们使用的一种语言。让我在上面打个问号，因为我不相信
+
+170
+00:16:53,930 --> 00:16:56,370
+statement.
+声明。
+
+171
+00:16:56,370 --> 00:17:02,620
+And I think a moment's reflection with a moment's reflection I can convince you that this isn't
+我认为片刻的反省加上片刻的反省我可以说服你这不是
+
+172
+00:17:02,620 --> 00:17:08,319
+a great measure. On the positive side I guess the argument for this is that it's a very
+这是一个很大的衡量标准。从积极的一面来看，我猜这个的论点是，这是一个非常
+
+173
+00:17:08,319 --> 00:17:12,689
+clear measure. It measures the popularity of the language. How many people are actually
+明确衡量标准。它衡量的是这种语言的受欢迎程度。实际上有多少人
+
+174
+00:17:12,689 --> 00:17:19,689
+using it and presumably languages are more widely used for a good reason. In some sense
+使用它，想必语言被更广泛地使用是有很好的理由的。在某种意义上说
+
+175
+00:17:20,269 --> 00:17:26,149
+perhaps they are better languages. But this would imply if you believe this and follow
+也许它们是更好的语言。但这意味着如果你相信这一点并遵循
+
+176
+00:17:26,148 --> 00:17:33,149
+it its logical conclusion that Visual Basic is the best language above all other programming
+Visual Basic是最好的编程语言，这是合乎逻辑的结论
+
+177
+00:17:37,169 --> 00:17:38,739
+languages.
+语言。
+
+178
+00:17:38,739 --> 00:17:43,429
+And I've nothing against Visual Basic. It's a well designed system but I don't even think
+而且我也不反对Visual Basic。这是一个设计得很好的系统，但我甚至不认为
+
+179
+00:17:43,429 --> 00:17:50,429
+the designers of Visual Basic, would claim that it is in fact the world's best programming
+Visual Basic的设计者会声称它实际上是世界上最好的编程
+
+180
+00:17:50,529 --> 00:17:55,549
+language. And as we saw in the discussion that we just had, there are many, many other
+语言。正如我们在刚才的讨论中看到的，还有很多很多其他的
+
+181
+00:17:55,549 --> 00:18:02,159
+factors besides technical excellence that go into whether a programming languages is
+除了技术卓越之外，编程语言是否
+
+182
+00:18:02,159 --> 00:18:03,149
+widely used or not.
+不管是否被广泛使用。
+
+183
+00:18:03,149 --> 00:18:08,249
+And in fact technical excellence is probably not even the most important reason that a
+事实上，卓越的技术可能甚至不是最重要的原因
+
+184
+00:18:08,249 --> 00:18:15,249
+language might be used. It has much more to do with whether it addresses a niche or application
+可能会使用语言。它与它是否针对某个利基市场或应用程序有更多关系
+
+185
+00:18:15,539 --> 00:18:19,850
+domain for which there isn't a better tool. And then once it's established and has lots
+没有更好的工具的领域。一旦它建立起来，并且有很多
+
+186
+00:18:19,850 --> 00:18:24,379
+of users of course there's inertia in history that aided in surviving. And that's why we
+当然，用户也有历史上的惰性，帮助他们生存下来。这就是为什么我们
+
+187
+00:18:24,379 --> 00:18:31,379
+still have Fortran and Cobalt and lots of other languages from long long ago that we
+还有Fortran、Cobalt和许多很久以前的其他语言，我们
+
+188
+00:18:31,950 --> 00:18:36,909
+could if we were starting over today designed much better.
+如果我们今天重新开始的话会设计得更好。
+
+189
+00:18:36,909 --> 00:18:41,090
+So to conclude this video on the economy of programming languages, I think the two most
+所以总结这段关于编程语言经济性的视频，我认为两个最重要的
+
+190
+00:18:41,090 --> 00:18:47,820
+important things to remember are that application domains have conflicting needs and therefore
+需要记住的重要一点是，应用程序域具有相互冲突的需求，因此
+
+191
+00:18:47,820 --> 00:18:54,820
+it is difficult to design one system that incorporates everything that you would like
+很难设计出一个包含您想要的一切的系统。
+
+192
+00:18:57,110 --> 00:19:04,110
+to have. So you can't get all the features that you would like into a single system in
+才能拥有。因此，您不能将您想要的所有功能都放入单个系统中
+
+193
+00:19:04,759 --> 00:19:09,769
+a coherent design at least it's very hard to do that and so it takes a lot of time to
+一个连贯的设计，至少很难做到这一点，所以要花很多时间
+
+194
+00:19:09,769 --> 00:19:14,279
+add new features to existing systems.
+向现有系统添加新功能。
+
+195
+00:19:14,279 --> 00:19:18,700
+And the second point is that programmer training is the dominant cost for programming
+第二点是程序员培训是编程的主要成本
+
+196
+00:19:18,700 --> 00:19:25,700
+language. And together these two things, these two observations, these really explain why
+语言。把这两件事，这两个观察放在一起，这就解释了为什么
+
+197
+00:19:25,879 --> 00:19:30,909
+we get new programming languages, because the old languages are difficult to change
+我们得到了新的编程语言，因为旧的语言很难改变
+
+198
+00:19:30,909 --> 00:19:36,769
+and when we have new opportunities, it's often easier and more direct to just design a new
+当我们有新的机会时，通常更容易和更直接地设计一个新的
+
+199
+00:19:36,769 --> 00:19:43,279
+language for those rather than trying to move the entire community of programmers and an
+语言，而不是试图推动整个程序员社区和
+
+200
+00:19:43,279 --> 00:19:46,989
+existing systems to accommodate those new applications.
+现有的系统来适应这些新的应用程序。
+

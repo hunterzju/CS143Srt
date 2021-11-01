@@ -1,0 +1,675 @@
+0
+00:00:04,270 --> 00:00:11,270
+In this video we're going to begin our discussion of formal operational semantics.
+在这段视频中，我们将开始讨论正式的操作语义。
+
+1
+00:00:13,469 --> 00:00:18,039
+Just as we did with lexical analysis, parsing and type-checking. The first step
+就像我们处理词法分析、解析和类型检查一样。第一步
+
+2
+00:00:18,039 --> 00:00:22,140
+in defining what we mean by a formal operational semantics is introduced the
+在定义我们所说的正式操作语义时，引入了
+
+3
+00:00:22,140 --> 00:00:27,220
+notation and it turns out that the notation we want to use for operational
+表示法，结果是我们想要用于运算的表示法
+
+4
+00:00:27,220 --> 00:00:31,289
+semantics is the same or very similar in the notation we use in type-checking. We
+语义与我们在类型检查中使用的符号相同或非常相似。我们
+
+5
+00:00:31,289 --> 00:00:37,210
+are going to be using logical rule of inference. So, in the case of
+将使用逻辑推理规则。所以，在这种情况下
+
+6
+00:00:37,210 --> 00:00:42,850
+type-checking, the kinds of inference rules we, we presented, proofing's of the
+类型检查，我们，我们提出的各种推理规则，
+
+7
+00:00:42,850 --> 00:00:47,610
+forms that in some context. We could show that some expression had a particular type
+在某种背景下形成了这一点。我们可以证明某些表达式具有特定类型
+
+8
+00:00:47,610 --> 00:00:53,899
+in this case to type c. And for evaluation we're going to be doing something quite
+在本例中，键入c。对于求值，我们将做一些相当大的工作
+
+9
+00:00:53,899 --> 00:00:57,700
+similar. We will show that in some contacts now that this is going to be a
+差不多。我们将在一些联系人中展示，现在这将是一个
+
+10
+00:00:57,700 --> 00:01:01,320
+different kind of context that we had in typing so this is going to be an
+不同的上下文，我们在打字时有，所以这将是一个
+
+11
+00:01:01,320 --> 00:01:06,049
+evaluation context as oppose to a type context and so what goes in the context
+与类型上下文相对的求值上下文，以及上下文中的内容
+
+12
+00:01:06,049 --> 00:01:09,340
+will actually be different. But for the moment all that really matters is there is
+实际上会有所不同。但就目前而言，真正重要的是
+
+13
+00:01:09,340 --> 00:01:15,090
+some kind of a context and in that context we're going to be able to show some
+某种上下文，在这种上下文中，我们将能够展示一些
+
+14
+00:01:15,090 --> 00:01:22,090
+expression evaluates to a particular value b. So as an example, let's take a look at
+表达式的计算结果是一个特定值b。
+
+15
+00:01:23,990 --> 00:01:29,359
+this simple expression, e1 + e2 and let's say that using our rules which we, I
+这个简单的表达式，e1+e2，假设使用我们的规则，我们，我
+
+16
+00:01:29,359 --> 00:01:33,969
+haven't shown you yet, but let's say we had a bunch of rules and we could show in
+我还没有向你们展示，但是让我们假设我们有一堆规则，我们可以展示
+
+17
+00:01:33,969 --> 00:01:40,969
+the initial context. That e1 in that same context, okay? So these context are going
+初始上下文。这个E1在同样的背景下，好吗？所以这些背景是
+
+18
+00:01:41,939 --> 00:01:47,149
+to be the same, that e1 evaluated to the a value of five and e2 also in that same
+为了相同，e1评估为a值5，e2也在该相同中评估为a值
+
+19
+00:01:47,149 --> 00:01:53,149
+context evaluated to the value of, of seven then we could prove that e1 + e2
+上下文评估为7的值，那么我们可以证明e1+e2
+
+20
+00:01:53,149 --> 00:01:56,149
+evaluated to the value of twelve. If you think about it what this rule was saying
+估值为十二。如果你想一想这条规则说的是什么
+
+21
+00:01:56,149 --> 00:02:01,729
+is that if e1 evaluates to five and e2 evaluates to seven, then if you evaluated
+如果e1求值为5，e2求值为7，那么如果你求值
+
+22
+00:02:01,729 --> 00:02:05,999
+the expression e1 + e2, you're going to get the value twelve. And what's the
+表达式e1+e2，你会得到值12。还有什么是
+
+23
+00:02:05,999 --> 00:02:12,280
+context doing, well it doesn't do a whole lot in this particular rule. But remember
+上下文操作，在这个特定的规则中，它并没有做很多事情。但请记住
+
+24
+00:02:12,280 --> 00:02:17,470
+what the context was for in type checking. The context was for giving values to the
+类型检查中上下文的用途。上下文用于将值赋给
+
+25
+00:02:17,470 --> 00:02:23,510
+free variables of the expression. And so, we need for an expres sion like e1 + e2 to
+表达式的自由变量。因此，我们需要像e1+e2这样的表达式
+
+26
+00:02:23,510 --> 00:02:26,470
+say something about what the values are, the variable that might appear in e1 and
+说说这些值是什么，可能出现在e1和e1中的变量
+
+27
+00:02:26,470 --> 00:02:32,720
+in e2 in order to say what they evaluate to and, and therefore, to say what the
+在e2中，为了说出他们的评估结果，因此，也就是说，
+
+28
+00:02:32,720 --> 00:02:39,720
+entire expression e1 + e2 will evaluated to. Now, let's be a little more precise
+整个表达式e1+e2的计算结果为。现在，让我们再精确一点
+
+29
+00:02:40,730 --> 00:02:45,780
+about what's going to go in the context. So, let's consider the evaluation of a, a
+关于在上下文中会发生什么。那么我们来考虑一下对一个，一个
+
+30
+00:02:45,780 --> 00:02:50,850
+expression or statement like y gets x+1. Okay, so we are going to assign y the
+像y这样的表达式或语句得到x+1。好的，我们要给y赋值
+
+31
+00:02:50,850 --> 00:02:57,850
+value x+1 and there are two things that we have to know in order to evaluate this
+值x+1，我们必须知道两件事才能评估它
+
+32
+00:02:59,120 --> 00:03:06,120
+expression. First of all, we have to know where In memory of valuable start. So, for
+表达式。首先，我们要知道有价值的记忆是从哪里开始的。所以，对于
+
+33
+00:03:06,560 --> 00:03:11,010
+example, the variable x here, we're going to have to go and look up excess value and
+例如，这里的变量x，我们将不得不去查找超额值，
+
+34
+00:03:11,010 --> 00:03:17,640
+then add one to it And then that value is going to be stored in whatever memory
+然后将其加1，然后该值将存储在任何内存中
+
+35
+00:03:17,640 --> 00:03:24,640
+location holds the value for y okay so there is a mapping from variables, Two
+位置保存y的值，好的，所以有一个来自变量的映射，两个
+
+36
+00:03:25,840 --> 00:03:32,840
+memory locations. Okay and that is called, In operational semantics the environment
+内存位置。好的，在操作语义学中，这叫做环境
+
+37
+00:03:34,819 --> 00:03:38,690
+and this is a little confusing maybe because it use environment for other
+这有点令人困惑，可能是因为它将环境用于其他
+
+38
+00:03:38,690 --> 00:03:42,180
+things. Okay, so now let's forget about, as all we uses of the word environment. We
+一些事情。好了，现在让我们忘掉环境这个词，因为我们使用的都是环境这个词。我们
+
+39
+00:03:42,180 --> 00:03:47,810
+were talking about the operational semantics, what the environment means is
+我们谈论的是操作语义，环境的含义是
+
+40
+00:03:47,810 --> 00:03:52,850
+the mapping, the association in between variables and where that variable store in
+变量之间的映射、关联以及变量的存储位置
+
+41
+00:03:52,850 --> 00:03:57,480
+memory. And then in addition, we're going to need a store and that's going to tell
+记忆。此外，我们还需要一家商店，这将说明
+
+42
+00:03:57,480 --> 00:04:03,730
+us what is in the memory. So just knowing the location for a variable isn't quite
+我们的记忆里有什么。所以仅仅知道变量的位置并不完全
+
+43
+00:04:03,730 --> 00:04:09,840
+enough. When we, if we know the value of x if we know the location for x, for example
+足够的。当我们，如果我们知道x的值，如果我们知道x的位置，例如
+
+44
+00:04:09,840 --> 00:04:12,680
+or as, as important because we're going to get the value of x but we also have to
+或者同样重要，因为我们要得到x的值，但我们也必须
+
+45
+00:04:12,680 --> 00:04:19,329
+know exactly when value is stored there and so store. Is going to be a mapping for
+准确地知道值存储在那里的时间，因此可以存储。将会是一个映射
+
+46
+00:04:19,329 --> 00:04:25,740
+memory locations Values. These are the values that are actually stored in the
+内存位置值。这些是实际存储在
+
+47
+00:04:25,740 --> 00:04:30,460
+memory so it's two levels of mapping. We associate with each variable and memory
+内存，所以这是两个层次的映射。我们将每个变量和内存关联起来
+
+48
+00:04:30,460 --> 00:04:37,460
+location And then each memory location will have a value in it. So let's talk
+位置，则每个内存位置都将具有一个值。所以让我们谈谈吧
+
+49
+00:04:37,539 --> 00:04:42,189
+about the notation that we're going to use for writing down the environment and the
+关于我们将要用来写下环境和
+
+50
+00:04:42,189 --> 00:04:46,249
+store. So as we said, the variable environments have variables to locations
+商店。所以就像我们说的，可变的环境对位置有不同的影响
+
+51
+00:04:46,249 --> 00:04:51,169
+and we're going to w rite that out. In the following way, we're going to just have
+我们要把它写出来。在下面的方式中，我们将只需要
+
+52
+00:04:51,169 --> 00:04:56,849
+this as a list of variables and location pairs separated by columns and this
+它是由列分隔的变量和位置对的列表，
+
+53
+00:04:56,849 --> 00:05:02,159
+environment for examples of variable a, is it location l1 And variable b is in
+环境对于变量a的示例，是位置l1，而变量b在
+
+54
+00:05:02,159 --> 00:05:07,590
+location l2. And another aspect of the environment is that it's going to keep
+位置L2。环境的另一个方面是它将保持
+
+55
+00:05:07,590 --> 00:05:11,539
+track of the variables that are in scalps and the only variables that will be
+跟踪头皮中的变量以及将
+
+56
+00:05:11,539 --> 00:05:16,469
+mentioned in the environment are those currently in sculpted in the expression
+环境中提到的是当前在表达式中雕刻的那些
+
+57
+00:05:16,469 --> 00:05:22,539
+that is being evaluated. Now as we said, stores map memory location to values and
+这一点正在评估中。现在，正如我们所说的，存储将内存位置映射到值和
+
+58
+00:05:22,539 --> 00:05:27,479
+we'll also write out stores as lists of pairs. So in this case, the memory
+我们还将以配对列表的形式写出商店。所以在这种情况下，内存
+
+59
+00:05:27,479 --> 00:05:33,749
+location l1 in the store contains the value five and the memory location l2
+存储中的位置L1包含值5和存储位置L2
+
+60
+00:05:33,749 --> 00:05:40,749
+contains the value seven And we will also separate these pairs by an arrow. And just
+包含值7，我们还将用箭头分隔这些对。然后就是
+
+61
+00:05:41,469 --> 00:05:45,180
+to make the stores look a little bit different from the environment so that we
+为了让商店看起来与环境稍有不同，这样我们就可以
+
+62
+00:05:45,180 --> 00:05:50,520
+won't confuse the two. There's an operation on stores which is to replace of
+不会把两者搞混的。在商店上有一项行动，要更换
+
+63
+00:05:50,520 --> 00:05:55,389
+value or update of value. So, in this case, we're taking the store s and we're
+价值或价值的更新。所以，在这种情况下，我们取商店s，我们
+
+64
+00:05:55,389 --> 00:06:02,389
+updating the value at location l1 to b12 And this defines a new store s prime. So,
+更新位置L1到B12的值，这定义了一个新的商店的素数。所以,
+
+65
+00:06:02,680 --> 00:06:07,889
+keep in mind here that the stores are just functions list in our model and so we can
+请记住，商店只是我们模型中的函数列表，所以我们可以
+
+66
+00:06:07,889 --> 00:06:11,819
+define a new store by taking the old function or the old store has and
+通过采用旧功能或旧存储具有AND来定义新存储
+
+67
+00:06:11,819 --> 00:06:18,529
+modifying it at one point. So this defines a new store as prime such if I apply s
+在某一点上对其进行修改。因此，这将新存储定义为主存储，例如，如果我应用s
+
+68
+00:06:18,529 --> 00:06:24,830
+prime to the location l1, I get off the new value twelve and if I apply s prime to
+到位置l1的素数，我得到新值12，如果将s素数应用于
+
+69
+00:06:24,830 --> 00:06:31,539
+any other location, any location different from l1 I get out the value that the store
+任何其他位置，任何不同于L1的位置，我得到存储的值
+
+70
+00:06:31,539 --> 00:06:38,539
+held in s, sorry the value of the location in store s. Now in Cool we have more
+保存在%s中，很抱歉商店%s中位置的价值。现在Cool中我们有更多
+
+71
+00:06:41,529 --> 00:06:45,259
+complicated values and integers. In particular we have objects and all the
+复杂的值和整数。具体地说，我们有对象和所有
+
+72
+00:06:45,259 --> 00:06:49,639
+objects of course are instances of some class and we're going to need a notation
+当然，对象是某个类的实例，我们需要一个表示法
+
+73
+00:06:49,639 --> 00:06:53,520
+for representing objects in our operational semantics. So we'll use the
+用于在我们的操作语义中表示对象。所以我们将使用
+
+74
+00:06:53,520 --> 00:07:00,330
+following way of writing down an object. An object will begin with its class name.
+遵循写下物体的方式。对象将以其类名开头。
+
+75
+00:07:00,330 --> 00:07:06,210
+In this case the class name x and it would be followed by a list of the attributes.
+在本例中，类名x后跟属性列表。
+
+76
+00:07:06,210 --> 00:07:11,529
+In this case the class x has n attributes, a1 through an And associated with each
+在这种情况下，类x具有n个属性，a1到an，并且与每个属性相关联
+
+77
+00:07:11,529 --> 00:07:16,229
+attribute will be the memory location whether an attribute stored so attribute
+属性将是存储属性是否存储为属性的内存位置
+
+78
+00:07:16,229 --> 00:07:21,830
+a1 is stored location l1 up through attribute and which is stored at location
+A1是通过属性向上存储的位置L1，并且存储在位置处
+
+79
+00:07:21,830 --> 00:07:27,659
+ln. And this would be a complete description of the object because we know
+在。这将是对该物体的完整描述，因为我们知道
+
+80
+00:07:27,659 --> 00:07:34,659
+where in memory the object the object is stored. We can use the store to look up
+在存储器中对象存储该对象的位置。我们可以用商店去查一下
+
+81
+00:07:34,860 --> 00:07:41,860
+the value of each of those attributes. There are few special classes in Kuhl that
+每个属性的值。在库尔，很少有特殊的班级
+
+82
+00:07:42,219 --> 00:07:47,639
+don't have attribute names and we'll have special way overriding them. So integers
+没有属性名，我们会用特殊的方式覆盖它们。所以整数
+
+83
+00:07:47,639 --> 00:07:53,770
+only have a value and, and that will be written as int with a single value in
+只有一个值和，它将被写为int，在中只有一个值
+
+84
+00:07:53,770 --> 00:07:58,240
+parens, the value of the integer similarly for brilliance. They have a single value
+括号，整数的值与Brilliance类似。它们只有一个值
+
+85
+00:07:58,240 --> 00:08:02,879
+true of false and strings have two properties, the length of the string and
+TRUE OF FALSE AND字符串有两个属性，字符串的长度和
+
+86
+00:08:02,879 --> 00:08:09,689
+the sting constant. There's also a special value void typed object and we'll use the
+刺痛常数。还有一个特殊的值void类型的对象，我们将使用
+
+87
+00:08:09,689 --> 00:08:14,860
+term void in our operational semantics to representative and briefly here, so void
+术语在我们的操作语义中是无效的，在这里简单地表示，所以无效
+
+88
+00:08:14,860 --> 00:08:19,039
+is a, a special and that there are no operations that can be before and on void
+是一个特殊的，并且没有可以在void之前和在void上的操作
+
+89
+00:08:19,039 --> 00:08:23,719
+except for the test is void. So, in particular, you can't dispatch the void
+只是考试是无效的。所以，特别是，你不能把空位
+
+90
+00:08:23,719 --> 00:08:27,080
+even though it has typed objects that will generate runtime error. The only thing you
+即使它具有将生成运行时错误的类型化对象。你唯一能做的就是
+
+91
+00:08:27,080 --> 00:08:31,919
+can do is to test whether the value is void or not. And concrete implementation
+可以做的就是测试值是否为void。和具体实施
+
+92
+00:08:31,919 --> 00:08:38,919
+we typically use a null pointer which represent void. Now we're ready to talk
+我们通常使用表示空的空指针。现在我们准备好谈谈了
+
+93
+00:08:39,650 --> 00:08:43,240
+about in more detail what the judgments will look like in our operational
+关于我们行动中的判决将会是什么样子的更详细的信息
+
+94
+00:08:43,240 --> 00:08:48,580
+semantics so the context will consist of three pieces. The first piece is a current
+语义学，因此上下文将由三部分组成。第一块是一股水流
+
+95
+00:08:48,580 --> 00:08:53,580
+self object. The second piece is the environment which is again the mapping
+自我客体。第二部分是环境，也就是映射
+
+96
+00:08:53,580 --> 00:08:57,940
+from variables to the locations where those variables are stored and the third
+从变量到这些变量的存储位置，第三个
+
+97
+00:08:57,940 --> 00:09:03,340
+piece is the memory, the store. The mapping from memory locations to the
+片断是记忆，是商店。从内存位置到
+
+98
+00:09:03,340 --> 00:09:10,340
+values held at those locations, All right? So in some context, an expression e will
+那些地方的价值观，好吗？因此在某些上下文中，表达式e将
+
+99
+00:09:10,370 --> 00:09:15,800
+evaluate to two things. First of all, e will produce a value so for example we saw
+评估结果有两点。首先，e将产生一个值，例如，我们看到
+
+100
+00:09:15,800 --> 00:09:20,650
+before that the expressions seven + five would produce the value twelve, that's one
+在此之前，表达式7+5将产生值12，也就是1
+
+101
+00:09:20,650 --> 00:09:25,570
+result to the evaluation. But the second thing is that we'll produce a modified
+评估的结果。但第二件事是我们将生产一种改进型的
+
+102
+00:09:25,570 --> 00:09:30,960
+store. So the expression e maybe a complicated piece of code Maybe a whole
+商店。所以表达式e可能是一段复杂的代码，也可能是整个
+
+103
+00:09:30,960 --> 00:09:35,020
+program is on the right and it might have a slight statements that update the
+程序在右侧，它可能有一些更新
+
+104
+00:09:35,020 --> 00:09:41,320
+contents of the memory And so, after e is evaluated, there will be a new memory
+因此，在计算e之后，将会有一个新的存储器
+
+105
+00:09:41,320 --> 00:09:46,300
+state that we have to represent and so s prime here represents the state of memory
+我们必须表示的状态，所以这里的质数表示内存的状态。
+
+106
+00:09:46,300 --> 00:09:52,350
+after evaluation And now, those are couple of things here. First of all the current
+经过评估，现在，这些都是这里的几件事。首先，当前
+
+107
+00:09:52,350 --> 00:09:58,530
+self object and the environment don't change. They are not changed by evaluation
+自身物体和环境不变。它们不会因评估而更改
+
+108
+00:09:58,530 --> 00:10:04,600
+so which object is the self parameter to the current method and. Well, the mapping
+那么哪个对象是当前方法的self参数，并且。嗯，这张地图
+
+109
+00:10:04,600 --> 00:10:11,180
+between variables and memory locations that is not modified by running a, running
+在变量和内存位置之间，不能通过运行，运行
+
+110
+00:10:11,180 --> 00:10:14,620
+an expression and that makes sense, I mean, you can't update the self object in
+表达式，这是有意义的，我的意思是，您不能在
+
+111
+00:10:14,620 --> 00:10:21,240
+Kuhl and we don't have access in, in any form to re-locations or variables stored
+Kuhl和我们不能以任何形式访问重新定位或存储的变量
+
+112
+00:10:21,240 --> 00:10:26,240
+and so those two things are in variant. They don't they are variant under
+所以这两个东西是不同的。他们没有，他们是变种的
+
+113
+00:10:26,240 --> 00:10:30,240
+evaluation. They don't change when you run a piece of code. However, the story does
+评估。当您运行一段代码时，它们不会改变。然而，这个故事确实
+
+114
+00:10:30,240 --> 00:10:34,560
+change so the contents in the memory may be modified so that's why we need a store
+更改以便可以修改内存中的内容，这就是我们需要存储的原因
+
+115
+00:10:34,560 --> 00:10:40,520
+for both before evaluation and after evaluation. And one more detail these
+无论是评估前还是评估后。还有一个细节，这些
+
+116
+00:10:40,520 --> 00:10:47,520
+judgments of this form always has a qualification. That judgment only holds if
+这种形式的判断总是有限制条件的。这一判断只有在以下情况下才成立
+
+117
+00:10:47,620 --> 00:10:53,200
+the evaluation of e terminates. So, if e goes in to infinite loop, then you're not
+e的评估终止。所以，如果e进入无限循环，那么你就不会
+
+118
+00:10:53,200 --> 00:10:56,900
+going to get a value and you're not going to get a new store. So, this kind of the
+将获得价值，而不会获得新的商店。所以这一种
+
+119
+00:10:56,900 --> 00:11:02,340
+judgment must always be read as saying that if e terminates, then e produces a
+必须始终将判断理解为：如果e终止，则e产生一个
+
+120
+00:11:02,340 --> 00:11:09,340
+value v and a new store s prime. Summarize the results of evaluation is a value and a
+值v和一个新商店的素数。总结评价结果是有价值的，也是有价值的
+
+121
+00:11:12,130 --> 00:11:19,130
+new store. And where the new store models, the side effects of the expression And
+新开的店。以及哪里有新的商店模式，表达的副作用和
+
+122
+00:11:19,360 --> 00:11:22,810
+once again there are something don't change as a result of evaluation. And this
+再说一次，有些东西不会因为评估而改变。还有这个
+
+123
+00:11:22,810 --> 00:11:26,310
+is actually important for compilation because we'll be able to take advantage of
+对于编译实际上很重要，因为我们将能够利用
+
+124
+00:11:26,310 --> 00:11:30,450
+the fact that they don't change to generate efficient code so the variable
+事实上，它们不会改变以生成高效的代码，所以变量
+
+125
+00:11:30,450 --> 00:11:34,420
+environment doesn't change, the value itself which object we're talking about
+环境不变，值本身就是我们谈论的对象
+
+126
+00:11:34,420 --> 00:11:39,880
+doesn't change and notice here as another detail. That the contents of the self
+没有改变，注意到这里是另一个细节。自我的内容
+
+127
+00:11:39,880 --> 00:11:43,140
+objects, the attributes inside the self object might change, they might get
+对象，则Self对象内的属性可能会更改，它们可能会获得
+
+128
+00:11:43,140 --> 00:11:49,480
+updated but t he locations where the attributes are stored do not change. So,
+已更新，但存储属性的位置不变。所以,
+
+129
+00:11:49,480 --> 00:11:52,980
+the layout of the object where the object stored doesn't change and that's all we're
+存储对象的对象布局不变，这就是我们要做的
+
+130
+00:11:52,980 --> 00:11:57,870
+saying here, the actual contents of the object which of course is a part of the
+在这里，对象的实际内容当然是
+
+131
+00:11:57,870 --> 00:12:03,990
+mapping of the store, those might get updated by evaluation. And also the
+商店的地图，这些地图可能会通过评估进行更新。还有
+
+132
+00:12:03,990 --> 00:12:07,420
+operational semantics allows for non-terminating evaluations. That's the
+操作语义允许非终止评估。这就是
+
+133
+00:12:07,420 --> 00:12:14,420
+last point here and so the meaning that the judgments only holds on the assumption
+这里的最后一点，也就是判断仅仅基于假设的意义。
+
+134
+00:12:14,490 --> 00:12:17,890
+that the, that the expression actually completes.
+那个，那个表达式实际上完成了。
+

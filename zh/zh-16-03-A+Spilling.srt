@@ -1,0 +1,775 @@
+0
+00:00:10,469 --> 00:00:17,469
+The graph  coloring here is like that we discussed in the previous video doesn't
+这里的图形着色类似于我们在上一个视频中讨论的图形着色，而不是
+
+1
+00:00:21,460 --> 00:00:26,160
+always succeed in coloring an arbitrary graph. And it may well get stuck and not
+总是能成功地给任意图形上色。它很可能会卡住而不会
+
+2
+00:00:26,160 --> 00:00:31,029
+be able to find a coloring. And so in that case the only conclusion we can reach is
+能够找到一种颜色。所以在这种情况下我们能得出的唯一结论是
+
+3
+00:00:31,029 --> 00:00:34,920
+that we can't hold all the values that we'd like to register. We have more
+我们不可能拥有我们想要登记的所有价值。我们还有更多
+
+4
+00:00:34,920 --> 00:00:38,970
+temporary values and we have registers to hold them. And those temporary values have
+临时值，我们有寄存器来保存它们。这些临时值具有
+
+5
+00:00:38,970 --> 00:00:41,680
+to live somewhere so where should they live? Well, they're going to have to live
+住在某个地方，那么他们应该住在哪里呢？嗯，他们将不得不活着
+
+6
+00:00:41,680 --> 00:00:45,369
+in memory. That's the only other kind of stories that we have. And so we're going
+在记忆中。这是我们仅有的其他类型的故事。所以我们要去
+
+7
+00:00:45,369 --> 00:00:49,970
+to pick some values and spill them into memory. The ideas that we have, the
+选择一些值并将它们溢出到内存中。我们拥有的想法，
+
+8
+00:00:49,970 --> 00:00:53,939
+picture in your mind should be. A bucket and it can hold a fixed amount of stuff.
+你脑海中的画面应该是。一个水桶，它可以装固定数量的东西。
+
+9
+00:00:53,939 --> 00:00:57,850
+Those are the registers and when it gets too full, some of the stuff spills over
+这些是收银机，当它太满时，一些东西就会溢出来。
+
+10
+00:00:57,850 --> 00:01:03,900
+and, and ends up some place else. Now, when does the graph coloring here do get
+然后，最后去了别的地方。现在，这里的图表着色是什么时候开始的呢？
+
+11
+00:01:03,900 --> 00:01:08,310
+stuck? Well, this only situation which we won't be able to make progress as if all
+卡住了？嗯，这是唯一一种我们不能取得进展的情况，就好像所有的
+
+12
+00:01:08,310 --> 00:01:13,079
+the notes have k or more neighbors. So, let's take a look at our
+音符有k个或更多的邻居。那么我们来看一下我们的
+
+13
+00:01:13,079 --> 00:01:16,890
+favorite register interference graph when we will be using at our examples and now,
+最喜欢的寄存器干扰图，当我们将在我们的示例中使用时，现在，
+
+14
+00:01:16,890 --> 00:01:21,690
+let's say that our, the machine we want to use only has three registers and so we,
+比如说我们，我们要用的这个机器只有三个寄存器，所以我们，
+
+15
+00:01:21,690 --> 00:01:25,880
+instead of finding a 4-coloring of this graph, we need to find a 3-coloring. So
+我们需要找的不是这个图的4-着色，而是3-着色。所以
+
+16
+00:01:25,880 --> 00:01:29,960
+let's think about how to find the three coloring of this graph. If we apply the
+让我们考虑一下如何找到这张图的三种颜色。如果我们将
+
+17
+00:01:29,960 --> 00:01:33,600
+heuristic, we'll remove A from the graph but then we're going to get stuck. Because
+启发式，我们会从图中去掉A，但是我们会被卡住。因为
+
+18
+00:01:33,600 --> 00:01:37,680
+once you take A out of the graph and it's edge is out and every node that's
+一旦你把A从图中拿出来，它的边就出来了，每一个节点
+
+19
+00:01:37,680 --> 00:01:44,060
+left has more than has three or more neighbors as at least three neighbors. So,
+Left有超过三个或更多邻居作为至少三个邻居。所以,
+
+20
+00:01:44,060 --> 00:01:48,700
+there's no node that we can delete from the graph and be guaranteed to be able to
+我们不能从图中删除任何节点，也不能保证能够
+
+21
+00:01:48,700 --> 00:01:54,619
+find the coloring for it with the heuristic that we discussed in the previous video.
+使用我们在上一个视频中讨论的启发式方法找到它的颜色。
+
+22
+00:01:54,619 --> 00:01:59,799
+So, in this situation, what we're going to do is we're going to pick and know that
+因此，在这种情况下，我们要做的是选择并了解
+
+23
+00:01:59,799 --> 00:02:05,400
+there is a candidate for spilling. This is a know that we or a temporary that we are
+有一个可能会泄漏的候选人。这是一种知道我们或暂时知道我们是
+
+24
+00:02:05,400 --> 00:02:10,439
+probably or we think we may have to assign into a memory location rather than to our
+可能，或者我们认为我们可能必须赋值到内存位置，而不是赋值给我们的
+
+25
+00:02:10,439 --> 00:02:16,030
+register and let is assume for the sake of this example that we pick f and we talk
+注册，为了这个示例，我们假设我们选择f并进行交谈
+
+26
+00:02:16,030 --> 00:02:20,670
+later about how to choose a, the know to spill, there's a number of different ways
+后来关于如何选择一个，知道怎么说，有很多不同的方式
+
+27
+00:02:20,670 --> 00:02:24,560
+to, to chose the particular know to spill but for the illustration of this example,
+为了，为了，为了这个例子的说明，选择了特定的已知信息来泄漏，
+
+28
+00:02:24,560 --> 00:02:29,020
+it doesn't matter how pick, we just have to pick one to remove from the. Graph. As
+不管怎么挑，我们只需要挑一个就行了。图表。作为
+
+29
+00:02:29,020 --> 00:02:33,590
+were going to say, we're going to remove, that we going to spill F. So what we'll do
+我们会说，我们要去掉，我们要把F洒出来，所以我们要做的是
+
+30
+00:02:33,590 --> 00:02:39,010
+then is we'll remove f from the graph just like before and then we'll continue with
+然后，我们将像以前一样从图中删除f，然后我们将继续
+
+31
+00:02:39,010 --> 00:02:42,140
+our simplification and this will now succeed because once we move F from the
+我们的简化现在会成功，因为一旦我们将F从
+
+32
+00:02:42,140 --> 00:02:47,590
+graph we can see that all the nodes well, actually several of the nodes have fewer
+图中我们可以看到，所有的节点都很好，实际上有几个节点的数量较少
+
+33
+00:02:47,590 --> 00:02:53,540
+than three neighbors and so B, C, and D. Sorry, B and D both only have two
+三个邻居，所以B、C和D。对不起，B和D都只有两个
+
+34
+00:02:53,540 --> 00:02:59,170
+neighbors when [inaudible] E and C will only have one neighbor each and so clearly
+邻居当[听不见]E和C将各自只有一个邻居，并且非常清楚
+
+35
+00:02:59,170 --> 00:03:04,030
+coloring will now succeed and here's one order that we'll succeed with this reduced
+现在上色将会成功，这里有一个订单，我们将使用此简化后的颜色成功上色
+
+36
+00:03:04,030 --> 00:03:11,030
+graph. After we decide to spill f and we successfully color the sub-graph, now we
+图表。在我们决定溢出f并且成功地给子图着色之后，现在我们
+
+37
+00:03:12,170 --> 00:03:18,010
+have to try to assign a color to f and it could be, we could get lucky and discover
+我得试着给f指定一种颜色，它可能是，我们可以幸运地发现
+
+38
+00:03:18,010 --> 00:03:24,030
+that even though f had more than there neighbors or three or more neighbors when
+即使f有多于三个邻居或三个或更多邻居，当
+
+39
+00:03:24,030 --> 00:03:28,440
+we remove it from the graph, it could be that when we go to construct the coloring
+我们将其从图中移除，这可能是因为当我们要构造着色时
+
+40
+00:03:28,440 --> 00:03:33,410
+for the sub-graph that. Those neighbors actually don't use all of the register. It
+对于子图来说。那些邻居实际上并没有使用所有的收银机。它
+
+41
+00:03:33,410 --> 00:03:36,739
+could wind up being at all those neighbors, for example or assign to the
+可能最终成为所有这些邻居，例如，或分配给
+
+42
+00:03:36,739 --> 00:03:41,790
+same register and so there are plenty of registers left over to assign to f. And
+相同的寄存器，因此有大量剩余的寄存器可以分配给f和
+
+43
+00:03:41,790 --> 00:03:46,790
+so, this is called optimistic coloring. So we pick a candidate for spilling. We tried
+所以，这叫做乐观着色。所以我们选了一个泄密的候选人。我们试过了
+
+44
+00:03:46,790 --> 00:03:50,349
+to color the sub-graph. Once we have a coloring for the sub-graph, now we see if
+来给子图上色。一旦我们有了子图的着色，现在我们就可以看到
+
+45
+00:03:50,349 --> 00:03:56,260
+we just get lucky. And are able to assign a register to F. In which case we can just
+我们只是走运而已。并且能够将寄存器分配给F。在这种情况下，我们可以只
+
+46
+00:03:56,260 --> 00:04:00,489
+go ahead and continue the color of the rest of the graph as if nothing had
+继续，继续图表的睡觉颜色，就好像什么都没有
+
+47
+00:04:00,489 --> 00:04:04,500
+happened. So in this case let's take a look what happens. We're going add F back
+发生了。在这种情况下，让我们来看看会发生什么。我们要把F加回去
+
+48
+00:04:04,500 --> 00:04:11,500
+into the graph. And. And look at all, and look at it's neighbors and we see that we
+添加到图表中。和。看看所有的，看看它的邻居，我们看到我们
+
+49
+00:04:12,769 --> 00:04:15,290
+have a neighbor that's using r1. We have a neighbor that's using r2 and we have a
+有一个邻居正在使用R1。我们有一个邻居正在使用R2，我们有一个
+
+50
+00:04:15,290 --> 00:04:19,090
+neighbor that's using r2 and we have a neighbor that's using r3. And so on in
+邻居使用R2，我们有一个邻居使用R3。以此类推
+
+51
+00:04:19,089 --> 00:04:24,849
+this case, optimistic coloring will not work so in fact F had more than K
+在这种情况下，乐观着色不会起作用，所以实际上F超过了K
+
+52
+00:04:24,849 --> 00:04:28,090
+neighbors and after we color the sub-graph, it turns out that those
+邻居，在我们给子图上色之后，结果发现那些
+
+53
+00:04:28,090 --> 00:04:33,160
+neighbors are using all K. In this case three, all three of the register names.
+邻居使用的都是K，在本例中是三个，全部三个寄存器名称。
+
+54
+00:04:33,160 --> 00:04:37,400
+And so F where there is no register left over for F and we're going to have to
+也就是说，没有剩余的寄存器了，我们将不得不
+
+55
+00:04:37,400 --> 00:04:44,020
+actually spill it and store in memory. So, if optimistic coloring fails as it does in
+实际上是把它洒出来并储存在内存中。因此，如果乐观着色失败，就像在
+
+56
+00:04:44,020 --> 00:04:48,000
+this example, then we spill f. So, what we're going to do is allocate the memory
+在这个例子中，我们会泄漏f。所以，我们要做的是分配内存
+
+57
+00:04:48,000 --> 00:04:52,560
+location for f and typically, what that means is that we'll allocate a position in
+f的位置，通常，这意味着我们将在
+
+58
+00:04:52,560 --> 00:04:59,560
+the current stack frame. Let's call this address fa for the address of f. And then
+当前堆栈帧。让我们称这个地址为f的地址，然后
+
+59
+00:05:00,130 --> 00:05:04,410
+we're going to modify the control flow graph. We're going to change the code for
+我们将修改控制流图。我们要将代码更改为
+
+60
+00:05:04,410 --> 00:05:10,220
+that compiling. So, before each operation that reads f, we're going to insert a load
+那个汇编。因此，在每个读取f的操作之前，我们将插入一个加载
+
+61
+00:05:10,220 --> 00:05:17,160
+that loads from that address to current value of f into a temporary name. Okay,
+其从该地址到当前值f加载到临时名称中。好吧,
+
+62
+00:05:17,160 --> 00:05:19,870
+that makes sense because if the value is out of memory, then if we have an
+这是有意义的，因为如果值内存不足，那么如果我们有一个
+
+63
+00:05:19,870 --> 00:05:23,840
+operation that needs to actually use the value. We're going to have to load it from
+操作，该操作需要实际使用该值。我们要把它从
+
+64
+00:05:23,840 --> 00:05:29,800
+a memory first then to the register. And similarly after each operation that writes
+首先是存储器，然后是寄存器。类似地，在写入的每个操作之后
+
+65
+00:05:29,800 --> 00:05:34,430
+F, we're going to insert the store so we're going to save the current value of F
+，我们要插入存储，所以我们要保存F的当前值
+
+66
+00:05:34,430 --> 00:05:41,240
+into it's location in memory. So, here is the original code from which we
+它在内存中的位置。所以，这是我们从中提取的原始代码
+
+67
+00:05:41,240 --> 00:05:45,070
+constructed the registry interference graph and notice that there are few
+构建了注册表干扰图，并注意到
+
+68
+00:05:45,070 --> 00:05:49,400
+references to f in here and we just highlight them, alright. So, we have a
+在这里引用f，我们只突出显示它们，好的。所以，我们有一个
+
+69
+00:05:49,400 --> 00:05:56,400
+couple of reads, we have a right and so now, what are we going to do? So, here
+读了几遍，我们就有了权利，那么现在我们要做什么呢？所以，在这里
+
+70
+00:05:56,520 --> 00:06:01,240
+we had the use of F, the read of F in this statement and now we preceded that by
+我们在这条语句中使用了F，也就是F的读法，现在我们在前面加上
+
+71
+00:06:01,240 --> 00:06:05,740
+a load. And notice that I've given a new name here. I've called this F1. And, that's
+一大笔钱。请注意，我在这里给了一个新名称。我把这叫做F1。还有，那就是
+
+72
+00:06:05,740 --> 00:06:10,460
+because the different uses of F in the control flow graph don't all have to have
+因为F在控制流图中的不同用法并不都必须具有
+
+73
+00:06:10,460 --> 00:06:14,889
+the same temporary name. And actually it would be a good idea to separate them so
+相同的临时名称。实际上，把它们分开会是个好主意
+
+74
+00:06:14,889 --> 00:06:19,360
+each distinct to use of F will get it's own name. So here we load the value of F
+使用F的每个DISTINCT都会有自己的名称。所以我们在这里加载F的值
+
+75
+00:06:19,360 --> 00:06:24,050
+and then it get to use in the statement. Here we have a right to f and so we store
+然后在语句中使用它。在这里，我们有权使用f，所以我们存储
+
+76
+00:06:24,050 --> 00:06:28,460
+the current value of f and those argument to a different name, f2. So, that's
+f的当前值和其他名称f2的参数。所以，这就是
+
+77
+00:06:28,460 --> 00:06:32,270
+temporary is computed here as going to be stored and it's called f2. And finally,
+临时值在这里被计算为将被存储，它被称为f2。最后，
+
+78
+00:06:32,270 --> 00:06:38,930
+the third use of f there's another load of f right here. Which is then used in this
+f的第三个用法，这里还有一个f。然后将其用于此
+
+79
+00:06:38,930 --> 00:06:45,930
+computation here of b. Okay. So, that is the systematic way to modify the code to
+这里计算b，好的。因此，这是将代码修改为
+
+80
+00:06:46,800 --> 00:06:53,800
+use f in storage. And now, we have to recompute the aliveness of f. And so, what
+在存储中使用f。现在，我们必须重新计算f的活性，那么，
+
+81
+00:06:54,520 --> 00:06:59,539
+happens there. Well, here is the original aliveness information from which we
+发生在那里。好的，这是原始的活体信息，我们从这些信息中
+
+82
+00:06:59,539 --> 00:07:06,389
+computed the register interference graph, okay. And now notice that f is gone. We no
+计算了寄存器干扰图，好的。现在请注意，f已经消失了。我们没有
+
+83
+00:07:06,389 --> 00:07:10,520
+longer use f in the programs so we can delete all the places where we mentioned
+在程序中不再使用f，这样我们就可以删除我们提到的所有位置
+
+84
+00:07:10,520 --> 00:07:16,389
+that f was live and now we have the three new names, f1, f2, and f3. And we have to
+那个f是实况转播的，现在我们有了三个新名字，f1，f2和f3。我们必须要
+
+85
+00:07:16,389 --> 00:07:21,350
+add in their aliveness information so it creates a new program points here where we
+添加他们的活跃度信息，以便在此处创建一个新的计划点，我们
+
+86
+00:07:21,350 --> 00:07:27,289
+inserted statements. And of course, where we have a load of the current value of f
+插入的语句。当然，我们有一大堆f的当前值
+
+87
+00:07:27,289 --> 00:07:33,569
+that value if live right before the use in the next statement. Here, we have the
+该值如果正好在下一条语句中使用之前有效。在这里，我们有
+
+88
+00:07:33,569 --> 00:07:37,169
+right of the current value of f and that's live right before the store and then
+在f的当前值的右边，它就在商店前面，然后
+
+89
+00:07:37,169 --> 00:07:42,460
+here's another load of the current value of f which is live until the store, I'm
+这是另一个加载的f的当前值，它一直持续到商店，我是
+
+90
+00:07:42,460 --> 00:07:47,699
+sorry, until the use in the next statement. Okay. And so, now notice here
+抱歉，在下一条语句中使用之前。好吧。所以，现在请注意这里
+
+91
+00:07:47,699 --> 00:07:54,699
+that f used to be live in many, many, many places in the, in the code. And now not
+在代码中，f曾经住在很多很多地方。现在不是了
+
+92
+00:07:55,550 --> 00:08:02,039
+only is f or the, the different versions of f live in fewer places also we've
+只是f或者，f的不同版本生活在更少的地方，我们也有
+
+93
+00:08:02,039 --> 00:08:05,830
+distinguish them. So, it actually separate the different uses of f and so this will
+把它们区分开来。因此，它实际上将f的不同用法分开，所以这将
+
+94
+00:08:05,830 --> 00:08:10,069
+have their own nodes in their own set of interferences in the graph and they won't
+在图中的自己的干涉集中有自己的结点，并且它们不会
+
+95
+00:08:10,069 --> 00:08:14,740
+share them with the other users of f and that will actually also reduce the number
+与f的其他用户共享它们，这实际上也会减少
+
+96
+00:08:14,740 --> 00:08:21,740
+of edges in the graph. To summarize the example on the previous slide, once we
+图形中的边数。总结上一张幻灯片上的示例，一旦我们
+
+97
+00:08:22,009 --> 00:08:26,699
+have decided that we are actually going to spill a temporary f, that means we're
+已经决定我们实际上要泄漏一个临时的f，这意味着我们
+
+98
+00:08:26,699 --> 00:08:30,110
+going to change the program where have loads and stores to the program and now
+正在将程序的加载和存储位置更改为程序，现在
+
+99
+00:08:30,110 --> 00:08:33,240
+we're going to have a different program and that's going to change our register
+我们将有一个不同的程序，这将改变我们的注册表
+
+100
+00:08:33,240 --> 00:08:36,569
+allocation problems. We're going to have to recompute the aliveness of information,
+分配问题。我们将不得不重新计算信息的活性，
+
+101
+00:08:36,568 --> 00:08:39,490
+we're have to rebuild the restrain interference graph and then we're going to
+我们必须重建约束干涉图，然后我们要
+
+102
+00:08:39,490 --> 00:08:44,629
+have to try again to color that block graph. Now, it turns out that this new
+我得再试一次给挡路图表上色。现在，事实证明，这个新的
+
+103
+00:08:44,629 --> 00:08:50,459
+aliveness information is almost the same as it was before. So, all the temporary
+活跃度信息几乎和以前一样。所以，所有临时性的
+
+104
+00:08:50,459 --> 00:08:55,759
+names other than f are not much affected by the by the new statements that are
+f以外的名称不会受到影响较大的新语句的影响，这些新语句是
+
+105
+00:08:55,759 --> 00:08:59,300
+added. There are a few program points where they might be live but I replaced
+添加了。有几个程序点可能是现场直播的，但我替换了
+
+106
+00:08:59,300 --> 00:09:06,089
+they were alive before and they're still alive. And, F itself has changed fairly
+他们以前还活着，现在还活着。而且，F本身也发生了相当大的变化
+
+107
+00:09:06,089 --> 00:09:09,769
+dramatically. It's like this information has changed really dramatically. Certainly
+戏剧性的。这个信息好像真的发生了戏剧性的变化。当然
+
+108
+00:09:09,769 --> 00:09:14,959
+the old name F is no longer used and so it's like this information goes away and
+旧名字F不再使用，所以这个信息好像消失了，
+
+109
+00:09:14,959 --> 00:09:20,379
+then we've also split F into three in this case three different temporaries. One for
+然后我们也把F分成三部分，在这种情况下是三个不同的时间段。一张是
+
+110
+00:09:20,379 --> 00:09:24,809
+each of the different uses of F in the control flow graph. And I noticed that
+F在控制流图中的不同用法。我注意到
+
+111
+00:09:24,809 --> 00:09:30,339
+each of these new uses of F or these new versions of F is live in a very, very
+F的每一种新用法或F的这些新版本都生活在一个非常、非常
+
+112
+00:09:30,339 --> 00:09:34,480
+small area so a load. In this video, we are going to continue our discussion of
+面积很小，所以负荷很大。在这段视频中，我们将继续讨论
+
+113
+00:09:34,480 --> 00:09:38,369
+as filling. For a load instruction The thing that were loading the temporary that
+作为填充物。对于加载指令，加载临时
+
+114
+00:09:38,369 --> 00:09:43,189
+we're loading fi is live only between the load and the next instruction where it's
+我们正在加载的FI只在加载和下一条指令之间有效，在下一条指令中
+
+115
+00:09:43,189 --> 00:09:50,110
+used and similarly for a store. It's score of a temporary fi is live only between the
+用于商店，类似地用于商店。它的分数是临时的FI只在
+
+116
+00:09:50,110 --> 00:09:54,369
+store itself and the proceeding instruction. The one they created fi. And
+存储自身和后续指令。就是他们创造的那个菲。和
+
+117
+00:09:54,369 --> 00:09:59,790
+the effective is, is to greatly reduce the live range of the spilled variable. So,
+有效的是，大大缩小了溢出变量的生存范围。所以,
+
+118
+00:09:59,790 --> 00:10:03,920
+whatever name we decide to spill by adding the load and stores right next to the
+无论我们决定通过将加载和存储添加到
+
+119
+00:10:03,920 --> 00:10:08,959
+places where those values are used We dramatically reduced the live range and in
+使用这些值的地方我们极大地缩小了活动范围
+
+120
+00:10:08,959 --> 00:10:13,879
+addition, as I mentioned in the previous live by splitting the name f into multiple
+另外，正如我在上一次直播中提到的，通过将名称f分成多个
+
+121
+00:10:13,879 --> 00:10:20,879
+different name, we also you know, avoid sharing. Those different liv e ranges
+不同的名字，我们也是你知道的，避免分享。那些不同的生活范围
+
+122
+00:10:21,410 --> 00:10:28,110
+between the different versions of F. So because the live range of F is reduced by
+不同版本的F之间的差异。因此，因为F的有效范围减少了
+
+123
+00:10:28,110 --> 00:10:33,610
+spilling. It has fewer interferences in the new program than it did in the old
+打翻了。它对新程序的干扰比对旧程序的干扰要少
+
+124
+00:10:33,610 --> 00:10:36,720
+program. And so what that means the particulars in the rebuild [inaudible]
+程序。那么，重建过程中的细节[听不见]意味着什么呢？
+
+125
+00:10:36,720 --> 00:10:41,759
+interference graph, F will have fewer neighbors. Some of the neighbors that it
+干涉图，F将具有较少的邻居。一些邻居认为它
+
+126
+00:10:41,759 --> 00:10:47,009
+had before have gone away because it just live in fewer places. So if we look at the
+已经消失了，因为它们只是生活在更少的地方。所以如果我们看一下
+
+127
+00:10:47,009 --> 00:10:50,709
+new register interference graph, we can see that among all the different versions
+新的寄存器干扰图，我们可以看到在所有不同的版本中
+
+128
+00:10:50,709 --> 00:10:56,420
+of F. Remember that F has been split into three temporaries in this graph. We see
+记住F在这个图中被分成了三个时间段。我们看到了
+
+129
+00:10:56,420 --> 00:11:03,139
+that they only interfere with D and C. Whereas, before f have several other
+它们只干扰D和C，而在f有其他几个
+
+130
+00:11:03,139 --> 00:11:10,139
+neighbors in the graph. And now, in fact this new graph is three tolerable. Of
+图中的邻居。现在，实际上这个新的图是三个可以容忍的。的
+
+131
+00:11:10,209 --> 00:11:14,389
+course it might be the case that we can't just spill one name. We might have to have
+当然，情况可能是这样，我们不能只说出一个名字。我们可能不得不
+
+132
+00:11:14,389 --> 00:11:18,509
+just spill several different temporaries before the coloring is found. And, the
+在找到着色剂之前，只需洒出几个不同的临时颜色即可。而且，这个
+
+133
+00:11:18,509 --> 00:11:23,809
+tricky part is to siding what to spill. So, this is the hard decision that has to
+棘手的部分是把要洒的东西放在一边。所以，这是一个艰难的决定
+
+134
+00:11:23,809 --> 00:11:28,239
+be made during restore allocation. Now any choice is correct. It's only a question of
+在还原分配期间执行。现在任何选择都是正确的。这只是一个问题
+
+135
+00:11:28,239 --> 00:11:32,779
+performance so you know some choices of spilling will lead to better code than
+性能，因此您知道一些溢出选项将产生比以下选项更好的代码
+
+136
+00:11:32,779 --> 00:11:38,189
+others but any choice of spilling is going to resolve in a correct program. And
+除了任何泄漏的选择之外，其他的都将在一个正确的程序中解决。和
+
+137
+00:11:38,189 --> 00:11:44,279
+there's heuristics that people use to pick which temporaries to spill and here are a
+有一些试探法，人们用来选择要泄漏的临时文件，这里是一个
+
+138
+00:11:44,279 --> 00:11:48,239
+few or I think three of the most popular ones. One is to spill the temporaries and
+我认为最受欢迎的有三个，少之又少。一种是把临时文件和
+
+139
+00:11:48,239 --> 00:11:54,929
+have the most conflicts. And the reason for that is that this is the temporary.
+有最多的冲突。原因是这是暂时的。
+
+140
+00:11:54,929 --> 00:11:59,819
+The one thing that you can move into memory that will most affect the number of
+您可以移动到内存中的一件事将最大程度地影响
+
+141
+00:11:59,819 --> 00:12:05,089
+interferences in the graph. So, the idea is by possible spilling justice on
+图形中的干涉。所以，这个想法是通过可能的伸张正义
+
+142
+00:12:05,089 --> 00:12:08,649
+variable. We'll remove enough edges from the graph that they becomes tolerable with
+变量。我们将从图中删除足够多的边，使它们变得可以容忍
+
+143
+00:12:08,649 --> 00:12:12,889
+the number of registers we have. Another possibility is a spilled temporaries that
+我们拥有的登记簿的数量。另一种可能性是泄漏的临时文件
+
+144
+00:12:12,889 --> 00:12:19,769
+have few definitions and uses. And, here the idea is that by spilling those since
+几乎没有定义和用途。而且，这里的想法是，通过泄漏这些，因为
+
+145
+00:12:19,769 --> 00:12:24,089
+they're not used very much, the number of lows in storage will have to add, will be
+它们的使用率不是很高，存储低点的数量将不得不增加，将是
+
+146
+00:12:24,089 --> 00:12:29,929
+relatively small and so if a variable just isn't used in many places, then the actual
+相对较小，因此如果变量在很多地方没有使用，那么实际的
+
+147
+00:12:29,929 --> 00:12:35,920
+cost, in terms of additional instructions that are going to be executed to spill it,
+成本，就将要执行以溢出它的额外指令而言，
+
+148
+00:12:35,920 --> 00:12:39,980
+is relatively small. And another one and this is actually the one that I think that
+相对较小。还有另一个，实际上这就是我认为
+
+149
+00:12:39,980 --> 00:12:44,499
+all the compilers implement is to avoid spilling an inner loops. So, if you have a
+所有编译器的实现都是为了避免溢出内部循环。所以，如果你有一个
+
+150
+00:12:44,499 --> 00:12:50,069
+choice between spilling a variable that's used within the. Innermost loop for the
+控件中使用的变量溢出之间的选择。对象的最里面的循环
+
+151
+00:12:50,069 --> 00:12:54,670
+program and one that is used some place else. You probably preferred this that you
+程序和在其他地方使用的程序。你可能更喜欢这样，因为你
+
+152
+00:12:54,670 --> 00:12:58,839
+spill the one that is used not in the innermost loop absolutely because again,
+绝对泄漏不在最里面循环中使用的那个，因为再说一遍，
+
+153
+00:12:58,839 --> 00:13:03,649
+that will result in fewer loads in stores. You really want to avoid adding additional
+这将导致商店中的装载量减少。是否确实要避免添加其他
+
+154
+00:13:03,649 --> 00:13:04,989
+instructions to your inner loop.
+指示您的内循环。
+

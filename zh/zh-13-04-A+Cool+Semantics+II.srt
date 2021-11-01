@@ -1,0 +1,1080 @@
+0
+00:00:04,010 --> 00:00:08,069
+In this video we're going to continue and complete our discussion of cool
+在这段视频中，我们将继续并完成对COOL的讨论
+
+1
+00:00:08,069 --> 00:00:11,600
+operational semantics. We'll be taking a look with the two most complex operations
+操作语义学。我们将通过两个最复杂的操作来看一看
+
+2
+00:00:11,600 --> 00:00:18,600
+in cool, the allocation of the new object and dynamic dispatch. We'll begin by
+在COOL中，新对象的分配和动态调度。我们将从
+
+3
+00:00:20,119 --> 00:00:24,320
+giving an informal discussion of what happens when a new object is allocated in
+中分配新对象时会发生什么的非正式讨论
+
+4
+00:00:24,320 --> 00:00:28,529
+Kuhl. So, the first thing that has to happen, if we have to allocate space for
+库尔。所以，首先要做的是，如果我们必须为
+
+5
+00:00:28,529 --> 00:00:33,330
+the object and essentially, that means having enough space for the object
+对象，本质上，这意味着要有足够的空间容纳对象
+
+6
+00:00:33,330 --> 00:00:37,680
+attributes. We're going to have to allocate a location for every attribute of
+属性。我们将不得不为每个属性分配一个位置
+
+7
+00:00:37,680 --> 00:00:44,170
+the object of class t if what we're doing is allocating a new t object. Then we're
+类t的对象，如果我们正在做的是分配一个新的t对象。那我们就是
+
+8
+00:00:44,170 --> 00:00:49,229
+going to set the attributes of, of that object to their default values and well in
+将该对象的、的属性设置为其默认值
+
+9
+00:00:49,229 --> 00:00:54,220
+a few minutes, we'll see what the default values are and why we need to set the, set
+几分钟后，我们将看到默认值是什么，以及为什么需要设置、设置
+
+10
+00:00:54,220 --> 00:00:58,860
+the attributes to defaults. And then we evaluate the initializers so every
+要默认的属性。然后我们评估初始值设定项，因此每个
+
+11
+00:00:58,860 --> 00:01:03,519
+attribute in the class declaration can have an initializing expression. We're
+属性可以具有初始化表达式。我们是
+
+12
+00:01:03,519 --> 00:01:08,480
+going to evaluate those and set the resulting attribute values And then we
+对这些进行求值并设置结果属性值，然后我们
+
+13
+00:01:08,480 --> 00:01:12,800
+return the newly allocated objects. So these are the steps that are involved in
+返回新分配的对象。因此，这些都是涉及到的步骤
+
+14
+00:01:12,800 --> 00:01:17,610
+setting a new object and as you can see it's actually more than just allocating a
+设置一个新对象，如您所见，它实际上不仅仅是分配一个
+
+15
+00:01:17,610 --> 00:01:22,430
+little bit of memory. It's actually quite a bit of computation going on in
+一点内存。这实际上是相当大的计算量
+
+16
+00:01:22,430 --> 00:01:29,430
+allocating new objects in cool. Every class has a default value associated with
+在凉爽状态下分配新对象。每个类都有一个与
+
+17
+00:01:29,670 --> 00:01:35,770
+that class. So for integers, the default value is zero. For Boolean, the default
+那节课。因此，对于整数，默认值为零。对于布尔型，默认设置为
+
+18
+00:01:35,770 --> 00:01:42,700
+value is a Boolean false and for strings, the default value is the empty string And
+值为布尔值FALSE，并且对于字符串，默认值为空字符串，并且
+
+19
+00:01:42,700 --> 00:01:47,350
+then for any other class, that isn't one of these three basic classes or any other
+那么对于任何其他类，这不是这三个基本类中的一个，也不是任何其他类
+
+20
+00:01:47,350 --> 00:01:53,750
+class, the default value is void. In the operational rules, we're going to need a
+类，则默认值为void。在操作规则中，我们需要一个
+
+21
+00:01:53,750 --> 00:01:58,720
+way to repair to the attributes of a class. So we're going to define a function
+修复到类的属性的方法。所以我们要定义一个函数
+
+22
+00:01:58,720 --> 00:02:05,720
+called class that takes a class name and returns the list of attributes of, of that
+调用的类，它接受类名并返回、的属性列表
+
+23
+00:02:06,570 --> 00:02:10,759
+class. So here we have all the attributes of class a, let's say that a1 through and
+班级。这里我们有a类的所有属性，让我们假设A1到AND
+
+24
+00:02:10,758 --> 00:02:15,090
+in addition, this functions also going to tell us for each attribute declared type
+此外，此函数还将告诉我们声明的每个属性的类型
+
+25
+00:02:15,090 --> 00:02:22,090
+of the attribute and the expression that initiali zes the attribute. And one other
+属性和初始化该属性的表达式的。和另一个
+
+26
+00:02:22,230 --> 00:02:29,030
+important feature of this list, is that it includes all the attributes of class a
+这个列表的一个重要特征是它包含a类的所有属性
+
+27
+00:02:29,030 --> 00:02:35,090
+including the inherited ones. And there's another detail which is in what order
+包括遗传的。还有一个细节是按什么顺序排列的
+
+28
+00:02:35,090 --> 00:02:40,029
+these attributes appear and these are actually become important when we define
+这些属性会出现，当我们定义以下属性时，这些属性实际上会变得很重要
+
+29
+00:02:40,029 --> 00:02:45,319
+the semantics of how attributes are initialized and the rule is the attributes
+属性如何初始化的语义，规则是属性
+
+30
+00:02:45,319 --> 00:02:52,319
+are listed in greatest ancestor first order And what do I mean by that? Let's
+以最伟大的祖先第一顺序列出，我这是什么意思？我们走吧
+
+31
+00:02:55,799 --> 00:03:02,799
+say that we have three classes a, b, and c and a, I'm sorry, b inherits from a. And c
+假设我们有三个类a、b和c，对不起，b继承自a和c
+
+32
+00:03:08,409 --> 00:03:15,409
+inherits. From b. Okay, let's say, that a defines two attributes, a1 and a2 and b
+继承。好的，假设a定义了两个属性，a1、a2和b
+
+33
+00:03:20,659 --> 00:03:27,659
+defines two attributes b1, b2 and c defines two attributes c1 and c2. Then
+定义两个属性b1、b2和c定义两个属性c1和c2。然后
+
+34
+00:03:29,260 --> 00:03:36,260
+class of c. We'll list the attributes in the following order. First we'll come a1
+类。我们将按以下顺序列出属性。我们先走A1路
+
+35
+00:03:38,849 --> 00:03:45,849
+and then a2 Because a is the greatest ancestor, okay, it's the, the closest to
+然后是a2，因为a是最伟大的祖先，好的，它是最接近
+
+36
+00:03:46,010 --> 00:03:51,959
+the root of the object hierarchy and the attribute was in class a or within any
+对象层次结构的根和属性在a类中或在任何
+
+37
+00:03:51,959 --> 00:03:55,139
+class, it's always listed in the order that it textually appear. So, first comes
+类中，它始终以文本形式出现的顺序列出。所以，首先来的是
+
+38
+00:03:55,139 --> 00:04:00,849
+a1 and a2 and of course the type in the initializer are also, let's see here, most
+a1和a2，当然还有初始化式中的类型也是，让我们在这里看到，大多数
+
+39
+00:04:00,849 --> 00:04:04,449
+of these attributes but we're just concentrating here in the order in which
+这些属性，但我们在这里集中讨论的顺序是
+
+40
+00:04:04,449 --> 00:04:11,449
+the information appears. So, the next would come class b. So, the attributes of
+此时将显示该信息。因此，下一个是类b。所以，
+
+41
+00:04:11,829 --> 00:04:17,570
+class b will be next and of course, there'll be the type and initialize for
+接下来是类b，当然还有类型和初始化
+
+42
+00:04:17,570 --> 00:04:22,040
+those attributes and then finally the attributes of class c Again, in the order
+这些属性，最后是类c的属性，按如下顺序
+
+43
+00:04:22,040 --> 00:04:26,370
+in which they are listed in the class definition, okay? So, that defines the
+将它们列在类定义中，好吗？因此，这定义了
+
+44
+00:04:26,370 --> 00:04:30,880
+order of the attributes for any class. It's always in the order of the greatest
+任何类的属性顺序。它总是按照最伟大的顺序排列
+
+45
+00:04:30,880 --> 00:04:37,530
+ancestor down the inheritance chain to the class itself which is the argument of the
+沿继承链向下传递到类本身的祖先，这是
+
+46
+00:04:37,530 --> 00:04:44,530
+class functions. At this point we're ready to actually define the formal semantics of
+类函数。此时，我们已经准备好实际定义
+
+47
+00:04:44,980 --> 00:04:51,560
+new t and let switch colors here. So we're going to be allocating a new object of
+新设置，让您在这里切换颜色。所以我们将分配一个新的对象
+
+48
+00:04:51,560 --> 00:04:58,560
+type and is going to be in a context with self object as zero environment e and
+类型，并且将位于自身对象为零的环境e的上下文中，并且
+
+49
+00:04:58,750 --> 00:05:04,130
+store s. The first thing we have to do we're going to figure out what kind of
+我们要做的第一件事就是找出
+
+50
+00:05:04,130 --> 00:05:08,170
+object it is that we're actually going to allocate and the only question is whether
+对象是我们实际上要分配，唯一的问题是
+
+51
+00:05:08,170 --> 00:05:13,670
+t is se lf type or not because remember self type is not the name of an actual
+t是否为se lf类型，因为记住自身类型不是实际类型的名称
+
+52
+00:05:13,670 --> 00:05:19,910
+class. If t is not self type then the class that we're going to allocate is
+班级。如果t不是self类型，那么我们要分配的类是
+
+53
+00:05:19,910 --> 00:05:23,340
+actually a t. T is actually a class name and with that, that's the kind of object
+实际上，t.t实际上是一个类名，有了这个名称，它就是这样一种对象
+
+54
+00:05:23,340 --> 00:05:28,010
+that we're going to allocate. If t is self type then the kind of object we're going
+我们要分配的。如果t是Self类型，那么我们将要使用的对象类型
+
+55
+00:05:28,010 --> 00:05:32,480
+to be allocating. Is whatever the class is of the self objects? So we're going to
+来分配。类是自我对象吗？所以我们要去
+
+56
+00:05:32,480 --> 00:05:39,410
+look at the dynamic type here of the self object called that x and that will be the
+请看这里名为x的self对象的动态类型，它将是
+
+57
+00:05:39,410 --> 00:05:42,990
+class that we create. That will be the kind of objects that we created, all
+我们创建的类。这将是我们创建的那种对象，所有
+
+58
+00:05:42,990 --> 00:05:46,990
+right? So there's two possibilities, Either object, object, allocating an
+对吗？所以有两种可能性，要么是对象，要么是对象，分配一个
+
+59
+00:05:46,990 --> 00:05:53,370
+object of type t if t is actually a class name. Otherwise it's an object of the same
+如果t实际上是一个类名，则类型为t的对象。否则它就是相同的对象
+
+60
+00:05:53,370 --> 00:06:00,370
+dynamic type as the self object Alright? So, now we're going to look up t0 is,
+动态类型作为自我对象，好吗？所以，现在我们来看一下0是，
+
+61
+00:06:02,520 --> 00:06:09,360
+alright. And we get out the list of the attribute types and initializers for t0.
+好的。我们得到t0的属性类型和初始值设定项的列表。
+
+62
+00:06:09,360 --> 00:06:16,010
+So, this tells that what we have to do to construct an object of this type. Alright
+所以，这告诉我们，要构造这种类型的对象，我们必须做些什么。好的，好的
+
+63
+00:06:16,010 --> 00:06:20,200
+and the next thing we do is we allocate locations for each of the attributes. So,
+接下来我们要做的是为每个属性分配位置。所以,
+
+64
+00:06:20,200 --> 00:06:24,480
+because they were in attributes, we're going to allocate n locations. One for
+因为它们在属性中，所以我们将分配n个位置。一张是
+
+65
+00:06:24,480 --> 00:06:29,780
+each attribute, all right. And then we're going to create an object with the class
+每个属性，好的。然后我们将使用类创建一个对象
+
+66
+00:06:29,780 --> 00:06:36,610
+tag t0 and the attributes are going to be bound to these new locations. So, the i
+标签t0和属性将被绑定到这些新位置。所以，我
+
+67
+00:06:36,610 --> 00:06:41,720
+attribute will be abound to the i new location that we just allocated and that
+属性将丰富到我们刚刚分配的i个新位置，并且
+
+68
+00:06:41,720 --> 00:06:46,620
+were going to update the store. Okay. So, we're going to take our initial store and
+我们要更新商店。好吧。所以，我们要把我们的第一家店铺
+
+69
+00:06:46,620 --> 00:06:50,650
+know this is the same with the store we started with. We take s and we are going
+我知道这和我们刚开始开的那家店是一样的。我们坐%s，我们要走了
+
+70
+00:06:50,650 --> 00:06:55,310
+to update it so that at these new locations, those new locations hold the
+为了更新它，以便在这些新位置，这些新位置保存
+
+71
+00:06:55,310 --> 00:07:01,090
+default values of, for the type of each of the attribute. Okay, and that gives us the
+的默认值，表示每个属性的类型。好的，这给了我们
+
+72
+00:07:01,090 --> 00:07:07,750
+store s1 and now we have to evaluate the initializer. The two actually, initialize
+存储s1，现在我们必须计算初始值设定项。这两个实际上是初始化
+
+73
+00:07:07,750 --> 00:07:13,280
+the attributes. And we have to think about what the environment is in which those
+属性。我们必须想一想环境是什么，在这个环境中，
+
+74
+00:07:13,280 --> 00:07:18,810
+attributes are initialized and remember the rule is that within initializer I
+属性已初始化，请记住，规则是在初始化式i中
+
+75
+00:07:18,810 --> 00:07:23,590
+mean, attribute, all the attributes of the class are in scope. Alright, so the
+均值、属性、类的所有属性都在作用域内。好的，所以
+
+76
+00:07:23,590 --> 00:07:29,720
+environment in this case for the initializers will ju st consist of the
+在本例中，初始化器的环境将由
+
+77
+00:07:29,720 --> 00:07:33,520
+initializer or the attributes, excuse me, themselves. Okay, so these are the
+初始值设定项或属性，抱歉，它们本身。好的，这些是
+
+78
+00:07:33,520 --> 00:07:38,850
+attribute names and the i attributes is bound to the i's new memory location
+属性名和I属性被绑定到I的新内存位置
+
+79
+00:07:38,850 --> 00:07:44,490
+holding the value, the default value initially of that attribute. Alright, and
+保存该值，即该属性的初始默认值。好的，还有
+
+80
+00:07:44,490 --> 00:07:49,610
+then finally, to evaluate initializers, we just evaluate them as a block in the order
+最后，为了评估初始值设定项，我们只需按顺序将它们评估为挡路
+
+81
+00:07:49,610 --> 00:07:54,110
+which they appear in the class function. This is why it was important to specify
+它们出现在类函数中。这就是为什么指定
+
+82
+00:07:54,110 --> 00:08:00,290
+the order in the class function. So remember that these attributes include all
+类函数中的顺序。因此请记住，这些属性包括所有
+
+83
+00:08:00,290 --> 00:08:04,500
+the inherited attribute so we'll start by evaluating initializing attributes with
+继承的属性，因此我们将从评估初始化属性开始
+
+84
+00:08:04,500 --> 00:08:09,190
+the greatest ancestor and working our way down to the attributes declared within the
+最伟大的祖先，一直到
+
+85
+00:08:09,190 --> 00:08:14,389
+class itself. Notice that the environment here. Which has all of the attributes in
+类本身。注意这里的环境。它具有中的所有属性
+
+86
+00:08:14,389 --> 00:08:19,350
+scope is an interesting point, this environment has nothing to do with the
+范围是一个有趣的问题，这个环境与
+
+87
+00:08:19,350 --> 00:08:24,060
+environment in which new t is actually evaluation. You know, these environments e
+实际评估新测试的环境。你知道，这些环境
+
+88
+00:08:24,060 --> 00:08:30,760
+and e prime are completely separate, okay? So new, so e prime has in scope the names
+和e质数是完全分开的，好吗？所以很新，所以e一号在范围内有名字
+
+89
+00:08:30,760 --> 00:08:36,550
+of the attributes the class e is a, you know, is, is some other environment.
+在e类的属性中，你知道，是，是一些其他的环境。
+
+90
+00:08:36,549 --> 00:08:40,330
+There's some functions somewhere that's calling new t and the variables are in
+有一些函数正在调用new t，变量在
+
+91
+00:08:40,330 --> 00:08:46,700
+scope there are just completely different, okay? But anyway, evaluating this block Of
+范围是完全不同的，好吗？但不管怎样，评估这个挡路
+
+92
+00:08:46,700 --> 00:08:52,850
+initializers will yield some value. And the new store the value isn't used for
+初始值设定项将产生一些值。以及该值不用于的新存储
+
+93
+00:08:52,850 --> 00:08:57,980
+anything, okay? But the new store is the final store. That's the store that we get
+什么都行，好吗？但是新店是最后一家店。那就是我们买到的那家店
+
+94
+00:08:57,980 --> 00:09:03,130
+out as a result of allocating the object and then what is the result of new t, well
+作为分配对象的结果，那么新t的结果是什么？
+
+95
+00:09:03,130 --> 00:09:10,130
+it is the new object itself, v. To summarize the semantics of New that was
+这是新对象本身，v。总结一下New的语义
+
+96
+00:09:11,290 --> 00:09:15,320
+the first three steps allocate the object, actually allocate the memory
+前三个步骤分配对象，实际分配内存
+
+97
+00:09:15,320 --> 00:09:19,890
+for the object and then the remaining steps initialize the objects by evaluating
+，然后其余步骤通过计算
+
+98
+00:09:19,890 --> 00:09:23,700
+a sequence of assignments and the most important thing probably to understand
+一系列作业和最重要的可能要理解的事情
+
+99
+00:09:23,700 --> 00:09:27,830
+about initialization and one of the most important things is the context in which
+关于初始化，最重要的事情之一是
+
+100
+00:09:27,830 --> 00:09:32,200
+or the stage in which the initializers are evaluated. So know that only the attribute
+或评估初始化器的阶段。所以要知道，只有属性
+
+101
+00:09:32,200 --> 00:09:36,700
+are in scope while we emphasize that and it's the same rule as of typing. So when
+是在范围内的，我们强调这一点，这和打字的规则是一样的。那么什么时候
+
+102
+00:09:36,700 --> 00:09:41,000
+you 're type checking a class declaration only the attributes are in scope of the
+您正在对类声明进行类型检查，只有属性在
+
+103
+00:09:41,000 --> 00:09:45,460
+you know, for the initializers of the class and then as the same, naturally the
+您知道，对于类的初始值设定项，然后是相同的，自然
+
+104
+00:09:45,460 --> 00:09:50,560
+same thing that we use when we actually evaluate the initializers at runtime. And
+与我们在运行时实际计算初始值设定项时使用的内容相同。和
+
+105
+00:09:50,560 --> 00:09:55,040
+the initial values of the attributes are the default values and then, then we need
+属性的初始值是默认值，然后，我们需要
+
+106
+00:09:55,040 --> 00:09:59,730
+the defaults because, precisely because the attributes are in-sculpt inside their
+缺省值是因为，正是因为属性在其
+
+107
+00:09:59,730 --> 00:10:05,550
+own initializers. So, it could be for example, it's perfectly reasonable like
+拥有初始值设定项。所以，它可能是，举个例子，它非常合理，就像
+
+108
+00:10:05,550 --> 00:10:12,150
+Kuhls to have an initializer, let's say, like this. And I'm just going to, I may
+库尔斯有一个初始化器，比方说，像这样。我正要去，我可能会
+
+109
+00:10:12,150 --> 00:10:19,040
+leave all the types here just to save time but I can assign and attribute a the value
+为了节省时间，将所有类型都留在这里，但我可以为值赋值并赋值
+
+110
+00:10:19,040 --> 00:10:22,720
+of a and this is perfectly okay because the right hand side of the intializer has
+这是完全没有问题的，因为初始化式的右手边有
+
+111
+00:10:22,720 --> 00:10:27,290
+all the attributes and scope and for this to make sense a has to have some kind of
+所有的属性和作用域，要想理解这一点，a必须有某种
+
+112
+00:10:27,290 --> 00:10:33,050
+default value. It has to have some initial value so because I might read it, before I
+默认值。它必须有一些初始值，因为我可能会读到它，在我
+
+113
+00:10:33,050 --> 00:10:37,880
+might read an attribute before I have actually finished computing its
+可能会在我实际完成属性的计算之前读取该属性
+
+114
+00:10:37,880 --> 00:10:43,600
+initializer All right? And the last point here, is that notice that in the
+初始化器可以吗？这里的最后一点是，请注意，在
+
+115
+00:10:43,600 --> 00:10:50,589
+initialization or in the yeah, in the initialization of an object self is the
+初始化还是在初始化是的，在初始化一个对象本身就是
+
+116
+00:10:50,589 --> 00:10:55,040
+object itself is the self object. And what do I mean by that? I forgot to mention
+对象本身就是自我对象。我这么说是什么意思？我忘了说了
+
+117
+00:10:55,040 --> 00:10:59,730
+this on the previous slide just flipping back to that slide for a moment, notice
+请注意，上一张幻灯片上的内容只是暂时返回到那张幻灯片
+
+118
+00:10:59,730 --> 00:11:06,730
+here. That in the evaluation of the initializers, what is the context the self
+这里。在对初始化器的评价中，自我的语境是什么
+
+119
+00:11:07,370 --> 00:11:12,580
+object is v, the self object is v, this is the new object that we have just
+对象是v，自我对象是v，这是我们刚刚拥有的新对象
+
+120
+00:11:12,580 --> 00:11:17,770
+constructed. And so, it's perfectly fine for e1 or en, the initialization
+建造的。因此，对于e1或en，初始化是完全合适的
+
+121
+00:11:17,770 --> 00:11:21,330
+expressions over here and refers to stealth and what they were referred to if
+表达式在这里，并且指的是隐形，以及在以下情况下它们被指的是什么
+
+122
+00:11:21,330 --> 00:11:28,330
+they use self is the object that is being initialized. Alright Returning to this, to
+它们使用Self是正在初始化的对象。好了，回到这个，到
+
+123
+00:11:29,580 --> 00:11:36,580
+our summary you know it might be a little bit of a surprise how complicated the.
+我们的总结，你知道，这可能会让人有点惊讶，它是多么的复杂。
+
+124
+00:11:36,790 --> 00:11:43,790
+Semantics of new is, in cool and it's not just cool that has that property. In fact
+new的语义是，在Cool中，并不是只有Cool才有这个属性。事实上
+
+125
+00:11:44,360 --> 00:11:50,279
+every object oriented language, language has a fairly complex semantics for the
+每种面向对象的语言，语言都有相当复杂的语义
+
+126
+00:11:50,279 --> 00:11:54,980
+initialization of new objects and it's a combination of features like inheritance
+初始化新对象，它是继承等功能的组合
+
+127
+00:11:54,980 --> 00:12:00,720
+and the ability of initializers to refer to the attributes that leads to this kind
+以及初始化器引用导致这种类型的属性的能力
+
+128
+00:12:00,720 --> 00:12:07,720
+of complexity. Now let's talk about the semantics of dynamic dispatch and we'll
+是复杂的。现在让我们讨论一下动态分派的语义，我们将
+
+129
+00:12:08,100 --> 00:12:12,880
+follow the same plan that we did the semantics of new for us giving for us have
+遵循与我们为我们提供的new的语义相同的计划
+
+130
+00:12:12,880 --> 00:12:18,089
+an informal discussion and high level description of how the evaluation of
+非正式讨论和高层次描述如何评价
+
+131
+00:12:18,089 --> 00:12:23,460
+dynamic dispatch works and then we'll look at the formal operational rule. So the
+动态分派是有效的，然后我们将查看正式的操作规则。因此，
+
+132
+00:12:23,460 --> 00:12:26,370
+first thing it happens in evaluating a dispatch is that we'll evaluate the
+评估派单时发生的第一件事是，我们将评估
+
+133
+00:12:26,370 --> 00:12:33,300
+arguments e1 through en and next we'll evaluate the target object e0 so that
+参数e1到en，接下来我们将计算目标对象e0，以便
+
+134
+00:12:33,300 --> 00:12:38,149
+expression to get the actual object to which we're dispatching. Next, we're going
+表达式来获取我们要调度到的实际对象。接下来，我们要去
+
+135
+00:12:38,149 --> 00:12:42,680
+to look at the dynamic type of the target object. So, after we evaluate the zero,
+若要查看目标对象的动态类型，请执行以下操作。所以，在我们评估完零之后，
+
+136
+00:12:42,680 --> 00:12:48,760
+we're going to look at its class peg is And then, we're going to use that type to
+我们将查看它的类关联，然后，我们将使用该类型
+
+137
+00:12:48,760 --> 00:12:53,230
+figure out which function which function f we're supposed to use. So, we're going to
+找出我们应该使用哪个函数。所以，我们要去
+
+138
+00:12:53,230 --> 00:13:00,230
+go and look in the method table for the class x and see what method it has for f.
+转到方法表中查找类x，看看它对f有什么方法。
+
+139
+00:13:00,770 --> 00:13:07,770
+Then we're going to create new locations and an environment for the call. Alright, and
+然后，我们将为电话会议创建新的地点和环境。好的，还有
+
+140
+00:13:08,920 --> 00:13:14,450
+we're going to set up a new locations for the actual parameters. We're going to
+我们将为实际参数设置一个新位置。我们要去
+
+141
+00:13:14,450 --> 00:13:21,450
+initialize the, those locations with the actual arguments. Where s itself to be the
+使用实际参数初始化这些位置。它本身应该在哪里呢？
+
+142
+00:13:21,589 --> 00:13:28,589
+target object and then we're going to evaluate the body of f. Now in order to do
+目标对象，然后我们将计算f的主体。现在为了
+
+143
+00:13:29,990 --> 00:13:34,570
+the look up of a method in a class, we're going to need some representation of what
+在类中查找方法时，我们将需要一些表示
+
+144
+00:13:34,570 --> 00:13:39,160
+methods exist and which class is in our operational rules. So we're going to find
+方法存在，以及我们的操作规则中包含哪个类。所以我们要找出
+
+145
+00:13:39,160 --> 00:13:45,940
+a function eval stands for implementation and the implementation in a class a of a
+函数eval代表实现以及
+
+146
+00:13:45,940 --> 00:13:52,260
+method f is, is going to be first of all, the list of formal parameters. So it's
+方法f是，首先是形式参数列表。所以这就是
+
+147
+00:13:52,260 --> 00:13:56,540
+going to tell us what the formal parameters are of f and then the body of f
+告诉我们f的形式参数是什么，然后是f的主体
+
+148
+00:13:56,540 --> 00:14:03,390
+Whatever the, the function body of f is. Now we're ready to actually discuss the
+不管是什么，f的函数体是。现在我们准备好实际讨论
+
+149
+00:14:03,390 --> 00:14:08,959
+details of the formal operational semantics of method dispatch in Kuhl. I'm
+Kuhl中方法分派的形式化操作语义的详细信息。我
+
+150
+00:14:08,959 --> 00:14:14,430
+going to switch colors here again just for contrast. So as we said, the first thing
+我要在这里再换一次颜色，只是为了对比一下。所以就像我们说的，第一件事
+
+151
+00:14:14,430 --> 00:14:20,410
+we do is we evaluate the n arguments. So this first in lines, take care of that ad
+我们要做的就是评估这n个论点。所以这是第一行，注意那个广告
+
+152
+00:14:20,410 --> 00:14:24,500
+notice that each arguments that's evaluated may have side effects. So, it
+请注意，评估的每个参数都可能有副作用。所以，它
+
+153
+00:14:24,500 --> 00:14:29,279
+starts in some store but it may produce a different store. So after we've done all
+从一些商店开始，但可能会产生不同的商店。所以在我们做完所有的事情之后
+
+154
+00:14:29,279 --> 00:14:35,920
+of this we'll have the n arguments evaluated and some store s (N). The next
+其中，我们将计算n个参数，并存储s(N)。下一个
+
+155
+00:14:35,920 --> 00:14:40,420
+thing that happens is we evaluate zero. This is the expression to which we are
+发生的事情是我们评估为零。这就是我们要表达的意思
+
+156
+00:14:40,420 --> 00:14:47,420
+dispatching and that would give us an object v0 and some updated store s (n) +
+调度，这将给我们一个对象V0和一些更新的存储s(N)+
+
+157
+00:14:48,290 --> 00:14:54,350
+one. Okay And now we have to inspect v0. We want to know what's inside of v0, what
+一。好的，现在我们要检查V0。我们想知道V0里面有什么，
+
+158
+00:14:54,350 --> 00:15:00,899
+v0 is made of and in particular we're interested in the classed tag of v0 and
+V0由我们特别感兴趣的V0的分类标记组成，
+
+159
+00:15:00,899 --> 00:15:05,899
+we'll also be interested in the contents of its attributes. The locations
+我们还将对其属性的内容感兴趣。地点
+
+160
+00:15:05,899 --> 00:15:10,720
+associated with its attributes but first let's focus on the class tag. Alright,
+与其属性相关联，但首先让我们将重点放在类标记上。好的，
+
+161
+00:15:10,720 --> 00:15:14,420
+because we're going to use that class, remember, this is the dynamic type of the
+因为我们将使用该类，请记住，这是
+
+162
+00:15:14,420 --> 00:15:19,160
+zeros and what kind of objects the zeros actually is when the program is running.
+零，以及当程序运行时，零实际上是什么类型的对象。
+
+163
+00:15:19,160 --> 00:15:24,899
+And we're going to use that class to look up the definition of f that we should run.
+我们将使用这个类来查找我们应该运行的f的定义。
+
+164
+00:15:24,899 --> 00:15:31,899
+So, we look for the method f in class x. We want to know its implementation and in
+因此，我们在类x中查找方法f。
+
+165
+00:15:32,060 --> 00:15:37,930
+particular we get the names of the former parameters. Okay x1 through xn and we get
+具体地说，我们得到了以前参数的名称。好的，从x1到xn，我们得到
+
+166
+00:15:37,930 --> 00:15:44,930
+the body of the function or method. Alright So, the next thing we have to do
+函数或方法的主体。好的，接下来我们要做的是
+
+167
+00:15:45,110 --> 00:15:52,040
+is we have to allocate space in the memory or in the store for the actual parameters
+我们必须在内存中还是在存储中为实际参数分配空间
+
+168
+00:15:52,040 --> 00:15:59,040
+of the method call. So, we allocate new locations. Okay, one for each actual
+方法调用的。所以，我们分配新的地点。好的，一人一份
+
+169
+00:16:00,260 --> 00:16:07,260
+argument and that we're ready to build an environment in which we can evaluate the
+我们已经准备好建立一个环境，在这个环境中我们可以评估
+
+170
+00:16:07,420 --> 00:16:10,390
+method, alright? So, what is this environment going to consist of? So, we
+方法，好吗？那么，这个环境将由什么组成呢？所以，我们
+
+171
+00:16:10,390 --> 00:16:15,600
+have to think about what names or in-scoped inside of a method. Well, all
+必须考虑方法中的名称或作用域是什么。嗯，都是
+
+172
+00:16:15,600 --> 00:16:21,040
+the attributes of the class are in-scope. Okay. So, this is a class x with
+类的属性在范围内。好吧。所以，这是一个x类，它有
+
+173
+00:16:21,040 --> 00:16:25,820
+attributes a1 through an so the environment will have those names to find
+属性A1到AN，因此环境将具有要查找的这些名称
+
+174
+00:16:25,820 --> 00:16:30,300
+a1 through an. And now what are the attributes or locations of those
+A1至An。那么现在它们的属性或位置是什么呢？
+
+175
+00:16:30,300 --> 00:16:34,899
+attributes. Well those are the locations of. The zero, that's the object that we're
+属性。这些都是。零，这就是我们的目标
+
+176
+00:16:34,899 --> 00:16:39,589
+dispatching to that were going to be the self object and the attribute names will
+调度到的对象将是Self对象，属性名称将
+
+177
+00:16:39,589 --> 00:16:45,649
+refer to the attributes of, of self, alright. So, those locations here are the
+指的是，自我的属性，好的。那么，这里的那些位置就是
+
+178
+00:16:45,649 --> 00:16:52,649
+locations of, of the attributes in the object v0. Now in addition the formal
+对象V0中属性的位置。现在除了正式的
+
+179
+00:16:53,800 --> 00:17:00,170
+paramete rs are also in scope inside of the method body. So we add to this
+参数r也在方法体内部作用域中。所以我们再加上这个
+
+180
+00:17:00,170 --> 00:17:07,170
+environment with just the attributes all of the formal parameters okay and they are
+仅具有所有形式参数的属性的环境，它们都是
+
+181
+00:17:07,449 --> 00:17:14,449
+at the new locations l(x1) up to l(xn). Okay? And notice one slight subtlety about
+在新位置l(X1)直到l(Xn)。好吧?注意到一个细微的地方，那就是
+
+182
+00:17:17,859 --> 00:17:22,720
+the way this is defined we're taking an initial environment which I'll show here
+按照定义的方式，我们采用的是初始环境，我将在这里展示这一点
+
+183
+00:17:22,720 --> 00:17:26,760
+with, I'll, I'll color these braces in blue. So we're defining and initial
+我会，我会把这些牙套涂成蓝色。所以我们在定义和首字母缩写
+
+184
+00:17:26,760 --> 00:17:31,780
+environment of the attributes and then we're doing updates to that, okay? So
+属性的环境，然后我们会对其进行更新，好吗？所以
+
+185
+00:17:31,780 --> 00:17:38,780
+we're, instead of just defining x1 to map two l sub x1, we're saying we're replacing
+我们不是简单地定义x1来映射两个l/x1，而是说我们正在替换
+
+186
+00:17:39,280 --> 00:17:44,660
+The definition of x1 in this environment in the blue braces with one and maps x1
+此环境中的x1定义在蓝色大括号中加1，并映射x1
+
+187
+00:17:44,660 --> 00:17:49,929
+and l(x1). Why do we do it that way? Well, the thing is that a method may have a
+和l(X1)。我们为什么要那样做呢？嗯，问题是一个方法可能有一个
+
+188
+00:17:49,929 --> 00:17:55,809
+formal parameter that is the same as an attribute name so for example I could have
+与属性名称相同的形参，例如，我可以使用
+
+189
+00:17:55,809 --> 00:18:02,809
+a class a that has an attribute little a in it And it also has a method f that
+一个a类，其中有一个属性小a，并且它也有一个方法f
+
+190
+00:18:03,790 --> 00:18:10,790
+takes a formal parameter named a. Okay And if I do that, and of course, I'm leaving
+接受一个名为a的形参。好的，如果我这样做了，当然，我要离开
+
+191
+00:18:11,910 --> 00:18:15,530
+out types and lots of other things here. So, here I have an attribute named
+我们这里有各种类型和很多其他的东西。因此，这里我有一个名为
+
+192
+00:18:15,530 --> 00:18:19,070
+a that's declared. And then I have a method that takes the argument
+A这是已经宣布的。然后我有一个方法，它接受这个参数
+
+193
+00:18:19,070 --> 00:18:24,130
+called a. And then the question is when I refer to a. Inside of the body of the
+然后问题是，当我引用
+
+194
+00:18:24,130 --> 00:18:30,880
+method what a do I get? Is this a, is this a bind to the formal parameters, is it
+方法我得到的是什么？这是一个，这是对形参的绑定，是吗
+
+195
+00:18:30,880 --> 00:18:34,170
+bind to the attribute? And the answer, we have to get one answer or the other, the
+是否绑定到该属性？而答案，我们必须得到一个或另一个答案，
+
+196
+00:18:34,170 --> 00:18:41,170
+answer in Kuhl, is that it binds to the formal parameter that hides the, the outer
+Kuhl的答案是，它绑定到隐藏外部的形参
+
+197
+00:18:41,780 --> 00:18:46,429
+name. Okay, and that's, and that's enforced here in the rule by these
+名字。好的，这是，这是由这些人在规则中强制执行的
+
+198
+00:18:46,429 --> 00:18:51,000
+updates. So, if a formal parameter has the same name as one of the attributes, it
+更新。因此，如果形式参数与其中一个属性同名，则它
+
+199
+00:18:51,000 --> 00:18:55,820
+will replace the definition of the attribute in the environment. Okay. Once
+将替换环境中的属性定义。好吧。一次
+
+200
+00:18:55,820 --> 00:19:01,500
+we get the environment set up, we need to set up our store what, what are the
+我们把环境设置好了，我们需要开我们的店什么，什么是
+
+201
+00:19:01,500 --> 00:19:05,540
+changes to the store? What we just have to store the actual value of each argument at
+商店有什么变化吗？我们只需将每个参数的实际值存储在
+
+202
+00:19:05,540 --> 00:19:12,130
+the location for that argument. And finally, we are ready to evaluate the
+该参数的位置。最后，我们准备好评估
+
+203
+00:19:12,130 --> 00:19:16,090
+functioning body and the interesting part here is the context in which that's done.
+有功能的身体，这里有趣的部分是做这件事的背景。
+
+204
+00:19:16,090 --> 00:19:23,090
+So, notice here that the that the self object in, in the context of running the
+请注意，在运行
+
+205
+00:19:23,650 --> 00:19:28,850
+method f is the object to which are dispatching. Okay? And then the
+方法f是要调度到的对象。好吧?然后是
+
+206
+00:19:28,850 --> 00:19:32,270
+environment is e prime, the new environment we just set up and once again
+环境是最好的，我们刚刚建立的新环境，一次又一次
+
+207
+00:19:32,270 --> 00:19:36,170
+notice that this is a complete change of context that e prime, the environment e
+请注意，这是上下文的完全改变，即e主，环境e
+
+208
+00:19:36,170 --> 00:19:40,679
+prime has nothing to do with the environment e. E prime is built completely
+素数与环境无关。e素数完全是建立起来的。
+
+209
+00:19:40,679 --> 00:19:44,660
+from scratch using only information about the method for calling, it doesn't borrow
+仅使用有关调用方法的信息从头开始，而不是借用
+
+210
+00:19:44,660 --> 00:19:49,850
+anything from the, from the environment where the method originated, where the
+任何内容，从方法起源的环境，其中
+
+211
+00:19:49,850 --> 00:19:56,820
+method was called from. And finally all of this is done in the store that has,
+方法是从调用的。最后，所有这些都是在商店里完成的，
+
+212
+00:19:56,820 --> 00:20:01,770
+reflects all the side effects performed by evaluating the arguments, by evaluating e0
+通过计算e0反映通过计算参数执行的所有副作用
+
+213
+00:20:01,770 --> 00:20:08,590
+and by extending the store with the locations for the actual parameters. So to
+并通过用实际参数的位置扩展存储。所以要
+
+214
+00:20:08,590 --> 00:20:13,900
+evaluate the body of the method we get back a value and another updated store and
+评估方法体，我们将获得一个值和另一个更新的存储，并
+
+215
+00:20:13,900 --> 00:20:20,900
+that value in store are the results of the entire execution of the dynamic dispatch.
+存储中的值是整个动态分派执行的结果。
+

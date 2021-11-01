@@ -1,0 +1,480 @@
+0
+00:00:04,220 --> 00:00:08,240
+After numerous videos on run time organization and stack machines, we are
+在大量关于运行时组织和堆栈机器的视频之后，我们
+
+1
+00:00:08,240 --> 00:00:15,240
+finally ready to begin our discussion of code generation. So as I mentioned in the
+最后，准备开始我们关于代码生成的讨论。所以正如我在
+
+2
+00:00:16,510 --> 00:00:20,279
+previous video we're going to focus on generating code for stack machines. This
+在之前的视频中，我们将重点介绍如何为堆叠机生成代码。这
+
+3
+00:00:20,279 --> 00:00:24,659
+is probably the simplest code generation strategy. It doesn't generally yield
+可能是最简单的代码生成策略。它通常不会屈服
+
+4
+00:00:24,659 --> 00:00:28,890
+extremely efficient code. It's an interesting strategy and certainly not,
+极其高效的代码。这是一个有趣的策略，当然也不是，
+
+5
+00:00:28,890 --> 00:00:35,030
+totally not an unrealistic one. It's more than complex enough for our purposes. We
+完全不是不切实际的。对于我们的目的来说，这已经够复杂的了。我们
+
+6
+00:00:35,030 --> 00:00:39,520
+want to run a real machine and we're going to the mix processor. In particular we're
+想要运行一台真正的机器，我们将使用Mix处理器。尤其是我们正在
+
+7
+00:00:39,520 --> 00:00:43,520
+going to use a simulator from it which runs on about any kind of hardware so that
+我将使用它的模拟器，它可以在任何类型的硬件上运行，因此
+
+8
+00:00:43,520 --> 00:00:48,370
+will be very convenient for the course project And the basic idea, the basic
+将会很方便的介绍课程项目和基本思路、基本
+
+9
+00:00:48,370 --> 00:00:52,940
+strategy, is going to be to simulate a stack machine using Mipp's instructions
+策略将是使用MIPP的指令模拟堆叠机
+
+10
+00:00:52,940 --> 00:00:59,010
+and registers. So the first decision in, designing our simulation, is deciding
+和寄存器。因此，在设计我们的模拟时，第一个决策是决定
+
+11
+00:00:59,010 --> 00:01:03,329
+where to put the accumulator in. We'll keep that, in this register, A0. Any
+把蓄电池放在哪里。我们会把它保存在这个寄存器里，A0。任何
+
+12
+00:01:03,329 --> 00:01:08,970
+register would have done but we'll just use A0 always for the accumulator And then
+寄存器本来可以这样做，但我们将始终使用A0作为累加器，然后
+
+13
+00:01:08,970 --> 00:01:13,080
+the stack is going to be kept in memory And I should point out here that when we
+堆栈将保存在内存中，我应该在此指出，当我们
+
+14
+00:01:13,080 --> 00:01:20,000
+talk about a one register stack machine nominally that register in this case A0,
+在这种情况下，谈论名义上寄存器为A0单寄存器堆栈机，
+
+15
+00:01:20,000 --> 00:01:25,320
+is the top of the logical stack of the stack machine But just to avoid confusion
+是堆栈机器逻辑堆栈的顶部，但只是为了避免念力
+
+16
+00:01:25,320 --> 00:01:30,810
+in the terminology, I'm going to refer to A0 as the accumulator and the stack as all
+在术语中，我将A0称为累加器，将堆栈称为All
+
+17
+00:01:30,810 --> 00:01:36,200
+of the other data that's kept in a memory stack on the MISC processor, so we'll just
+保存在MISC处理器的内存堆栈中的其他数据，所以我们只需
+
+18
+00:01:36,200 --> 00:01:42,220
+consider A0 the accumulator to be distinct from the stack, which lives in memory And
+考虑A0累加器与堆栈不同，堆栈驻留在内存中，
+
+19
+00:01:42,220 --> 00:01:46,640
+the stack on the MIPS will grow towards the lower addresses which is the standard
+MIPS上的堆栈将向更低的地址增长，这是标准
+
+20
+00:01:46,640 --> 00:01:53,000
+convention on MIPS. The address of the next location on the stack is going to be
+关于MIPS的约定。堆栈上下一个位置的地址将是
+
+21
+00:01:53,000 --> 00:01:57,960
+kept in the MIPS register $sp and this register actually has a mnemonic name that
+保存在MIPS寄存器$sp中，该寄存器实际上有一个助记符名称，该名称
+
+22
+00:01:57,960 --> 00:02:04,960
+stand for stack pointer. So, normally on the MIPS machine, compilers use SP to,
+代表堆栈指针。因此，通常在MIPS机器上，编译器使用SP来
+
+23
+00:02:05,510 --> 00:02:11,939
+point to, their stack, and the top of the stack will always be at the address, SP
+指向它们的堆栈，堆栈的顶部将始终位于地址SP
+
+24
+00:02:11,939 --> 00:02:17,640
+plus four. So, remember the stack is growing towards low addresses, and the
+加四个。因此，请记住堆栈正在向低位地址增长，并且
+
+25
+00:02:17,640 --> 00:02:22,170
+address, in the stack pointer is the ne xt unallocated location on the stack. So the
+堆栈指针中的地址是堆栈上的next未分配位置。因此，
+
+26
+00:02:22,170 --> 00:02:25,760
+stack pointer actually points to unused memory, and the top of the stack,
+堆栈指针实际上指向未使用的内存，堆栈的顶部
+
+27
+00:02:25,760 --> 00:02:31,800
+therefore, is at the next higher word address which would be SP plus four, Now
+因此，现在位于下一个较高的字地址，即SP加4
+
+28
+00:02:31,800 --> 00:02:34,840
+the MIPS architecture is quite an old architecture. It was designed in the
+MIPS架构是一个相当古老的架构。它是在
+
+29
+00:02:34,840 --> 00:02:40,550
+1980's and it was, or is, the prototypical reduced instruction set computer, or risk
+20世纪80年代，它曾经是，或者现在是典型的精简指令集计算机，或称Risk
+
+30
+00:02:40,550 --> 00:02:44,760
+machine. And the idea behind RISC machines was to have a relatively simple
+机器。RISC机器背后的想法是拥有一个相对简单的
+
+31
+00:02:44,760 --> 00:02:49,880
+instruction set. Most of the operations used registers for operands and results.
+指令集。大多数操作使用寄存器来存储操作数和结果。
+
+32
+00:02:49,880 --> 00:02:54,250
+And then load and store instructions are used to move values to and from memory. So
+然后使用加载和存储指令将值移入和移出存储器。所以
+
+33
+00:02:54,250 --> 00:02:58,560
+primarily all the computation takes place in registers, and the memory operations
+首先，所有的计算都在寄存器中进行，而内存操作
+
+34
+00:02:58,560 --> 00:03:05,230
+are primarily are just loading and storing data. There are 32 purp-, there are 32
+主要是加载和存储数据。有32个紫色的，有32个的
+
+35
+00:03:05,230 --> 00:03:08,680
+general-purpose registers on the MITS, it's a 32 bit machine. We're only going to
+MITS上的通用寄存器，它是一台32位机器。我们只打算
+
+36
+00:03:08,680 --> 00:03:13,500
+use three of those registers. We already talked about SP, the stack pointer. A0 the
+使用其中的三个寄存器。我们已经讨论了堆栈指针SP。A0 The
+
+37
+00:03:13,500 --> 00:03:18,310
+accumulator, and we'll need one more register for temporary values. So some
+累加器，我们还需要一个寄存器来存放临时值。所以有些人
+
+38
+00:03:18,310 --> 00:03:22,870
+operations that take two arguments like plus and times will have to have two
+接受两个参数(如加号和时间)的运算必须有两个
+
+39
+00:03:22,870 --> 00:03:25,849
+registers to hold the arguments to the operation. So we'll use the accumulator
+寄存器以保存操作的参数。所以我们将使用累加器
+
+40
+00:03:25,849 --> 00:03:29,120
+for one of those and a temporary register for the other. And there is a lot more
+其中一个是临时登记簿，另一个是临时登记簿。而且还有更多的东西
+
+41
+00:03:29,120 --> 00:03:34,959
+information on the MIPS architecture in the SPIM documentation. Spim is the
+SPIM文档中有关MIPS体系结构的信息。SPIM是
+
+42
+00:03:34,959 --> 00:03:41,959
+simulator that we, we'll use to execute MIPS code. Now of course, to, generate
+我们，我们要用来执行MIPS代码的模拟器。现在当然是为了，产生
+
+43
+00:03:44,620 --> 00:03:49,099
+code for the mix. We'll also need some mix instructions. And we'll be able to get
+混合的代码。我们还需要一些配料说明。我们就能得到
+
+44
+00:03:49,099 --> 00:03:52,489
+away, with just a very small number of instructions. Five in fact, for our first
+离开了，只有很少的指令。实际上是五个，这是我们第一次
+
+45
+00:03:52,489 --> 00:03:58,950
+example And here they are. So the first instruction we need, is load, or load word
+例如，它们就在这里。因此，我们需要的第一条指令是LOAD或LOAD WORD
+
+46
+00:03:58,950 --> 00:04:03,220
+And the way this works is it takes the value of register two, takes the contents
+它的工作方式是取寄存器2的值，取内容
+
+47
+00:04:03,220 --> 00:04:07,920
+that are in register two Adds a fixed offset. So this is a number that's,
+寄存器2中的寄存器添加固定偏移量。所以这是一个数字，
+
+48
+00:04:07,920 --> 00:04:12,739
+directly in the code Adds a fixed offset to that to the contents of register two.
+直接在代码中将固定偏移量添加到寄存器2的内容中。
+
+49
+00:04:12,739 --> 00:04:17,599
+That's a memory address. It loads the value of that memory address into register
+那是一个内存地址。它将该内存地址的值加载到寄存器中
+
+50
+00:04:17,599 --> 00:04:22,600
+one. The add instruction adds the contents of register two and register three
+一。ADD指令将寄存器2和寄存器3的内容相加
+
+51
+00:04:22,600 --> 00:04:27,910
+together and stores the results in register one again. The store operation,
+并再次将结果存储在寄存器1中。存储操作，
+
+52
+00:04:27,910 --> 00:04:33,560
+or store word operation takes the value in register one and stores it into memory. So
+或存储字操作获取寄存器1中的值并将其存储到存储器中。所以
+
+53
+00:04:33,560 --> 00:04:37,570
+that's stored at a memory address, and with the memory address is the contents of
+它存储在内存地址中，与内存地址一起的是
+
+54
+00:04:37,570 --> 00:04:44,570
+register two, plus a fixed offset that's in the code. And an add immediate
+寄存器2，加上代码中的固定偏移量。和添加立即
+
+55
+00:04:44,970 --> 00:04:51,970
+unsigned, takes, is an unsigned add, and it takes a value in register two, an
+UNSIGNED，Take，是一个无符号加法，它接受寄存器2中的一个值，一个
+
+56
+00:04:52,850 --> 00:04:56,810
+immediate value. So, this is just a number, that's a constant that's directly
+立即值。所以，这只是一个数字，这是一个常数，它直接
+
+57
+00:04:56,810 --> 00:05:01,220
+embedded in the code. It adds that to the value register two and stores the result
+嵌入到代码中。它将其加到值寄存器2并存储结果
+
+58
+00:05:01,220 --> 00:05:06,229
+in register one. And the unsigned aspect here just means that the overflow is not
+在第一收银台。而这里的无符号方面只是意味着溢出不是
+
+59
+00:05:06,229 --> 00:05:10,380
+checked, we're not, we're not checking whether we generate a number that's
+检查过了，我们没有，我们没有检查我们是否生成了一个
+
+60
+00:05:10,380 --> 00:05:17,380
+beyond, beyond what we could represent if we had sine numbers. Finally, load
+超出了，超出了如果我们有正弦数的话我们可以表示的范围。最后，加载
+
+61
+00:05:18,160 --> 00:05:23,300
+immediate just takes a constant that's in the code, and puts it into, the register
+IMMEDIATE只是接受代码中的常量，并将其放入寄存器
+
+62
+00:05:23,300 --> 00:05:25,780
+that's named as the first argument Alright? So those are the five
+这被命名为第一个论点，好吗？那么这五个就是
+
+63
+00:05:25,780 --> 00:05:32,400
+instructions that we need, to do a, one very simple example. So now we're ready to
+我们需要的指令，来做一个，一个非常简单的例子。所以现在我们准备好
+
+64
+00:05:32,400 --> 00:05:37,660
+do our first program, and not surprisingly it's the same program that we looked at in
+做我们的第一个程序，不出所料，它和我们在
+
+65
+00:05:37,660 --> 00:05:41,009
+previous videos when we were talking about stack machine code. So let's look, here's
+以前我们讨论堆栈机器代码时的视频。我们来看看，这是
+
+66
+00:05:41,009 --> 00:05:46,070
+the program for adding seven plus five, written out in our little abstract stack
+7加5的程序，写在我们的小抽象堆栈中
+
+67
+00:05:46,070 --> 00:05:51,030
+machine language. Now our goal is to implement this program using MIPS
+机器语言。现在我们的目标是使用MIPS实现此计划
+
+68
+00:05:51,030 --> 00:05:55,470
+instructions. So over here on the right, I'm going to layout the instructions we
+说明书。在这里，在右边，我将布局我们的指令
+
+69
+00:05:55,470 --> 00:05:59,530
+would use to simulate this program or implement this program on the MIPS machine
+将用于在MIPS计算机上模拟此程序或实现此程序
+
+70
+00:05:59,530 --> 00:06:05,430
+Alright? So the first instruction is to load seven into the accumulator. And we
+好吗？因此，第一条指令是将7加载到累加器中。而我们
+
+71
+00:06:05,430 --> 00:06:08,590
+can do that with a load immediate. We're going to load immediate the value seven.
+可以立即装货做到这一点。我们要立即加载价值7。
+
+72
+00:06:08,590 --> 00:06:12,810
+A0 is our accumulator register, and so this instruction puts seven in the
+A0是我们的累加器寄存器，因此此指令将7放入
+
+73
+00:06:12,810 --> 00:06:17,680
+accumulator. Next instruction, we want to push the value of the accumulator onto the
+累加器。下一条指令中，我们希望将累加器的值压入
+
+74
+00:06:17,680 --> 00:06:22,270
+stack. How do we do that? Well we have to store the value onto the stack, and
+堆栈。我们该怎么做呢？我们必须将值存储到堆栈中，并且
+
+75
+00:06:22,270 --> 00:06:26,710
+remember the stack pointer points to the next unused memory location. And so we're
+记住，堆栈指针指向下一个未使用的内存位置。所以我们要
+
+76
+00:06:26,710 --> 00:06:30,160
+just storing directly at what the stack pointer points to, so that's at zero
+直接存储在堆栈指针指向的位置，所以它是零
+
+77
+00:06:30,160 --> 00:06:34,220
+offset from the stack pointer. The value of the accumulator pushes the value onto
+堆栈指针的偏移量。累加器的值会将该值推送到
+
+78
+00:06:34,220 --> 00:06:38,100
+the stack, and now to restore the invariant. That the stack pointer points
+堆栈，现在恢复不变量。堆栈指针指向的
+
+79
+00:06:38,100 --> 00:06:42,070
+to the next unused location, we have to subtract four from the stack pointer.
+到下一个未使用的位置，我们必须从堆栈指针中减去4。
+
+80
+00:06:42,070 --> 00:06:47,090
+Okay. So, these two instructions together, implement a push, they push the data value
+好吧。因此，这两条指令一起实现推送，它们推送数据值
+
+81
+00:06:47,090 --> 00:06:51,259
+onto the stack, and they move the stack pointer to the next unused address.
+放到堆栈上，然后它们将堆栈指针移动到下一个未使用的地址。
+
+82
+00:06:51,259 --> 00:06:55,639
+Alright, now I'm ready to do the next instruction, loading five into the
+好的，现在我准备好执行下一条指令，将五个加载到
+
+83
+00:06:55,639 --> 00:07:00,150
+accumulator. Well, we already know how to do that. We'll be a load immediate into
+累加器。嗯，我们已经知道怎么做了。我们马上就会满载而归
+
+84
+00:07:00,150 --> 00:07:06,490
+the accumulator register A0, the immediate value five Are now ready to do the add And
+累加器寄存器A0、立即值5现在准备好进行加法和
+
+85
+00:07:06,490 --> 00:07:13,210
+how does that work? Well, first, we have to load the value of that's on the top of
+那是怎么回事呢？好的，首先，我们要把它的值加载到
+
+86
+00:07:13,210 --> 00:07:16,400
+the stack, alright. Because it's like an argument is taken from the top of the
+堆栈，好的。因为这就像是从
+
+87
+00:07:16,400 --> 00:07:20,090
+stack. And since MIPS can only do operations out of registers, that value
+堆栈。由于MIPS只能在寄存器之外执行操作，因此该值
+
+88
+00:07:20,090 --> 00:07:22,960
+has to go somewhere into a register. And this is where we use our temporary
+一定要放到收银机的某个地方。这就是我们用我们的临时
+
+89
+00:07:22,960 --> 00:07:27,850
+register. So now, this value is now at offset four from the stack pointer,
+注册。所以现在，这个值现在位于堆栈指针的偏移量4处，
+
+90
+00:07:27,850 --> 00:07:33,060
+because we subtracted four from the stack pointer And we load it into register T1.
+因为我们从堆栈指针中减去4，然后将其加载到寄存器T1中。
+
+91
+00:07:33,060 --> 00:07:38,539
+Okay, And then we can actually perform the add. And so we add the accumulator to the
+好的，然后我们就可以进行加法了。因此我们将累加器添加到
+
+92
+00:07:38,539 --> 00:07:43,610
+value of T1 and we store the result back into the accumulator And finally we're
+值，我们将结果存储回累加器中，最后我们
+
+93
+00:07:43,610 --> 00:07:46,560
+going to pop the stack so we're done with the value that's on the stack, And how do
+我要弹出堆栈，这样我们就完成了堆栈上的值，该如何做
+
+94
+00:07:46,560 --> 00:07:50,460
+we pop? Well, we just add four to the stack pointer, and that moves the stack
+我们突击吗？嗯，我们只需将4加到堆栈指针上，这就移动了堆栈
+
+95
+00:07:50,460 --> 00:07:54,169
+pointer back popping that value off of the stack.
+将该值从堆栈中弹出的指针。
+

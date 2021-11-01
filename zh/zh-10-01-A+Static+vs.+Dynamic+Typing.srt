@@ -1,0 +1,305 @@
+0
+00:00:03,470 --> 00:00:10,470
+In this video, we're gonna talk about static typing versus dynamic typing. One
+在这段视频中，我们将讨论静电打字与动态打字的对比。一
+
+1
+00:00:10,540 --> 00:00:13,950
+way to think about the purpose of static types system is to prevent common
+对静电类型制目的的思考是为了防止常见的
+
+2
+00:00:13,950 --> 00:00:17,609
+programming errors and they do this at compile times. So they do this when the
+编程错误，它们在编译时这样做。所以他们这样做的时候
+
+3
+00:00:17,609 --> 00:00:23,230
+program is compiled. And in particular they do it without knowing any input to
+编写了程序。具体地说，他们在不知道任何输入的情况下这样做
+
+4
+00:00:23,230 --> 00:00:26,960
+the program. So the only thing that is available is the program text, and that's
+这个项目。所以唯一可用的就是程序文本，那就是
+
+5
+00:00:26,960 --> 00:00:30,759
+why we call them static Because they don't involve any of the dynamic behavior, the
+为什么我们叫它们静电，因为它们不涉及任何动态行为，
+
+6
+00:00:30,759 --> 00:00:36,170
+actual execution behavior of the program. Now any type system that is correct, any
+程序的实际执行行为。现在，任何正确的类型系统、任何
+
+7
+00:00:36,170 --> 00:00:40,180
+static type system that actually does the right thing, is going to have to disallow
+静电类型的系统实际上做的是正确的事情，将不得不禁止
+
+8
+00:00:40,180 --> 00:00:45,690
+some correct programs. It can't reason completely precisely at compile time about
+一些正确的程序。它不能在编译时完全准确地推论
+
+9
+00:00:45,690 --> 00:00:49,030
+everything that could happen as the program runs. Now what this means is that
+程序运行时可能发生的一切。现在这意味着
+
+10
+00:00:49,030 --> 00:00:53,470
+some correct programs, by that I mean some programs that would actually run correctly
+一些正确的程序，我的意思是一些实际可以正确运行的程序
+
+11
+00:00:53,470 --> 00:00:58,760
+if you executed them, are going to have to be disallowed by the type checker. And so
+如果您执行了它们，类型检查器将不得不禁止。因此，
+
+12
+00:00:58,760 --> 00:01:02,250
+for this reason some people argue for a dynamic type checking instead, and this is
+出于这个原因，有些人主张使用动态类型检查，这是
+
+13
+00:01:02,250 --> 00:01:07,970
+type checking that's done solely when the program runs. So at run time we check
+仅在程序运行时执行的类型检查。所以在运行时我们检查
+
+14
+00:01:07,970 --> 00:01:11,920
+whether the actual operations were executing are appropriate for the actual
+正在执行的实际操作是否适合于
+
+15
+00:01:11,920 --> 00:01:17,310
+data that arises when the program executes. Other people say well the
+程序执行时产生的数据。其他人说得好
+
+16
+00:01:17,310 --> 00:01:21,860
+problem is really just that the type systems just aren't expressive enough and
+真正的问题是类型系统没有足够的表现力，
+
+17
+00:01:21,860 --> 00:01:28,700
+we should work on fancier static type checking systems. And. Over time, there's
+我们应该在更花哨的静电验型系统上下功夫。和。随着时间的推移，会有
+
+18
+00:01:28,700 --> 00:01:32,460
+been a considerable development in both camps. We see a lot of new dynamically
+在两个阵营都是一个相当大的发展。我们动态地看到了很多新的
+
+19
+00:01:32,460 --> 00:01:37,060
+type checked languages, coming out, so a lot of the modern scripting like languages
+输入检查语言，出来了，所以很多现代脚本都喜欢语言
+
+20
+00:01:37,060 --> 00:01:41,250
+and domain specific languages have some form of dynamic type checking. Other
+领域特定语言具有某种形式的动态类型检查。其他
+
+21
+00:01:41,250 --> 00:01:46,590
+people have been working on fancier and fancier type systems and actually there's
+人们一直在研究越来越花哨的类型系统，实际上
+
+22
+00:01:46,590 --> 00:01:53,140
+been a lot of progress, in static checking The disadvantage of the more expressive
+有了很大进步，在静电查劣势更有表现力
+
+23
+00:01:53,140 --> 00:01:57,479
+text. Time checking systems they do tend to get more complicated though, and not
+文本。不过，他们的时间检查系统往往会变得更加复杂，而不是
+
+24
+00:01:57,479 --> 00:01:59,950
+all of these features that these people have develop have actually found their way
+这些人发展起来的所有这些特征实际上都找到了他们的方式
+
+25
+00:01:59,950 --> 00:02:06,950
+yet into main stream languages. Now , one important idea that this discussion
+但仍被翻译成主流语言。现在，这场讨论的一个重要观点是
+
+26
+00:02:07,240 --> 00:02:12,130
+suggests is that there are two different notions of type. There is the dynamic
+表明有两种不同的类型概念。这是一种动态
+
+27
+00:02:12,130 --> 00:02:16,920
+type. That is the type that the object or the value that we're talking about
+键入。这就是我们正在讨论的对象或值的类型
+
+28
+00:02:16,920 --> 00:02:23,920
+actually has at run time And then there is the static type, which is the compile time
+实际上在运行时有，然后是静电类型，这是编译时
+
+29
+00:02:24,500 --> 00:02:29,390
+notion, what the type checker knows about the object. And there is some relationship
+概念，类型检查器知道关于对象的信息。其中有一些关系
+
+30
+00:02:29,390 --> 00:02:34,230
+that has to exist between the static type and the dynamic type if the static type
+它必须存在于静电类型和动态类型之间(如果静电类型
+
+31
+00:02:34,230 --> 00:02:41,230
+checker is to be correct. In this relationship can be formalized by some
+切克应该是正确的。在这个关系中可以用一些形式化为
+
+32
+00:02:43,920 --> 00:02:47,720
+kind of a theorem that proves something like the following, what we'd like to know
+这是一个定理，它证明了如下内容，我们想知道的是
+
+33
+00:02:47,720 --> 00:02:52,270
+is that for every expression E, for every program expression E that you can write in
+就是对于每个表达式E，对于你可以写进的每个程序表达式
+
+34
+00:02:52,270 --> 00:02:57,900
+the programming language, the static type that the compiler says that the, the
+编程语言，编译器说的静电类型，
+
+35
+00:02:57,900 --> 00:03:02,739
+expression is going to have is equal to the dynamic type of that expression.
+表达式的动态类型等于该表达式的动态类型。
+
+36
+00:03:02,739 --> 00:03:07,510
+Another way is saying that if you actually run the program. Then you get something
+另一种说法是，如果你真的运行程序。然后你会得到一些东西
+
+37
+00:03:07,510 --> 00:03:11,650
+that is consistent with what you expected to get from the static type checker. That
+这与您期望从静电类型检查器获得的结果是一致的。那
+
+38
+00:03:11,650 --> 00:03:16,420
+the static type checker is actually able to correctly predict what values will hap,
+静电类型检查器实际上能够正确预测将发生什么值，
+
+39
+00:03:16,420 --> 00:03:21,450
+will, will arise at run time. And in fact in the early days of programming languages
+将在运行时出现。事实上，在编程语言的早期
+
+40
+00:03:21,450 --> 00:03:26,290
+these were exactly the kinds of terms we had for the very simple type systems in
+这些正是我们在中用来描述非常简单的类型系统的术语
+
+41
+00:03:26,290 --> 00:03:31,640
+the languages at that time. Now the situations a little more complicated for a
+当时的语言。现在的情况有点复杂，对于一个
+
+42
+00:03:31,640 --> 00:03:37,050
+language like COOL. So let's take a look at the execution of a, a typical COOL
+语言很酷。那么让我们来看看如何执行一个典型的酷
+
+43
+00:03:37,050 --> 00:03:41,269
+program. So here's a couple of classes, class A and a class B that inherits from
+程序。这里有几个类，A类和B类，它们继承自
+
+44
+00:03:41,269 --> 00:03:47,459
+A. So B is going to be a subtype of A which we'll write like that. And now we
+A，所以B将是A的一个子类型，我们这样写。现在我们
+
+45
+00:03:47,459 --> 00:03:53,870
+have a declaration here of X having type A and this is the static type of X. So the
+这里声明X的类型为A，这是X的静电类型。
+
+46
+00:03:53,870 --> 00:04:00,870
+static type of X is A. And that's what the compiler knows about X's value. And then
+静电类型的X是A，这就是编译器所知道的X的值。然后
+
+47
+00:04:03,260 --> 00:04:09,190
+here, when we execute this line of code, we can see that we assign a new A object
+在这里，当我们执行这行代码时，我们可以看到我们分配了一个新的A对象
+
+48
+00:04:09,190 --> 00:04:11,739
+to X. And the fact that it's new is not important. All that's important is the
+对X来说，它是新的这一事实并不重要。最重要的是
+
+49
+00:04:11,739 --> 00:04:16,840
+fact that it's an A object. And so, at this point, the dynamic type of X is also
+它是一个A级物体的事实。因此，在这一点上，X的动态类型也是
+
+50
+00:04:16,839 --> 00:04:22,090
+A. Okay. So if this line of code when it actually execu tes A, which was declared
+好的。所以如果这行代码在它实际执行时执行了A，它被声明为
+
+51
+00:04:22,089 --> 00:04:27,110
+to have static type A, actually holds an object of class A. But a little bit later
+若要使静电类型为A，实际上持有的是A类的对象，但稍晚一点
+
+52
+00:04:27,110 --> 00:04:31,580
+on, down at this line of code, the dynamic type is actually different. The dynamic
+在这行代码中，动态类型实际上是不同的。动感十足的
+
+53
+00:04:31,580 --> 00:04:38,580
+type here of X Is going to be B. K line of code executes x holds a b object even
+这里X的类型将是B。k行代码执行x，甚至包含b对象
+
+54
+00:04:40,990 --> 00:04:45,370
+though it's declared Have a different type. And this is a very, very important
+尽管它被声明为具有不同的类型。这是一个非常非常重要的
+
+55
+00:04:45,370 --> 00:04:48,930
+distinction to keep in mind. So there's a static type, there's a type that the
+要牢记区别。所以有一种静电类型，有一种类型的
+
+56
+00:04:48,930 --> 00:04:53,340
+compiler knows about, and that's invariant. X has type A It always has type
+编译器知道，这是不变的。X具有类型A，它始终具有类型
+
+57
+00:04:53,340 --> 00:05:00,220
+a All the uses of x for the entire scope of our typed with class A by the compiler.
+在我们的整个作用域中，编译器使用类A类型化了x的所有用法。
+
+58
+00:05:00,220 --> 00:05:03,590
+But at run time, because we have assignments and we can assign different
+但是在运行时，因为我们有赋值，并且我们可以分配不同的
+
+59
+00:05:03,590 --> 00:05:08,660
+objects to x, x can actually take on objects of different types, different run
+x，x的对象实际上可以接受不同类型、不同运行的对象
+
+60
+00:05:08,660 --> 00:05:15,660
+time types. Type b, that's assigned x when the program executes.
+时间类型。类型b，它在程序执行时分配给x。
+

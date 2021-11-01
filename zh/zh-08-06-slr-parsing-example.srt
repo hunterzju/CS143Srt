@@ -1,0 +1,395 @@
+0
+00:00:03,439 --> 00:00:10,370
+Welcome back, In this video, we're going to do an extended example of SLR parsing.
+欢迎回来，在这个视频中，我们将做一个单反解析的扩展示例。
+
+1
+00:00:10,370 --> 00:00:14,759
+To review, here is the parsing automaton for the grammar that we've been looking at
+为了回顾一下，下面是我们一直在研究的语法的解析自动机
+
+2
+00:00:14,759 --> 00:00:19,950
+in the last couple of videos. And this is just the deterministic version of the, non
+在最后几个视频里。这只是一个确定性的版本，非
+
+3
+00:00:19,950 --> 00:00:23,290
+deterministic automaton we built last time. And I've just gone through and
+我们上次建造的确定性自动机。我刚看了一遍
+
+4
+00:00:23,290 --> 00:00:28,290
+numbered all of the states. So let's take a look at what happens when we parse the
+给所有的州都编了号。那么让我们来看看当我们解析
+
+5
+00:00:28,290 --> 00:00:32,930
+input [inaudible] times [inaudible]. And just to review, we've appended dollar sign
+输入[听不见]次[听不见]。再回顾一下，我们附加了美元符号
+
+6
+00:00:32,930 --> 00:00:36,989
+here to the end, to indicate where the end of the input occurs. That's just an end of
+从这里到结尾，以指示输入结束的位置。这只是一个结束
+
+7
+00:00:36,989 --> 00:00:41,760
+input marker. And because this is the beginning of the parse we haven't seen any
+输入标记。因为这是解析的开始，所以我们还没有看到
+
+8
+00:00:41,760 --> 00:00:46,249
+input yet. And so the vertical bar is all the way at the left hand side of the
+还没有输入。所以竖线一直在左手边
+
+9
+00:00:46,249 --> 00:00:53,249
+input. So the machine begins in state one, and there's nothing on the stack. The
+输入。所以机器从状态1开始，堆栈上没有任何东西。这个
+
+10
+00:00:53,899 --> 00:00:56,719
+vertical bar is all the way to the left again, so the stack is empty. So it just
+竖线又一直靠左，所以堆栈是空的。所以它只是
+
+11
+00:00:56,719 --> 00:01:02,819
+terminates in state one. And these are the possible items, that are valid for the
+以状态一终止。这些是可能的项，它们对
+
+12
+00:01:02,819 --> 00:01:08,960
+initial state of the parser. So among those items, we see that there are two
+解析器的初始状态。所以在这些项目中，我们看到有两个
+
+13
+00:01:08,960 --> 00:01:13,180
+that tell us that it's okay to shift an integer in this state. And, of course, the
+这告诉我们，在这种状态下移位整数是可以的。当然，还有
+
+14
+00:01:13,180 --> 00:01:18,210
+first input is an integer, and so there are no reduced moves. All the other items
+第一个输入是整数，因此没有减少的动作。所有其他物品
+
+15
+00:01:18,210 --> 00:01:22,120
+in here also have their jobs all the way at the left side of the item, so there's
+在这里也有他们的工作一直在物品的左边，所以有
+
+16
+00:01:22,120 --> 00:01:25,450
+no possible reduced move in this state. The only thing we could possibly do is
+在这种状态下不可能减少移动。我们唯一能做的就是
+
+17
+00:01:25,450 --> 00:01:32,450
+shift, and it's okay to shift an integer. So to summarize, on the initial
+移位，则可以对整数进行移位。所以总而言之，在最初的
+
+18
+00:01:32,990 --> 00:01:37,060
+configuration of the parser, the DFA halts in state one, it never even gets out of
+配置解析器时，DFA会在状态1中暂停，它甚至永远不会离开
+
+19
+00:01:37,060 --> 00:01:40,030
+state one, so it starts there and ends there without even reading any input
+状态1，所以它从那里开始，在那里结束，甚至没有读取任何输入
+
+20
+00:01:40,030 --> 00:01:44,980
+because the stack is empty and the action that, that state tells us to do is to
+因为堆栈是空的，该状态告诉我们要做的操作是
+
+21
+00:01:44,980 --> 00:01:49,780
+shift. So that leads us in the following state, there's an int on the stack and we
+换档。这将我们引向下面的状态，堆栈上有一个int，我们
+
+22
+00:01:49,780 --> 00:01:56,780
+have a times coming up on the input. So, what happens in that situation? Well, we
+输入的时间快到了。那么，在这种情况下会发生什么呢？嗯，我们
+
+23
+00:01:57,900 --> 00:02:01,120
+begin. The automaton is going to read the stack. So, starting from the bottom of the
+开始吧。自动机将读取堆栈。因此，从
+
+24
+00:02:01,120 --> 00:02:06,210
+stack, we're in the start state. And then we read an int, there's an int on the
+史塔克，我们现在处于开始状态。然后我们读一个整型，上面有一个整型
+
+25
+00:02:06,210 --> 00:02:10,599
+stack, and we win d up in this state. And what does this state tell us we can do?
+堆栈，我们在这种状态下赢得d。这个州告诉我们我们能做什么？
+
+26
+00:02:10,598 --> 00:02:16,069
+Well, it tells us one possibility is to reduce by T goes to int. But again, we
+它告诉我们一种可能性是将T减去INT。不过，再说一遍，我们
+
+27
+00:02:16,069 --> 00:02:22,730
+will only do that, if the following input is in the follow of T, And times, which is
+只有当下面的输入跟在T和时间之后时才会这样做，这是
+
+28
+00:02:22,730 --> 00:02:29,730
+the next input item, is not in the follow of T. So times is not in the follow. Of T
+下一个输入项不在T后面，所以时间不在后面。的数量
+
+29
+00:02:30,060 --> 00:02:35,620
+and so reducing here is not a possibility. That leaves only the other item to
+所以在这里减少是不可能的。这样就只剩下另一项要
+
+30
+00:02:35,620 --> 00:02:40,000
+consider and here we see that this item says we can the time. So if the times the
+想想看，我们在这里看到，这一项说我们可以计时。所以如果泰晤士报
+
+31
+00:02:40,000 --> 00:02:45,700
+next thing in input, which it is, it's okay to shift. So the DFA halts in state
+输入的下一件事，就是，可以换档了。所以DFA在状态下停止
+
+32
+00:02:45,700 --> 00:02:51,450
+three and because there's a times in the input the move is to shift. And that puts
+三，因为在输入中有一个时间，所以移动是移位。这就把
+
+33
+00:02:51,450 --> 00:02:55,400
+us into this configuration where we have int and times on the stack. Times is at
+我们进入这个配置，其中堆栈上有int和time。《泰晤士报》在
+
+34
+00:02:55,400 --> 00:03:01,599
+the top of the stack, int is below it and we have an int coming up in the input. So
+堆栈的顶部，int在它的下面，我们在输入中出现一个int。所以
+
+35
+00:03:01,599 --> 00:03:06,590
+what happens now, again, the DFA is going to read the entire stack. So beginning at
+现在会发生什么，同样，DFA将读取整个堆栈。所以从一开始就是
+
+36
+00:03:06,590 --> 00:03:09,770
+the bottom of the stack, the first thing it sees is an int, and it moves to that
+在堆栈的底部，它首先看到的是一个int，然后移到那里
+
+37
+00:03:09,770 --> 00:03:15,720
+state. And then it sees a times, and so it moves to this state. And now, in this
+州政府。然后它看到一个时间，所以它移动到这种状态。而现在，在这个
+
+38
+00:03:15,720 --> 00:03:20,440
+particular state, what are the possibilities? Well, we can see, first of
+特定的州，有哪些可能性？那么我们可以看到，首先
+
+39
+00:03:20,440 --> 00:03:25,770
+all, that there are no reduced moves. There are no items with the dot all the
+最重要的是，没有减少动作。所有的项目中都没有带圆点的项目
+
+40
+00:03:25,770 --> 00:03:30,280
+way at the right end. So the only possibility is a, is a shift. And we could
+就在正确的一端。所以唯一的可能性就是一个，一个转变。我们可以
+
+41
+00:03:30,280 --> 00:03:35,069
+shift if the upcoming input's a open paren, which it's not. More usefully, we
+如果即将到来的输入是开放的Paren(实际上不是)，则进行Shift。更有用的是，我们
+
+42
+00:03:35,069 --> 00:03:40,130
+could shift if the upcoming input is an [inaudible], which is exactly what we see.
+如果即将到来的输入是[听不见的]，可能会发生变化，这正是我们所看到的。
+
+43
+00:03:40,130 --> 00:03:46,010
+So, the DFA terminates in state eleven, and the move in that state is to shift.
+因此，DFA终止于状态11，并且在该状态下的移动是移位。
+
+44
+00:03:46,010 --> 00:03:50,459
+And that puts us into this state, where we have int times int on the stack, and we
+这就把我们带到了这个状态，在这里我们在堆栈上有int次int，我们
+
+45
+00:03:50,459 --> 00:03:57,020
+are out of input. We are at the end of the input. So let's see what happens on the
+都没有输入。我们已经在输入的末尾了。所以让我们来看看会发生什么
+
+46
+00:03:57,020 --> 00:04:03,959
+stack int times int. The automaton reads it int times int and it winds up back in
+堆栈int乘以int。自动机读取它的int乘以int，它就会返回到
+
+47
+00:04:03,959 --> 00:04:10,450
+state three. Sa3 tells us that we can shift if the, next input item is a times
+第三州。SA3告诉我们，如果下一个输入项是a次，我们可以进行移位
+
+48
+00:04:10,450 --> 00:04:16,879
+and which it is not. Or we can reduce, if whatever the next. Is in the next input is
+但事实并非如此。或者我们可以减少，如果下一步有什么问题的话。在下一个输入中是
+
+49
+00:04:16,879 --> 00:04:22,690
+in the follow of T. And in fact dollar is in, the follow of T. So, in, the end of
+在T后面，实际上美元是in，t后面是in，end，in，end of
+
+50
+00:04:22,690 --> 00:04:27,940
+the input come after a T on the stack. And that means it's fine to reduce by T goes
+输入位于堆栈上的T之后。那就是说，用T来减少是可以的
+
+51
+00:04:27,940 --> 00:04:34,940
+to int. So, once we do that, once we do the reduction T goes to int, we wind up in
+转到int。所以，一旦我们这样做了，一旦我们把T减去INT，我们最终得到
+
+52
+00:04:36,060 --> 00:04:40,880
+the state times T. That's our stack contents and of course we're still at the
+状态时间T。这是我们的堆栈内容，当然我们还在
+
+53
+00:04:40,880 --> 00:04:45,790
+end of the input. So once again the DFA is going to read the entire stack contents
+输入结束。因此，DFA将再次读取整个堆栈内容
+
+54
+00:04:45,790 --> 00:04:49,860
+from the bottom to the top. First it reads the int at the bottom of the stack, then
+从下到上。它首先读取堆栈底部的int，然后
+
+55
+00:04:49,860 --> 00:04:54,080
+it sees the times. And then it finally reads the t at the top of the stack. And
+它看得见时代。然后，它最终读取堆栈顶部的t。和
+
+56
+00:04:54,080 --> 00:04:58,669
+it winds up in a new state, state four. And the interesting thing about this
+最后到了一个新的州，州四。有趣的是，这件事
+
+57
+00:04:58,669 --> 00:05:03,750
+particular step is that the DFA took a different path through the state graph
+具体步骤是DFA在状态图中采用不同的路径
+
+58
+00:05:03,750 --> 00:05:07,830
+than it did the previous time. And that's because the stack contents changed. We
+比上一次要好。这是因为堆栈内容改变了。我们
+
+59
+00:05:07,830 --> 00:05:11,650
+didn't just add stuff to the stack, and so we didn't extend the previous path. We
+并不只是将内容添加到堆栈中，因此我们没有扩展前面的路径。我们
+
+60
+00:05:11,650 --> 00:05:15,760
+actually replaced some symbols or a symbol on the stack with a new symbol, in this
+实际上用新符号替换了一些符号或堆栈上的符号，在此
+
+61
+00:05:15,760 --> 00:05:20,520
+case, the non-terminal T and that caused the DFA to take a different path. Now what
+情况下，非终端T，这导致DFA采用不同的路径。现在怎么办？
+
+62
+00:05:20,520 --> 00:05:26,030
+does this item in state four tell us to do? Well it says that we can reduce by T
+第四州的这个项目告诉我们要做什么吗？上面说我们可以减少T
+
+63
+00:05:26,030 --> 00:05:31,889
+goes to N times T if whatever. Follows in the input is in the follow of T. And, once
+如果有的话，就是N乘以T。后面的输入跟在T的后面，并且，ONCE
+
+64
+00:05:31,889 --> 00:05:37,000
+again, dollar is in the follow of T. And so we'll do that reduction, and now we're
+再说一次，美元紧随T之后，所以我们要减去，现在我们
+
+65
+00:05:37,000 --> 00:05:41,020
+left with the static contents just consisting of T. And, of course we're
+剩下的静电内容只包含T，当然，我们是
+
+66
+00:05:41,020 --> 00:05:45,210
+still at the end of the input. And let's see what happens now. So now of course the
+仍然在输入的末尾。让我们看看现在会发生什么。所以现在当然
+
+67
+00:05:45,210 --> 00:05:49,370
+contents of the stack have changed even more radically and so the DFA just goes
+堆栈的内容发生了更大的变化，所以DFA就这么走了
+
+68
+00:05:49,370 --> 00:05:53,370
+off in a completely different direction. It reads T winds up in this state and this
+朝完全不同的方向走去。上面写着T在这个州结束，然后这个
+
+69
+00:05:53,370 --> 00:05:57,590
+state says we can either shift a plus if there's a plus in the input. And again,
+州政府说，如果输入中有加号，我们可以移动一个加号。再一次，
+
+70
+00:05:57,590 --> 00:06:03,699
+there's no more input. Or we can reduce by E goes to T if dollar, if the end of the
+没有更多的输入了。或者我们可以减去E，如果美元变成T，如果
+
+71
+00:06:03,699 --> 00:06:07,979
+input is in the follow of E, Which it is. And so the reduction will be the one that
+输入是跟在E后面的，它是这样的。所以减少的数量将会是
+
+72
+00:06:07,979 --> 00:06:14,110
+we do. And now we have, this stack contents, consisting only of E. Let's see
+我们有。现在我们有了这个堆栈内容，只由E组成，让我们看看
+
+73
+00:06:14,110 --> 00:06:17,990
+what happens in that situation. Now we make a transition to this state, state
+在那种情况下会发生什么。现在我们过渡到这个状态，状态
+
+74
+00:06:17,990 --> 00:06:24,120
+two. And we only have one item, S prime goes to E dot. And so this is a reduced
+二。我们只有一项，S一等数是E点。所以这是一个简化的
+
+75
+00:06:24,120 --> 00:06:28,530
+move. And again, dollar is in the follow of S prime, ' cause that is the start
+移动。再一次，美元紧跟在S质数之后，因为这是开始
+
+76
+00:06:28,530 --> 00:06:32,570
+symbol. And since that is the start symbol, we accept at this point. So once
+符号。因为这是开始符号，我们在这一点上接受。所以有一次
+
+77
+00:06:32,570 --> 00:06:37,720
+we get to that item as our, reduce move, we know that the input has been
+我们到达该项目作为我们的Reduce移动，我们知道输入已经
+
+78
+00:06:37,720 --> 00:06:38,970
+successfully parsed.
+已成功解析。
+

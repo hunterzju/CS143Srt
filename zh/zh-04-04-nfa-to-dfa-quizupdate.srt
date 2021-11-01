@@ -1,0 +1,715 @@
+0
+00:00:04,150 --> 00:00:07,770
+Welcome back. In this video, we're going to talk about converting nondeterministic
+欢迎回来。在这段视频中，我们将讨论如何将不确定性
+
+1
+00:00:07,770 --> 00:00:14,770
+finite automata into deterministic finite automata. Here again is our little diagram
+将有限自动机转化为确定性有限自动机。这又是我们的小图表
+
+2
+00:00:17,270 --> 00:00:23,179
+of the pipeline of a lexical analyzer, how one is constructed. So beginning with the
+词法分析器的流水线是如何构造的。所以从
+
+3
+00:00:23,179 --> 00:00:27,109
+lexical specification, we write our regular expressions. Last time we talked
+词法规范，我们编写正则表达式。上次我们谈话的时候
+
+4
+00:00:27,109 --> 00:00:31,820
+about the step, the conversion of regular expressions and the non-deterministic
+关于步骤、正则表达式的转换和不确定性
+
+5
+00:00:31,820 --> 00:00:36,040
+finite automata and this time we're going to talk about this step. And as you might
+有限自动机，这一次我们要讨论这一步。就像你可能会做的那样
+
+6
+00:00:36,040 --> 00:00:40,450
+guess in the final video in the series we'll talk about the final step which is
+我猜在本系列的最后一段视频中，我们将讨论最后一步，即
+
+7
+00:00:40,450 --> 00:00:47,450
+the implementation of DFA's. So here's the Nondeterministic Finite Automata and we
+DFA的实现。所以这里是非确定性有限自动机，我们
+
+8
+00:00:47,870 --> 00:00:52,140
+finished up with last time. And, the first thing we're gonna discuss today is an
+最后一次结束了。今天我们要讨论的第一件事是
+
+9
+00:00:52,140 --> 00:00:57,690
+important idea called the Epsilon Closure of a state. And the basic idea of the
+一个重要的概念叫做国家的爱普西隆闭合。它的基本思想是
+
+10
+00:00:57,690 --> 00:01:01,300
+epsilon culture is that I pick the states. And it could a set of states but we'll
+爱普西隆文化是我挑选各州。它可以是一组州，但是我们会
+
+11
+00:01:01,300 --> 00:01:06,259
+just do it for a single state. And then I look at all the states that I can reach by
+只为一个州这么做就行了。然后我看看我能到达的所有州
+
+12
+00:01:06,259 --> 00:01:11,750
+following only epsilon moves. And so b is the state that we're starting with so b
+只跟随ε运动。所以b是我们开始的状态，所以
+
+13
+00:01:11,750 --> 00:01:16,240
+would be included in the set and then there's an epsilon move to c. So c would
+会包括在集合中，然后会有ε移动到c，所以c会
+
+14
+00:01:16,240 --> 00:01:20,360
+be included in the set and there's another epsilon move to d so d would be included
+被包括在集合中，并且有另一个ε移动到d，所以d将被包括在内
+
+15
+00:01:20,360 --> 00:01:27,360
+in the set. So we would say, the epsilon closure of b is = the set b c d. And let's
+在片场。所以我们会说，b的ε闭包是，集合b，c，d，让我们
+
+16
+00:01:29,820 --> 00:01:36,820
+do one more as an example. Want to take the epsilon closure of g. And when we
+再做一个例子。我想用g的ε闭包。当我们
+
+17
+00:01:38,530 --> 00:01:44,740
+switch colors up to this one, I'll erase that and to this one in pink, Our
+把颜色换成这个，我会把它擦掉，换成粉红色的，我们的
+
+18
+00:01:44,740 --> 00:01:49,760
+purple-ish pink. So the epsilon closure of g, we always have to follow all the
+略带紫色的粉红色。所以g的ε闭合，我们总是要遵循所有
+
+19
+00:01:49,760 --> 00:01:56,580
+epsilon transitions out of g. So, h would be in the epsilon closure of g but it's
+ε从g跃迁出来，所以h会在g的ε闭包中，但它是
+
+20
+00:01:56,580 --> 00:02:00,600
+not just single epsilon move. This is recursive. So any number of epsilon moves
+不只是单一的ε运动。这是递归的。所以任何数量的ε移动
+
+21
+00:02:00,600 --> 00:02:05,390
+that I can take, all of those states are included in the epsilon closure of g. So,
+我能理解的是，所有这些态都包含在g的ε闭合中。所以，
+
+22
+00:02:05,390 --> 00:02:12,390
+in fact, i would also be included. A would be included and b and c and d will also be
+事实上，我也会被包括在内。a将包括在内，b、c和d也将包括在内
+
+23
+00:02:13,719 --> 00:02:18,159
+included And now, if I look at all of these states that have been colored in the
+包括在内，现在，如果我查看所有这些状态，这些状态都已经在
+
+24
+00:02:18,159 --> 00:02:23,189
+light purple color. I can see that I can't reach any new states from those states
+浅紫色。我看得出来，我不能从那些州到达任何新的州
+
+25
+00:02:23,189 --> 00:02:30,189
+using only epsilon moves and so the epsilon closure of g would be equal to and
+仅使用ε运动，因此g的ε闭合等于和
+
+26
+00:02:31,459 --> 00:02:38,459
+[inaudible] out here it's a, b, c, d. Ghi. Okay. So that is the epsilon closure of a
+[听不见]外面是a，b，c，d，ghi。好吧。这就是一个
+
+27
+00:02:45,819 --> 00:02:51,689
+state. Recall from the last video that an NFA maybe in many states any given point
+州政府。回想上一段视频，NFA可能在许多州的任何给定点
+
+28
+00:02:51,689 --> 00:02:56,279
+in time that is because of the choices it can make for a given input and NFA may
+随着时间的推移，这是因为它可以为给定的输入做出选择，并且NFA可以
+
+29
+00:02:56,279 --> 00:03:00,579
+reach multiple different states. And the question we want to address now is how
+到达多个不同的州。我们现在要解决的问题是如何
+
+30
+00:03:00,579 --> 00:03:06,739
+many different states can it be in? Well if a non-deterministic automaton has n
+它可以是很多不同的州吗？如果一个不确定的自动机有n个
+
+31
+00:03:06,739 --> 00:03:12,739
+states. And it winds up in some subset of those states as how big can that subset b
+各州。它在这些州的一些子集中结束，比如子集b可以有多大
+
+32
+00:03:12,739 --> 00:03:18,139
+will clearly the cardinality of that said has to be less than or equal to n. So the
+显然，所说的基数必须小于或等于n，所以
+
+33
+00:03:18,139 --> 00:03:24,279
+NFA can get into a most and different states. Now instead, I want to know the
+NFA可以进入一种非常不同的状态。现在，我想知道
+
+34
+00:03:24,279 --> 00:03:29,189
+number of different subsets, well how many different subsets are there of any things.
+不同子集的数量，任何事物有多少不同的子集。
+
+35
+00:03:29,189 --> 00:03:36,189
+Well that means there are two to the n - one possible subsets of n states. And
+这意味着有n个态的2到n-1个可能的子集。和
+
+36
+00:03:36,499 --> 00:03:40,059
+there's something very interesting about this number. First of all it's a very big
+这个数字有一些非常有趣的地方。首先它是一个非常大的
+
+37
+00:03:40,059 --> 00:03:44,129
+number so clearly the NFA can get into lots of different configurations
+很明显，NFA可以有很多不同的配置
+
+38
+00:03:44,129 --> 00:03:49,559
+particularly one it has a lot of different states but the important thing is that
+特别是它有很多不同的州，但重要的是
+
+39
+00:03:49,559 --> 00:03:56,559
+this is a finite set of possible configurations. And this is going to give
+这是一组有限的可能配置。这将会给我们带来
+
+40
+00:04:02,779 --> 00:04:09,779
+us the seed of the idea. For converting an NFA into a DFA or Deterministic Automata
+我们是这个想法的种子。用于将NFA转换为DFA或确定性自动机
+
+41
+00:04:11,419 --> 00:04:17,609
+because all we have to be able to do to convert a Nondeterministic Automata into
+因为我们所能做的就是把一个不确定的自动机转化为
+
+42
+00:04:17,608 --> 00:04:22,060
+Deterministic Automata is come up with a way for the Deterministic Automata to
+确定性自动机为确定性自动机的研究提供了一条新的途径
+
+43
+00:04:22,060 --> 00:04:24,970
+simulate for the [inaudible] of the Nondeterministic Automata and the fact
+非确定性自动机的[听不见]和事实的模拟
+
+44
+00:04:24,970 --> 00:04:30,000
+that the Nondeterministic Automata can only get into a finite set of
+非确定性自动机只能进入有限的
+
+45
+00:04:30,000 --> 00:04:34,440
+configurations even that configurations is very large, is exactly what we will
+配置即使是非常大的配置，也正是我们要做的
+
+46
+00:04:34,440 --> 00:04:41,440
+exploit in the construction. Now we're ready to give the construction showing how
+在建设中加以利用。现在我们准备好给出展示如何
+
+47
+00:04:41,479 --> 00:04:45,979
+to map an arbitrary nondeterministic finite automaton to an equivalent
+将任意不确定有限自动机映射到等价的
+
+48
+00:04:45,979 --> 00:04:51,710
+deterministic finite automaton. So let's begin by saying what's in our NFA. So,
+确定性有限自动机。所以让我们先说一下我们的NFA里有什么。所以,
+
+49
+00:04:51,710 --> 00:04:57,210
+we'll have a set of states, Which we'll call s and these are the states of the
+我们将有一组状态，我们称之为s，这些是
+
+50
+00:04:57,210 --> 00:05:02,659
+Nondeterministic machine. There's a star t state, a little s which is one of the
+不确定机器。这里有一个星t态，一个小的s，它是
+
+51
+00:05:02,659 --> 00:05:09,150
+states and there is a set of final states F. And then we also have to give the
+有一组最终的状态F，然后我们还必须给出
+
+52
+00:05:09,150 --> 00:05:14,840
+transition function and I want to write out the state transition function. I want
+转移函数，我想写出状态转移函数。我想要
+
+53
+00:05:14,840 --> 00:05:19,400
+to use the state transition function to define a, a operator that we're going to
+要使用状态转移函数来定义一个运算符，我们将
+
+54
+00:05:19,400 --> 00:05:26,400
+find handy for defining our DFA. So I'd say that a applied to a set of states so x
+发现可以方便地定义我们的DFA。所以我想说a适用于一组州，所以x
+
+55
+00:05:27,060 --> 00:05:32,460
+here is a set of states and a is a character in the input language. So, a and
+下面是一组状态，a是输入语言中的字符。所以，a和
+
+56
+00:05:32,460 --> 00:05:39,460
+x is = those states y such that there is some x little x here, single state in the
+x is=那些状态y，这里有一些x小x，在
+
+57
+00:05:41,349 --> 00:05:48,349
+set of states such that there's a transition from x to y on input a. Okay.
+一组状态，在输入a上有一个从x到y的转变，好的。
+
+58
+00:05:50,729 --> 00:05:55,520
+So this is just a way of saying I've given the transition function at this set level.
+所以这只是一种方式，我已经给出了这个集合水平的转移函数。
+
+59
+00:05:55,520 --> 00:06:00,960
+It says for a given set of state x, show me all the states that you can reach on
+它说，对于给定的一组状态x，向我展示您可以到达的所有状态
+
+60
+00:06:00,960 --> 00:06:07,960
+input a. Alright. So now we're ready to define our DFA. So what will the DFA be?
+输入a。好的。现在我们准备好定义我们的DFA了。那么DFA会是什么呢？
+
+61
+00:06:24,180 --> 00:06:27,379
+Well, it's gonna have to have all of these things. It's gonna have to have, perhaps
+嗯，它必须拥有所有这些东西。它可能必须要有，也许
+
+62
+00:06:27,379 --> 00:06:31,419
+where the states are? What are the start state is? What's the final states are and
+各州在哪里？开始状态是什么？最终的州是什么？
+
+63
+00:06:31,419 --> 00:06:35,620
+what's the transition function is? So let's begin with the set of states. The
+转移函数是什么？那么让我们从一组状态开始。这个
+
+64
+00:06:35,620 --> 00:06:42,620
+states will be the subsets Of s. So the states of the DFA will be all possible
+状态将是s的子集。因此，DFA的状态将是所有可能的
+
+65
+00:06:46,949 --> 00:06:52,430
+subsets of the states of the NFA so there will be one state of DFA for each subset
+NFA状态的子集，因此每个子集将有一个DFA状态
+
+66
+00:06:52,430 --> 00:06:57,060
+of possible, each possible subset of states of the NFA. And of course this is
+可能的是NFA的每个可能的状态子集。当然这是
+
+67
+00:06:57,060 --> 00:07:02,289
+potentially a very big number but it's still finite and so we can use that set
+可能是一个非常大的数字，但它仍然是有限的，所以我们可以使用该集合
+
+68
+00:07:02,289 --> 00:07:09,289
+of, of subsets of states as the states based of the Deterministic machine So, now
+作为基于确定性机器的状态的状态子集的So，Now
+
+69
+00:07:09,550 --> 00:07:16,550
+what's the start state of the DFA. Well that's going 
+DFA的起始状态是什么。嗯，那是要去的。
+
+70
+00:07:23,879 --> 00:07:30,879
+to 
+至
+
+71
+00:07:45,370 --> 00:07:52,370
+be the  epsilon closure. Now one of the set of final states, Well,
+是epsilon的闭合。现在是一组最终状态中的一个，
+
+72
+00:08:00,259 --> 00:08:05,279
+so the final states will be consist of those state x and every member of the
+所以最终状态将由这些状态x和
+
+73
+00:08:05,279 --> 00:08:10,699
+states of the DFA are sets of states of the NFA. So that x is a set and is can be
+DFA的状态是NFA的状态集合。因此x是一个集合，且可以
+
+74
+00:08:10,699 --> 00:08:17,699
+every x such that x intersected with the set of final states of the NFA is not
+使得x与NFA的最终状态集相交的每个x不
+
+75
+00:08:18,699 --> 00:08:25,699
+empty. And finally we need to define the transition function. And do we do that?
+空的。最后，我们需要定义转移函数。我们要这么做吗？
+
+76
+00:08:59,580 --> 00:09:05,570
+Well, we, we need to say that for a given state x and another state y, when is there
+那么我们，我们需要说，对于一个给定的状态x和另一个状态y，什么时候
+
+77
+00:09:05,570 --> 00:09:12,570
+a transition between them on some input a. Well that, there will be such a transition
+它们之间在某些输入上的转换。嗯，会有这样的转换
+
+78
+00:09:13,260 --> 00:09:20,260
+under that conditions and well let's write them out. So, remember we're in state x.
+在这种情况下，我们把它们写出来。所以，记住我们是在x州。
+
+79
+00:09:20,960 --> 00:09:25,220
+And what do we need to know? Well we need to know, the set of states that we can
+我们需要知道什么？我们需要知道，我们可以
+
+80
+00:09:25,220 --> 00:09:30,830
+reach on input A, and we'll be justifying that that's A of X, and then once we've
+到达输入A，我们将证明这是X的A，然后一旦我们
+
+81
+00:09:30,830 --> 00:09:35,590
+gotten to where these, once we've seen where we can go from the set of states X
+到达这些的地方，一旦我们看到我们可以从状态集合X到哪里
+
+82
+00:09:35,590 --> 00:09:39,870
+of input A. There's also a possibility of making [inaudible] after that so
+输入A也有可能在那之后变得[听不见]，所以
+
+83
+00:09:39,870 --> 00:09:45,980
+furthermore we have to take the [inaudible] closer of that set of states,
+此外，我们必须将这组状态中的(听不见的)更近一些，
+
+84
+00:09:45,980 --> 00:09:52,980
+okay? And So we'll say that there's a transition from x to y if y is equal to
+好吧?所以我们说，如果y等于，就会有一个从x到y的转变
+
+85
+00:09:57,320 --> 00:10:02,830
+this set of states. Alright, And notice that there's only one such set of states
+这组州。好的，注意只有一组这样的州
+
+86
+00:10:02,830 --> 00:10:07,810
+for any x and that guarantees of this is a deterministic machine. Each machine, each
+对于任何x，这是一台确定性机器。每台机器，每台
+
+87
+00:10:07,810 --> 00:10:12,890
+state will only have one possible move on each input so. We can just, now it goes to
+状态将在每个输入上只有一次可能的移动。我们可以，现在它去了
+
+88
+00:10:12,890 --> 00:10:16,850
+our check list and see if we have a deterministic machine. We have a finite
+我们的核对表，看看我们是否有一台确定性的机器。我们有一个有限的
+
+89
+00:10:16,850 --> 00:10:22,750
+set of states. We have a start state and we have a set of final states and we have
+一组州。我们有一个开始状态，我们有一组最终状态，我们有
+
+90
+00:10:22,750 --> 00:10:27,680
+a transition function with only one more per input and no epsilon moves. And so
+每个输入只有一个以上且没有ε移动的转移函数。因此，
+
+91
+00:10:27,680 --> 00:10:31,680
+that is in fact a deterministic machine and the property that it maintain is that
+这实际上是一台确定性机器，它维护的属性是
+
+92
+00:10:31,680 --> 00:10:37,100
+each step of computation. The state of the DFA records the set of possible states
+计算的每一步。DFA的状态记录一组可能的状态
+
+93
+00:10:37,100 --> 00:10:44,100
+that the NFA could have gotten into the same input So let's work to an example of
+NFA可以进入相同的输入，所以让我们来举一个例子
+
+94
+00:10:45,690 --> 00:10:50,650
+constructing a Deterministic machine from a Nondeterministic machine. Here's the
+从不确定的机器构造确定的机器。这是
+
+95
+00:10:50,650 --> 00:10:54,890
+Nondeterministic Finite Automata that we built in the last video and again this is
+我们在上一个视频中构建的非确定性有限自动机，同样，这是
+
+96
+00:10:54,890 --> 00:10:59,810
+the one that I used at the beginning of the video to define epsilon enclosure. So
+我在视频开头用来定义epsilon外壳的那个。所以
+
+97
+00:10:59,810 --> 00:11:03,950
+we're gonna do the example slightly differently than the construction I gave
+我们要做的示例与我给出的结构略有不同
+
+98
+00:11:03,950 --> 00:11:08,480
+on the previous slide. If we actually have to write out all the subsets of this many
+在上一张幻灯片上。如果我们真的要写出这许多东西中的所有子集
+
+99
+00:11:08,480 --> 00:11:12,450
+states, it will take us a very, very long time. And it turns out that not all of the
+在美国，这将花费我们非常、非常长的时间。事实证明，并不是所有的
+
+100
+00:11:12,450 --> 00:11:16,730
+subsets were actually used by the DFA. So we're just going to enumerate the states
+子集实际上由DFA使用。所以我们只需列举各州
+
+101
+00:11:16,730 --> 00:11:20,670
+that we actually need and we'll do that by beginning with the start sta te of DFA and
+这是我们真正需要的，我们将从DFA的开始阶段开始
+
+102
+00:11:20,670 --> 00:11:25,830
+then working out which additional states are required. So how do we do that? Well,
+然后计算出需要哪些额外的状态。那么我们该怎么做呢？井,
+
+103
+00:11:25,830 --> 00:11:31,910
+we begin with the start state of the NFA which is just this state a. And then
+我们从NFA的开始状态开始，也就是这个状态a。然后
+
+104
+00:11:31,910 --> 00:11:36,350
+recall at the start of the DFA is the epsilon closure of that state so that
+回想一下，在DFA开始时是该状态的epsilon闭合，因此
+
+105
+00:11:36,350 --> 00:11:42,230
+corresponds to this purple set here. Alright. So the first state of the DFA,
+与这套紫色相对应。好的。所以DFA的第一个状态，
+
+106
+00:11:42,230 --> 00:11:49,230
+the start state is the subset of states a, b, c, d, h, i. And now we have to work out
+开始状态是状态a，b，c，d，h，i的子集，现在我们必须计算出
+
+107
+00:11:50,770 --> 00:11:53,810
+from this particular state from the start state what happens on each of the
+从这个特定状态(从开始状态开始)，在每个
+
+108
+00:11:53,810 --> 00:11:59,030
+impossible input values. So, the alphabet of this machine is one and zero so you
+不可能的输入值。所以，这台机器的字母表是1和0，所以你可以
+
+109
+00:11:59,030 --> 00:12:03,200
+would have to have two transitions out of the state, one for an input of one and one
+必须有两次状态转换，一次是输入一次，另一次是输入一次
+
+110
+00:12:03,200 --> 00:12:10,200
+for an input of zero. So let's do input zero first. And, we can see looking at the
+输入为零。那么让我们先输入0。而且，我们可以看到，看着
+
+111
+00:12:10,370 --> 00:12:15,850
+purple set that there's only one possible transition and that's from the state D to
+紫色设置，只有一种可能的转换，那就是从状态D到
+
+112
+00:12:15,850 --> 00:12:22,850
+the state F. So certainly the state s is included in the set of states if the NFA
+因此，如果NFA将状态s包括在状态集合中，那么可以肯定的是，状态s包括在状态集合中
+
+113
+00:12:23,300 --> 00:12:27,110
+can reach but then once we get the state f there's a lot of epsilon moves that we can
+可以达到，但是一旦我们达到这个状态，就会有很多ε运动，我们可以
+
+114
+00:12:27,110 --> 00:12:32,510
+take and so in fact the second state of the DFA corresponds to a much larger set.
+实际上，DFA的第二个状态对应于一个大得多的集合。
+
+115
+00:12:32,510 --> 00:12:38,800
+It's all the, it's the epsilon closure of f and that is, this set of states f, g, h,
+这都是，这是f的ε闭包，也就是这组状态f，g，h，
+
+116
+00:12:38,800 --> 00:12:44,890
+i, a, b, c, and d, okay. So these are the set of possible states that the NFA could
+i，a，b，c和d，好的。因此，这些是NFA可能会出现的一组状态
+
+117
+00:12:44,890 --> 00:12:51,890
+be in after reading a single zero. Next, let's consider what happens from the start
+只读了一个零就进去了。接下来，让我们考虑一下从一开始会发生什么
+
+118
+00:12:52,000 --> 00:12:57,350
+state on an input of one. Which possible states can the NFA reach? And, if we look
+输入为1时的状态。NFA可以达到哪些可能的州？而且，如果我们看一下
+
+119
+00:12:57,350 --> 00:13:03,130
+at the transition function, we see there are two possible moves that the NFA could
+在转换函数中，我们看到NFA可以采取两种可能的举措
+
+120
+00:13:03,130 --> 00:13:09,180
+take. It could be in state c. In which case it would move to state e or it could
+拿走。它可以处于状态c。在这种情况下，它将移动到状态e，或者它可以
+
+121
+00:13:09,180 --> 00:13:13,730
+have been state i, that's also part of the purple set in which case it would move to
+状态I，这也是紫色集合的一部分，在这种情况下，它会移动到
+
+122
+00:13:13,730 --> 00:13:20,120
+state j. So, there are two possible states that the NFA can get into as a result of
+状态j。因此，NFA可以进入两种可能的状态，其结果是
+
+123
+00:13:20,120 --> 00:13:24,170
+reading a one and then after that, there's a bunch of epsilon moves that can take
+读完1之后，会有一系列的ε动作
+
+124
+00:13:24,170 --> 00:13:29,690
+place and in fact, it turns out that after reading a one, the machine could be in any
+实际上，在读完1之后，机器可能在任何
+
+125
+00:13:29,690 --> 00:13:36,690
+state except for state f. And that's this set of states and you'll notice that this
+除了f之外的州。这就是这组州，你会注意到这
+
+126
+00:13:37,120 --> 00:13:42,690
+particular set of states, the read set includes the final state of the NFA so
+特定状态集合，读集合包括NFA So的最终状态
+
+127
+00:13:42,690 --> 00:13:48,660
+this is also a final state indicating that after reading one, the NFA could be in an
+这也是一个最终状态，表明在读取1之后，NFA可能处于
+
+128
+00:13:48,660 --> 00:13:53,580
+accepting state. So this would be an accepting state of the DFA Well, we still
+接受状态。因此，这将是DFA的一种接受状态。那么，我们仍然
+
+129
+00:13:53,580 --> 00:14:00,580
+have to fill in for both of the two states that we've added here. The two states on
+必须填写我们在这里添加的两个州。上的两个州
+
+130
+00:14:01,030 --> 00:14:05,480
+the right of the machine what they do on input zero, what they do on input one. So
+机器的右边是他们在输入0上做什么，他们在输入1上做什么。所以
+
+131
+00:14:05,480 --> 00:14:11,060
+let's figure that out. So beginning with the red state on input zero, what can
+让我们弄清楚这一点。那么从输入0上的红色状态开始，什么可以
+
+132
+00:14:11,060 --> 00:14:16,420
+happen? Well, look the red state includes state d and it can move to state f but
+发生了什么？好，看，红色状态包括状态d，它可以移动到状态f，但是
+
+133
+00:14:16,420 --> 00:14:21,110
+we've already computed what happens on the epsilon, what the epsilon closure that is
+我们已经计算了epsilon上会发生什么，epsilon闭合是什么
+
+134
+00:14:21,110 --> 00:14:25,740
+just the green state. And so if I'm in the red state and I read zero, I move to the
+只有绿州。因此，如果我处于红色状态，并且读数为0，我将移动到
+
+135
+00:14:25,740 --> 00:14:32,740
+green state. If I'm in the red state and I read a one, you'll see that both states,
+绿州。如果我在红色的州，我读到1，你会看到这两个州，
+
+136
+00:14:33,470 --> 00:14:40,470
+NFA states c and i are in the red set. And so, it just takes us back to the red set.
+国家足协规定c和i在红色组。所以，它把我们带回了红色的场景。
+
+137
+00:14:40,830 --> 00:14:46,330
+And similarly for the green state, if I read a one, I move to the red state. And
+同样，对于绿色状态，如果我读到1，我就会转到红色状态。和
+
+138
+00:14:46,330 --> 00:14:50,480
+if I read a zero, I stay in the green state. And so, this then is our
+如果我读到零，我就会保持在绿色状态。所以，这就是我们的
+
+139
+00:14:50,480 --> 00:14:55,840
+deterministic machine down here. This is the deterministic machine and again, it
+这里有一台确定性机器。这是一台确定性的机器，再一次，它
+
+140
+00:14:55,840 --> 00:15:01,430
+simulates the NFA. So every move at the deterministic machine, it records the set
+模拟NFA。所以确定性机器的每一个动作，都会记录下
+
+141
+00:15:01,430 --> 00:15:07,490
+of possible states that the NFA could be in and it will accept a string infinitely
+NFA可能所处的可能状态，并且它将无限接受字符串
+
+142
+00:15:07,490 --> 00:15:09,380
+if the NFA could accept the string.
+如果NFA可以接受该字符串。
+

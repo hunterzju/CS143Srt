@@ -1,0 +1,870 @@
+0
+00:00:03,460 --> 00:00:07,210
+In this video, we're going to wrap up our discussion of Java by taking a look at a
+在本视频中，我们将通过查看一个
+
+1
+00:00:07,210 --> 00:00:12,800
+couple of additional topics and how they are integrated into the language design.
+几个附加主题，以及它们如何集成到语言设计中。
+
+2
+00:00:12,800 --> 00:00:19,800
+Consistent with Java's dynamic nature Java allows classes to be loaded at runtime.
+与Java的动态特性一致，Java允许在运行时加载类。
+
+3
+00:00:20,340 --> 00:00:24,220
+But this means that you can actually add functionality to an executing Java program
+但这意味着您实际上可以向正在执行的Java程序添加功能
+
+4
+00:00:24,220 --> 00:00:29,430
+so, while it's running, by loading a new class. And this creates potential issues
+所以，当它运行时，通过加载一个新类。这就产生了潜在的问题
+
+5
+00:00:29,430 --> 00:00:35,649
+with type safety and security because now there is a distinction between compiled
+类型安全和安全性，因为现在编译的
+
+6
+00:00:35,649 --> 00:00:41,489
+time and load time. So, type checking of the source takes place at compile time and
+时间和加载时间。因此，源代码的类型检查在编译时进行，并且
+
+7
+00:00:41,489 --> 00:00:47,309
+this is the kind of type checking we discussed in earlier in earlier videos.
+这就是我们在前面的视频中讨论的类型检查。
+
+8
+00:00:47,309 --> 00:00:50,749
+But the, the loader, when you actually go to load a class, you're loading bytecode,
+但是，装载器，当你真正去装入一个类的时候，你正在装入字节码，
+
+9
+00:00:50,749 --> 00:00:56,449
+you're not loading source and it's not being type checked again. And it could be,
+您没有加载源文件，也没有再次进行类型检查。也有可能是，
+
+10
+00:00:56,449 --> 00:01:00,909
+that this bytecode didn't come, you know, from a trusted source. This bytecode might
+这个字节码不是来自一个可信的来源。此字节码可能
+
+11
+00:01:00,909 --> 00:01:05,880
+not be the output of a compiler that did type checking, before it produced the
+不是执行类型检查的编译器的输出，在它生成
+
+12
+00:01:05,880 --> 00:01:09,950
+bytecode. So, the bytecode might not actually satisfy the type assumptions of
+字节码。因此，字节码实际上可能不满足
+
+13
+00:01:09,950 --> 00:01:13,590
+the Java implementation. So essentially, we have to check the bytecode again. And
+Java实现。所以本质上，我们必须再次检查字节码。和
+
+14
+00:01:13,590 --> 00:01:19,299
+a, and a procedure called bytecode verification takes place when the class is
+A，一个称为字节码验证的过程在类被
+
+15
+00:01:19,299 --> 00:01:25,200
+loaded, alright. And, and byte code verification is really a type checking of
+装好了，好的。并且，字节码验证实际上是一种类型检查
+
+16
+00:01:25,200 --> 00:01:29,329
+bytecode. That's, that's essentially what it does. The procedure is a little bit
+字节码。这就是它本质上的作用。这个过程有一点
+
+17
+00:01:29,329 --> 00:01:35,740
+different because we don't have you know, the code here is much lower level and so
+不同之处在于我们没有，这里的代码级别要低得多，所以
+
+18
+00:01:35,740 --> 00:01:38,950
+the algorithms look a little bit different. But what they're really doing
+算法看起来有点不同。但他们真正在做的是
+
+19
+00:01:38,950 --> 00:01:44,600
+is type checking the, thebytecode. So, now the loading policies are handled by
+是类型检查，字节码。因此，现在加载策略由
+
+20
+00:01:44,600 --> 00:01:48,719
+something called the class loader. And the class loader is a special class in Java
+一种叫做类加载器的东西。而类加载器是Java中的一个特殊类
+
+21
+00:01:48,719 --> 00:01:54,549
+and it decides what classes can be loaded and actually early on in Java, a bunch of
+它决定了哪些类可以加载，实际上在Java的早期，有一堆
+
+22
+00:01:54,549 --> 00:01:58,640
+security problems were discovered. Aware an attacker could get control of the class
+发现了安全问题。意识到攻击者可能会控制类
+
+23
+00:01:58,640 --> 00:02:04,329
+loader install it's own class loader that would be much more permissive than the
+加载器安装它自己的类加载器，这将比
+
+24
+00:02:04,329 --> 00:02:09,420
+Java standard class loader and subve rt the system. But those issues were fixed
+Java标准类加载器和Subve RT系统。但是这些问题已经解决了
+
+25
+00:02:09,419 --> 00:02:14,010
+quite awhile ago, alright. And another interesting thing about Java is that the
+很久以前了，好吧。关于Java的另一件有趣的事情是
+
+26
+00:02:14,010 --> 00:02:18,420
+classes may also be unloaded. So, you don't, you can not, not only load classes,
+也可以卸载类。所以，你不能，你不能，不仅装入类，
+
+27
+00:02:18,420 --> 00:02:23,220
+you can also unload classes. And the last time I checked this was not particularly
+您还可以卸载类。我最后一次检查这个并不是特别的
+
+28
+00:02:23,220 --> 00:02:28,060
+well specified in the definition and so it's a little bit unclear exactly what it
+在定义中有很好的说明，所以它的确切含义是什么还不是很清楚
+
+29
+00:02:28,060 --> 00:02:31,950
+meant when you unloaded the class and what happened to all the existing objects, for
+意味着当您卸载类以及所有现有对象发生的情况时，
+
+30
+00:02:31,950 --> 00:02:38,110
+example, of that class. Now, I'd like to spend a few minutes talking about
+例如，那个班级的。现在，我想花几分钟谈谈
+
+31
+00:02:38,110 --> 00:02:42,990
+initialization in Java, which is quite complex, and this shouldn't be too much of
+Java中的初始化，这相当复杂，这应该不会太多
+
+32
+00:02:42,990 --> 00:02:48,010
+a surprise because if you remember initialization in COOL was also pretty
+令人惊讶的是，如果您还记得Cool中的初始化也很漂亮
+
+33
+00:02:48,010 --> 00:02:52,190
+complex and Java is just a superset of COOL so it has all the initialization
+复杂，而Java只是COOL的超集，所以它有所有的初始化
+
+34
+00:02:52,190 --> 00:02:58,920
+issues that COOL has plus much more. And now the main source of complication is
+酷的问题加上更多。现在并发症的主要来源是
+
+35
+00:02:58,920 --> 00:03:04,450
+concurrency but other language features also add to the complexity of
+并发性，但其他语言功能也增加了
+
+36
+00:03:04,450 --> 00:03:11,450
+initialization in Java. And, in fact you could do worse. If you want to understand
+Java中的初始化。事实上，你可以做得更糟。如果你想了解
+
+37
+00:03:14,690 --> 00:03:21,020
+a new object oriented language, then study how it does object initialization and
+一种新的面向对象的语言，然后研究它是如何进行对象初始化和
+
+38
+00:03:21,020 --> 00:03:26,890
+class initialization. Because essentially what happens in initialization is that all
+类初始化。因为从本质上讲，在初始化中发生的是所有
+
+39
+00:03:26,890 --> 00:03:32,040
+the features of the language are going to be interacting and you have to explain
+语言的特点将会是互动的，你必须解释
+
+40
+00:03:32,040 --> 00:03:35,950
+what all those interactions are and how they are sorted out in order to have a
+所有这些交互是什么，以及如何对它们进行排序，以便
+
+41
+00:03:35,950 --> 00:03:41,070
+well-defined initialization procedure, alright. So, now let's talk about class
+定义明确的初始化过程，好的。那么现在让我们来谈谈课堂
+
+42
+00:03:41,070 --> 00:03:44,160
+initialization. We won't talk about object initialization, we'll just talk about
+初始化。我们不会讨论对象初始化，我们只会讨论
+
+43
+00:03:44,160 --> 00:03:51,040
+initializing classes. So, this is how the, the object that represents a class
+正在初始化类。所以这就是，表示一个类的这个对象
+
+44
+00:03:51,040 --> 00:03:57,260
+actually gets initialized when that class is first brought into the program. And so,
+实际上是在该类第一次被引入程序时初始化的。因此，
+
+45
+00:03:57,260 --> 00:04:02,530
+the first thing to know is that a class is initialized when a symbol in a class is
+首先要知道的是，当类中的符号被初始化时，类就会被初始化
+
+46
+00:04:02,530 --> 00:04:09,530
+first used, okay, not when the class is loaded, alright? So, if you reference any
+第一次使用，好的，不是在装入类的时候，好吗？因此，如果您引用任何
+
+47
+00:04:09,780 --> 00:04:15,200
+symbol in the class at the first time that happens that will cause the class to be
+符号在类中的第一次出现，该符号将导致类被
+
+48
+00:04:15,200 --> 00:04:19,989
+initialized. And the reason for doing this is if you are going to have an error in
+已初始化。这样做的原因是如果您将在
+
+49
+00:04:19,988 --> 00:04:24,469
+class initialization, th is will cause that error to happen in a predictable
+类初始化，这将导致在可预测的
+
+50
+00:04:24,469 --> 00:04:27,979
+place. So, if you have an error and you run the, you, you have an error in class
+地点。所以，如果你有一个错误，你运行，你，你在课堂上有一个错误
+
+51
+00:04:27,979 --> 00:04:32,389
+initialization if you run the program five times you know, that error will probably
+初始化如果您运行该程序五次，该错误可能会
+
+52
+00:04:32,389 --> 00:04:36,169
+happen in the same place every time. So, it'll be repeatable and predictable where
+每次都在同一个地方发生。因此，这将是可重复和可预测的
+
+53
+00:04:36,169 --> 00:04:42,550
+the error occurs. If instead we had, the error happened where you loaded the class
+出现错误。如果相反，错误发生在您装入类的位置
+
+54
+00:04:42,550 --> 00:04:46,430
+at the time that you loaded the class, well, the class might be loaded at lots of
+在您装入类的时候，这个类可能被装入了很多
+
+55
+00:04:46,430 --> 00:04:52,800
+different times. And, and, and so this, this, this error here the error in the
+不同的时代。还有，还有，所以这个，这个，这个错误，这里的错误
+
+56
+00:04:52,800 --> 00:04:58,650
+initialization of the class would become non-deterministic if we didn't if we
+如果我们不这样做，类的初始化将变得不确定
+
+57
+00:04:58,650 --> 00:05:05,650
+didn't delay the initialization until some deterministic point in the execution. So,
+直到执行中的某个确定点才延迟初始化。所以,
+
+58
+00:05:06,259 --> 00:05:10,319
+now I'll discuss the procedure for initializing class objects in Java. And
+现在我将讨论在Java中初始化类对象的过程。和
+
+59
+00:05:10,319 --> 00:05:14,919
+the first thing I should stress is that this idea of a class object is something
+我要强调的第一件事是，类对象的概念是
+
+60
+00:05:14,919 --> 00:05:19,650
+that Java has that COOL does not have, I mentioned this on the previous slide. But
+Java拥有酷炫没有的东西，我在上一张幻灯片中提到了这一点。但
+
+61
+00:05:19,650 --> 00:05:25,749
+just to be completely clear, what is a class object? A class object is just what
+明确地说，什么是类对象？类对象就是
+
+62
+00:05:25,749 --> 00:05:32,749
+it sounds like, it is the object for a class. It represents a class. Okay, this
+听起来好像，它是一个类的对象。它代表一个班级。好的，这个
+
+63
+00:05:33,530 --> 00:05:40,300
+is not an instance of the class. This is an object which is the class, okay. So,
+不是该类的实例。这是一个对象，它是类，好的。所以,
+
+64
+00:05:40,300 --> 00:05:44,689
+this is an object which is the class, it has all the information about the class
+这是一个对象，它是类，它包含有关类的所有信息
+
+65
+00:05:44,689 --> 00:05:48,530
+so, you know, it tells you what the type of the class is, what the fields of the
+因此，您知道，它会告诉您类的类型、
+
+66
+00:05:48,530 --> 00:05:54,110
+class are, and everything else. So, this is used for introspection or reflection.
+班级是，其他一切都是。所以，这是用来反省或反思的。
+
+67
+00:05:54,110 --> 00:05:59,139
+And it's necessary in Java because of features like dynamic loading. So, if, you
+而且它在Java中是必要的，因为它具有动态加载等特性。所以如果你
+
+68
+00:05:59,139 --> 00:06:03,210
+know, if you want, if you dynamically load a class though you want to be able to use
+要知道，如果您想要动态加载一个类，尽管您希望能够使用
+
+69
+00:06:03,210 --> 00:06:07,360
+that class, you have to have some way of querying what the, what kinds of methods
+那个类，你必须有某种方式来查询什么，什么样的方法
+
+70
+00:06:07,360 --> 00:06:11,759
+and things the class has and that is what the class object is for. So, there is one
+以及类所拥有的东西，这就是类对象的用途。所以，有一个
+
+71
+00:06:11,759 --> 00:06:16,719
+object, there is one class object for each class in Java, alright. So, when you load
+对象，那么Java中的每个类都有一个类对象。所以，当你装入
+
+72
+00:06:16,719 --> 00:06:20,719
+a class, the first thing you have do is to initialize the class object. And how is
+一个类，您要做的第一件事就是初始化类对象。那你还好吗？
+
+73
+00:06:20,719 --> 00:06:27,719
+that done? Well, we lock the class object for the class, alright. And if th at, if
+做完了吗？好的，我们锁定类的类对象，好的。如果是这样的话，如果
+
+74
+00:06:27,740 --> 00:06:32,650
+that object is already locked by another thread, then we'll simply wait on the
+该对象已被另一个线程锁定，那么我们只需等待
+
+75
+00:06:32,650 --> 00:06:37,990
+lock, okay. So, we will wait until somebody tells us that it's okay to
+锁定，好的。所以，我们会等到有人告诉我们可以
+
+76
+00:06:37,990 --> 00:06:44,990
+proceed. Now once we obtain the lock on the class, we have to do a check to see if
+开始吧。现在，一旦我们获得类的锁，我们就必须进行检查，看是否
+
+77
+00:06:45,499 --> 00:06:52,499
+the class is already being initialized, alright. So, and it could turn out that it
+这个类已经在初始化了，好吧。所以，它可能会证明
+
+78
+00:06:53,219 --> 00:06:57,099
+is our thread, it is the same thread is already initializing the class. And how
+是我们的线程，它是同一个线程已经在初始化类。以及如何
+
+79
+00:06:57,099 --> 00:07:04,099
+could that happen? Well, remember that a class can have fields of the same type.
+这会发生吗？嗯，请记住，一个类可以有相同类型的字段。
+
+80
+00:07:04,919 --> 00:07:10,999
+So, I could have a class of class called X and then it could have a field of type X
+因此，我可以有一个名为X的类，然后它可以有一个类型为X的字段
+
+81
+00:07:10,999 --> 00:07:16,809
+in it. And the way classes are going to be initialize if we're going to have to
+在里面。如果我们必须这样做，那么类的初始化方式
+
+82
+00:07:16,809 --> 00:07:21,309
+initialize the class itself and then, and we're going to do that by recursively
+初始化类本身，然后，我们将通过递归
+
+83
+00:07:21,309 --> 00:07:24,509
+initializing the classes for all the fields or at least making sure of the
+初始化所有字段的类，或者至少确保
+
+84
+00:07:24,509 --> 00:07:29,279
+classes for all the fields are initialize. And if we have a recursive structure here
+所有字段的类都已初始化。如果我们这里有一个递归结构
+
+85
+00:07:29,279 --> 00:07:33,990
+with the same class mention in a field as in a name, as the name of the enclosing
+在字段中提及与在名称中提及的类相同的类，作为封闭的
+
+86
+00:07:33,990 --> 00:07:37,449
+class, then we will get the situation where the thread initializing the class
+类，那么我们就会得到这样的情况：初始化类的线程
+
+87
+00:07:37,449 --> 00:07:40,990
+may attempt to initialize the same class again. So, if we discover that we're
+可能会再次尝试初始化同一个类。所以，如果我们发现我们
+
+88
+00:07:40,990 --> 00:07:45,370
+already initializing this class, we simply release the lock and we turn. Now, another
+已经初始化了这个类，我们只需释放锁，然后转向。现在，又来了一个
+
+89
+00:07:45,370 --> 00:07:49,529
+possibility is that the class is already initialized. So, if when we finally get
+可能的情况是该类已经初始化。所以，如果当我们最终
+
+90
+00:07:49,529 --> 00:07:53,680
+the lock we discover that some other thread got in there and initialized the
+我们发现某个其他线程进入了锁，并初始化了
+
+91
+00:07:53,680 --> 00:07:57,110
+class before we have a chance to., well, then there's nothing to do and we just
+在我们有机会之前上课。嗯，那就没什么可做的了，我们只是
+
+92
+00:07:57,110 --> 00:08:02,300
+return normally, alright? Now, if neither one of these things is true, okay, if we
+正常返回，好吗？现在，如果这两件事都不是真的，好吧，如果我们
+
+93
+00:08:02,300 --> 00:08:08,279
+get the lock and we discover that the class is not already initialized and that
+获取锁后，我们发现类尚未初始化，并且
+
+94
+00:08:08,279 --> 00:08:13,469
+we're not already in the process of initializing the class, then we will mark
+我们还没有在初始化类的过程中，那么我们将标记
+
+95
+00:08:13,469 --> 00:08:18,800
+the class to, to note the initialization is in progress by this thread, okay. So,
+注意这个线程正在进行初始化的类，好的。所以,
+
+96
+00:08:18,800 --> 00:08:21,620
+we'll indicate, you know, this class is being initialized and that we are
+我们会指出，您知道，这个类正在初始化，我们
+
+97
+00:08:21,620 --> 00:08:27,219
+initializing it and then we'll unlock the class. Alright, the next thing that
+初始化它，然后我们将解锁该类。好的，接下来要做的就是
+
+98
+00:08:27,219 --> 00:08:31,169
+happens is we'll have to initialize the superclass and that will m ean initial,
+发生的情况是我们必须初始化超类，这将是初始的，
+
+99
+00:08:31,169 --> 00:08:36,180
+and then we'll initialize all the fields in textual order. But because Java has
+然后我们将按文本顺序初始化所有字段。而是因为Java有
+
+100
+00:08:36,179 --> 00:08:40,940
+what are called static and final fields we will initialize those first, okay. So,
+所谓的静电和最终字段，我们会先初始化它们，好的。所以,
+
+101
+00:08:40,940 --> 00:08:45,530
+static final fields will get initialized before any other fields in textual order.
+静电最终字段将在文本顺序中的任何其他字段之前初始化。
+
+102
+00:08:45,530 --> 00:08:48,930
+And, of course, we have to give every field of default value before
+当然，在此之前，我们必须给出每个字段的默认值
+
+103
+00:08:48,930 --> 00:08:53,730
+initialization just as in COOL. So, this step, step five is very similar to what
+初始化就像在Cool中一样。所以这一步，第五步跟什么很相似
+
+104
+00:08:53,730 --> 00:09:00,730
+goes on in COOL. Now if there's an error during the initialization, so some part of
+在凉爽中进行。现在，如果在初始化过程中出现错误，那么
+
+105
+00:09:03,770 --> 00:09:08,410
+the initialization throws an exception, then we're going to mark the class as
+初始化抛出异常，然后我们将该类标记为
+
+106
+00:09:08,410 --> 00:09:12,840
+erroneous, okay, we're going to mark this class as no good and can't be used and,
+错误，好的，我们要把这门课标记为不好，不能用，
+
+107
+00:09:12,840 --> 00:09:16,470
+and that's the best we can do. So, if there's an exception during
+这是我们能做的最好的了。因此，如果在此过程中出现异常
+
+108
+00:09:16,470 --> 00:09:20,320
+initialization, we just have to give up on that class. And so it gets a special mark
+初始化时，我们只能放弃那个类。所以它会有一个特殊的标记
+
+109
+00:09:20,320 --> 00:09:25,960
+on it saying that it's erroneous. And, if there are no errors if we succeed in
+说这是错误的。如果没有错误，如果我们成功地
+
+110
+00:09:25,960 --> 00:09:30,430
+initializing the class and with and without any errors, then we're going to
+初始化类，并且有或没有任何错误，然后我们将
+
+111
+00:09:30,430 --> 00:09:34,500
+lock the class again. We will label the class as initialized, alright? And then
+再次锁定班级。我们会将类标记为已初始化，好吗？然后
+
+112
+00:09:34,500 --> 00:09:38,880
+we'll notify the threads that are waiting on the class object. So. Anybody who was
+我们将通知正在等待类对象的线程。所以。任何曾经是
+
+113
+00:09:38,880 --> 00:09:44,500
+locked waiting on the class object will now be alerted that the object is, is
+正在等待类对象的锁定现在将被警告该对象是、是
+
+114
+00:09:44,500 --> 00:09:49,400
+ready and then we'll unlock the class. Okay, and so that's a rough outline of how
+准备好了，然后我们就解锁班级。好的，这就是粗略的描述
+
+115
+00:09:49,400 --> 00:09:52,520
+class initialization in Java works. I skipped over a few things and
+Java中的类初始化工作正常。我略过了几件事
+
+116
+00:09:52,520 --> 00:09:57,230
+oversimplified it a bit. So, this isn't the complete description but these are the
+有点过于简单化了。所以，这不是完整的描述，但这些是
+
+117
+00:09:57,230 --> 00:10:03,070
+main points and they, and they illustrate how the various features of the language
+要点和它们，它们说明了语言的各种特征
+
+118
+00:10:03,070 --> 00:10:06,100
+have to interact. So, you have to worry about concurrency, you have to worry about
+必须互动。所以，你必须担心并发性，你必须担心
+
+119
+00:10:06,100 --> 00:10:09,090
+exceptions, you have to worry about static and final fields, you have to worry about
+例外，你要担心静电和Final字段，你要担心
+
+120
+00:10:09,090 --> 00:10:13,680
+inheritance. I mean, all these things have to be dealt with together in the design of
+继承。我的意思是，所有这些事情都必须在设计的时候一起处理
+
+121
+00:10:13,680 --> 00:10:20,130
+a single algorithm to do class initialization. Stepping back for a moment
+执行类初始化的单一算法。后退片刻
+
+122
+00:10:20,130 --> 00:10:25,510
+this discussion of class initialization in Java illustrates a general point about
+关于Java中的类初始化的讨论说明了关于
+
+123
+00:10:25,510 --> 00:10:30,710
+designing complex systems. So, in any system with a certain number of featu res
+设计复杂的系统。因此，在任何具有一定数量的功能的系统中
+
+124
+00:10:30,710 --> 00:10:34,490
+and every system is going to have some number of features, let's call it N,
+每个系统都会有一些功能，让我们称它为N，
+
+125
+00:10:34,490 --> 00:10:36,790
+because you want to provide some functionality, obviously the thing the
+因为您想要提供一些功能，显然
+
+126
+00:10:36,790 --> 00:10:40,160
+system's suppose to d so its going to have features to do those things. But as you
+系统应该是d，所以它会有功能来做这些事情。但是当你
+
+127
+00:10:40,160 --> 00:10:43,690
+add features, you get lots of interactions, potential interactions
+添加功能，您将获得大量交互、潜在交互
+
+128
+00:10:43,690 --> 00:10:46,940
+between the features and if we think about, even just the pairwise
+在这些特征之间，如果我们想一想，即使是成对的
+
+129
+00:10:46,940 --> 00:10:53,710
+interactions. If I have N features, then I'll have, I don't know, about N^2
+互动。如果我有N个特征，那么我就会有，我不知道，大约N^2
+
+130
+00:10:53,710 --> 00:10:58,230
+pairwise feature interactions. And the point there, of course, is that as I add
+成对功能交互。当然，这里的重点是，正如我补充的那样
+
+131
+00:10:58,230 --> 00:11:03,450
+features the number of possible interactions grows super linearly in the
+功能中，可能的交互数量呈超线性增长。
+
+132
+00:11:03,450 --> 00:11:06,320
+number of features, I mean, it grows much more quickly than the number of features.
+功能的数量，我的意思是，它的增长速度远远快于功能的数量。
+
+133
+00:11:06,320 --> 00:11:09,160
+And so, adding the next feature, you're going to have to consider all of the
+因此，添加下一个功能时，您将不得不考虑所有
+
+134
+00:11:09,160 --> 00:11:13,190
+previous features that you already have in the system and how this new feature
+系统中已有的以前功能，以及此新功能如何
+
+135
+00:11:13,190 --> 00:11:19,550
+affects them, and this is why it becomes very difficult to extend or build systems
+影响它们，这就是为什么扩展或构建系统变得非常困难的原因
+
+136
+00:11:19,550 --> 00:11:24,370
+that have a lot of features, alright. And this is just the pairwise features. These
+有很多特色的，好吧。这只是两两配对的特征。这些
+
+137
+00:11:24,370 --> 00:11:27,900
+are just, this is just considering pairwise interactions between one feature
+只是，这只是考虑了一个要素之间的成对交互
+
+138
+00:11:27,900 --> 00:11:31,280
+and another. If I have to start worrying about subsets of features, I'm thinking
+再来一次。如果我必须开始担心功能的子集，我在想
+
+139
+00:11:31,280 --> 00:11:35,040
+about how all possible subsets of features might interact with each other, well then,
+关于所有可能的特征子集如何彼此交互，那么，
+
+140
+00:11:35,040 --> 00:11:39,920
+this step, this number of, of potential interactions will grow not just it will
+这一步，这一潜在互动的数量将会增长，而不仅仅是
+
+141
+00:11:39,920 --> 00:11:45,700
+grow, in fact, exponentially. So, it'd be, you know, way more than quadratic. And the
+事实上，成倍增长。所以，它会，你知道，远远超过二次。以及
+
+142
+00:11:45,700 --> 00:11:50,970
+bottom line here is that big, feature-full systems are hard to understand. You know,
+这里的底线是，功能齐全的大型系统很难理解。你知道,
+
+143
+00:11:50,970 --> 00:11:56,530
+this is you know, a general lesson in Computer Science and any kind of
+你知道，这是一堂关于计算机科学的普通课，以及任何形式的
+
+144
+00:11:56,530 --> 00:12:01,600
+discipline that wants to design complex systems and, and this lesson applies to
+想要设计复杂系统的学科，本课适用于
+
+145
+00:12:01,600 --> 00:12:05,470
+programming languages. It applies to every other kind of software system that you
+编程语言。它适用于您所使用的所有其他类型的软件系统
+
+146
+00:12:05,470 --> 00:12:09,100
+might want to build. But, and somehow it has a particular force in programming
+可能会想要建造。但是，不知何故，它在编程方面有一种特殊的力量
+
+147
+00:12:09,100 --> 00:12:14,040
+languages because these interactions between the features, you know, these are
+语言，因为这些功能之间的交互，你知道，这些是
+
+148
+00:12:14,040 --> 00:12:17,720
+the features of the programming language, they happen at a very fine grain. And
+编程语言的特点，它们发生在非常细微的粒度上。和
+
+149
+00:12:17,720 --> 00:12:21,970
+these things can be, really can b e composed arbitrarily and so you really do
+这些东西可以，真的可以任意组合，所以你真的这样做了
+
+150
+00:12:21,970 --> 00:12:27,670
+have to work out in language design, you know, what all the interactions are in
+我必须在语言设计中工作，你知道，所有的交互都包含在
+
+151
+00:12:27,670 --> 00:12:33,100
+order to have a language that people, that programmers can actually understand and
+为了拥有一种人们、程序员能够真正理解的语言，
+
+152
+00:12:33,100 --> 00:12:40,100
+use productively. Alright? And that really I think is the big, big idea that, one of
+高效使用。好吗？我真的认为这是一个很大很大的想法，
+
+153
+00:12:41,390 --> 00:12:46,310
+the big ideas that we've talked about throughout the course. And, and I hope one
+我们在整个课程中谈到的重要思想。而且，我希望能有一个
+
+154
+00:12:46,310 --> 00:12:51,520
+of the things that you would take away from this lecture at least in particular.
+你会从这堂课中学到的东西，至少是特别的。
+
+155
+00:12:51,520 --> 00:12:56,320
+So, to summarize and to conclude our discussion of Java, I think Java is a, is
+因此，总结和总结我们对Java的讨论，我认为Java是一种
+
+156
+00:12:56,320 --> 00:13:00,810
+a well-done language. By production standards, it is extremely well-done. So,
+一种做得很好的语言。按照生产标准，这道菜做得非常好。所以,
+
+157
+00:13:00,810 --> 00:13:05,470
+it's one of the best designed and best specified languages that's in, in use
+它是目前正在使用的设计最好、指定最好的语言之一
+
+158
+00:13:05,470 --> 00:13:11,780
+today. It brought several important ideas into the main stream. So, when it was new
+今天。它把几个重要的思想带入主流。所以，当它是新的时候
+
+159
+00:13:11,780 --> 00:13:18,780
+it brought ideas that had been around for a long time but had not found their way
+它带来的想法已经存在很长一段时间了，但一直没有找到方向。
+
+160
+00:13:18,920 --> 00:13:23,690
+into a production language that was very, very widely used and in particular, Java
+转换成一种非常、非常广泛使用的生产语言，特别是Java
+
+161
+00:13:23,690 --> 00:13:29,050
+was the first language to be very widely used in, in commercial settings. They had
+是第一种在商业环境中被广泛使用的语言。他们有
+
+162
+00:13:29,050 --> 00:13:33,750
+strong sets of typing there that had real guarantees they were, you know, provided
+强大的打字套装在那里有真正的保证，你知道，它们提供了
+
+163
+00:13:33,750 --> 00:13:37,750
+by the type-system and also there was a manage language and had a garbage
+通过类型系统，还有一个托管语言和一个垃圾
+
+164
+00:13:37,750 --> 00:13:41,870
+collected memory. But that doesn't mean it's perfect. And it, and Java also
+收集的内存。但这并不意味着它是完美的。还有它，还有Java也
+
+165
+00:13:41,870 --> 00:13:47,070
+includes some features that, at the time that it was designed, that we didn't fully
+包括一些功能，在设计它的时候，我们没有完全
+
+166
+00:13:47,070 --> 00:13:50,480
+understand and I would say, you know, that this are probably the rough areas where
+理解，我想说，你知道，这可能是最艰难的领域
+
+167
+00:13:50,480 --> 00:13:55,230
+there's still some roughness in the, in, in the Java design. So, things like the
+在Java设计中，仍有一些粗糙之处。所以，像这样的东西
+
+168
+00:13:55,230 --> 00:13:59,260
+way the memory semantics work in the presence of concurrency, you know,
+内存语义在并发性存在的情况下工作的方式，你知道，
+
+169
+00:13:59,260 --> 00:14:04,780
+probably still has most people would agree I think, you now, has some problems and
+可能还有很多人会同意我觉得，你现在，有一些问题，
+
+170
+00:14:04,780 --> 00:14:10,020
+some, some little gray areas that as a program, you probably want to stay out of.
+一些，一些小的灰色地带，作为一个程序，你可能想置身事外。
+
+171
+00:14:10,020 --> 00:14:15,750
+And the other thing is that Java has a lot of features. And as I said before when you
+另一件事是Java有很多特性。就像我之前说的，当你
+
+172
+00:14:15,750 --> 00:14:19,830
+have a lot of features, you're going to have even more feature interactions and
+有很多功能，您将会有更多的功能交互
+
+173
+00:14:19,830 --> 00:14:23,850
+that leads to complexity that becomes difficult to manage.
+这导致复杂性变得难以管理。
+

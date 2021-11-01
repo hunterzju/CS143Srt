@@ -1,0 +1,340 @@
+0
+00:00:04,350 --> 00:00:07,759
+Now that we've seen some of the operations on self type, in this video we're going to
+现在我们已经看到了对Self类型的一些操作，在这个视频中，我们将
+
+1
+00:00:07,759 --> 00:00:14,759
+talk about where self type can be used in Cool. The parser checks if self type
+谈论一下在Cool中可以使用Self类型的地方。解析器检查自身类型
+
+2
+00:00:15,709 --> 00:00:19,340
+appears only where types are permitted, but that's in fact a little bit too
+仅在允许类型的地方出现，但这实际上也有一点
+
+3
+00:00:19,340 --> 00:00:24,130
+permissive. There are places where some other types can appear but self type
+很宽容。有些地方可以显示除自身类型之外的其他类型
+
+4
+00:00:24,130 --> 00:00:28,330
+cannot, and so the purpose of this particular video is to go over the various
+不能，所以这个视频的目的是复习各种
+
+5
+00:00:28,330 --> 00:00:34,340
+rules for the usage of self type. So let's begin with, a very simple rule. So, self
+SELF类型的用法规则。让我们从一条非常简单的规则开始。所以，赛尔夫
+
+6
+00:00:34,340 --> 00:00:39,010
+type is not a class name so it can't appear in a class definition, can neither
+类型不是类名，因此它不能出现在类定义中，也不能
+
+7
+00:00:39,010 --> 00:00:46,010
+be the name of the class nor the class that is inherited from. In attribute
+既不是继承自的类的名称，也不是继承自的类的名称。入站属性
+
+8
+00:00:46,120 --> 00:00:50,219
+declarations the type of attribute in this case we have an attribute x and is
+声明属性的类型在本例中，我们有一个属性x，并且是
+
+9
+00:00:50,219 --> 00:00:54,829
+declared to have type t, it is okay for t to be self type so it's fine to have
+声明为类型t，t可以为自身类型，所以具有
+
+10
+00:00:54,829 --> 00:01:01,829
+attributes that are declared to be the self type of the class. Similarly, it's
+声明为类的自身类型的属性。同样，它也是
+
+11
+00:01:02,600 --> 00:01:08,799
+fine to have local let down variables that have type self type. And it's fine to
+拥有类型为self类型的局部RESHOW变量是很好的。而且这是很好的
+
+12
+00:01:08,799 --> 00:01:13,740
+allocate a new object of type self type. And what this actually does is that it
+分配类型为Self类型的新对象。而这实际上做的是它
+
+13
+00:01:13,740 --> 00:01:20,009
+allocates an object that has the same dynamic type as the self object. So,
+分配与Self对象具有相同动态类型的对象。所以,
+
+14
+00:01:20,009 --> 00:01:23,670
+whatever the type of the self object happens to be, which is not necessarily
+不管Self对象的类型是什么，这不一定是
+
+15
+00:01:23,670 --> 00:01:30,170
+the type of the enclosing class at run time, the u t operation will create a new
+运行时封闭类的类型，则u t操作将创建一个新的
+
+16
+00:01:30,170 --> 00:01:36,780
+object of that dynamic type. The type named in aesthetic dispatch cannot be self
+该动态类型的。美学调度中命名的类型不能为自身
+
+17
+00:01:36,780 --> 00:01:43,780
+type, again because it has to be an actual class name. Finally let's consider method
+类型，同样因为它必须是实际的类名。最后，让我们考虑一下方法
+
+18
+00:01:45,609 --> 00:01:48,189
+definitions. So, here's a very simple method definition. It has one formal
+定义。所以，这里有一个非常简单的方法定义。它有一个正式的
+
+19
+00:01:48,189 --> 00:01:53,689
+parameter X of type T and the method returns something of type T prime. And it
+类型为T的参数X，该方法返回类型为T的素数。而且它
+
+20
+00:01:53,689 --> 00:01:58,729
+turns out that only T prime, only the return type can be of type self-type. No
+原来只有T素数，只有返回类型可以是SELF类型。不是的
+
+21
+00:01:58,729 --> 00:02:04,619
+argument type can be of type self-type. And to see why let's, I can show it
+参数类型可以是自类型。想知道为什么，我可以展示给大家看
+
+22
+00:02:04,619 --> 00:02:09,890
+actually two different ways. Why, why this has to be the case. And we'll do both
+实际上有两种不同的方式。为什么，为什么一定要这样。我们两个都要做
+
+23
+00:02:09,889 --> 00:02:15,500
+because this is actually important. So, let's think about a dispatch to this a
+因为这实际上很重要。那么，让我们想一想派往这里的消息
+
+24
+00:02:15,500 --> 00:02:20,730
+method, so let's say we have some expression e, and we call method m, and we
+方法，所以假设我们有一些表达式e，我们调用方法m，我们
+
+25
+00:02:20,730 --> 00:02:26,250
+have some argument e prime. And now, let's say the argument e prime As the
+有一些论点e素数。现在，让我们把论点e‘作为
+
+26
+00:02:26,250 --> 00:02:33,250
+type t zero. So if you recall the rule for method calls, t zero is gonna have to be a
+键入t0。所以如果你回想一下方法调用的规则，t0必须是一个
+
+27
+00:02:34,450 --> 00:02:39,530
+sub type of the type of the fall parameter. We're gonna be passing this in,
+Fall参数类型的子类型。我们会把这个交给你，
+
+28
+00:02:39,530 --> 00:02:43,910
+so whatever type x is declared to have here has to be a super type of the type of
+因此，这里声明的任何类型x都必须是
+
+29
+00:02:43,910 --> 00:02:49,260
+the actual argument. So that means that t zero is going to have to be a sub type of,
+真正的论据。所以这意味着t0将会是一个子类型，
+
+30
+00:02:49,260 --> 00:02:55,230
+now let's assume that the argument can be of type self type. Some view that t zero
+现在让我们假设参数可以是self类型。一些人认为测试为零
+
+31
+00:02:55,230 --> 00:03:01,250
+has to be a subtype of self type this is in some class c wherever this is defined,
+必须是SELF类型的子类型，它在某个类C中，无论它是在哪里定义的，
+
+32
+00:03:01,250 --> 00:03:06,780
+and remember that we said This was always false that you couldn't have self type on
+记住，我们说过这总是假的，你不能自己打字
+
+33
+00:03:06,780 --> 00:03:13,430
+the right hand side and a regular type on the left hand side. Because that would
+右手边的，左手边的普通字体。因为那样会
+
+34
+00:03:13,430 --> 00:03:18,510
+lead to problems that would, that we would never be able to prove that in general for
+导致的问题，我们将永远不能证明这一点，一般情况下
+
+35
+00:03:18,510 --> 00:03:24,090
+a, that, that a type is actually a sub type of self type because self type can
+A，就是说，一个类型实际上是自我类型的一个子类型，因为自我类型可以
+
+36
+00:03:24,090 --> 00:03:28,680
+vary over all the sub types of the class C. So that's one way to see that we can't
+在类C的所有子类型上有所不同，所以这是我们看不到的一种方式
+
+37
+00:03:28,680 --> 00:03:34,450
+allow method parameters, to be typed self type, but it's also helpful to just think
+允许将方法参数类型化为自身类型，但仅考虑这一点也很有帮助
+
+38
+00:03:34,450 --> 00:03:40,230
+about executing the code or some example code and see what can go wrong. So here's
+关于执行代码或一些示例代码，并查看可能出错的地方。所以这里是
+
+39
+00:03:40,230 --> 00:03:46,260
+an example. And let me just walk you through what happens if we allow a
+举个例子。让我给你们讲讲如果我们允许
+
+40
+00:03:46,260 --> 00:03:52,270
+parameter to have type self type in this example. So there are two class
+在此示例中，参数的类型为Self类型。所以有两个班级
+
+41
+00:03:52,270 --> 00:03:58,760
+definitions. Class A has a method comp for comparison, and it takes one argument of
+定义。类A有一个用于比较的方法comp，它的一个参数是
+
+42
+00:03:58,760 --> 00:04:03,100
+type self-type. And it returns a bull. So the idea here is that the comparison
+键入self-type。它会返回一头公牛。所以这里的想法是比较
+
+43
+00:04:03,100 --> 00:04:07,730
+operation probably compares the, this parameter with the argument and returns
+操作可能会将，this参数与实参进行比较，并返回
+
+44
+00:04:07,730 --> 00:04:13,170
+true or false. Then, there's a second class B, and B is a sub-type of A, it
+对或错。然后，还有第二个B类，B是A的一个子类型，它
+
+45
+00:04:13,170 --> 00:04:20,170
+inherits from A. And it has one new field B little b here of type int. And now the
+继承自A，这里有一个int类型的新字段。而现在
+
+46
+00:04:21,649 --> 00:04:27,460
+comparison function in class B is overridden has the same signature as the
+类B中的比较函数被重写，其签名与
+
+47
+00:04:27,460 --> 00:04:33,370
+comparison function or the comp function in class A. But, the, the method body here
+类A中的比较函数或Comp函数。但是，这里的方法体
+
+48
+00:04:33,370 --> 00:04:40,370
+accesses the field B. And now let's take a look at what happens with a piece of code
+访问字段B。现在让我们看看一段代码会发生什么情况
+
+49
+00:04:40,990 --> 00:04:46,090
+that uses these two classes. So, here X is going to be declared to be of type A. But
+使用这两个类的。这里，X将被声明为类型A，但是
+
+50
+00:04:46,090 --> 00:04:50,750
+we're going to assign it something of type B. And here we're notice that there's a
+我们将它指定为B类型，这里我们注意到有一个
+
+51
+00:04:50,750 --> 00:04:55,370
+gap between the static type, which will be A, and the dynamic type, which will be B.
+静电类型(将为A)和动态类型(将为B)之间的差距。
+
+52
+00:04:55,370 --> 00:05:02,370
+And that's actually key to the problem. And now, we Invoke the cup method on X and
+这实际上是问题的关键。现在，我们调用X和X上的Cup方法
+
+53
+00:05:03,340 --> 00:05:08,600
+we pass it a new A object. And so what happens, well this type checks just fine
+我们给它传递一个新的A对象。那么会发生什么呢，嗯，这种类型的检查很好
+
+54
+00:05:08,600 --> 00:05:15,130
+because X is in class A. X is of type A and this argument is also of type A. So if
+因为X在A类中。X是A类型的，这个参数也是A类型的。所以如果
+
+55
+00:05:15,130 --> 00:05:18,880
+self-type if having an argument type self-type is ever going to work it has to
+Self类型如果有一个参数类型，那么Self类型永远不会起作用，它必须
+
+56
+00:05:18,880 --> 00:05:25,530
+work for this example where the two static types of the, of the dispatched of this
+工作在此示例中，这两种静电类型的、已调度的
+
+57
+00:05:25,530 --> 00:05:29,880
+parameter and the former parameter are exactly the same. So that clearly has to
+参数和前一个参数完全相同。所以这显然是必须的
+
+58
+00:05:29,880 --> 00:05:35,050
+be allowed if we allow self type as the type of the argument. And now let's think
+如果我们允许Self类型作为参数的类型，则允许。现在让我们想想
+
+59
+00:05:35,050 --> 00:05:41,860
+about what happens when it actually executes Is going to invoke the comp
+关于它实际执行时发生的事情将调用comp
+
+60
+00:05:41,860 --> 00:05:48,260
+method in the b class okay, Because X is of dynamic type B. And then it's going to
+方法，因为X是动态类型B，然后它将
+
+61
+00:05:48,260 --> 00:05:53,230
+take the arguments and it's going to access its B field. But the argument is of
+接受参数，它将访问它的B字段。但论点是
+
+62
+00:05:53,230 --> 00:05:57,970
+dynamic type A and it has no B field. And so, this is actually going to cause a
+动态类型A，并且没有B字段。因此，这实际上会导致
+
+63
+00:05:57,970 --> 00:06:02,310
+runtime crash. So, and just to go over that one more time, Just to make sure that
+运行时崩溃。所以，我再重复一遍，只是为了确保
+
+64
+00:06:02,310 --> 00:06:08,560
+it is clear. Here X has type A ut dynamic type B. The argument has static type A and
+很明显。此处X的类型为A，但动态类型为B。参数的类型为静电类型A，并且
+
+65
+00:06:08,560 --> 00:06:14,430
+dynamic type A and when this method gets invoked the argument That which is of
+动态类型A，并且当调用此方法时，
+
+66
+00:06:14,430 --> 00:06:21,250
+dynamic type A, does not have the operations, all the fields and methods, of
+动态类型A没有的操作、所有字段和方法
+
+67
+00:06:21,250 --> 00:06:25,680
+the class B And results in a run time, undefined behavior at run time.
+类B和导致运行时未定义的运行时行为。
+

@@ -1,0 +1,125 @@
+0
+00:00:01,530 --> 00:00:04,170
+It turns out that this left string, this stuff to the left
+原来左边的这根线，左边的这个东西
+
+1
+00:00:04,170 --> 00:00:08,900
+of the vertical bar can be implemented by a stack, and that's because we only do
+可以由堆栈实现，这是因为我们只做
+
+2
+00:00:08,900 --> 00:00:15,440
+reduced operations immediately to the left of the vertical bar. So it's always suffix
+减少了紧邻竖线左侧的操作。所以它总是后缀
+
+3
+00:00:15,440 --> 00:00:19,010
+of the string to left of the vertical bar, where the reduction is happening so what a
+垂直线条左边的字符串的位置，这里发生了减少，那么这是什么呢？
+
+4
+00:00:19,010 --> 00:00:23,170
+shift move then does is to push a terminal onto the stack. It reads one token of
+Shift Move接下来要做的是将终端推送到堆栈上。它读取一个令牌
+
+5
+00:00:23,170 --> 00:00:27,870
+input, and pushed it onto the stack. And then a reduce, pops some number symbols
+输入，并将其推送到堆栈上。然后是减号，弹出一些数字符号
+
+6
+00:00:27,870 --> 00:00:31,560
+off of the stack. That's the production right hand side. And then it pushed one
+离开堆栈。那是产品的右手边。然后它推了一个
+
+7
+00:00:31,560 --> 00:00:38,560
+non-terminal onto the stack. And that's the production, left hand side. Now it can
+将非终端拖到堆栈上。这就是制作，在左手边。现在它可以了
+
+8
+00:00:38,969 --> 00:00:43,989
+happen that in a given state, that more than one action, shift or reduce, may lead
+在给定状态下，可能会导致不止一个动作，即Shift或Reduce
+
+9
+00:00:43,989 --> 00:00:49,069
+to a valid parse. So in particular, if it's legal to shift or reduce, if you can
+转换为有效的解析。所以特别要注意的是，如果移动或减少是合法的，如果你可以
+
+10
+00:00:49,069 --> 00:00:52,789
+do either one of those things, then we say there is a shift re duce conflict. The
+做这两件事中的任何一件，那么我们就说这是一种转变，减少了冲突。这个
+
+11
+00:00:52,789 --> 00:00:57,210
+parser could either read one token of input and push it on the stack, or it
+解析器可以读取一个输入标记并将其推送到堆栈上，或者它
+
+12
+00:00:57,210 --> 00:01:02,870
+could perform a reduction. If it's legal to reduce by two different productions,
+可以进行减量。如果减少两种不同的产品是合法的，
+
+13
+00:01:02,870 --> 00:01:07,090
+then there is what is called a reduce/reduce conflict. Okay. So reduce,
+然后是所谓的减少/减少冲突。好吧。所以减少，
+
+14
+00:01:07,090 --> 00:01:12,290
+reduce conflicts are, are always bad, are almost always bad. They indicate usually
+减少冲突是，总是不好的，几乎总是不好的。他们通常表示
+
+15
+00:01:12,290 --> 00:01:16,600
+some kind of serious problem with the grammar. Shift reduce conflicts are not
+语法有一些严重的问题。Shift Reduce冲突不是
+
+16
+00:01:16,600 --> 00:01:21,060
+good, but they're often easier to remove. So if you have reduce, reduce conflicts
+很好，但是它们通常更容易去掉。所以如果你减少了，那就减少冲突
+
+17
+00:01:21,060 --> 00:01:24,740
+particularly when you're building your, grammar for cool, then you're doing
+特别是当你在构建你的，酷的语法时，你就是在做
+
+18
+00:01:24,740 --> 00:01:30,380
+something seriously wrong. If you have shift reduce conflicts then that, that's
+出了严重的问题。如果你有减少冲突的班次，那么，那就是
+
+19
+00:01:30,380 --> 00:01:34,869
+to be almost expected, because of You're probably going to need to use precedence
+几乎是意料之中的，因为您可能需要使用优先顺序
+
+20
+00:01:34,869 --> 00:01:40,909
+declarations, Remove them, and we'll talk about that some more in another video. But
+声明，删除它们，我们将在另一个视频中详细讨论这一点。但
+
+21
+00:01:40,909 --> 00:01:45,049
+in general, if you have either one of these conflicts, it means that, there's
+一般来说，如果你有这些冲突中的任何一个，那就意味着，有
+
+22
+00:01:45,049 --> 00:01:48,979
+some state in which the parser doesn't know what to do. And you either need to
+解析器不知道该做什么的某种状态。你要么需要
+
+23
+00:01:48,979 --> 00:01:52,299
+rewrite the grammar, or give it a hint as to what it should do in order to
+重写语法，或者给它一个提示，说明它应该做什么，以便
+
+24
+00:01:52,299 --> 00:01:54,570
+successfully parse your language.
+成功解析您的语言。
+

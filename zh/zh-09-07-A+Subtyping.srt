@@ -1,0 +1,465 @@
+0
+00:00:04,230 --> 00:00:07,890
+In this video, we're going to talk about sub typing another important idea in cool
+在这个视频中，我们将讨论在酷中输入另一个重要的想法
+
+1
+00:00:07,890 --> 00:00:14,890
+and other object oriented languages. Let's begin by taking a look at the typing rule
+以及其他面向对象的语言。让我们从查看键入规则开始
+
+2
+00:00:17,060 --> 00:00:21,560
+for let with initialization. So last time we looked at the let rule, but didn't have
+FOR LET WITH INTIZATION。上一次我们看了LET规则，但是没有
+
+3
+00:00:21,560 --> 00:00:26,189
+the initializers. Let's just see how adding the initializer right here changes
+初始化器。让我们来看看在这里添加初始化器会有什么变化
+
+4
+00:00:26,189 --> 00:00:31,449
+things. So what's going to happen here? Well first of all, notice that the body of
+一些事情。那么这里会发生什么呢？首先，请注意，
+
+5
+00:00:31,449 --> 00:00:38,140
+the rule is almost the same. So We type check E1 in an environment where X has
+规则几乎是一样的。因此，我们在X具有以下特性的环境中键入check E1
+
+6
+00:00:38,140 --> 00:00:43,170
+type T0. The type is declared to have in the let And all the other variables have
+键入T0。该类型在let中声明为Have，而所有其他变量都具有
+
+7
+00:00:43,170 --> 00:00:47,309
+whatever types O gives them And we can add some type T1, and that'll be the type of
+无论O给他们什么类型，我们可以添加一些类型T1，这就是
+
+8
+00:00:47,309 --> 00:00:52,050
+the whole thing. So this piece Right here is exactly the same as before. So what's
+整件事。所以这里的这一块和以前一模一样。那么什么是
+
+9
+00:00:52,050 --> 00:00:58,280
+new is this line of where we type check the initializer. And so how does that
+新的是我们在其中键入check the initializer的这一行。那么如何做到这一点呢？
+
+10
+00:00:58,280 --> 00:01:02,570
+work? Well, first of all, under the assumptions o we type check e zero, we get
+工作?首先，在假设我们键入check e 0的情况下，我们得到
+
+11
+00:01:02,570 --> 00:01:07,910
+some type t zero. And this is really an aside from the main point, but notice that
+一些类型t0。这确实偏离了主要观点，但请注意
+
+12
+00:01:07,910 --> 00:01:13,810
+we use the environment o, in particular x. The new definition of X is not available
+我们使用环境o，特别是x。X的新定义不可用
+
+13
+00:01:13,810 --> 00:01:20,510
+in E0, so if E0 uses the name X that means it uses the name of some other X that's
+在E0中，如果E0使用名称X，这意味着它使用某个其他X的名称，即
+
+14
+00:01:20,510 --> 00:01:26,380
+defined outside Of the lead because we didn't include a, this definition of X in
+定义在销售线索之外，因为我们没有包括一个，这个X的定义在
+
+15
+00:01:26,380 --> 00:01:30,800
+the environment for type checking E0. All right now, but the main point a, thing I
+类型检查环境E0。好的，但是主要的一点，事情是
+
+16
+00:01:30,800 --> 00:01:35,950
+want to point oh I'm a sly, is that easier or here has type zero which is exactly
+想指出哦，我是个狡猾的人，是比较容易呢，还是这里有类型0，就是
+
+17
+00:01:35,950 --> 00:01:41,940
+same type as X, and that's a requirement of this rule, it says that E0 has to have
+与X相同的类型，这是此规则的要求，它规定E0必须具有
+
+18
+00:01:41,940 --> 00:01:47,770
+the same type as X, and that's actually fairly weak of because it's really a, no
+与X相同的类型，这实际上是相当弱的，因为它真的是一个，不
+
+19
+00:01:47,770 --> 00:01:54,770
+problem if E0 has a type which is a subtype of T0, a. T zero can hold any
+问题：如果E0的类型是T0的子类型，则.t0可以容纳任何
+
+20
+00:01:54,970 --> 00:01:59,110
+sub-type of T zero, that would be absolutely fine. But here we've limited
+亚型的T0，那绝对没问题。但在这里我们限制了
+
+21
+00:01:59,110 --> 00:02:06,110
+ourselves to only allowing initializers that exactly match the type of X. So we
+我们只允许与X的类型完全匹配的初始值设定项。因此，我们
+
+22
+00:02:07,810 --> 00:02:12,709
+can do better if we introduce the sub typing relation on classes. And the most
+如果我们在类上引入子类型关系，可以做得更好。最重要的是
+
+23
+00:02:12,709 --> 00:02:17,379
+obvious form of sub typing is that if X is a class and inherits directly from, from
+子类型的明显形式是，如果X是一个类并且直接从继承，则从
+
+24
+00:02:17,379 --> 00:02:23,510
+Y, meaning there's a line in the code that says X inherits from Y. Then x should be a
+表示代码中有一行X继承自Y，那么x应该是一个
+
+25
+00:02:23,510 --> 00:02:28,269
+sub type o f Y. And furthermore this relationship is transitive. So if x is a
+子类型的Y，而且这个关系是传递的。所以如果x是一个
+
+26
+00:02:28,269 --> 00:02:33,060
+sub type of y, and y is a sub type of z, then x is a sub type of z. And finally as
+y的子类型，y是z的子类型，那么x是z的子类型。
+
+27
+00:02:33,060 --> 00:02:38,629
+you might expect, it's also reflexive, so every class is a sub type of itself. And
+您可能会想到，它也是反射性的，所以每个类都是其自身的子类型。和
+
+28
+00:02:38,629 --> 00:02:43,290
+using sub typing, we can write out a better version of the let rule with
+使用子类型，我们可以用以下命令写出更好版本的let规则
+
+29
+00:02:43,290 --> 00:02:48,340
+initialization. So once again, the body, the, the part of the rule that deals with
+初始化。所以再一次，身体，规则中涉及到的部分
+
+30
+00:02:48,340 --> 00:02:52,909
+the body of the let is exactly the same as before, so let's not look at that, and.
+LET的正文和以前完全一样，所以我们不看了，和。
+
+31
+00:02:52,909 --> 00:02:57,239
+Now what we're going to do is we're gonna type check E0 and we get some type T0 out,
+现在我们要做的是键入check E0，然后取出一些类型T0，
+
+32
+00:02:57,239 --> 00:03:02,280
+and then T0 now is only required to be a sub-type of T, so this here is another
+然后T0现在只需要是T的一个子类型，所以这里是另一个
+
+33
+00:03:02,280 --> 00:03:07,269
+hypothesis. And it just says that T zero has to be a sub type of T and what is T,
+假设。它只是说T0必须是T的一个子类型，什么是T，
+
+34
+00:03:07,269 --> 00:03:11,170
+well T is now the type that X is declared to be. So this allows E zero to have a
+好的，T现在是X声明的类型。所以这使得E0可以有一个
+
+35
+00:03:11,170 --> 00:03:16,010
+type that's different from the type of X, and the only issue here is that more
+类型与X的类型不同，这里唯一的问题是更多
+
+36
+00:03:16,010 --> 00:03:20,180
+programs will type check with this rule in the previous one. The previous rule that
+程序将在前一个规则中键入check with this Rule。前面的规则是
+
+37
+00:03:20,180 --> 00:03:24,930
+we had was certainly correct, any program that compiled with that rule, would run
+我们肯定是正确的，任何用该规则编译的程序都可以运行
+
+38
+00:03:24,930 --> 00:03:30,379
+correctly, but this is a more permissive and still correct rule. More programs will
+正确，但这是一个更宽松且仍然正确的规则。将有更多的计划
+
+39
+00:03:30,379 --> 00:03:36,420
+compile and type check correctly, using this rule. Sub-typing shows up in a number
+使用此规则正确编译并键入检查。子键入在数字中显示
+
+40
+00:03:36,420 --> 00:03:41,010
+of places in the cool type system. Here's the rule for assignment, which is in many
+凉爽类型系统中的位置。下面是赋值的规则，这在许多情况下都存在
+
+41
+00:03:41,010 --> 00:03:45,779
+ways similar to the rule for let. So, how does an assignment work, well on the left
+方式类似于LET的规则。那么，任务是如何工作的呢？
+
+42
+00:03:45,779 --> 00:03:49,370
+hand side is a variable and the right hand side is an expression, we're gonna
+手边是一个变量，右手边是一个表达式，我们将
+
+43
+00:03:49,370 --> 00:03:53,489
+evaluate the expression and assign whatever value we get back. To the
+对表达式求值，然后分配我们得到的任何值。发送到
+
+44
+00:03:53,489 --> 00:03:58,090
+variable on the left-hand side And so what how is this type-checked? Well, first of
+变量放在左边，那么这个类型是如何检查的呢？嗯，首先，
+
+45
+00:03:58,090 --> 00:04:02,260
+all, we have to look up the type of X in the environment, and we discovered it has
+总之，我们必须在环境中查找X的类型，我们发现它有
+
+46
+00:04:02,260 --> 00:04:06,730
+some type T0 And then we type-check E1 in the same environment. So the set of
+一些类型为T0，然后我们在相同的环境中键入检查E1。所以这组
+
+47
+00:04:06,730 --> 00:04:10,950
+variables here is not changing. And so we type-check E1 environment O, and we get
+这里的变量没有改变。所以我们输入检查E1环境O，我们得到
+
+48
+00:04:10,950 --> 00:04:15,659
+some type T1. And now what has to be true for this assignment to be correct? Well it
+某种类型的T1。现在，什么必须是正确的，才能使这项任务正确呢？嗯，它
+
+49
+00:04:15,659 --> 00:04:22,340
+has to possible for X to hold the value of type T1. So X's type T0 has to be a super
+X必须有可能保存T1类型的值。所以X的T0型必须是超级的
+
+50
+00:04:22,340 --> 00:04:28,160
+type, has to be bigger than the type of T1. So, if this [inaudible] Is satisfied,
+类型，必须大于T1的类型。所以，如果这个(听不见的)得到满足，
+
+51
+00:04:28,160 --> 00:04:34,480
+then the assignment is correct. Another example that uses sub-typing is the rule
+那么任务是正确的。另一个使用子类型的示例是规则
+
+52
+00:04:34,480 --> 00:04:38,320
+for attribute initialization which except for the scope for identifiers is very,
+对于除了标识符的范围之外的属性初始化是非常重要的，
+
+53
+00:04:38,320 --> 00:04:42,790
+very similar to the rule for normal assignments. So recall what a class looks
+与正常作业的规则非常相似。所以回想一下班级是什么样子的
+
+54
+00:04:42,790 --> 00:04:48,450
+like, you can declare a class in Cool and it has at the top level some set of
+例如，您可以在Cool中声明一个类，它在顶层有一些
+
+55
+00:04:48,450 --> 00:04:55,450
+attributes and methods. And what does an attribute Definition look like. Well it
+属性和方法。属性定义是什么样子。嗯，它
+
+56
+00:04:55,810 --> 00:05:00,150
+looks like one of these things. It's, a variable declared to some type and you can
+看起来像是这些东西之一。它是一个声明为某种类型的变量，您可以
+
+57
+00:05:00,150 --> 00:05:04,670
+have an initializer on the right hand side. And so in what environment then is
+在右手边有一个初始值设定项。那么在什么样的环境下
+
+58
+00:05:04,670 --> 00:05:08,310
+this initializer type checked? Well, its type checked in this special environment O
+是否检查此初始值设定项类型？嗯，它的类型是在这个特殊的环境中检查的。
+
+59
+00:05:08,310 --> 00:05:14,370
+sub c which just consists of the types of all the attributes that are declared in
+SUB c，它只是由在中声明的所有属性的类型组成。
+
+60
+00:05:14,370 --> 00:05:18,720
+class c. So this mean we have to make a pass over the class definition, pull out
+类c。这意味着我们必须通过类定义，拉出
+
+61
+00:05:18,720 --> 00:05:23,310
+all the attribute definitions, all the names of the variables and their types,
+所有属性定义、所有变量名称及其类型，
+
+62
+00:05:23,310 --> 00:05:27,460
+build an environment. That [inaudible] all that information, and then we can type
+营造环境。所有这些信息都是[听不见的]，然后我们就可以打字了
+
+63
+00:05:27,460 --> 00:05:32,080
+check the initialize rs because remember the initializer for an attribute can refer
+检查初始化rs，因为记住属性的初始值设定项可以引用
+
+64
+00:05:32,080 --> 00:05:38,030
+to any of the initialize rs for the class. So, let's take a look at how this works.
+类的任何初始化RS。那么，让我们来看看它是如何工作的。
+
+65
+00:05:38,030 --> 00:05:42,180
+First we look up the type of X in the environment. That's sum type T O. Now we
+首先，我们在环境中查找X的类型。那是SUM类型的T。现在我们
+
+66
+00:05:42,180 --> 00:05:46,190
+type check E1 in the same environment. That's sum type T1. And then just as with
+在同一环境中键入check E1。这是和类型T1。然后，就像
+
+67
+00:05:46,190 --> 00:05:53,190
+assignment T1 needs to be a subset or a subtype of the type T O. Now we come to
+赋值T1需要是类型T的子集或子类型。
+
+68
+00:05:55,710 --> 00:06:00,510
+another interesting example how we type check If and Else. And the important thing
+另一个有趣的例子是我们如何键入check if和Else。重要的是
+
+69
+00:06:00,510 --> 00:06:04,630
+about If and Else is that when we're doing type checking we don't know which branch
+关于IF和ELSE的问题是，当我们进行类型检查时，我们不知道哪个分支
+
+70
+00:06:04,630 --> 00:06:07,730
+is going to be taken, we don't know whether the program is going to execute E1
+，我们不知道程序是否会执行E1
+
+71
+00:06:07,730 --> 00:06:12,220
+or E2, and in general actually this statement may or If this expression may
+或E2，通常实际上此语句可以或如果此表达式可以
+
+72
+00:06:12,220 --> 00:06:16,380
+execute multiple times doing a run of the program, in sometimes it may execute only
+执行多次运行程序，有时可能只执行
+
+73
+00:06:16,380 --> 00:06:20,230
+one, other times it may execute it two. And so what that means that the resulting
+一次，另一些时候，它可能执行两次。所以这意味着由此产生的
+
+74
+00:06:20,230 --> 00:06:26,870
+type of am If and Else is either the type of E1 or the type E2 and we don't. Know a
+AM的类型IF和ELSE要么是E1的类型，要么是E2的类型，我们不知道。
+
+75
+00:06:26,870 --> 00:06:30,770
+compile time, which one is going to be . So the best we can do. Is to say the type
+编译时间，哪一个将是。所以我们能做的就是。就是说这种类型
+
+76
+00:06:30,770 --> 00:06:37,770
+of entire if then else is the smallest super type larger than either e1 or e2 The
+如果整个if则是比e1或e2大的最小的超类型，则
+
+77
+00:06:39,380 --> 00:06:43,510
+need to compute an upper bound over two or more types comes up often enough that
+需要计算两个或更多类型的上界的次数足够频繁，以至于
+
+78
+00:06:43,510 --> 00:06:48,310
+we're going to give the operation a special name. We'll call it the LUB or
+我们要给这次行动起个特别的名字。我们会叫它Lub或者
+
+79
+00:06:48,310 --> 00:06:53,130
+least upper bound of X and Y. And the least upper bound of X and Y is going to
+X和Y的最小上界，以及X和Y的最小上界将
+
+80
+00:06:53,130 --> 00:06:59,420
+be Z if Z is an upper bound, so meaning it's bigger than both X and Y, and also if
+如果Z是一个上界，那么就是Z，也就是说它比X和Y都大，而且如果
+
+81
+00:06:59,420 --> 00:07:03,250
+it is the least among all possible upper bounds. So what this line here says, is
+在所有可能的上限中，它是最小的。所以这条线说的是，
+
+82
+00:07:03,250 --> 00:07:09,080
+that there is some other Z prime that's bigger than X and Y. Well then z has to be
+还有一些比X和Y更大的Z素数，那么z必须是
+
+83
+00:07:09,080 --> 00:07:15,270
+smaller than z prime. So z is the least, if z smallest of all the possible upper
+比z素数小。所以z是最小的，如果z是所有可能的上限中最小的
+
+84
+00:07:15,270 --> 00:07:20,680
+bounds of x and y. And in Cool, and in most object oriented languages, the least
+x和y的界限。在Cool和大多数面向对象语言中，至少
+
+85
+00:07:20,680 --> 00:07:24,630
+upper bound of two types is just their least common ancestor in the inheritance
+两种类型的上界只是它们在继承中的最小共同祖先
+
+86
+00:07:24,630 --> 00:07:30,690
+tree. So typically, the inheritance tree is rooted at object or some similarly
+树。因此，通常情况下，继承树的根是对象或一些类似的
+
+87
+00:07:30,690 --> 00:07:35,280
+named class that incorporates, that includes all possible classes of the
+合并的命名类，它包括
+
+88
+00:07:35,280 --> 00:07:40,960
+program. And then there's some kind of a hierarchy which is a tree, That descends
+程序。然后是某种层次结构，它是一棵树，从下往下
+
+89
+00:07:40,960 --> 00:07:46,160
+from object, and, and if I want to find the least upper bound of two types, say
+从Object，并且，如果我想找出两种类型中的最小上界，比方说
+
+90
+00:07:46,160 --> 00:07:50,470
+this type and this type, I just have to walk back through the tree until I find
+这种类型和这种类型，我只需要往回走一遍树，直到我找到
+
+91
+00:07:50,470 --> 00:07:53,720
+their least common ancestor. And so, in this case, if I pick these two types out
+他们最不共同的祖先。所以，在这种情况下，如果我挑出这两种
+
+92
+00:07:53,720 --> 00:07:57,280
+of my tree, this would be the least upper bound of those two types.
+在我的树中，这将是这两种类型中最小的上界。
+

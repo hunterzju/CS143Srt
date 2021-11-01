@@ -1,0 +1,415 @@
+0
+00:00:04,059 --> 00:00:08,350
+In this video we're going to wrap up our series on type checking with a discussion
+在这段视频中，我们将用一个讨论来结束我们关于类型检查的系列
+
+1
+00:00:08,350 --> 00:00:15,350
+of how to recover from type errors. So as with all the other front end phases, like
+如何从类型错误中恢复。就像所有其他前端阶段一样，比如
+
+2
+00:00:17,199 --> 00:00:20,550
+flexing and parsing, it's important to recover from errors that happen during
+灵活处理和解析，重要的是要从以下过程中发生的错误中恢复
+
+3
+00:00:20,550 --> 00:00:25,320
+type checking But unlike parsing, it's much, much easier to recover from errors
+类型检查，但与解析不同，从错误中恢复要容易得多
+
+4
+00:00:25,320 --> 00:00:28,949
+in the type checker because we already have the up stacks and text tree and so
+在类型检查器中，因为我们已经有了上行堆栈和文本树，所以
+
+5
+00:00:28,949 --> 00:00:33,340
+there's no need to skip over portions of the code as we did in parsing before we
+不需要像我们在解析之前那样跳过部分代码
+
+6
+00:00:33,340 --> 00:00:38,870
+even knew what the structure of the program was. The problem though, is what
+甚至知道节目的结构是什么。但问题是，
+
+7
+00:00:38,870 --> 00:00:43,910
+type should we assign to an expression that has no legitimate type? The type
+类型是否应该赋给没有合法类型的表达式？类型
+
+8
+00:00:43,910 --> 00:00:48,370
+checker works by structural induction, and it can't just get stuck. So if we find
+Checker的工作原理是结构归纳，它不能就这样卡住。所以如果我们发现
+
+9
+00:00:48,370 --> 00:00:52,750
+some sub expression that has no type that we can meaningfully give it, we still have
+一些子表达式没有我们可以有意义地赋予它类型，我们仍然有
+
+10
+00:00:52,750 --> 00:00:56,070
+to do something with it so that we can type check all the expressions that
+要对其执行某些操作，以便我们可以键入，请选中所有符合以下条件的表达式
+
+11
+00:00:56,070 --> 00:01:03,010
+surround it. One possibility is to simply assign the type object as the type of any
+包围它。一种可能是简单地将类型Object指定为任何
+
+12
+00:01:03,010 --> 00:01:06,900
+ill typed expression. And the intuition here is that even if we couldn't figure
+键入的表达式不正确。这里的直觉是即使我们不知道
+
+13
+00:01:06,900 --> 00:01:10,640
+out what the type or the expression was supposed to be, certainly it was something
+从这个类型或表达应该是什么，它肯定是什么东西
+
+14
+00:01:10,640 --> 00:01:15,799
+that was a sub type of object. So it is certainly safe to assign any expression
+那是一种亚类型的物体。因此，将任何表达式赋值给
+
+15
+00:01:15,799 --> 00:01:21,299
+the type object. So let's consider what happens with this strategy in a simple
+类型对象。那么让我们简单地考虑一下这个策略会发生什么
+
+16
+00:01:21,299 --> 00:01:25,920
+piece of code. So here we have a little code fragment and we just assume here that
+一段代码。所以在这里我们有一小段代码，我们在这里只是假设
+
+17
+00:01:25,920 --> 00:01:30,280
+X is undefined, that actually there's a bug in this code and that's at X has no
+X是未定义的，实际上在这段代码中有一个错误，那就是X没有
+
+18
+00:01:30,280 --> 00:01:34,560
+binding. So there's no type anywhere for X. So what happens when we type check
+有约束力的。所以任何地方都没有X的类型。那么当我们输入check时会发生什么呢？
+
+19
+00:01:34,560 --> 00:01:38,399
+this? Well, we're going to recursively walk down the abstract syntax tree,
+这?好的，我们将沿着抽象语法树递归遍历，
+
+20
+00:01:38,399 --> 00:01:40,969
+eventually we'll get to the leaves, and we'll try to type check X. And then we'll
+最终我们将到达树叶，我们将尝试键入check X，然后我们将
+
+21
+00:01:40,969 --> 00:01:46,299
+discover that there is no type for X anywhere and that will result in an error
+发现没有X Anywhere的类型，这将导致错误
+
+22
+00:01:46,299 --> 00:01:53,299
+message Saying that X is undefined And then in order to proceed with type
+消息称X未定义，然后为了继续键入
+
+23
+00:01:54,929 --> 00:01:59,090
+checking, in order to recover, we'll have to assign X a type And so, we'll just
+正在检查，为了恢复，我们必须给X赋值一个类型，因此，我们只需
+
+24
+00:01:59,090 --> 00:02:04,590
+assume that X has type object, because that's our recovery strategy And now we'll
+假设X具有Object类型，因为这是我们的恢复策略，现在我们将
+
+25
+00:02:04,590 --> 00:02:08,060
+continue to type check as we walk up the abstr act syntax tree, and the next thing
+当我们沿着abstr act语法树向上移动时，继续键入check，然后进行下一步操作
+
+26
+00:02:08,060 --> 00:02:11,569
+we'll try to do is to type check this plus operation. We'll see that we're adding
+我们要做的就是键入check this加号运算。我们将看到我们正在添加
+
+27
+00:02:11,569 --> 00:02:17,569
+something of type object to, an integer. And of course plus doesn't work on things
+Object to类型的东西，一个整数。当然，PLUS对某些事情不起作用
+
+28
+00:02:17,569 --> 00:02:24,569
+of type object, so we'll get an error. Something like plus applied to an object.
+类型为Object，所以我们会得到一个错误。适用于物体的类似加号的东西。
+
+29
+00:02:28,939 --> 00:02:32,430
+And then we'll have to decide, now that we couldn't type check this plus, what the
+然后我们必须决定，既然我们不能输入check this加号，那么
+
+30
+00:02:32,430 --> 00:02:36,939
+type is of X+2, so this whole sub-expression and of course our recovery
+类型是X+2，所以整个子表达式，当然还有我们的恢复
+
+31
+00:02:36,939 --> 00:02:42,420
+strategy is to say, well that also has type object And now the next thing up in
+策略是这样说的，也有Object类型，现在下一件事是
+
+32
+00:02:42,420 --> 00:02:45,310
+the abstract syntax tree is this initialization assignment. Here we're
+抽象语法树就是这个初始化赋值。我们在这里
+
+33
+00:02:45,310 --> 00:02:50,840
+assigning Y the result of this expression But we couldn't type check this expression
+将此表达式的结果赋给Y，但我们无法键入check this表达式
+
+34
+00:02:50,840 --> 00:02:54,189
+so it has type object And now the type checker sees that we're assigning
+所以它有类型对象，现在类型检查器看到我们正在分配
+
+35
+00:02:54,189 --> 00:02:58,489
+something of type object to something of type int and we get yet a third
+类型为Object的对象类型为int类型的对象，并且我们还获得了第三个
+
+36
+00:02:58,489 --> 00:03:05,489
+error Saying that we have a bad assignment, of some kind. So The nut of
+错误地说我们有一项糟糕的任务，某种形式的。所以这颗坚果
+
+37
+00:03:08,379 --> 00:03:13,680
+the, the problem here is that this simple recovery strategy works. If we do recover
+这里的问题是，这个简单的恢复策略是有效的。如果我们真的恢复了
+
+38
+00:03:13,680 --> 00:03:20,480
+we continue type checking. But a single error leads potentially to, lots of other
+我们继续进行类型检查。但一个单一的错误可能会导致许多其他的错误
+
+39
+00:03:20,480 --> 00:03:25,079
+errors. So this is a workable solution. It, it, it achieves the goal of recovering
+错误。所以这是一个可行的解决方案。它，它，它达到了恢复的目的
+
+40
+00:03:25,079 --> 00:03:29,159
+But in general it will lead, to cascading errors. Once you have on one type error
+但一般来说，它会导致级联错误。一旦你有一个打字错误
+
+41
+00:03:29,159 --> 00:03:33,980
+that type error will just cause many more because not very many things can be done
+该类型错误只会导致更多错误，因为可以做的事情不是很多
+
+42
+00:03:33,980 --> 00:03:38,340
+with something of type object And probably the code was written assuming some more
+具有Object类型的内容，并且很可能代码是假设更多的内容编写的
+
+43
+00:03:38,340 --> 00:03:43,540
+specific type And these errors will just propagate up the abstract syntax tree
+特定类型，并且这些错误只会向上传播抽象语法树
+
+44
+00:03:43,540 --> 00:03:50,540
+until some point just result in multiple errors Another possibility is to introduce
+直到某一点只会导致多个错误，另一种可能是引入
+
+45
+00:03:51,510 --> 00:03:57,209
+a new type, a No type that is specifically for use with ill typed expressions And No
+一个新类型、一个专门用于错误类型表达式的No类型和No
+
+46
+00:03:57,209 --> 00:04:01,999
+type is very special. It's not a type that is available to the programmer. It's only
+类型是非常特殊的。它不是程序员可用的类型。它只是
+
+47
+00:04:01,999 --> 00:04:05,900
+available to the compiler and it's just there for error recovery and type
+可供编译器使用，它仅用于错误恢复和键入
+
+48
+00:04:05,900 --> 00:04:10,249
+checking. And the special property of No type is that it's going to be a sub type
+正在检查。No type的特殊属性是它将是一个子类型
+
+49
+00:04:10,249 --> 00:04:15,739
+of every other type. So if you remember object was the opposite. Object is a super
+所有其他类型的。所以如果你记得，物体是相反的。对象是一个超级
+
+50
+00:04:15,739 --> 00:04:20,819
+type of every type and that had the bad property that there are very
+每种类型的类型，都有非常糟糕的属性
+
+51
+00:04:20,819 --> 00:04:25,960
+few methods that defined on object and so if you plug in type object. Where you
+在Object上定义的方法很少，所以如果您插入类型Object。你在哪里
+
+52
+00:04:25,960 --> 00:04:31,130
+expected some other type probably it's not going to type check. So we can fix that
+需要其他类型，可能不会进行类型检查。所以我们可以解决这个问题
+
+53
+00:04:31,130 --> 00:04:35,240
+problem by introducing no type. And no type will have this special property that
+通过引入无类型来解决问题。任何类型都不会有这样的特殊属性
+
+54
+00:04:35,240 --> 00:04:40,360
+every operation, every operation is defined for no type And furthermore we'll
+每个操作，每个操作都没有定义类型，而且我们将
+
+55
+00:04:40,360 --> 00:04:45,370
+say that it produces no type as a result. So any operation in the language that
+假设结果是它不生成类型。所以语言中的任何操作
+
+56
+00:04:45,370 --> 00:04:49,780
+takes an argument of type no type it will produce a result of type no type. So the
+接受类型为no类型的参数，它将产生类型为no类型的结果。因此，
+
+57
+00:04:49,780 --> 00:04:55,490
+no types will propagate. And now let's take a look at our same code fragment and
+不会传播任何类型。现在让我们看一下我们相同的代码片段
+
+58
+00:04:55,490 --> 00:05:00,270
+let's work through what happens if we use no type. So, again we walk down the
+让我们研究一下如果不使用类型会发生什么。所以，我们再一次沿着
+
+59
+00:05:00,270 --> 00:05:04,669
+abstract syntax tree we get to this leaf X, we see that X is undefined, we
+抽象语法树我们到达这个叶X，我们看到X是未定义的，我们
+
+60
+00:05:04,669 --> 00:05:11,669
+produce an error saying X is undefined. And then we have to assign a type to X so
+产生一个错误，指出X是未定义的。然后我们必须给X赋值一个类型，所以
+
+61
+00:05:13,139 --> 00:05:20,139
+we say well X has type no type and now we consider the plus operation And now plus
+我们说X有类型，没有类型，现在我们考虑加号运算，现在是加号
+
+62
+00:05:21,750 --> 00:05:26,460
+is taking an augmentative type no type integer And this is fine. We're not gonna
+采用的是加法类型，不是整数类型，这是可以接受的。我们不会
+
+63
+00:05:26,460 --> 00:05:31,110
+produce any errors that's consider to be well type and the results is also of type
+产生任何被认为是良好类型的错误，并且结果也是类型
+
+64
+00:05:31,110 --> 00:05:38,110
+no type. And now we're doing an assignment And no type is compatible with N. No type
+没有类型。现在我们正在进行赋值，没有类型与N兼容，没有类型
+
+65
+00:05:39,990 --> 00:05:44,800
+is a subtype of N. So this assignment is also type correct And we don't produce any
+是N的子类型，所以这个赋值也是类型正确的，我们不生成任何
+
+66
+00:05:44,800 --> 00:05:49,610
+type of error in that stage either And so, you can see what happens here is that no
+这一阶段的错误类型也是如此，因此，您可以看到这里发生的情况是没有
+
+67
+00:05:49,610 --> 00:05:54,430
+types propagate up the abstract syntax tree just like the object types did before
+类型在抽象语法树中向上传播，就像以前的对象类型一样
+
+68
+00:05:54,430 --> 00:05:57,789
+But since no type is a special type it's used only for error recovery. We can
+但是，因为没有类型是特殊类型，所以它只用于错误恢复。我们可以的
+
+69
+00:05:57,789 --> 00:06:01,419
+distinguish it from all the other regular types And we know that we shouldn't print
+将它与所有其他常规类型区分开来，我们知道不应该打印
+
+70
+00:06:01,419 --> 00:06:08,419
+out an error message after the first one is produced. So a real compiler, a
+在生成第一个错误消息后发出错误消息。所以一个真正的编译器，一个
+
+71
+00:06:08,840 --> 00:06:13,860
+production compiler would use something like no type, for error recovery But there
+生产编译器将使用类似于无类型的东西来进行错误恢复，但是
+
+72
+00:06:13,860 --> 00:06:18,430
+is an implementation issue with no type. And in particular, the fact that no type
+是一个没有类型的实现问题。特别值得一提的是，没有任何类型
+
+73
+00:06:18,430 --> 00:06:25,000
+is a subtype of every other class means that the class hierarchy is no longer a
+是每个其他类的子类型意味着类层次结构不再是
+
+74
+00:06:25,000 --> 00:06:28,720
+tree. If you think about it, you have object at the top and then you have this
+树。如果你想一想，你在顶部有一个物体，然后你就有了这个
+
+75
+00:06:28,720 --> 00:06:33,509
+tree structure branching out. But then no type is a subtype of everything. So no
+树状结构向外分枝。但是没有一种类型是万事万物的子类型。所以不是
+
+76
+00:06:33,509 --> 00:06:40,240
+type becomes a bottom ele ment And This is now a DAG and not a tree, and that makes
+类型变成了底部元素，这现在是DAG而不是树，这使得
+
+77
+00:06:40,240 --> 00:06:43,389
+it just slightly harder to implement. Instead of being able to just have tree
+只是实施起来稍微困难一点。而不是只有一棵树
+
+78
+00:06:43,389 --> 00:06:47,669
+algorithms now you have to have either have a special case for no type or just do
+算法现在你必须有一个没有类型的特殊情况，或者干脆这样做
+
+79
+00:06:47,669 --> 00:06:52,639
+something more general. And this is just enough extra hassle that I personally
+一些更笼统的东西。这已经够多的额外麻烦了，我个人
+
+80
+00:06:52,639 --> 00:06:57,300
+don't think it's worth doing for the course project and I recommend that you
+我认为这不值得为课程项目做这件事，我建议你
+
+81
+00:06:57,300 --> 00:07:02,620
+use the object solution and we just live with the propagating, or compounding,
+使用对象解决方案，我们只需忍受传播，或复合，
+
+82
+00:07:02,620 --> 00:07:04,240
+errors that, that produces.
+由此产生的错误。
+
